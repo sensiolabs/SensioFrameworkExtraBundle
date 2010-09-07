@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://www.symfony-project.org/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.symfony-project.org/schema/dic/services http://www.symfony-project.org/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="annotations.reader.class">Doctrine\Common\Annotations\AnnotationReader</parameter>
+        <parameter key="annotations.cache.class">Doctrine\Common\Cache\NullCache</parameter>
+        <parameter key="annotations.parser.class">Doctrine\Common\Annotations\Parser</parameter>
+        <parameter key="annotations.controller_parser.class">Bundle\Sensio\FrameworkExtraBundle\Controller\ControllerAnnotationParser</parameter>
+    </parameters>
+
+    <services>
+        <service id="annotations.cache" class="%annotations.cache.class%" />
+
+        <service id="annotations.parser" class="%annotations.parser.class%" />
+
+        <service id="annotations.reader" class="%annotations.reader.class%">
+            <argument type="service" id="annotations.cache" />
+            <argument type="service" id="annotations.parser" />
+        </service>
+
+        <service id="annotations.controller_parser" class="%annotations.controller_parser.class%">
+            <tag name="kernel.listener" />
+            <argument type="service" id="annotations.reader" />
+        </service>
+    </services>
+</container>

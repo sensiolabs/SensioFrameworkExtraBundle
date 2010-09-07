@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://www.symfony-project.org/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.symfony-project.org/schema/dic/services http://www.symfony-project.org/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="converter.listener.class">Bundle\Sensio\FrameworkExtraBundle\Controller\ParamConverterListener</parameter>
+        <parameter key="converter.manager.class">Bundle\Sensio\FrameworkExtraBundle\Request\Converter\ConverterManager</parameter>
+        <parameter key="converter.doctrine.class">Bundle\Sensio\FrameworkExtraBundle\Request\Converter\DoctrineConverter</parameter>
+    </parameters>
+
+    <services>
+        <service id="converter.listener" class="%converter.listener.class%">
+            <tag name="kernel.listener" />
+            <argument type="service" id="converter.manager" />
+            <argument>%kernel.bundle_dirs%</argument>
+        </service>
+
+        <service id="converter.manager" class="%converter.manager.class%">
+            <argument type="collection">
+                <argument type="service" id="converter.doctrine" />
+            </argument>
+        </service>
+
+        <service id="converter.doctrine" class="%converter.doctrine.class%">
+            <argument type="service" id="doctrine.orm.entity_manager" />
+        </service>
+    </services>
+</container>
