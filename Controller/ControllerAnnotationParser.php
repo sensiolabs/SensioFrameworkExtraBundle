@@ -23,23 +23,9 @@ use Bundle\Sensio\FrameworkExtraBundle\Configuration\ConfigurationInterface;
  */
 class ControllerAnnotationParser
 {
-    protected $classes;
-
     public function __construct(AnnotationReader $reader)
     {
         $this->reader = $reader;
-
-        $this->classes = array(
-            'Bundle\\Sensio\\FrameworkExtraBundle\\Configuration\\Cache',
-            'Bundle\\Sensio\\FrameworkExtraBundle\\Configuration\\ParamConverter',
-            'Bundle\\Sensio\\FrameworkExtraBundle\\Configuration\\Template',
-        );
-
-        foreach ($this->classes as $class) {
-            if (!class_exists($class)) {
-                throw new \RuntimeException(sprintf('Unable to autoload "%s" class.', $class));
-            }
-        }
     }
 
     /**
@@ -68,10 +54,9 @@ class ControllerAnnotationParser
 
         $request = $event->getParameter('request');
 
-        $classes = $this->classes;
-        $this->reader->setAnnotationCreationFunction(function ($name, $values) use ($classes)
+        $this->reader->setAnnotationCreationFunction(function ($name, $values)
         {
-            if (!in_array($name, $classes)) {
+            if (!is_subclass_of($name, 'Bundle\\Sensio\\FrameworkExtraBundle\\Configuration\\ConfigurationInterface')) {
                 return null;
             }
 
