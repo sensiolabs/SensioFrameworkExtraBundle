@@ -39,7 +39,7 @@ class AnnotationTemplateListener
     public function register(EventDispatcher $dispatcher, $priority = 0)
     {
         $dispatcher->connect('core.controller', array($this, 'filterController'), $priority);
-        $dispatcher->connect('core.view', array($this, 'filter'), $priority);
+        $dispatcher->connect('core.view', array($this, 'filterView'), $priority);
     }
 
     /**
@@ -86,7 +86,7 @@ class AnnotationTemplateListener
      *
      * @param Event $event An Event instance
      */
-    public function filter(Event $event, $parameters)
+    public function filterView(Event $event, $parameters)
     {
         $request = $event->getParameter('request');
 
@@ -138,6 +138,6 @@ class AnnotationTemplateListener
             throw new \InvalidArgumentException(sprintf('The "%s" class does not belong to a known bundle namespace.', $class->getName()));
         }
 
-        return $bundle.':'.$value;
+        return $bundle.':'.$value.'.twig';
     }
 }
