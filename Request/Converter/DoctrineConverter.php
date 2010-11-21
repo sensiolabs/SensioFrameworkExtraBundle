@@ -7,6 +7,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Mapping\MappingException;
 
 /*
  * This file is part of the Symfony framework.
@@ -87,25 +88,13 @@ class DoctrineConverter implements ConverterInterface
             return false;
         }
 
-        if (false !== $pos = strpos($configuration->getClass(), ':')) {
-            try {
-                list($alias, $class) = explode(':', $configuration->getClass());
-                $configuration->setClass($this->manager->getConfiguration()->getEntityNamespace($alias).'\\'.$class);
-            } catch (\Exception $e) {
-                // not a valid Doctrine alias
-                return false;
-            }
-        }
+        // Doctrine Entity?
+        try {
+            $this->manager->getClassMetadata($configuration->getClass());
 
-        if (!class_exists($configuration->getClass())) {
+            return true;
+        } catch (MappingException $e) {
             return false;
         }
-
-        // Entity?
-        if (!in_array($configuration->getClass(), $this->manager->getConfiguration()->getMetadataDriverImpl()->getAllClassNames())) {
-            return false;
-        }
-
-        return true;
     }
 }

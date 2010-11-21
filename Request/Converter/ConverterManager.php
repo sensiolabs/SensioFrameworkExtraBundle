@@ -47,7 +47,7 @@ class ConverterManager
         }
 
         if (false === $converted) {
-            throw new \InvalidArgumentException(sprintf('Unable to convert @ParamConverter configuration "%s".', $configuration));
+            throw new \InvalidArgumentException(sprintf('Unable to convert configuration for annotation of class "%s".', get_class($configuration)));
         }
     }
 
