@@ -23,9 +23,12 @@ use Bundle\Sensio\FrameworkExtraBundle\Configuration\ConfigurationInterface;
  */
 class ControllerAnnotationParser
 {
-    public function __construct(AnnotationReader $reader)
+    protected $reader;
+
+    public function __construct()
     {
-        $this->reader = $reader;
+        $this->reader = new AnnotationReader();
+        $this->reader->setAutoloadAnnotations(true);
     }
 
     /**
