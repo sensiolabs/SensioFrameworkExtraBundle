@@ -111,9 +111,9 @@ class AnnotationTemplateListener
             return $parameters;
         }
 
-        $response = $this->container->getResponseService();
+        $response = $this->container->get('response');
 
-        $response->setContent($this->container->getTemplatingService()->render($template, $parameters));
+        $response->setContent($this->container->get('templating')->render($template, $parameters));
 
         return $response;
     }
