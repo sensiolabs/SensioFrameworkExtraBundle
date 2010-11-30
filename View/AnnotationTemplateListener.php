@@ -53,7 +53,7 @@ class AnnotationTemplateListener
             return $controller;
         }
 
-        $request = $event->getParameter('request');
+        $request = $event->get('request');
 
         if (!$configuration = $request->attributes->get('_template')) {
             return $controller;
@@ -88,7 +88,7 @@ class AnnotationTemplateListener
      */
     public function filterView(Event $event, $parameters)
     {
-        $request = $event->getParameter('request');
+        $request = $event->get('request');
 
         if (null === $parameters) {
             if (!$vars = $request->attributes->get('_template_vars')) {

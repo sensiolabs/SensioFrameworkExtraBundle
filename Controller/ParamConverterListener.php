@@ -51,7 +51,7 @@ class ParamConverterListener
      */
     public function filter(Event $event, $controller)
     {
-        $request = $event->getParameter('request');
+        $request = $event->get('request');
 
         if ($configuration = $request->attributes->get('_converters')) {
             $this->manager->apply($request, $configuration);

@@ -3,9 +3,11 @@
 namespace Bundle\Sensio\FrameworkExtraBundle\Routing;
 
 use Symfony\Component\Routing\Loader\AnnotationClassLoader;
-use Symfony\Component\Routing\Annotation\Route as RouteAnnotation;
-use Doctrine\Common\Annotations\AnnotationReader;
+use Symfony\Component\Routing\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\ControllerNameConverter;
+use Doctrine\Common\Annotations\AnnotationReader;
+use Bundle\Sensio\FrameworkExtraBundle\Configuration\AnnotationReader as ConfigurationAnnotationReader;
+use Bundle\Sensio\FrameworkExtraBundle\Configuration\Method;
 
 /*
  * This file is part of the Symfony framework.
@@ -20,6 +22,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\ControllerNameConverter;
  * AnnotatedRouteControllerLoader is an implementation of AnnotationClassLoader
  * that sets the '_controller' default based on the class and method names.
  *
+ * It also parse the @Method annotation.
+ *
  * @author Fabien Potencier <fabien.potencier@symfony-project.com>
  */
 class AnnotatedRouteControllerLoader extends AnnotationClassLoader
@@ -33,10 +37,17 @@ class AnnotatedRouteControllerLoader extends AnnotationClassLoader
         parent::__construct($reader);
     }
 
-    protected function getRouteDefaults(\ReflectionClass $class, \ReflectionMethod $method, RouteAnnotation $annot)
+    protected function configureRoute(Route $route, \ReflectionClass $class, \ReflectionMethod $method)
     {
-        return array(
-            '_controller' => $this->converter->toShortNotation($class->getName().'::'.$method->getName())
-        );
+        // controller
+        $route->setDefault('_controller', $this->converter->toShortNotation($class->getName().'::'.$method->getName()));
+
+        // requirements (@Method)
+        $reader = new ConfigurationAnnotationReader();
+        foreach ($reader->getMethodAnnotations($method) as $configuration) {
+            if ($configuration instanceof Method) {
+                $route->setRequirement('_method', implode('|', $configuration->getMethods()));
+            }
+        }
     }
 }

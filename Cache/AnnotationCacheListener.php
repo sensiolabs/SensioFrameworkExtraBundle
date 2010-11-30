@@ -40,7 +40,7 @@ class AnnotationCacheListener
      */
     public function filter(Event $event, Response $response)
     {
-        if (!$configuration = $event->getParameter('request')->attributes->get('_cache')) {
+        if (!$configuration = $event->get('request')->attributes->get('_cache')) {
             return $response;
         }
 

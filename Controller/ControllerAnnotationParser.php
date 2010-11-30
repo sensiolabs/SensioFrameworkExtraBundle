@@ -2,10 +2,10 @@
 
 namespace Bundle\Sensio\FrameworkExtraBundle\Controller;
 
-use Doctrine\Common\Annotations\AnnotationReader;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\Event;
 use Bundle\Sensio\FrameworkExtraBundle\Configuration\ConfigurationInterface;
+use Bundle\Sensio\FrameworkExtraBundle\Configuration\AnnotationReader;
 
 /*
  * This file is part of the Symfony framework.
@@ -24,12 +24,6 @@ use Bundle\Sensio\FrameworkExtraBundle\Configuration\ConfigurationInterface;
 class ControllerAnnotationParser
 {
     protected $reader;
-
-    public function __construct()
-    {
-        $this->reader = new AnnotationReader();
-        $this->reader->setAutoloadAnnotations(true);
-    }
 
     /**
      * Registers a core.controller listener.
@@ -52,36 +46,17 @@ class ControllerAnnotationParser
             return $controller;
         }
 
-        $r = new \ReflectionObject($controller[0]);
-        $m = $r->getMethod($controller[1]);
+        $object = new \ReflectionObject($controller[0]);
+        $method = $object->getMethod($controller[1]);
 
-        $request = $event->getParameter('request');
+        $request = $event->get('request');
 
-        $this->reader->setAnnotationCreationFunction(function ($name, $values)
-        {
-            if (!is_subclass_of($name, 'Bundle\\Sensio\\FrameworkExtraBundle\\Configuration\\ConfigurationInterface')) {
-                return null;
-            }
-
-            $configuration = new $name();
-            foreach ($values as $key => $value) {
-                if (!method_exists($configuration, $method = 'set'.$key)) {
-                    throw new \BadMethodCallException(sprintf("Unknown annotation attribute '%s' for '%s'.", ucfirst($key), get_class($this)));
-                }
-                $configuration->$method($value);
-            }
-
-            return $configuration;
-        });
-
-        $this->reader->setDefaultAnnotationNamespace('Bundle\\Sensio\\FrameworkExtraBundle\\Configuration\\');
-        foreach ($this->reader->getMethodAnnotations($m) as $configuration) {
+        $reader = new AnnotationReader();
+        foreach ($reader->getMethodAnnotations($method) as $configuration) {
             if ($configuration instanceof ConfigurationInterface) {
                 $request->attributes->set('_'.$configuration->getAliasName(), $configuration);
             }
         }
-
-        $this->reader->setAnnotationCreationFunction(function ($name, $values) { return null; });
 
         return $controller;
     }
