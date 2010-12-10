@@ -40,7 +40,7 @@ Activation
 ----------
 
 The routes need to be imported to be active as any other routing resource
-(note the ``annotations:`` prefix):
+(note the ``annotation`` type):
 
 .. code-block:: yaml
 
@@ -48,7 +48,8 @@ The routes need to be imported to be active as any other routing resource
 
     # import routes from a controller class
     post:
-        resource: annotations:BlogBundle/Controller/PostController.php
+        resource: BlogBundle/Controller/PostController.php
+        type:     annotation
 
 You can also import a whole directory:
 
@@ -56,7 +57,8 @@ You can also import a whole directory:
 
     # import routes from a controller directory
     blog:
-        resource: annotations:BlogBundle/Controller
+        resource: BlogBundle/Controller
+        type:     annotation
 
 Or even import all controllers:
 
@@ -64,15 +66,17 @@ Or even import all controllers:
 
     # import routes from all controllers
     all:
-        resource: annotations:*/Controller
+        resource: */Controller
+        type:     annotation
 
 As for any other resource, you can "mount" the routes under a given prefix:
 
 .. code-block:: yaml
 
     post:
-        resource: annotations:BlogBundle/Controller/PostController.php
+        resource: BlogBundle/Controller/PostController.php
         prefix:   /blog
+        type:     annotation
 
 Route Name
 ----------
