@@ -37,11 +37,11 @@ class ExtraExtension extends Extension
 
         $annotationsToLoad = array();
 
-        if (!isset($config['router']['annotations']) || !$config['router']['annotations']) {
+        if (!isset($config['router']['annotations']) || $config['router']['annotations']) {
             $annotationsToLoad[] = 'routing.xml';
         }
 
-        if (!isset($config['request']['converters']) || !$config['request']['converters']) {
+        if (!isset($config['request']['converters']) || $config['request']['converters']) {
             $annotationsToLoad[] = 'converters.xml';
         }
 
@@ -56,7 +56,7 @@ class ExtraExtension extends Extension
             $container->setParameter('view.template_annotation.manage_null_arguments', $v);
         }
 
-        if (!isset($config['cache']['annotations']) || !$config['cache']['annotations']) {
+        if (!isset($config['cache']['annotations']) || $config['cache']['annotations']) {
             $annotationsToLoad[] = 'cache.xml';
         }
 
