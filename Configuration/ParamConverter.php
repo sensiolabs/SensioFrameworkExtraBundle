@@ -14,7 +14,7 @@ namespace Bundle\Sensio\FrameworkExtraBundle\Configuration;
 /**
  *
  *
- * @ParamConverter("post", class="BlogBundle:Post")
+ * @extra:ParamConverter("post", class="BlogBundle:Post")
  *
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  */

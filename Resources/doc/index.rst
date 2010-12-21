@@ -114,14 +114,14 @@ The following annotations are defined by the bundle:
 This example shows all the available annotations in action::
 
     /**
-     * @Route("/blog")
-     * @Cached(expires="tomorrow")
+     * @extra:Route("/blog")
+     * @extra:Cached(expires="tomorrow")
      */
     class AnnotController extends Controller
     {
         /**
-         * @Route("/")
-         * @Template
+         * @extra:Route("/")
+         * @extra:Template
          */
         public function indexAction()
         {
@@ -131,10 +131,10 @@ This example shows all the available annotations in action::
         }
 
         /**
-         * @Route("/:id")
-         * @ParamConverter("post", class="BlogBundle:Post")
-         * @Template("BlogBundle:Annot:post", vars={"post"})
-         * @Cache(smaxage="15")
+         * @extra:Route("/:id")
+         * @extra:ParamConverter("post", class="BlogBundle:Post")
+         * @extra:Template("BlogBundle:Annot:post", vars={"post"})
+         * @extra:Cache(smaxage="15")
          */
         public function showAction(Post $post)
         {
@@ -145,8 +145,8 @@ As the ``showAction`` method follows some conventions, you can omit some
 annotations::
 
     /**
-     * @Route("/:id")
-     * @Cache(smaxage="15")
+     * @extra:Route("/:id")
+     * @extra:Cache(smaxage="15")
      */
     public function showAction(Post $post)
     {

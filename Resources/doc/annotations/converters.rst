@@ -1,16 +1,16 @@
-@ParamConverter
+@extra:ParamConverter
 ===============
 
 Usage
 -----
 
-The ``@ParamConverter`` annotation calls *converters* to convert request
+The ``@extra:ParamConverter`` annotation calls *converters* to convert request
 parameters to objects. These objects are stored as request attributes and so
 they can be injected as controller method arguments::
 
     /**
-     * @Route("/blog/:id")
-     * @ParamConverter("post", class="BlogBundle:Post")
+     * @extra:Route("/blog/:id")
+     * @extra:ParamConverter("post", class="BlogBundle:Post")
      */
     public function showAction(Post $post)
     {
@@ -31,7 +31,7 @@ Several things happens under the hood:
   controller when present in the method signature.
 
 If you use type hinting as in the example above, you can even omit the
-``@ParamConverter`` annotation altogether::
+``@extra:ParamConverter`` annotation altogether::
 
     // automatic with method signature
     public function showAction(Post $post)
