@@ -13,6 +13,10 @@
     <services>
         <service id="annotations.parser" class="%annotations.parser.class%">
             <call method="setAutoloadAnnotations"><argument>true</argument></call>
+            <call method="setAnnotationNamespaceAlias">
+                <argument>Bundle\Sensio\FrameworkExtraBundle\Configuration\</argument>
+                <argument>extra</argument>
+            </call>
         </service>
 
         <service id="annotations.reader" class="%annotations.reader.class%">
