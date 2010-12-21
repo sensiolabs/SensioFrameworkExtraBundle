@@ -1,13 +1,13 @@
-@Cache
+@extra:Cache
 ======
 
 Usage
 -----
 
-The ``@Cache`` annotation makes it easy to define HTTP caching::
+The ``@extra:Cache`` annotation makes it easy to define HTTP caching::
 
     /**
-     * @Cache(expires="tomorrow")
+     * @extra:Cache(expires="tomorrow")
      */
     public function indexAction()
     {
@@ -16,7 +16,7 @@ The ``@Cache`` annotation makes it easy to define HTTP caching::
 You can also use the annotation on a class to define caching for all methods::
 
     /**
-     * @Cache(expires="tomorrow")
+     * @extra:Cache(expires="tomorrow")
      */
     class BlogController extends Controller
     {
@@ -26,12 +26,12 @@ When there is a conflict between the class configuration and the method
 configuration, the latter overrides the former::
 
     /**
-     * @Cache(expires="tomorrow")
+     * @extra:Cache(expires="tomorrow")
      */
     class BlogController extends Controller
     {
         /**
-         * @Cache(expires="+2 days")
+         * @extra:Cache(expires="+2 days")
          */
         public function indexAction()
         {
@@ -46,9 +46,9 @@ Here is a list of accepted attributes and their HTTP header equivalent:
 ==================================== ===============
 Annotation                           Response Method
 ==================================== ===============
-``@Cache(expires="tomorrow")``       ``$response->setExpires()``
-``@Cache(smaxage="15")``             ``$response->setSharedMaxAge()``
-``@Cache(maxage="15")``              ``$response->setMaxAge()``
+``@extra:Cache(expires="tomorrow")`` ``$response->setExpires()``
+``@extra:Cache(smaxage="15")``       ``$response->setSharedMaxAge()``
+``@extra:Cache(maxage="15")``        ``$response->setMaxAge()``
 ==================================== ===============
 
 .. note::

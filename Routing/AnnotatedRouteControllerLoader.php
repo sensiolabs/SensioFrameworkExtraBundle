@@ -22,7 +22,7 @@ use Bundle\Sensio\FrameworkExtraBundle\Configuration\Method;
  * AnnotatedRouteControllerLoader is an implementation of AnnotationClassLoader
  * that sets the '_controller' default based on the class and method names.
  *
- * It also parse the @Method annotation.
+ * It also parse the @extra:Method annotation.
  *
  * @author Fabien Potencier <fabien.potencier@symfony-project.com>
  */
@@ -47,7 +47,7 @@ class AnnotatedRouteControllerLoader extends AnnotationClassLoader
             $route->setDefault('_controller', $this->converter->toShortNotation($class->getName().'::'.$method->getName()));
         }
 
-        // requirements (@Method)
+        // requirements (@extra:Method)
         $reader = new ConfigurationAnnotationReader();
         foreach ($reader->getMethodAnnotations($method) as $configuration) {
             if ($configuration instanceof Method) {
