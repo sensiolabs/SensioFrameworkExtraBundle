@@ -34,6 +34,7 @@
             <tag name="routing.loader" />
             <argument type="service" id="controller_name_converter" />
             <argument type="service" id="annotations.reader" />
+            <argument type="service" id="annotations.configuration_reader" />
             <call method="setAnnotationClass">
                 <argument>Bundle\Sensio\FrameworkExtraBundle\Configuration\Route</argument>
             </call>

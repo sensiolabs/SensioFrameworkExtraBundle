@@ -6,6 +6,7 @@
 
     <parameters>
         <parameter key="annotations.reader.class">Doctrine\Common\Annotations\AnnotationReader</parameter>
+        <parameter key="annotations.configuration_reader.class">Bundle\Sensio\FrameworkExtraBundle\Configuration\AnnotationReader</parameter>
         <parameter key="annotations.parser.class">Doctrine\Common\Annotations\Parser</parameter>
         <parameter key="annotations.controller_parser.class">Bundle\Sensio\FrameworkExtraBundle\Controller\ControllerAnnotationParser</parameter>
     </parameters>
@@ -24,12 +25,17 @@
             <argument type="service" id="annotations.parser" />
         </service>
 
-        <service id="annotations.controller_parser" class="%annotations.controller_parser.class%">
-            <tag name="kernel.listener" />
-            <argument type="service" id="annotations.reader" />
+        <service id="annotations.configuration_reader" class="%annotations.configuration_reader.class%">
+            <argument type="service" id="annotations.cache" />
+            <argument type="service" id="annotations.parser" />
         </service>
 
-        <service id="annotations.cache.array" class="Doctrine\Common\Cache\ArrayCache" />
+        <service id="annotations.controller_parser" class="%annotations.controller_parser.class%">
+            <tag name="kernel.listener" />
+            <argument type="service" id="annotations.configuration_reader" />
+        </service>
+
+        <service id="annotations.cache.array" class="Doctrine\Common\Cache\ArrayCache" shared="false" />
 
         <service id="annotations.cache" alias="annotations.cache.array" />
     </services>

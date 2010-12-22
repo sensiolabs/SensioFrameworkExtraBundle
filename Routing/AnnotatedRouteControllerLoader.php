@@ -29,10 +29,12 @@ use Bundle\Sensio\FrameworkExtraBundle\Configuration\Method;
 class AnnotatedRouteControllerLoader extends AnnotationClassLoader
 {
     protected $converter;
+    protected $configReader;
 
-    public function __construct(ControllerNameConverter $converter, AnnotationReader $reader)
+    public function __construct(ControllerNameConverter $converter, AnnotationReader $reader, ConfigurationAnnotationReader $configReader)
     {
         $this->converter = $converter;
+        $this->configReader = $configReader;
 
         parent::__construct($reader);
     }
@@ -48,8 +50,7 @@ class AnnotatedRouteControllerLoader extends AnnotationClassLoader
         }
 
         // requirements (@extra:Method)
-        $reader = new ConfigurationAnnotationReader();
-        foreach ($reader->getMethodAnnotations($method) as $configuration) {
+        foreach ($this->configReader->getMethodAnnotations($method) as $configuration) {
             if ($configuration instanceof Method) {
                 $route->setRequirement('_method', implode('|', $configuration->getMethods()));
             }

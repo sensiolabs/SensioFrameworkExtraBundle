@@ -25,6 +25,11 @@ class ControllerAnnotationParser
 {
     protected $reader;
 
+    public function __construct(AnnotationReader $reader)
+    {
+        $this->reader = $reader;
+    }
+
     /**
      * Registers a core.controller listener.
      *
@@ -51,8 +56,7 @@ class ControllerAnnotationParser
 
         $request = $event->get('request');
 
-        $reader = new AnnotationReader();
-        foreach ($reader->getMethodAnnotations($method) as $configuration) {
+        foreach ($this->reader->getMethodAnnotations($method) as $configuration) {
             if ($configuration instanceof ConfigurationInterface) {
                 $request->attributes->set('_'.$configuration->getAliasName(), $configuration);
             }
