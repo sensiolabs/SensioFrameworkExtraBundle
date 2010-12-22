@@ -47,13 +47,6 @@ class ExtraExtension extends Extension
 
         if (!isset($config['view']['annotations']) || $config['view']['annotations']) {
             $annotationsToLoad[] = 'view.xml';
-            $v = true;
-            if (isset($config['view']['manage_null_arguments'])) {
-                $v = $config['view']['manage_null_arguments'];
-            } elseif (isset($config['view']['manage-null-arguments'])) {
-                $v = $config['view']['manage-null-arguments'];
-            }
-            $container->setParameter('view.template_annotation.manage_null_arguments', $v);
         }
 
         if (!isset($config['cache']['annotations']) || $config['cache']['annotations']) {

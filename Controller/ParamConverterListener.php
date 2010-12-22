@@ -25,12 +25,10 @@ use Symfony\Component\EventDispatcher\Event;
 class ParamConverterListener
 {
     protected $manager;
-    protected $dirs;
 
-    public function __construct(ConverterManager $manager, $dirs)
+    public function __construct(ConverterManager $manager)
     {
         $this->manager = $manager;
-        $this->dirs = $dirs;
     }
 
     /**
