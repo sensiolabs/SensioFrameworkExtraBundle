@@ -18,7 +18,7 @@ Then, like for any other bundle, include it in your Kernel class::
         $bundles = array(
             ...
 
-            new Bundle\Sensio\FrameworkExtraBundle\FrameworkExtraBundle(),
+            new Bundle\Sensio\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
         );
 
         ...

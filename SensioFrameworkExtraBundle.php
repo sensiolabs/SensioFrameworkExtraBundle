@@ -14,10 +14,10 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 
 /**
- * FrameworkExtraBundle.
+ * SensioFrameworkExtraBundle.
  *
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  */
-class FrameworkExtraBundle extends Bundle
+class SensioFrameworkExtraBundle extends Bundle
 {
 }
