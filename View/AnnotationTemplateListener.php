@@ -138,6 +138,6 @@ class AnnotationTemplateListener
             throw new \InvalidArgumentException(sprintf('The "%s" class does not belong to a known bundle namespace.', $class->getName()));
         }
 
-        return $bundle.':'.$value.'.twig';
+        return $bundle.':'.$value.'.twig.html';
     }
 }
