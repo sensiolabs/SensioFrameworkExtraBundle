@@ -56,7 +56,12 @@ class ControllerAnnotationParser
 
         $request = $event->get('request');
 
-        foreach ($this->reader->getMethodAnnotations($method) as $configuration) {
+        $annotations = array_merge(
+            $this->reader->getClassAnnotations($object),
+            $this->reader->getMethodAnnotations($method)
+        );
+
+        foreach ($annotations as $configuration) {
             if ($configuration instanceof ConfigurationInterface) {
                 $request->attributes->set('_'.$configuration->getAliasName(), $configuration);
             }
