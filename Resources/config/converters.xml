@@ -14,7 +14,6 @@
         <service id="converter.listener" class="%converter.listener.class%">
             <tag name="kernel.listener" />
             <argument type="service" id="converter.manager" />
-            <argument>%kernel.bundle_dirs%</argument>
         </service>
 
         <service id="converter.manager" class="%converter.manager.class%">

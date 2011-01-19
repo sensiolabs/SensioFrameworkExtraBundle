@@ -49,6 +49,7 @@ class ConverterManager
         if (false === $converted) {
             throw new \InvalidArgumentException(sprintf('Unable to convert configuration for annotation of class "%s".', get_class($configuration)));
         }
+
     }
 
     public function addConverter(ConverterInterface $converter)

@@ -120,24 +120,26 @@ class AnnotationTemplateListener
 
     protected function guessTemplateName($controller)
     {
-        $value = substr($controller[1], 0, -6);
         if (!preg_match('/Controller\\\(.*)Controller$/', get_class($controller[0]), $match)) {
-            throw new \InvalidArgumentException(sprintf('The "%s" class does not look like a controller class (it does not end with Controller)', $class->getName()));
+            throw new \InvalidArgumentException(sprintf('The "%s" class does not look like a controller class (it does not end with Controller)', get_class($controller[0])));
         }
-        $namespace = substr(get_class($controller[0]), 0, -strlen($match[0]) - 1);
 
-        $value = $match[1].':'.$value;
-        $bundle = null;
-        foreach (array_keys($this->container->getParameter('kernel.bundle_dirs')) as $prefix) {
-            if (0 === $pos = strpos($namespace, $prefix)) {
-                $bundle = substr($namespace, strlen($prefix) + 1);
+        $bundle = $this->getBundleForClass(get_class($controller[0]));
+
+        $name = $match[1].':'.substr($controller[1], 0, -6);
+
+        return $bundle->getName().':'.$name.'.twig.html';
+    }
+
+    protected function getBundleForClass($class)
+    {
+        $namespace = strtr(dirname(strtr($class, '\\', '/')), '/', '\\');
+        foreach ($this->getBundles() as $bundle) {
+            if (0 === strpos($namespace, $bundle->getNamespace())) {
+                return $bundle;
             }
         }
 
-        if (null === $bundle) {
-            throw new \InvalidArgumentException(sprintf('The "%s" class does not belong to a known bundle namespace.', $class->getName()));
-        }
-
-        return $bundle.':'.$value.'.twig.html';
+        throw new \InvalidArgumentException(sprintf('The "%s" class does not belong to a registered bundle.', $class));
     }
 }

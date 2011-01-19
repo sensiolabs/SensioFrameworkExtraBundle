@@ -4,7 +4,6 @@ namespace Bundle\Sensio\FrameworkExtraBundle\Routing;
 
 use Symfony\Component\Routing\Loader\AnnotationClassLoader;
 use Symfony\Component\Routing\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\ControllerNameConverter;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Bundle\Sensio\FrameworkExtraBundle\Configuration\AnnotationReader as ConfigurationAnnotationReader;
 use Bundle\Sensio\FrameworkExtraBundle\Configuration\Method;
@@ -28,12 +27,10 @@ use Bundle\Sensio\FrameworkExtraBundle\Configuration\Method;
  */
 class AnnotatedRouteControllerLoader extends AnnotationClassLoader
 {
-    protected $converter;
     protected $configReader;
 
-    public function __construct(ControllerNameConverter $converter, AnnotationReader $reader, ConfigurationAnnotationReader $configReader)
+    public function __construct(AnnotationReader $reader, ConfigurationAnnotationReader $configReader)
     {
-        $this->converter = $converter;
         $this->configReader = $configReader;
 
         parent::__construct($reader);
@@ -46,7 +43,7 @@ class AnnotatedRouteControllerLoader extends AnnotationClassLoader
         if ($classAnnot && $service = $classAnnot->getService()) {
             $route->setDefault('_controller', $service.':'.$method->getName());
         } else {
-            $route->setDefault('_controller', $this->converter->toShortNotation($class->getName().'::'.$method->getName()));
+            $route->setDefault('_controller', $class->getName().'::'.$method->getName());
         }
 
         // requirements (@extra:Method)
