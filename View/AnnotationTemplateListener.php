@@ -134,7 +134,7 @@ class AnnotationTemplateListener
     protected function getBundleForClass($class)
     {
         $namespace = strtr(dirname(strtr($class, '\\', '/')), '/', '\\');
-        foreach ($this->getBundles() as $bundle) {
+        foreach ($this->container->get('kernel')->getBundles() as $bundle) {
             if (0 === strpos($namespace, $bundle->getNamespace())) {
                 return $bundle;
             }
