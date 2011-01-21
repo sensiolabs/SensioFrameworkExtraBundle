@@ -25,13 +25,20 @@ use Symfony\Component\DependencyInjection\Definition;
  */
 class ExtraExtension extends Extension
 {
+    public function configLoad($configs, ContainerBuilder $container)
+    {
+        foreach ($configs as $config) {
+            $this->doConfigLoad($config, $container);
+        }
+    }
+
     /**
      * Loads the extra configuration.
      *
      * @param array $config  An array of configuration settings
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container A ContainerBuilder instance
      */
-    public function configLoad($config, ContainerBuilder $container)
+    protected function doConfigLoad($config, ContainerBuilder $container)
     {
         $loader = new XmlFileLoader($container, __DIR__.'/../Resources/config');
 
