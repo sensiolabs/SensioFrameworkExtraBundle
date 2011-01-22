@@ -21,12 +21,12 @@
         </service>
 
         <service id="annotations.reader" class="%annotations.reader.class%">
-            <argument type="service" id="annotations.cache" />
+            <argument type="service" id="annotations.cache" strict="false" />
             <argument type="service" id="annotations.parser" />
         </service>
 
         <service id="annotations.configuration_reader" class="%annotations.configuration_reader.class%">
-            <argument type="service" id="annotations.cache" />
+            <argument type="service" id="annotations.cache" strict="false" />
             <argument type="service" id="annotations.parser" />
         </service>
 
@@ -35,7 +35,7 @@
             <argument type="service" id="annotations.configuration_reader" />
         </service>
 
-        <service id="annotations.cache.array" class="Doctrine\Common\Cache\ArrayCache" shared="false" />
+        <service id="annotations.cache.array" class="Doctrine\Common\Cache\ArrayCache" scope="prototype" />
 
         <service id="annotations.cache" alias="annotations.cache.array" />
     </services>
