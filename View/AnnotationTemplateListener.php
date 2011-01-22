@@ -128,7 +128,7 @@ class AnnotationTemplateListener
 
         $name = $match[1].':'.substr($controller[1], 0, -6);
 
-        return $bundle->getName().':'.$name.'.twig.html';
+        return $bundle->getName().':'.$name.'.html.twig';
     }
 
     protected function getBundleForClass($class)
