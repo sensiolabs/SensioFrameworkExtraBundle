@@ -19,6 +19,9 @@ use Bundle\Sensio\FrameworkExtraBundle\Configuration\Template;
 /**
  * .
  *
+ * The filterController method must be connected to the core.controller event.
+ * The filterView method must be connected to the core.view event.
+ *
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  */
 class AnnotationTemplateListener

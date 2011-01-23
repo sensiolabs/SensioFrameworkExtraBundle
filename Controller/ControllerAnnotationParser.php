@@ -19,6 +19,8 @@ use Bundle\Sensio\FrameworkExtraBundle\Configuration\AnnotationReader;
 /**
  * .
  *
+ * The filter method must be connected to the core.controller event.
+ *
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  */
 class ControllerAnnotationParser
@@ -28,16 +30,6 @@ class ControllerAnnotationParser
     public function __construct(AnnotationReader $reader)
     {
         $this->reader = $reader;
-    }
-
-    /**
-     * Registers a core.controller listener.
-     *
-     * @param Symfony\Component\EventDispatcher\EventDispatcher $dispatcher An EventDispatcher instance
-     */
-    public function register(EventDispatcher $dispatcher)
-    {
-        $dispatcher->connect('core.controller', array($this, 'filter'));
     }
 
     /**

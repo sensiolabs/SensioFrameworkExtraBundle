@@ -12,7 +12,7 @@
 
     <services>
         <service id="converter.listener" class="%converter.listener.class%">
-            <tag name="kernel.listener" />
+            <tag name="kernel.listener" event="core.controller" method="filter" />
             <argument type="service" id="converter.manager" />
         </service>
 

@@ -20,6 +20,8 @@ use Symfony\Component\EventDispatcher\Event;
 /**
  * ParamConverterListener.
  *
+ * The filter method must be connected to the core.controller event.
+ *
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  */
 class ParamConverterListener
@@ -29,17 +31,6 @@ class ParamConverterListener
     public function __construct(ConverterManager $manager)
     {
         $this->manager = $manager;
-    }
-
-    /**
-     * Registers a core.controller listener.
-     *
-     * @param EventDispatcher $dispatcher An EventDispatcher instance
-     * @param integer         $priority   The priority
-     */
-    public function register(EventDispatcher $dispatcher, $priority = 0)
-    {
-        $dispatcher->connect('core.controller', array($this, 'filter'), $priority);
     }
 
     /**
