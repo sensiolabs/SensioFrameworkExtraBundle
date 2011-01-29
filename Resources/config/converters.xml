@@ -17,12 +17,11 @@
         </service>
 
         <service id="converter.manager" class="%converter.manager.class%">
-            <argument type="collection">
-                <argument type="service" id="converter.doctrine" />
-            </argument>
+            <argument type="collection" />
         </service>
 
         <service id="converter.doctrine" class="%converter.doctrine.class%">
+            <tag name="request.param_converter" />
             <argument type="service" id="doctrine.orm.entity_manager" />
         </service>
     </services>

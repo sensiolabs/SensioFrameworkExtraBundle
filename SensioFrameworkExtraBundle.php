@@ -3,6 +3,8 @@
 namespace Bundle\Sensio\FrameworkExtraBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Bundle\Sensio\FrameworkExtraBundle\DependencyInjection\Compiler\AddParamConverterPass;
 
 /*
  * This file is part of the Symfony framework.
@@ -20,6 +22,13 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 class SensioFrameworkExtraBundle extends Bundle
 {
+    public function registerExtensions(ContainerBuilder $container)
+    {
+        parent::registerExtensions($container);
+
+        $container->addCompilerPass(new AddParamConverterPass());
+    }
+
     /**
      * {@inheritdoc}
      */
