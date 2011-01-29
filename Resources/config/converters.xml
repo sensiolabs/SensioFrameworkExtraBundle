@@ -6,8 +6,8 @@
 
     <parameters>
         <parameter key="converter.listener.class">Bundle\Sensio\FrameworkExtraBundle\Controller\ParamConverterListener</parameter>
-        <parameter key="converter.manager.class">Bundle\Sensio\FrameworkExtraBundle\Request\Converter\ConverterManager</parameter>
-        <parameter key="converter.doctrine.class">Bundle\Sensio\FrameworkExtraBundle\Request\Converter\DoctrineConverter</parameter>
+        <parameter key="converter.manager.class">Bundle\Sensio\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager</parameter>
+        <parameter key="converter.doctrine.class">Bundle\Sensio\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter</parameter>
     </parameters>
 
     <services>

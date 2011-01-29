@@ -1,6 +1,6 @@
 <?php
 
-namespace Bundle\Sensio\FrameworkExtraBundle\Request\Converter;
+namespace Bundle\Sensio\FrameworkExtraBundle\Request\ParamConverter;
 
 use Symfony\Component\HttpFoundation\Request;
 
@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  */
-class ConverterManager
+class ParamConverterManager
 {
     protected $converters;
 
@@ -51,7 +51,7 @@ class ConverterManager
         }
    }
 
-    public function addConverter(ConverterInterface $converter)
+    public function addConverter(ParamConverterInterface $converter)
     {
         $this->converters[] = $converter;
     }

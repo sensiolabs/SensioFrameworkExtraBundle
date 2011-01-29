@@ -1,6 +1,6 @@
 <?php
 
-namespace Bundle\Sensio\FrameworkExtraBundle\Request\Converter;
+namespace Bundle\Sensio\FrameworkExtraBundle\Request\ParamConverter;
 
 use Bundle\Sensio\FrameworkExtraBundle\Configuration\ConfigurationInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -23,7 +23,7 @@ use Doctrine\ORM\Mapping\MappingException;
  *
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  */
-class DoctrineConverter implements ConverterInterface
+class DoctrineParamConverter implements ParamConverterInterface
 {
     protected $manager;
 

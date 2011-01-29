@@ -3,7 +3,7 @@
 namespace Bundle\Sensio\FrameworkExtraBundle\Controller;
 
 use Bundle\Sensio\FrameworkExtraBundle\Configuration\ParamConverter;
-use Bundle\Sensio\FrameworkExtraBundle\Request\Converter\ConverterManager;
+use Bundle\Sensio\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\Event;
@@ -28,7 +28,7 @@ class ParamConverterListener
 {
     protected $manager;
 
-    public function __construct(ConverterManager $manager)
+    public function __construct(ParamConverterManager $manager)
     {
         $this->manager = $manager;
     }
