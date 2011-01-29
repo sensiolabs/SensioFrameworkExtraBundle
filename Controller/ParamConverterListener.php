@@ -46,13 +46,17 @@ class ParamConverterListener
             $this->manager->apply($request, $configuration);
         }
 
-        if (!is_array($controller)) {
-            return $controller;
+        if (is_array($controller)) {
+            list($controller, $method) = $controller;
+            $m = new \ReflectionMethod($controller, $method);
+            $parameters = $m->getParameters();
+        } else {
+            $f = new \ReflectionFunction($controller);
+            $parameters = $f->getParameters();
         }
 
         // automatically apply conversion for non-configured objects
-        $r = new \ReflectionObject($controller[0]);
-        foreach ($r->getMethod($controller[1])->getParameters() as $param) {
+        foreach ($parameters as $param) {
             if ($param->getClass() && !$request->attributes->get($param->getName())) {
                 $configuration = new ParamConverter();
                 $configuration->setName($param->getName());

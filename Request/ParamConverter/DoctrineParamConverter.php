@@ -53,6 +53,10 @@ class DoctrineParamConverter implements ParamConverterInterface
 
     protected function find($class, Request $request)
     {
+        if (!$request->attributes->has('id')) {
+            return false;
+        }
+
         return $this->manager->getRepository($class)->find($request->attributes->get('id'));
     }
 
