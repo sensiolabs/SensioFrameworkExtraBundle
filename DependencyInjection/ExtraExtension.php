@@ -27,21 +27,22 @@ class ExtraExtension extends Extension
 {
     public function configLoad($configs, ContainerBuilder $container)
     {
+        $loader = new XmlFileLoader($container, __DIR__.'/../Resources/config');
+
         foreach ($configs as $config) {
-            $this->doConfigLoad($config, $container);
+            $this->doConfigLoad($config, $container, $loader);
         }
     }
 
     /**
      * Loads the extra configuration.
      *
-     * @param array $config  An array of configuration settings
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container A ContainerBuilder instance
+     * @param array            $config    An array of configuration settings
+     * @param ContainerBuilder $container A ContainerBuilder instance
+     * @param XmlFileLoader    $loader    A XmlFileLoader loader
      */
-    protected function doConfigLoad($config, ContainerBuilder $container)
+    protected function doConfigLoad($config, ContainerBuilder $container, XmlFileLoader $loader)
     {
-        $loader = new XmlFileLoader($container, __DIR__.'/../Resources/config');
-
         $annotationsToLoad = array();
 
         if (!isset($config['router']['annotations']) || $config['router']['annotations']) {
