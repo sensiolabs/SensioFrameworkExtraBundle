@@ -28,11 +28,9 @@ class AddParamConverterPass implements CompilerPassInterface
             return;
         }
 
-        $converters = array();
+        $definition = $container->getDefinition('converter.manager');
         foreach ($container->findTaggedServiceIds('request.param_converter') as $id => $attributes) {
-            $converters[] = new Reference($id);
+            $definition->addMethodCall('add', array(new Reference($id), isset($attributes[0]['priority']) ? $attributes[0]['priority'] : 0));
         }
-
-        $container->getDefinition('converter.manager')->setArgument(0, $converters);
     }
 }
