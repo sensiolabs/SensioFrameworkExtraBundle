@@ -59,6 +59,16 @@ class ParamConverter implements ConfigurationInterface
         $this->options = $options;
     }
 
+    public function isOptional()
+    {
+        return $this->optional;
+    }
+
+    public function setOptional($optional)
+    {
+        $this->optional = $optional;
+    }
+
     public function getAliasName()
     {
         return 'converters';
