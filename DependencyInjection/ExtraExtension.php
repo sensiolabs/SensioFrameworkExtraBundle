@@ -1,6 +1,6 @@
 <?php
 
-namespace Bundle\Sensio\FrameworkExtraBundle\DependencyInjection;
+namespace Sensio\Bundle\FrameworkExtraBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;

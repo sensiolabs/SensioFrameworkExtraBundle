@@ -1,6 +1,6 @@
 <?php
 
-namespace Bundle\Sensio\FrameworkExtraBundle\Configuration;
+namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
 
 use Doctrine\Common\Annotations\AnnotationReader as BaseAnnotationReader;
 

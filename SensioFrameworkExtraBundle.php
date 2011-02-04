@@ -1,10 +1,10 @@
 <?php
 
-namespace Bundle\Sensio\FrameworkExtraBundle;
+namespace Sensio\Bundle\FrameworkExtraBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Bundle\Sensio\FrameworkExtraBundle\DependencyInjection\Compiler\AddParamConverterPass;
+use Sensio\Bundle\FrameworkExtraBundle\DependencyInjection\Compiler\AddParamConverterPass;
 
 /*
  * This file is part of the Symfony framework.

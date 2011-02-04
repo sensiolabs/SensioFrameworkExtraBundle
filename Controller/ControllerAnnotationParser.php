@@ -1,11 +1,11 @@
 <?php
 
-namespace Bundle\Sensio\FrameworkExtraBundle\Controller;
+namespace Sensio\Bundle\FrameworkExtraBundle\Controller;
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\Event;
-use Bundle\Sensio\FrameworkExtraBundle\Configuration\ConfigurationInterface;
-use Bundle\Sensio\FrameworkExtraBundle\Configuration\AnnotationReader;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\AnnotationReader;
 
 /*
  * This file is part of the Symfony framework.

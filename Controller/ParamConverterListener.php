@@ -1,9 +1,9 @@
 <?php
 
-namespace Bundle\Sensio\FrameworkExtraBundle\Controller;
+namespace Sensio\Bundle\FrameworkExtraBundle\Controller;
 
-use Bundle\Sensio\FrameworkExtraBundle\Configuration\ParamConverter;
-use Bundle\Sensio\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\Event;

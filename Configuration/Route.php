@@ -1,6 +1,6 @@
 <?php
 
-namespace Bundle\Sensio\FrameworkExtraBundle\Configuration;
+namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
 
 use Symfony\Component\Routing\Annotation\Route as BaseRoute;
 

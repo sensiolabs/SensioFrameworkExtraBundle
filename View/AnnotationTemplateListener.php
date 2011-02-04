@@ -1,11 +1,11 @@
 <?php
 
-namespace Bundle\Sensio\FrameworkExtraBundle\View;
+namespace Sensio\Bundle\FrameworkExtraBundle\View;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\Event;
-use Bundle\Sensio\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 /*
  * This file is part of the Symfony framework.

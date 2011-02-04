@@ -1,8 +1,8 @@
 <?php
 
-namespace Bundle\Sensio\FrameworkExtraBundle\Request\ParamConverter;
+namespace Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter;
 
-use Bundle\Sensio\FrameworkExtraBundle\Configuration\ConfigurationInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\NoResultException;

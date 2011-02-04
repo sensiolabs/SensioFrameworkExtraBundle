@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Bundle\Sensio\FrameworkExtraBundle\DependencyInjection\Compiler;
+namespace Sensio\Bundle\FrameworkExtraBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

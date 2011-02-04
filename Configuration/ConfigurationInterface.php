@@ -1,6 +1,6 @@
 <?php
 
-namespace Bundle\Sensio\FrameworkExtraBundle\Configuration;
+namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
 
 /*
  * This file is part of the Symfony package.
