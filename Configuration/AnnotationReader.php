@@ -26,7 +26,7 @@ class AnnotationReader extends BaseAnnotationReader
         $this->setAnnotationCreationFunction(function ($name, $values)
         {
             $r = new \ReflectionClass($name);
-            if (!$r->implementsInterface('Bundle\\Sensio\\FrameworkExtraBundle\\Configuration\\ConfigurationInterface')) {
+            if (!$r->implementsInterface('Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\ConfigurationInterface')) {
                 return null;
             }
 
@@ -41,7 +41,7 @@ class AnnotationReader extends BaseAnnotationReader
             return $configuration;
         });
 
-        $this->setDefaultAnnotationNamespace('Bundle\\Sensio\\FrameworkExtraBundle\\Configuration\\');
+        $this->setDefaultAnnotationNamespace('Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\');
         $configurations = parent::getMethodAnnotations($method);
         $this->setAnnotationCreationFunction(function ($name, $values) { return null; });
 
