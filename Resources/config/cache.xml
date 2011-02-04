@@ -5,7 +5,7 @@
     xsi:schemaLocation="http://www.symfony-project.org/schema/dic/services http://www.symfony-project.org/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="cache.annotation" class="Bundle\Sensio\FrameworkExtraBundle\Cache\AnnotationCacheListener">
+        <service id="cache.annotation" class="Sensio\Bundle\FrameworkExtraBundle\Cache\AnnotationCacheListener">
             <tag name="kernel.listener" event="core.response" method="filter" />
         </service>
     </services>

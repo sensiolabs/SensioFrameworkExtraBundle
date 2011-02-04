@@ -5,9 +5,9 @@
     xsi:schemaLocation="http://www.symfony-project.org/schema/dic/services http://www.symfony-project.org/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="converter.listener.class">Bundle\Sensio\FrameworkExtraBundle\Controller\ParamConverterListener</parameter>
-        <parameter key="converter.manager.class">Bundle\Sensio\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager</parameter>
-        <parameter key="converter.doctrine.class">Bundle\Sensio\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter</parameter>
+        <parameter key="converter.listener.class">Sensio\Bundle\FrameworkExtraBundle\Controller\ParamConverterListener</parameter>
+        <parameter key="converter.manager.class">Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager</parameter>
+        <parameter key="converter.doctrine.class">Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter</parameter>
     </parameters>
 
     <services>

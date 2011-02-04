@@ -6,16 +6,16 @@
 
     <parameters>
         <parameter key="annotations.reader.class">Doctrine\Common\Annotations\AnnotationReader</parameter>
-        <parameter key="annotations.configuration_reader.class">Bundle\Sensio\FrameworkExtraBundle\Configuration\AnnotationReader</parameter>
+        <parameter key="annotations.configuration_reader.class">Sensio\Bundle\FrameworkExtraBundle\Configuration\AnnotationReader</parameter>
         <parameter key="annotations.parser.class">Doctrine\Common\Annotations\Parser</parameter>
-        <parameter key="annotations.controller_parser.class">Bundle\Sensio\FrameworkExtraBundle\Controller\ControllerAnnotationParser</parameter>
+        <parameter key="annotations.controller_parser.class">Sensio\Bundle\FrameworkExtraBundle\Controller\ControllerAnnotationParser</parameter>
     </parameters>
 
     <services>
         <service id="annotations.parser" class="%annotations.parser.class%">
             <call method="setAutoloadAnnotations"><argument>true</argument></call>
             <call method="setAnnotationNamespaceAlias">
-                <argument>Bundle\Sensio\FrameworkExtraBundle\Configuration\</argument>
+                <argument>Sensio\Bundle\FrameworkExtraBundle\Configuration\</argument>
                 <argument>extra</argument>
             </call>
         </service>

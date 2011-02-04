@@ -5,7 +5,7 @@
     xsi:schemaLocation="http://www.symfony-project.org/schema/dic/services http://www.symfony-project.org/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="view.template_annotation" class="Bundle\Sensio\FrameworkExtraBundle\View\AnnotationTemplateListener">
+        <service id="view.template_annotation" class="Sensio\Bundle\FrameworkExtraBundle\View\AnnotationTemplateListener">
             <tag name="kernel.listener" event="core.controller" method="filterController" />
             <tag name="kernel.listener" event="core.view" method="filterView" />
             <argument type="service" id="service_container" />
