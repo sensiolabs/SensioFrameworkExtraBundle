@@ -28,20 +28,4 @@ class SensioFrameworkExtraBundle extends Bundle
 
         $container->addCompilerPass(new AddParamConverterPass());
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getNamespace()
-    {
-        return __NAMESPACE__;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getPath()
-    {
-        return strtr(__DIR__, '\\', '/');
-    }
 }
