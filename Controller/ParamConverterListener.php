@@ -5,8 +5,7 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\EventDispatcher\EventInterface;
 
 /*
  * This file is part of the Symfony framework.
@@ -38,7 +37,7 @@ class ParamConverterListener
      *
      * @param Event $event An Event instance
      */
-    public function filter(Event $event, $controller)
+    public function filter(EventInterface $event, $controller)
     {
         $request = $event->get('request');
 

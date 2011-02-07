@@ -2,8 +2,7 @@
 
 namespace Sensio\Bundle\FrameworkExtraBundle\Cache;
 
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\EventDispatcher\EventInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 /*
@@ -29,7 +28,7 @@ class AnnotationCacheListener
      *
      * @param Event $event An Event instance
      */
-    public function filter(Event $event, Response $response)
+    public function filter(EventInterface $event, Response $response)
     {
         if (!$configuration = $event->get('request')->attributes->get('_cache')) {
             return $response;

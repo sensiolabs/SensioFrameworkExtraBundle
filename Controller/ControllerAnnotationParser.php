@@ -2,8 +2,8 @@
 
 namespace Sensio\Bundle\FrameworkExtraBundle\Controller;
 
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\EventInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\AnnotationReader;
 
@@ -37,7 +37,7 @@ class ControllerAnnotationParser
      *
      * @param Event $event An Event instance
      */
-    public function filter(Event $event, $controller)
+    public function filter(EventInterface $event, $controller)
     {
         if (!is_array($controller)) {
             return $controller;

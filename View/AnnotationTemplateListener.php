@@ -3,8 +3,8 @@
 namespace Sensio\Bundle\FrameworkExtraBundle\View;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\EventInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 /*
@@ -39,7 +39,7 @@ class AnnotationTemplateListener
      * @param EventDispatcher $dispatcher An EventDispatcher instance
      * @param integer         $priority   The priority
      */
-    public function register(EventDispatcher $dispatcher, $priority = 0)
+    public function register(EventDispatcherInterface $dispatcher, $priority = 0)
     {
         $dispatcher->connect('core.controller', array($this, 'filterController'), $priority);
         $dispatcher->connect('core.view', array($this, 'filterView'), $priority);
@@ -50,7 +50,7 @@ class AnnotationTemplateListener
      *
      * @param Event $event An Event instance
      */
-    public function filterController(Event $event, $controller)
+    public function filterController(EventInterface $event, $controller)
     {
         if (!is_array($controller)) {
             return $controller;
@@ -89,7 +89,7 @@ class AnnotationTemplateListener
      *
      * @param Event $event An Event instance
      */
-    public function filterView(Event $event, $parameters)
+    public function filterView(EventInterface $event, $parameters)
     {
         $request = $event->get('request');
 
