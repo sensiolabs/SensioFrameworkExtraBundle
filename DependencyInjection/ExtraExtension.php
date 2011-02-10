@@ -4,6 +4,7 @@ namespace Sensio\Bundle\FrameworkExtraBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Loader\FileLocator;
 use Symfony\Component\DependencyInjection\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -27,7 +28,7 @@ class ExtraExtension extends Extension
 {
     public function configLoad($configs, ContainerBuilder $container)
     {
-        $loader = new XmlFileLoader($container, __DIR__.'/../Resources/config');
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 
         foreach ($configs as $config) {
             $this->doConfigLoad($config, $container, $loader);
