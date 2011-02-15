@@ -20,13 +20,13 @@ use Symfony\Component\Config\Resource\FileResource;
  */
 
 /**
- * ExtraExtension.
+ * SensioFrameworkExtraExtension.
  *
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  */
-class ExtraExtension extends Extension
+class SensioFrameworkExtraExtension extends Extension
 {
-    public function configLoad($configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container)
     {
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 
@@ -89,6 +89,6 @@ class ExtraExtension extends Extension
 
     public function getAlias()
     {
-        return 'extra';
+        return 'sensio_framework_extra';
     }
 }
