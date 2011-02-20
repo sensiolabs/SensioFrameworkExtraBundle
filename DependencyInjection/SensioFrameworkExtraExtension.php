@@ -86,9 +86,4 @@ class SensioFrameworkExtraExtension extends Extension
     {
         return 'http://www.symfony-project.org/schema/dic/symfony_extra';
     }
-
-    public function getAlias()
-    {
-        return 'sensio_framework_extra';
-    }
 }
