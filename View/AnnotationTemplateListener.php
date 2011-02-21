@@ -90,9 +90,10 @@ class AnnotationTemplateListener
      *
      * @param Event $event An Event instance
      */
-    public function filterView(EventInterface $event, $parameters)
+    public function filterView(EventInterface $event)
     {
         $request = $event->get('request');
+        $parameters = $event->get('controller_value');
 
         if (null === $parameters) {
             if (!$vars = $request->attributes->get('_template_vars')) {
@@ -114,6 +115,8 @@ class AnnotationTemplateListener
         if (!$template = $request->attributes->get('_template')) {
             return $parameters;
         }
+
+        $event->setProcessed();
 
         return new Response($this->container->get('templating')->render($template, $parameters));
     }
