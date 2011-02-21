@@ -5,6 +5,7 @@ namespace Sensio\Bundle\FrameworkExtraBundle\View;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 /*
@@ -114,11 +115,7 @@ class AnnotationTemplateListener
             return $parameters;
         }
 
-        $response = $this->container->get('response');
-
-        $response->setContent($this->container->get('templating')->render($template, $parameters));
-
-        return $response;
+        return new Response($this->container->get('templating')->render($template, $parameters));
     }
 
     protected function guessTemplateName($controller)
