@@ -2,11 +2,11 @@
 
 namespace Sensio\Bundle\FrameworkExtraBundle\Routing;
 
+use Symfony\Component\Routing\Loader\AnnotationClassLoader;
 use Symfony\Component\Routing\Route;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\AnnotationReader as ConfigurationAnnotationReader;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Routing\Loader\AnnotationClassLoader;
 
 /*
  * This file is part of the Symfony framework.
@@ -52,5 +52,29 @@ class AnnotatedRouteControllerLoader extends AnnotationClassLoader
                 $route->setRequirement('_method', implode('|', $configuration->getMethods()));
             }
         }
+    }
+
+    /**
+     * Makes the default route name more sane by removing common keywords.
+     *
+     * @param  ReflectionClass $class
+     * @param  ReflectionMethod $method
+     * @return string
+     */
+    public function getDefaultRouteName(\ReflectionClass $class, \ReflectionMethod $method)
+    {
+        $routeName = parent::getDefaultRouteName($class, $method);
+
+        return str_replace(array(
+            'bundle',
+            'controller',
+            'action',
+            '__',
+        ), array(
+            null,
+            null,
+            null,
+            '_',
+        ), $routeName);
     }
 }
