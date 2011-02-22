@@ -2,11 +2,11 @@
 
 namespace Sensio\Bundle\FrameworkExtraBundle\Routing;
 
-use Symfony\Component\Routing\Loader\AnnotationClassLoader;
 use Symfony\Component\Routing\Route;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\AnnotationReader as ConfigurationAnnotationReader;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Routing\Loader\AnnotationClassLoader;
 
 /*
  * This file is part of the Symfony framework.
