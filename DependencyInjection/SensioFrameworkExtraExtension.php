@@ -9,6 +9,7 @@ use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Resource\FileResource;
+use Symfony\Component\Config\Definition\Processor;
 
 /*
  * This file is part of the Symfony framework.
@@ -30,20 +31,11 @@ class SensioFrameworkExtraExtension extends Extension
     {
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 
-        foreach ($configs as $config) {
-            $this->doConfigLoad($config, $container, $loader);
-        }
-    }
+        $processor     = new Processor();
+        $configuration = new Configuration();
 
-    /**
-     * Loads the extra configuration.
-     *
-     * @param array            $config    An array of configuration settings
-     * @param ContainerBuilder $container A ContainerBuilder instance
-     * @param XmlFileLoader    $loader    A XmlFileLoader loader
-     */
-    protected function doConfigLoad($config, ContainerBuilder $container, XmlFileLoader $loader)
-    {
+        $config = $processor->process($configuration->getConfigTree(), $configs);
+
         $annotationsToLoad = array();
 
         if (!isset($config['router']['annotations']) || $config['router']['annotations']) {
