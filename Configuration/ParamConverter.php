@@ -23,6 +23,8 @@ class ParamConverter implements ConfigurationInterface
     protected $name;
     protected $class;
     protected $options = array();
+    protected $optional = false;
+
 
     public function getName()
     {
@@ -57,6 +59,16 @@ class ParamConverter implements ConfigurationInterface
     public function setOptions($options)
     {
         $this->options = $options;
+    }
+
+    public function setIsOptional($optional)
+    {
+        $this->optional = (Boolean) $optional;
+    }
+
+    public function isOptional()
+    {
+        return $this->optional;
     }
 
     public function getAliasName()

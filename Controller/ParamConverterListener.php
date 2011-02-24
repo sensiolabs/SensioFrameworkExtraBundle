@@ -58,6 +58,8 @@ class ParamConverterListener
                 $configuration->setName($param->getName());
                 $configuration->setClass($param->getClass()->getName());
 
+                $configuration->setIsOptional($param->isOptional());
+
                 $this->manager->apply($request, $configuration);
             }
         }
