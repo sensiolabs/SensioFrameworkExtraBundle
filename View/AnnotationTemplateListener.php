@@ -6,6 +6,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 /*
@@ -64,7 +65,7 @@ class AnnotationTemplateListener
         }
 
         if (!$configuration->getTemplate()) {
-            $configuration->setTemplate($this->guessTemplateName($controller));
+            $configuration->setTemplate($this->guessTemplateName($controller, $request));
         }
 
         $request->attributes->set('_template', $configuration->getTemplate());
@@ -121,7 +122,7 @@ class AnnotationTemplateListener
         return new Response($this->container->get('templating')->render($template, $parameters));
     }
 
-    protected function guessTemplateName($controller)
+    protected function guessTemplateName($controller, Request $request)
     {
         if (!preg_match('/Controller\\\(.*)Controller$/', get_class($controller[0]), $match)) {
             throw new \InvalidArgumentException(sprintf('The "%s" class does not look like a controller class (it does not end with Controller)', get_class($controller[0])));
@@ -131,7 +132,7 @@ class AnnotationTemplateListener
 
         $name = $match[1].':'.substr($controller[1], 0, -6);
 
-        return $bundle->getName().':'.$name.'.html.twig';
+        return $bundle->getName().':'.$name.'.'.$request->getRequestFormat().'.twig';
     }
 
     protected function getBundleForClass($class)
