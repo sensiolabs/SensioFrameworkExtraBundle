@@ -28,18 +28,12 @@ class ParamConverterManager
             $configurations = array($configurations);
         }
 
-        $converted = false;
         foreach ($configurations as $configuration) {
             foreach ($this->all() as $converter) {
                 if ($converter->supports($configuration)) {
-                    $converted = true;
                     $converter->apply($request, $configuration);
                 }
             }
-        }
-
-        if (false === $converted) {
-            throw new \InvalidArgumentException(sprintf('Unable to convert configuration for annotation of class "%s".', get_class($configuration)));
         }
    }
 
