@@ -14,7 +14,7 @@ use Symfony\Component\Config\Definition\Processor;
 /*
  * This file is part of the Symfony framework.
  *
- * (c) Fabien Potencier <fabien.potencier@symfony-project.com>
+ * (c) Fabien Potencier <fabien@symfony.com>
  *
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
@@ -23,7 +23,7 @@ use Symfony\Component\Config\Definition\Processor;
 /**
  * SensioFrameworkExtraExtension.
  *
- * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
+ * @author     Fabien Potencier <fabien@symfony.com>
  */
 class SensioFrameworkExtraExtension extends Extension
 {
@@ -76,6 +76,6 @@ class SensioFrameworkExtraExtension extends Extension
 
     public function getNamespace()
     {
-        return 'http://www.symfony-project.org/schema/dic/symfony_extra';
+        return 'http://symfony.com/schema/dic/symfony_extra';
     }
 }

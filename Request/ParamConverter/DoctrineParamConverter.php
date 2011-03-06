@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping\MappingException;
 /*
  * This file is part of the Symfony framework.
  *
- * (c) Fabien Potencier <fabien.potencier@symfony-project.com>
+ * (c) Fabien Potencier <fabien@symfony.com>
  *
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
@@ -21,7 +21,7 @@ use Doctrine\ORM\Mapping\MappingException;
 /**
  * DoctrineConverter.
  *
- * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
+ * @author     Fabien Potencier <fabien@symfony.com>
  */
 class DoctrineParamConverter implements ParamConverterInterface
 {
