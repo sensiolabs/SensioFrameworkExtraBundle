@@ -21,7 +21,8 @@ class Cache implements ConfigurationInterface
     protected $expires;
     protected $maxage;
     protected $smaxage;
-
+    protected $public;
+    
     public function getExpires()
     {
         return $this->expires;
@@ -50,6 +51,16 @@ class Cache implements ConfigurationInterface
     public function getSMaxAge()
     {
         return $this->smaxage;
+    }
+
+    public function isPublic()
+    {
+        return (bool) $this->public;
+    }
+
+    public function setPublic($public)
+    {
+        $this->public = $public;
     }
 
     public function getAliasName()

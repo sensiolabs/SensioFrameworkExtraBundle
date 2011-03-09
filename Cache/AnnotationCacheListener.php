@@ -52,6 +52,10 @@ class AnnotationCacheListener
             $response->setLastModified($date);
         }
 
+        if ($configuration->isPublic()) {
+            $response->setPublic();
+        }
+
         return $response;
     }
 }
