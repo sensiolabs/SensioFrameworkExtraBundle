@@ -27,7 +27,7 @@ class DoctrineParamConverter implements ParamConverterInterface
 {
     protected $manager;
 
-    public function __construct(EntityManager $manager)
+    public function __construct(EntityManager $manager = null)
     {
         $this->manager = $manager;
     }
@@ -79,6 +79,10 @@ class DoctrineParamConverter implements ParamConverterInterface
 
     public function supports(ConfigurationInterface $configuration)
     {
+        if (null === $this->manager) {
+            return false;
+        }
+
         if (null === $configuration->getClass()) {
             return false;
         }
