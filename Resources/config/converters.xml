@@ -22,7 +22,7 @@
 
         <service id="converter.doctrine" class="%converter.doctrine.class%">
             <tag name="request.param_converter" />
-            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="doctrine.orm.entity_manager" on-invalid="ignore" />
         </service>
     </services>
 </container>
