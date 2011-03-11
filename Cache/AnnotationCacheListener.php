@@ -24,9 +24,10 @@ use Symfony\Component\HttpFoundation\Response;
 class AnnotationCacheListener
 {
     /**
-     * 
+     * Modifies the response to apply HTTP expiration header fields.
      *
-     * @param Event $event An Event instance
+     * @param  Event    $event   An Event instance
+     * @return Response $reponse The modified Response instance
      */
     public function filter(EventInterface $event, Response $response)
     {
@@ -47,9 +48,9 @@ class AnnotationCacheListener
         }
 
         if (null !== $configuration->getExpires()) {
-            $date = \DateTime::create(\DateTime::createFromFormat('U', $configuration->getExpires(), new \DateTimeZone('UTC')));
 
-            $response->setLastModified($date);
+            $date = \DateTime::createFromFormat('U', strtotime($configuration->getExpires()), new \DateTimeZone('UTC'));
+            $response->setExpires($date);
         }
 
         if ($configuration->isPublic()) {
