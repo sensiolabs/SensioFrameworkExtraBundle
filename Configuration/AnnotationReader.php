@@ -23,8 +23,8 @@ class AnnotationReader extends BaseAnnotationReader
     public function getMethodAnnotations(\ReflectionMethod $method)
     {
         $this->setAutoloadAnnotations(true);
-        $self = $this;
-        $this->setAnnotationCreationFunction(function ($name, $values) use ($self)
+
+        $this->setAnnotationCreationFunction(function ($name, $values)
         {
             $r = new \ReflectionClass($name);
             if (!$r->implementsInterface('Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\ConfigurationInterface')) {
@@ -34,7 +34,7 @@ class AnnotationReader extends BaseAnnotationReader
             $configuration = new $name();
             foreach ($values as $key => $value) {
                 if (!method_exists($configuration, $method = 'set'.$key)) {
-                    throw new \BadMethodCallException(sprintf("Unknown annotation attribute '%s' for '%s'.", ucfirst($key), get_class($self)));
+                    throw new \BadMethodCallException(sprintf("Unknown annotation attribute '%s' for '%s'.", ucfirst($key), $name));
                 }
                 $configuration->$method($value);
             }
