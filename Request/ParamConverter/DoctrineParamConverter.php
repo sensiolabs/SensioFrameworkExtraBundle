@@ -37,36 +37,48 @@ class DoctrineParamConverter implements ParamConverterInterface
         $class = $configuration->getClass();
 
         // find by identifier?
-        if (false === $object = $this->find($class, $request)) {
+        if (false === $object = $this->find($class, $request, $configuration)) {
             // find by criteria
-            if (false === $object = $this->findOneBy($class, $request)) {
+            if (false === $object = $this->findOneBy($class, $request, $configuration)) {
                 throw new \LogicException('Unable to guess how to get a Doctrine instance from the request information.');
             }
         }
 
-        if (null === $object) {
+        if (null === $object && $configuration->isOptional() == false) {
             throw new NotFoundHttpException(sprintf('%s object not found.', $class));
         }
 
         $request->attributes->set($configuration->getName(), $object);
     }
 
-    protected function find($class, Request $request)
+    protected function find($class, Request $request, ConfigurationInterface $configuration)
     {
         if (!$request->attributes->has('id')) {
             return false;
         }
 
+        if(\is_array($configuration->getOptions()) && count($configuration->getOptions())) {
+            return $this->findOneBy($class, $return, $configuration);
+        }
+
         return $this->manager->getRepository($class)->find($request->attributes->get('id'));
     }
 
-    protected function findOneBy($class, Request $request)
+    protected function findOneBy($class, Request $request, ConfigurationInterface $configuration)
     {
         $criteria = array();
         $metadata = $this->manager->getClassMetadata($class);
         foreach ($request->attributes->all() as $key => $value) {
             if ($metadata->hasField($key)) {
                 $criteria[$key] = $value;
+            }
+        }
+        
+        if(\is_array($configuration->getOptions()) && count($configuration->getOptions())) {
+            foreach($configuration->getOptions() as $key => $value) {
+                if($metadata->hasField($key)) {
+                    $criteria[$key] = $value;
+                }
             }
         }
 
