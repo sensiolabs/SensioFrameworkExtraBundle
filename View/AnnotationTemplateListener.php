@@ -94,23 +94,18 @@ class AnnotationTemplateListener
     public function filterView(EventInterface $event)
     {
         $request = $event->get('request');
-        $parameters = $event->get('controller_value');
+        $parameters = (array) $event->get('controller_value');
 
-        if (null === $parameters) {
+        if (true === empty($parameters)) {
             if (!$vars = $request->attributes->get('_template_vars')) {
-                if (!$vars = $request->attributes->get('_template_default_vars')) {
-                    return;
+                $vars = $request->attributes->get('_template_default_vars', array());
+            }
+
+            if (true === is_array($vars)) {
+                foreach ($vars as $var) {
+                    $parameters[$var] = $request->attributes->get($var);
                 }
             }
-
-            $parameters = array();
-            foreach ($vars as $var) {
-                $parameters[$var] = $request->attributes->get($var);
-            }
-        }
-
-        if (!is_array($parameters)) {
-            return $parameters;
         }
 
         if (!$template = $request->attributes->get('_template')) {
