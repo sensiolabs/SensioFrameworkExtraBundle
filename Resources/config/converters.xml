@@ -20,9 +20,14 @@
             <argument type="collection" />
         </service>
 
-        <service id="converter.doctrine" class="%converter.doctrine.class%">
+        <service id="converter.doctrine.orm" class="%converter.doctrine.class%">
             <tag name="request.param_converter" />
             <argument type="service" id="doctrine.orm.entity_manager" on-invalid="ignore" />
+        </service>
+
+        <service id="converter.doctrine.mongodb.odm" class="%converter.doctrine.class%">
+            <tag name="request.param_converter" />
+            <argument type="service" id="doctrine.odm.mongodb.document_manager" on-invalid="ignore" />
         </service>
     </services>
 </container>
