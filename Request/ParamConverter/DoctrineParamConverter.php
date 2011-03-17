@@ -6,11 +6,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Request;
 
-use Doctrine\ORM\NoResultException;
-use Doctrine\ORM\EntityManager;
+use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\Mapping\MappingException;
-
-use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ODM\MongoDB\MongoDBException;
 
 /*
@@ -31,16 +28,8 @@ class DoctrineParamConverter implements ParamConverterInterface
 {
     protected $manager;
 
-    public function __construct($manager = null)
+    public function __construct(ObjectManager $manager = null)
     {
-        if (is_null($manager)) {
-            return;
-        }
-
-        if (false === (($manager instanceof EntityManager) || ($manager instanceof DocumentManager))) {
-            throw new \InvalidArgumentException('$manager must be an instance of Doctrine\ORM\EntityManager or Doctrine\ODM\MongoDB\DocumentManager.');
-        }
-
         $this->manager = $manager;
     }
 
