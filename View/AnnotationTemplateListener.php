@@ -4,7 +4,8 @@ namespace Sensio\Bundle\FrameworkExtraBundle\View;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\EventDispatcher\EventInterface;
+use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
+use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -19,10 +20,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
  */
 
 /**
- * .
- *
- * The filterController method must be connected to the core.controller event.
- * The filterView method must be connected to the core.view event.
  *
  * @author     Fabien Potencier <fabien@symfony.com>
  */
@@ -36,32 +33,20 @@ class AnnotationTemplateListener
     }
 
     /**
-     * Registers a core.controller and core.view listener.
-     *
-     * @param EventDispatcher $dispatcher An EventDispatcher instance
-     * @param integer         $priority   The priority
-     */
-    public function register(EventDispatcherInterface $dispatcher, $priority = 0)
-    {
-        $dispatcher->connect('core.controller', array($this, 'filterController'), $priority);
-        $dispatcher->connect('core.view', array($this, 'filterView'), $priority);
-    }
-
-    /**
      * 
      *
      * @param Event $event An Event instance
      */
-    public function filterController(EventInterface $event, $controller)
+    public function onCoreController(FilterControllerEvent $event)
     {
-        if (!is_array($controller)) {
-            return $controller;
+        if (!is_array($controller = $event->getController())) {
+            return;
         }
 
-        $request = $event->get('request');
+        $request = $event->getRequest();
 
         if (!$configuration = $request->attributes->get('_template')) {
-            return $controller;
+            return;
         }
 
         if (!$configuration->getTemplate()) {
@@ -82,8 +67,6 @@ class AnnotationTemplateListener
 
             $request->attributes->set('_template_default_vars', $vars);
         }
-
-        return $controller;
     }
 
     /**
@@ -91,10 +74,10 @@ class AnnotationTemplateListener
      *
      * @param Event $event An Event instance
      */
-    public function filterView(EventInterface $event)
+    public function onCoreView(GetResponseForControllerResultEvent $event)
     {
-        $request = $event->get('request');
-        $parameters = $event->get('controller_value');
+        $request = $event->getRequest();
+        $parameters = $event->getControllerResult();
 
         if (null === $parameters) {
             if (!$vars = $request->attributes->get('_template_vars')) {
@@ -117,9 +100,7 @@ class AnnotationTemplateListener
             return $parameters;
         }
 
-        $event->setProcessed();
-
-        return new Response($this->container->get('templating')->render($template, $parameters));
+        $event->setResponse(new Response($this->container->get('templating')->render($template, $parameters)));
     }
 
     protected function guessTemplateName($controller, Request $request)

@@ -31,7 +31,7 @@
         </service>
 
         <service id="annotations.controller_parser" class="%annotations.controller_parser.class%">
-            <tag name="kernel.listener" event="core.controller" method="filter" />
+            <tag name="kernel.listener" event="onCoreController" />
             <argument type="service" id="annotations.configuration_reader" />
         </service>
 

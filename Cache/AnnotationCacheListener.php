@@ -2,7 +2,7 @@
 
 namespace Sensio\Bundle\FrameworkExtraBundle\Cache;
 
-use Symfony\Component\EventDispatcher\EventInterface;
+use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpFoundation\Response;
 
 /*
@@ -15,9 +15,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 
 /**
- * .
- *
- * The filter method must be connected to the core.response event.
  *
  * @author     Fabien Potencier <fabien@symfony.com>
  */
@@ -25,18 +22,17 @@ class AnnotationCacheListener
 {
     /**
      * Modifies the response to apply HTTP expiration header fields.
-     *
-     * @param  Event    $event   An Event instance
-     * @return Response $reponse The modified Response instance
      */
-    public function filter(EventInterface $event, Response $response)
+    public function onCoreResponse(FilterResponseEvent $event)
     {
-        if (!$configuration = $event->get('request')->attributes->get('_cache')) {
-            return $response;
+        if (!$configuration = $event->getRequest()->attributes->get('_cache')) {
+            return;
         }
 
+        $response = $event->getResponse();
+
         if (!$response->isSuccessful()) {
-            return $response;
+            return;
         }
 
         if (null !== $configuration->getSMaxAge()) {
@@ -48,7 +44,6 @@ class AnnotationCacheListener
         }
 
         if (null !== $configuration->getExpires()) {
-
             $date = \DateTime::createFromFormat('U', strtotime($configuration->getExpires()), new \DateTimeZone('UTC'));
             $response->setExpires($date);
         }
@@ -57,6 +52,6 @@ class AnnotationCacheListener
             $response->setPublic();
         }
 
-        return $response;
+        $event->setResponse($response);
     }
 }

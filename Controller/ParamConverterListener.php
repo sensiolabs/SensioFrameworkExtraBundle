@@ -5,7 +5,7 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\EventDispatcher\EventInterface;
+use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 
 /*
  * This file is part of the Symfony framework.
@@ -18,8 +18,6 @@ use Symfony\Component\EventDispatcher\EventInterface;
 
 /**
  * ParamConverterListener.
- *
- * The filter method must be connected to the core.controller event.
  *
  * @author     Fabien Potencier <fabien@symfony.com>
  */
@@ -37,9 +35,10 @@ class ParamConverterListener
      *
      * @param Event $event An Event instance
      */
-    public function filter(EventInterface $event, $controller)
+    public function onCoreController(FilterControllerEvent $event)
     {
-        $request = $event->get('request');
+        $controller = $event->getController();
+        $request = $event->getRequest();
 
         if ($configuration = $request->attributes->get('_converters')) {
             $this->manager->apply($request, $configuration);
@@ -63,7 +62,5 @@ class ParamConverterListener
                 $this->manager->apply($request, $configuration);
             }
         }
-
-        return $controller;
     }
 }

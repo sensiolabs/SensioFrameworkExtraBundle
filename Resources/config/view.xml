@@ -10,8 +10,8 @@
 
     <services>
         <service id="view.template_annotation" class="%view.template_annotation.class%">
-            <tag name="kernel.listener" event="core.controller" method="filterController" />
-            <tag name="kernel.listener" event="core.view" method="filterView" />
+            <tag name="kernel.listener" event="onCoreController" />
+            <tag name="kernel.listener" event="onCoreView" />
             <argument type="service" id="service_container" />
         </service>
     </services>

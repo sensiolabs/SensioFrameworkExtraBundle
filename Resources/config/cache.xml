@@ -6,7 +6,7 @@
 
     <services>
         <service id="cache.annotation" class="Sensio\Bundle\FrameworkExtraBundle\Cache\AnnotationCacheListener">
-            <tag name="kernel.listener" event="core.response" method="filter" />
+            <tag name="kernel.listener" event="onCoreResponse" />
         </service>
     </services>
 </container>

@@ -3,7 +3,7 @@
 namespace Sensio\Bundle\FrameworkExtraBundle\Controller;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\EventDispatcher\EventInterface;
+use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\AnnotationReader;
 
@@ -17,9 +17,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\AnnotationReader;
  */
 
 /**
- * .
- *
- * The filter method must be connected to the core.controller event.
  *
  * @author     Fabien Potencier <fabien@symfony.com>
  */
@@ -37,23 +34,20 @@ class ControllerAnnotationParser
      *
      * @param Event $event An Event instance
      */
-    public function filter(EventInterface $event, $controller)
+    public function onCoreController(FilterControllerEvent $event)
     {
-        if (!is_array($controller)) {
-            return $controller;
+        if (!is_array($controller = $event->getController())) {
+            return;
         }
 
         $object = new \ReflectionObject($controller[0]);
         $method = $object->getMethod($controller[1]);
 
-        $request = $event->get('request');
-
+        $request = $event->getRequest();
         foreach ($this->reader->getMethodAnnotations($method) as $configuration) {
             if ($configuration instanceof ConfigurationInterface) {
                 $request->attributes->set('_'.$configuration->getAliasName(), $configuration);
             }
         }
-
-        return $controller;
     }
 }
