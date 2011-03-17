@@ -8,6 +8,7 @@
         <parameter key="converter.listener.class">Sensio\Bundle\FrameworkExtraBundle\Controller\ParamConverterListener</parameter>
         <parameter key="converter.manager.class">Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager</parameter>
         <parameter key="converter.doctrine.class">Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter</parameter>
+        <parameter key="converter.doctrine_mongodb.class">Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineMongoDBParamConverter</parameter>
     </parameters>
 
     <services>
@@ -23,6 +24,11 @@
         <service id="converter.doctrine" class="%converter.doctrine.class%">
             <tag name="request.param_converter" />
             <argument type="service" id="doctrine.orm.entity_manager" on-invalid="ignore" />
+        </service>
+
+        <service id="converter.doctrine_mongodb" class="%converter.doctrine_mongodb.class%">
+            <tag name="request.param_converter" />
+            <argument type="service" id="doctrine.odm.mongodb.document_manager" on-invalid="ignore" />
         </service>
     </services>
 </container>
