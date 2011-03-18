@@ -22,19 +22,30 @@ class Configuration
         $rootNode = $treeBuilder->root('sensio_framework_extra', 'array');
 
         $rootNode
-            ->arrayNode('router')
-                ->booleanNode('annotations')->defaultValue(true)->end()
+            ->children()
+                ->arrayNode('router')
+                    ->children()
+                        ->booleanNode('annotations')->defaultValue(true)->end()
+                    ->end()
+                ->end()
+                ->arrayNode('request')
+                    ->children()
+                        ->booleanNode('converters')->defaultValue(true)->end()
+                    ->end()
+                ->end()
+                ->arrayNode('view')
+                    ->children()
+                        ->booleanNode('annotations')->defaultValue(true)->end()
+                        ->booleanNode('manager_null_arguments')->defaultValue(true)->end()
+                    ->end()
+                ->end()
+                ->arrayNode('cache')
+                    ->children()
+                        ->booleanNode('annotations')->defaultValue(true)->end()
+                    ->end()
+                ->end()
             ->end()
-            ->arrayNode('request')
-                ->booleanNode('converters')->defaultValue(true)->end()
-            ->end()
-            ->arrayNode('view')
-                ->booleanNode('annotations')->defaultValue(true)->end()
-                ->booleanNode('manager_null_arguments')->defaultValue(true)->end()
-            ->end()
-            ->arrayNode('cache')
-                ->booleanNode('annotations')->defaultValue(true)->end()
-            ->end();
+        ;
 
         return $treeBuilder->buildTree();
     }
