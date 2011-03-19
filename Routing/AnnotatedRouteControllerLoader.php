@@ -36,11 +36,10 @@ class AnnotatedRouteControllerLoader extends AnnotationClassLoader
         parent::__construct($reader);
     }
 
-    protected function configureRoute(Route $route, \ReflectionClass $class, \ReflectionMethod $method)
+    protected function configureRoute(Route $route, \ReflectionClass $class, \ReflectionMethod $method, $annot)
     {
         // controller
-        $classAnnot = $this->reader->getClassAnnotation($class, $this->annotationClass);
-        if ($classAnnot && $service = $classAnnot->getService()) {
+        if ($service = $annot->getService()) {
             $route->setDefault('_controller', $service.':'.$method->getName());
         } else {
             $route->setDefault('_controller', $class->getName().'::'.$method->getName());
