@@ -49,7 +49,7 @@ Creating a Converter
 All converters must implement the
 :class:`Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\ParamConverterInterface`::
 
-    namespace Sensio\Bundle\FrameworkExtraBundle\Request\Converter;
+    namespace Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter;
 
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
     use Symfony\Component\HttpFoundation\Request;
