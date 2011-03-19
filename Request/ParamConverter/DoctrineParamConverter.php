@@ -5,9 +5,10 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Request;
-use Doctrine\ORM\NoResultException;
-use Doctrine\ORM\EntityManager;
+
+use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\Mapping\MappingException;
+use Doctrine\ODM\MongoDB\MongoDBException;
 
 /*
  * This file is part of the Symfony framework.
@@ -27,7 +28,7 @@ class DoctrineParamConverter implements ParamConverterInterface
 {
     protected $manager;
 
-    public function __construct(EntityManager $manager = null)
+    public function __construct(ObjectManager $manager = null)
     {
         $this->manager = $manager;
     }
@@ -93,6 +94,8 @@ class DoctrineParamConverter implements ParamConverterInterface
 
             return true;
         } catch (MappingException $e) {
+            return false;
+        } catch (MongoDBException $e) {
             return false;
         }
     }
