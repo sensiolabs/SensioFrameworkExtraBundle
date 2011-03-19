@@ -10,7 +10,7 @@ they can be injected as controller method arguments::
 
     /**
      * @extra:Route("/blog/:id")
-     * @extra:ParamConverter("post", class="BlogBundle:Post")
+     * @extra:ParamConverter("post", class="SensioBlogBundle:Post")
      */
     public function showAction(Post $post)
     {
@@ -18,7 +18,7 @@ they can be injected as controller method arguments::
 
 Several things happens under the hood:
 
-* The converter tries to get a ``BlogBundle:Post`` object from the request
+* The converter tries to get a ``SensioBlogBundle:Post`` object from the request
   attributes (request attributes comes from route placeholders -- here
   ``id``);
 
@@ -47,21 +47,21 @@ Creating a Converter
 --------------------
 
 All converters must implement the
-:class:`Bundle\\Sensio\\FrameworkExtraBundle\\Request\\Converter\\ConverterInterface`::
+:class:`Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\ParamConverterInterface`::
 
-    namespace Bundle\Sensio\FrameworkExtraBundle\Request\Converter;
+    namespace Sensio\Bundle\FrameworkExtraBundle\Request\Converter;
 
-    use Bundle\Sensio\FrameworkExtraBundle\Configuration\ConfigurationInterface;
-    use Symfony\Components\HttpFoundation\Request;
+    use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
+    use Symfony\Component\HttpFoundation\Request;
 
-    interface ConverterInterface
+    interface ParamConverterInterface
     {
         function apply(Request $request, ConfigurationInterface $configuration);
 
         function supports(ConfigurationInterface $configuration);
     }
 
-The ``supports()`` method must returns ``true`` when it is able to convert the
+The ``supports()`` method must return ``true`` when it is able to convert the
 given configuration (a ``ParamConverter`` instance).
 
 The ``ParamConverter`` instance has three information about the annotation:

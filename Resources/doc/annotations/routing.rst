@@ -24,13 +24,13 @@ URL. This is equivalent to the following YAML configuration:
 
     blog_home:
         pattern:  /
-        defaults: { _controller: BlogBundle:Post:index }
+        defaults: { _controller: SensioBlogBundle:Post:index }
 
 Like any route pattern, you can define placeholders, requirements, and default
 values::
 
     /**
-     * @extra:Route("/:id", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
+     * @extra:Route("/{id}", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
      */
     public function showAction($id)
     {
@@ -39,16 +39,16 @@ values::
 Activation
 ----------
 
-The routes need to be imported to be active as any other routing resource
+The routes need to be imported to be active as any other routing resources
 (note the ``annotation`` type):
 
 .. code-block:: yaml
 
-    # hello/config/routing.yml
+    # app/config/routing.yml
 
     # import routes from a controller class
     post:
-        resource: BlogBundle/Controller/PostController.php
+        resource: "@SensioBlogBundle/Controller/PostController.php"
         type:     annotation
 
 You can also import a whole directory:
@@ -57,7 +57,7 @@ You can also import a whole directory:
 
     # import routes from a controller directory
     blog:
-        resource: BlogBundle/Controller
+        resource: "@SensioBlogBundle/Controller"
         type:     annotation
 
 Or even import all controllers:
@@ -74,7 +74,7 @@ As for any other resource, you can "mount" the routes under a given prefix:
 .. code-block:: yaml
 
     post:
-        resource: BlogBundle/Controller/PostController.php
+        resource: "@SensioBlogBundle/Controller/PostController.php"
         prefix:   /blog
         type:     annotation
 
@@ -83,7 +83,7 @@ Route Name
 
 By default, a route defined with the ``@extra:Route`` annotation is given a name
 based on the controller class and method names:
-``blogbundle_controller_postcontroller_indexaction`` for the above example;
+``sensioblogbundle_controller_postcontroller_indexaction`` for the above example;
 the ``name`` attribute overrides the generated route name::
 
     /**
@@ -106,11 +106,11 @@ routes::
     class PostController extends Controller
     {
         /**
-         * @extra:Route("/:id")
+         * @extra:Route("/{id}")
          */
         public function showAction($id)
         {
         }
     }
 
-The ``show`` action is now mapped to the ``/blog/:id`` pattern.
+The ``show`` action is now mapped to the ``/blog/{id}`` pattern.

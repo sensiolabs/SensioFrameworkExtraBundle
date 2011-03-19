@@ -18,7 +18,7 @@ Then, like for any other bundle, include it in your Kernel class::
         $bundles = array(
             ...
 
-            new Bundle\Sensio\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
+            new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
         );
 
         ...
@@ -115,7 +115,7 @@ This example shows all the available annotations in action::
 
     /**
      * @extra:Route("/blog")
-     * @extra:Cached(expires="tomorrow")
+     * @extra:Cache(expires="tomorrow")
      */
     class AnnotController extends Controller
     {
@@ -132,8 +132,8 @@ This example shows all the available annotations in action::
 
         /**
          * @extra:Route("/:id")
-         * @extra:ParamConverter("post", class="BlogBundle:Post")
-         * @extra:Template("BlogBundle:Annot:post", vars={"post"})
+         * @extra:ParamConverter("post", class="SensioBlogBundle:Post")
+         * @extra:Template("SensioBlogBundle:Annot:post", vars={"post"})
          * @extra:Cache(smaxage="15")
          */
         public function showAction(Post $post)

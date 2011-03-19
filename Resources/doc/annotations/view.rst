@@ -7,7 +7,7 @@ Usage
 The ``@extra:Template`` annotation associates a controller with a template name::
 
     /**
-     * @extra:Template("BlogBundle:Post:show")
+     * @extra:Template("SensioBlogBundle:Post:show")
      */
     public function showAction($id)
     {
@@ -17,12 +17,12 @@ The ``@extra:Template`` annotation associates a controller with a template name:
         return array('post' => $post);
     }
 
-When using the ``@extra:Template`` annotation, the controller should return an array
-of parameters to pass to the view instead of a ``Response`` object.
+When using the ``@extra:Template`` annotation, the controller should return an
+array of parameters to pass to the view instead of a ``Response`` object.
 
 .. tip::
-   If the action returns a ``Response`` object, the ``@extra:Template`` annotation
-   is simply ignored.
+   If the action returns a ``Response`` object, the ``@extra:Template`` 
+   annotation is simply ignored.
 
 If the template is named after the controller and action names, which is the
 case for the above example, you can even omit the annotation value::
@@ -44,8 +44,8 @@ useful in combination with the ``@extra:ParamConverter`` :doc:`annotation
 <converters>`::
 
     /**
-     * @extra:ParamConverter("post", class="BlogBundle:Post")
-     * @extra:Template("BlogBundle:Post:show", vars={"post"})
+     * @extra:ParamConverter("post", class="SensioBlogBundle:Post")
+     * @extra:Template("SensioBlogBundle:Post:show", vars={"post"})
      */
     public function showAction(Post $post)
     {
