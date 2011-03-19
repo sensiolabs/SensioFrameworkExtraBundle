@@ -15,6 +15,8 @@ use Symfony\Component\HttpFoundation\Response;
  */
 
 /**
+ * The AnnotationCacheListener class has the responsability to modify the
+ * Response object when a controller uses the @extra:Cache annotation.
  *
  * @author     Fabien Potencier <fabien@symfony.com>
  */
@@ -22,6 +24,8 @@ class AnnotationCacheListener
 {
     /**
      * Modifies the response to apply HTTP expiration header fields.
+     *
+     * @param FilterResponseEvent $event The notified event
      */
     public function onCoreResponse(FilterResponseEvent $event)
     {

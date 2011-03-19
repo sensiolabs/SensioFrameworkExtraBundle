@@ -12,29 +12,55 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
  */
 
 /**
- * 
+ * The Method class handles the @extra:Method annotation parts.
  *
- * @author     Fabien Potencier <fabien@symfony.com>
+ * @author Fabien Potencier <fabien@symfony.com>
  */
 class Method implements ConfigurationInterface
 {
+    /**
+     * An array of restricted HTTP methods.
+     *
+     * @var array
+     */
     protected $methods = array();
 
+    /**
+     * Returns the array of HTTP methods.
+     *
+     * @return array
+     */
     public function getMethods()
     {
         return $this->methods;
     }
 
+    /**
+     * Sets the HTTP methods.
+     *
+     * @param array|string $methods An HTTP method or an array of HTTP methods
+     */
     public function setMethods($methods)
     {
         $this->methods = is_array($methods) ? $methods : array($methods);
     }
 
+    /**
+     * Sets the HTTP methods.
+     *
+     * @param array|string $methods An HTTP method or an array of HTTP methods
+     */
     public function setValue($methods)
     {
         $this->setMethods($methods);
     }
 
+    /**
+     * Returns the annotation alias name.
+     *
+     * @return string
+     * @see ConfigurationInterface
+     */
     public function getAliasName()
     {
         return 'method';

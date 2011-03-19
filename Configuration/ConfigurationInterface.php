@@ -12,11 +12,16 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
  */
 
 /**
- * 
+ * ConfigurationInterface.
  *
- * @author     Fabien Potencier <fabien@symfony.com>
+ * @author Fabien Potencier <fabien@symfony.com>
  */
 interface ConfigurationInterface
 {
+    /**
+     * Returns the alias name for an annotated configuration.
+     *
+     * @return string
+     */
     function getAliasName();
 }

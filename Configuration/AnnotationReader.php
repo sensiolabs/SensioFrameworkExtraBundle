@@ -16,7 +16,7 @@ use Doctrine\Common\Annotations\AnnotationReader as BaseAnnotationReader;
 /**
  * .
  *
- * @author     Fabien Potencier <fabien@symfony.com>
+ * @author Fabien Potencier <fabien@symfony.com>
  */
 class AnnotationReader extends BaseAnnotationReader
 {
