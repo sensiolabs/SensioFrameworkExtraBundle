@@ -17,22 +17,34 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\AnnotationReader;
  */
 
 /**
+ * The ControllerAnnotationParser class parses annotation blocks located in 
+ * controller classes.
  *
- * @author     Fabien Potencier <fabien@symfony.com>
+ * @author Fabien Potencier <fabien@symfony.com>
  */
 class ControllerAnnotationParser
 {
+    /**
+     * @var Sensio\Bundle\FrameworkExtraBundle\Configuration\AnnotationReader
+     */
     protected $reader;
 
+    /**
+     * Constructor.
+     *
+     * @param AnnotationReader $reader An AnnotationReader instance
+     */
     public function __construct(AnnotationReader $reader)
     {
         $this->reader = $reader;
     }
 
     /**
-     * 
+     * Modifies the Request object to apply configuration information found in
+     * controllers annotations like the template to render or HTTP caching 
+     * configuration.
      *
-     * @param Event $event An Event instance
+     * @param FilterControllerEvent $event A FilterControllerEvent instance
      */
     public function onCoreController(FilterControllerEvent $event)
     {

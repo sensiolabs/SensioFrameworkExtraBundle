@@ -20,22 +20,32 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
  */
 
 /**
+ * The AnnotationTemplateListener class handles the @extra:Template annotation.
  *
  * @author     Fabien Potencier <fabien@symfony.com>
  */
 class AnnotationTemplateListener
 {
+    /**
+     * @var Symfony\Component\DependencyInjection\ContainerInterface
+     */
     protected $container;
 
+    /**
+     * Constructor.
+     *
+     * @param ContainerInterface $container The service container instance
+     */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
 
     /**
-     * 
+     * Guesses the template name to render and its variables and adds them to 
+     * the request object.
      *
-     * @param Event $event An Event instance
+     * @param FilterControllerEvent $event A FilterControllerEvent instance
      */
     public function onCoreController(FilterControllerEvent $event)
     {
@@ -70,9 +80,10 @@ class AnnotationTemplateListener
     }
 
     /**
-     * 
+     * Renders the template and initializes a new response object with the 
+     * rendered template content.
      *
-     * @param Event $event An Event instance
+     * @param GetResponseForControllerResultEvent $event A GetResponseForControllerResultEvent instance
      */
     public function onCoreView(GetResponseForControllerResultEvent $event)
     {
@@ -103,6 +114,14 @@ class AnnotationTemplateListener
         $event->setResponse(new Response($this->container->get('templating')->render($template, $parameters)));
     }
 
+    /**
+     * Guesses and returns the template name to render based on the controller 
+     * and action names.
+     *
+     * @param array $controller An array storing the controller object and action method
+     * @param Request $request A Request instance
+     * @throws \InvalidArgumentException
+     */
     protected function guessTemplateName($controller, Request $request)
     {
         if (!preg_match('/Controller\\\(.*)Controller$/', get_class($controller[0]), $match)) {
@@ -116,6 +135,13 @@ class AnnotationTemplateListener
         return $bundle->getName().':'.$name.'.'.$request->getRequestFormat().'.twig';
     }
 
+    /**
+     * Returns the Bundle instance in which the given class name is located.
+     *
+     * @param string $class A fully qualified controller class name
+     * @param Bundle $bundle A Bundle instance
+     * @throws \InvalidArgumentException
+     */
     protected function getBundleForClass($class)
     {
         $namespace = strtr(dirname(strtr($class, '\\', '/')), '/', '\\');

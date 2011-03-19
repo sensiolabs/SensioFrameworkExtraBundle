@@ -17,23 +17,31 @@ use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
  */
 
 /**
- * ParamConverterListener.
+ * The ParamConverterListener handles the @extra:ParamConverter annotation.
  *
- * @author     Fabien Potencier <fabien@symfony.com>
+ * @author Fabien Potencier <fabien@symfony.com>
  */
 class ParamConverterListener
 {
+    /**
+     * @var Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager
+     */
     protected $manager;
 
+    /**
+     * Constructor.
+     *
+     * @param ParamConverterManager $manager A ParamConverterManager instance
+     */
     public function __construct(ParamConverterManager $manager)
     {
         $this->manager = $manager;
     }
 
     /**
-     * 
+     * Modifies the ParamConverterManager instance.
      *
-     * @param Event $event An Event instance
+     * @param FilterControllerEvent $event A FilterControllerEvent instance
      */
     public function onCoreController(FilterControllerEvent $event)
     {
