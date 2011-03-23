@@ -111,6 +111,7 @@ class AnnotationTemplateListener
             return $parameters;
         }
 
+        $template = $this->serializeTemplateName($template);
         $event->setResponse(new Response($this->container->get('templating')->render($template, $parameters)));
     }
 
@@ -120,6 +121,7 @@ class AnnotationTemplateListener
      *
      * @param array $controller An array storing the controller object and action method
      * @param Request $request A Request instance
+     * @return array template name
      * @throws \InvalidArgumentException
      */
     protected function guessTemplateName($controller, Request $request)
@@ -130,9 +132,26 @@ class AnnotationTemplateListener
 
         $bundle = $this->getBundleForClass(get_class($controller[0]));
 
-        $name = $match[1].':'.substr($controller[1], 0, -6);
+        return array(
+            'bundle' => $bundle->getName(),
+            'controller' => $match[1],
+            'name' => substr($controller[1], 0, -6),
+            'format' => $request->getRequestFormat(),
+            'engine' => 'twig'
+        );
+    }
 
-        return $bundle->getName().':'.$name.'.'.$request->getRequestFormat().'.twig';
+    /**
+     * Serialize template name into a string
+     *
+     * @param array $template name as an array
+     * @return string template name
+     */
+    protected function serializeTemplateName(array $template)
+    {
+        return $template['bundle'].':'
+            .$template['controller'].':'
+            .$template['name'].'.'.$template['format'].'.'.$template['engine'];
     }
 
     /**
