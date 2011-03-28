@@ -14,7 +14,7 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
 /**
  * The ParamConverter class handles the @extra:ParamConverter annotation parts.
  *
- * @extra:ParamConverter("post", class="BlogBundle:Post")
+ * @extra:ParamConverter("post", class="Blog:Post")
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */

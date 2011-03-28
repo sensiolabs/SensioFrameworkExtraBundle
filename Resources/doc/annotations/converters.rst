@@ -10,7 +10,7 @@ they can be injected as controller method arguments::
 
     /**
      * @extra:Route("/blog/:id")
-     * @extra:ParamConverter("post", class="SensioBlogBundle:Post")
+     * @extra:ParamConverter("post", class="SensioBlog:Post")
      */
     public function showAction(Post $post)
     {
@@ -18,7 +18,7 @@ they can be injected as controller method arguments::
 
 Several things happens under the hood:
 
-* The converter tries to get a ``SensioBlogBundle:Post`` object from the request
+* The converter tries to get a ``SensioBlog:Post`` object from the request
   attributes (request attributes comes from route placeholders -- here
   ``id``);
 
