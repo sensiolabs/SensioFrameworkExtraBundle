@@ -7,7 +7,7 @@ Usage
 The ``@extra:Template`` annotation associates a controller with a template name::
 
     /**
-     * @extra:Template("SensioBlog:Post:show")
+     * @extra:Template("SensioBlogBundle:Post:show")
      */
     public function showAction($id)
     {
@@ -44,8 +44,8 @@ useful in combination with the ``@extra:ParamConverter`` :doc:`annotation
 <converters>`::
 
     /**
-     * @extra:ParamConverter("post", class="SensioBlog:Post")
-     * @extra:Template("SensioBlog:Post:show", vars={"post"})
+     * @extra:ParamConverter("post", class="SensioBlogBundle:Post")
+     * @extra:Template("SensioBlogBundle:Post:show", vars={"post"})
      */
     public function showAction(Post $post)
     {

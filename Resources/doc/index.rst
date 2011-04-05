@@ -132,8 +132,8 @@ This example shows all the available annotations in action::
 
         /**
          * @extra:Route("/:id")
-         * @extra:ParamConverter("post", class="SensioBlog:Post")
-         * @extra:Template("SensioBlog:Annot:post", vars={"post"})
+         * @extra:ParamConverter("post", class="SensioBlogBundle:Post")
+         * @extra:Template("SensioBlogBundle:Annot:post", vars={"post"})
          * @extra:Cache(smaxage="15")
          */
         public function showAction(Post $post)

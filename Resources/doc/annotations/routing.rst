@@ -24,7 +24,7 @@ URL. This is equivalent to the following YAML configuration:
 
     blog_home:
         pattern:  /
-        defaults: { _controller: SensioBlog:Post:index }
+        defaults: { _controller: SensioBlogBundle:Post:index }
 
 Like any route pattern, you can define placeholders, requirements, and default
 values::
@@ -48,7 +48,7 @@ The routes need to be imported to be active as any other routing resources
 
     # import routes from a controller class
     post:
-        resource: "@SensioBlog/Controller/PostController.php"
+        resource: "@SensioBlogBundle/Controller/PostController.php"
         type:     annotation
 
 You can also import a whole directory:
@@ -57,7 +57,7 @@ You can also import a whole directory:
 
     # import routes from a controller directory
     blog:
-        resource: "@SensioBlog/Controller"
+        resource: "@SensioBlogBundle/Controller"
         type:     annotation
 
 Or even import all controllers:
@@ -74,7 +74,7 @@ As for any other resource, you can "mount" the routes under a given prefix:
 .. code-block:: yaml
 
     post:
-        resource: "@SensioBlog/Controller/PostController.php"
+        resource: "@SensioBlogBundle/Controller/PostController.php"
         prefix:   /blog
         type:     annotation
 
