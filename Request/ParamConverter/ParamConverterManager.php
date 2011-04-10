@@ -31,6 +31,10 @@ class ParamConverterManager
         foreach ($configurations as $configuration) {
             foreach ($this->all() as $converter) {
                 if ($converter->supports($configuration)) {
+                    if ($request->attributes->has($configuration->getName())) {
+                        continue 2;
+                    }
+
                     $converter->apply($request, $configuration);
                 }
             }

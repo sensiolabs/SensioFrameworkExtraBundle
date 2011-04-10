@@ -47,9 +47,10 @@ class ParamConverterListener
     {
         $controller = $event->getController();
         $request = $event->getRequest();
+        $configurations = array();
 
         if ($configuration = $request->attributes->get('_converters')) {
-            $this->manager->apply($request, $configuration);
+            $configurations = is_array($configuration) ? $configuration : array($configuration);
         }
 
         if (is_array($controller)) {
@@ -67,8 +68,10 @@ class ParamConverterListener
 
                 $configuration->setIsOptional($param->isOptional());
 
-                $this->manager->apply($request, $configuration);
+                $configurations[] = $configuration;
             }
         }
+
+        $this->manager->apply($request, $configurations);
     }
 }
