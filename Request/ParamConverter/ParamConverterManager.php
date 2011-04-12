@@ -14,14 +14,25 @@ use Symfony\Component\HttpFoundation\Request;
  */
 
 /**
- * 
+ * Managers converters. 
  *
- * @author     Fabien Potencier <fabien@symfony.com>
+ * @author Fabien Potencier <fabien@symfony.com>
+ * @author Henrik Bjornskov <henrik@bjrnskov.dk>
  */
 class ParamConverterManager
 {
+    /**
+     * @var array
+     */
     protected $converters = array();
 
+    /**
+     * Applies all converters to the passed configurations and stops when a 
+     * converter is applied it will move on to the next configuration and so on.
+     *
+     * @param Request $request
+     * @param array|object $configurations
+     */
     public function apply(Request $request, $configurations)
     {
         if (is_object($configurations)) {
@@ -31,6 +42,10 @@ class ParamConverterManager
         foreach ($configurations as $configuration) {
             foreach ($this->all() as $converter) {
                 if ($converter->supports($configuration)) {
+                    if ($request->attributes->has($configuration->getName())) {
+                        continue 2;
+                    }
+
                     $converter->apply($request, $configuration);
                 }
             }
