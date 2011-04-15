@@ -8,6 +8,7 @@ use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 /*
@@ -111,7 +112,6 @@ class AnnotationTemplateListener
             return $parameters;
         }
 
-        $template = $this->serializeTemplateName($template);
         $event->setResponse(new Response($this->container->get('templating')->render($template, $parameters)));
     }
 
@@ -132,26 +132,7 @@ class AnnotationTemplateListener
 
         $bundle = $this->getBundleForClass(get_class($controller[0]));
 
-        return array(
-            'bundle' => $bundle->getName(),
-            'controller' => $match[1],
-            'name' => substr($controller[1], 0, -6),
-            'format' => $request->getRequestFormat(),
-            'engine' => 'twig'
-        );
-    }
-
-    /**
-     * Serialize template name into a string
-     *
-     * @param array $template name as an array
-     * @return string template name
-     */
-    protected function serializeTemplateName(array $template)
-    {
-        return $template['bundle'].':'
-            .$template['controller'].':'
-            .$template['name'].'.'.$template['format'].'.'.$template['engine'];
+        return new TemplateReference($bundle->getName(), $match[1], substr($controller[1], 0, -6), $request->getRequestFormat(), 'twig');
     }
 
     /**
