@@ -2,6 +2,8 @@
 
 namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
 
+use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference;
+
 /*
  * This file is part of the Symfony package.
  *
@@ -77,7 +79,7 @@ class Template implements ConfigurationInterface
      *
      * @param TemplateReference $template The template reference
      */
-    public function setTemplate($template)
+    public function setTemplate(TemplateReference $template)
     {
         $this->template = $template;
     }
