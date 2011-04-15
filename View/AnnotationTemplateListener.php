@@ -121,7 +121,7 @@ class AnnotationTemplateListener
      *
      * @param array $controller An array storing the controller object and action method
      * @param Request $request A Request instance
-     * @return array template name
+     * @return TemplateReference template reference
      * @throws \InvalidArgumentException
      */
     protected function guessTemplateName($controller, Request $request)
