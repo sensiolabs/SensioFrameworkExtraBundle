@@ -12,7 +12,7 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
  */
 
 /**
- * The Template class handles the @extra:Method annotation parts.
+ * The Template class handles the @extra:Template annotation parts.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
@@ -24,7 +24,6 @@ class Template implements ConfigurationInterface
      * @var string
      */
     protected $template;
-
     /**
      * The associative array of template variables.
      *
