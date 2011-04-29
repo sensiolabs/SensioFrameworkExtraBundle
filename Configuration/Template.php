@@ -16,7 +16,7 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class Template implements ConfigurationInterface
+class Template extends ConfigurationAnnotation
 {
     /**
      * The template logic name.

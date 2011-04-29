@@ -5,38 +5,13 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="annotations.reader.class">Doctrine\Common\Annotations\AnnotationReader</parameter>
-        <parameter key="annotations.configuration_reader.class">Sensio\Bundle\FrameworkExtraBundle\Configuration\AnnotationReader</parameter>
-        <parameter key="annotations.parser.class">Doctrine\Common\Annotations\Parser</parameter>
         <parameter key="annotations.controller_parser.class">Sensio\Bundle\FrameworkExtraBundle\Controller\ControllerAnnotationParser</parameter>
     </parameters>
 
     <services>
-        <service id="annotations.parser" class="%annotations.parser.class%">
-            <call method="setAutoloadAnnotations"><argument>true</argument></call>
-            <call method="setAnnotationNamespaceAlias">
-                <argument>Sensio\Bundle\FrameworkExtraBundle\Configuration\</argument>
-                <argument>extra</argument>
-            </call>
-        </service>
-
-        <service id="annotations.reader" class="%annotations.reader.class%">
-            <argument type="service" id="annotations.cache" strict="false" />
-            <argument type="service" id="annotations.parser" />
-        </service>
-
-        <service id="annotations.configuration_reader" class="%annotations.configuration_reader.class%">
-            <argument type="service" id="annotations.cache" strict="false" />
-            <argument type="service" id="annotations.parser" />
-        </service>
-
         <service id="annotations.controller_parser" class="%annotations.controller_parser.class%">
             <tag name="kernel.listener" event="onCoreController" />
-            <argument type="service" id="annotations.configuration_reader" />
+            <argument type="service" id="annotation_reader" />
         </service>
-
-        <service id="annotations.cache.array" class="Doctrine\Common\Cache\ArrayCache" scope="prototype" />
-
-        <service id="annotations.cache" alias="annotations.cache.array" />
     </services>
 </container>

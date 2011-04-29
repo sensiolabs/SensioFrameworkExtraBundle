@@ -32,14 +32,7 @@
 
         <service id="routing.loader.annot_class" class="%routing.loader.annot_class.class%" public="false">
             <tag name="routing.loader" />
-            <argument type="service" id="annotations.reader" />
-            <argument type="service" id="annotations.configuration_reader" />
-            <call method="setRouteAnnotationClass">
-                <argument>Sensio\Bundle\FrameworkExtraBundle\Configuration\Route</argument>
-            </call>
-            <call method="setRoutesAnnotationClass">
-                <argument>Sensio\Bundle\FrameworkExtraBundle\Configuration\Routes</argument>
-            </call>
+            <argument type="service" id="annotation_reader" />
         </service>
     </services>
 </container>

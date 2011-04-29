@@ -12,11 +12,11 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
  */
 
 /**
- * The Method class handles the @extra:Method annotation parts.
+ * The Method class handles the @Method annotation parts.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class Method implements ConfigurationInterface
+class Method extends ConfigurationAnnotation
 {
     /**
      * An array of restricted HTTP methods.
