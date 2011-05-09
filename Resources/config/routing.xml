@@ -14,7 +14,7 @@
     <services>
         <service id="routing.loader.annot_glob" class="%routing.loader.annot_glob.class%" public="false">
             <tag name="routing.loader" />
-            <argument type="service" id="file_locator" />
+            <argument type="service" id="glob_locator" />
             <argument type="service" id="routing.loader.annot_class" />
         </service>
 
