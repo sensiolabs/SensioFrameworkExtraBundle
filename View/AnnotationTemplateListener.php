@@ -8,6 +8,7 @@ use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 /*
@@ -120,6 +121,7 @@ class AnnotationTemplateListener
      *
      * @param array $controller An array storing the controller object and action method
      * @param Request $request A Request instance
+     * @return TemplateReference template reference
      * @throws \InvalidArgumentException
      */
     protected function guessTemplateName($controller, Request $request)
@@ -130,9 +132,7 @@ class AnnotationTemplateListener
 
         $bundle = $this->getBundleForClass(get_class($controller[0]));
 
-        $name = $match[1].':'.substr($controller[1], 0, -6);
-
-        return $bundle->getName().':'.$name.'.'.$request->getRequestFormat().'.twig';
+        return new TemplateReference($bundle->getName(), $match[1], substr($controller[1], 0, -6), $request->getRequestFormat(), 'twig');
     }
 
     /**
