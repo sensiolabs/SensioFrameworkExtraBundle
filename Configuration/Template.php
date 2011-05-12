@@ -76,9 +76,9 @@ class Template implements ConfigurationInterface
     /**
      * Sets the template reference.
      *
-     * @param TemplateReference $template The template reference
+     * @param TemplateReference|string $template The template reference
      */
-    public function setTemplate(TemplateReference $template)
+    public function setTemplate($template)
     {
         $this->template = $template;
     }
