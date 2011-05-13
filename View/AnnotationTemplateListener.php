@@ -126,13 +126,18 @@ class AnnotationTemplateListener
      */
     protected function guessTemplateName($controller, Request $request)
     {
-        if (!preg_match('/Controller\\\(.*)Controller$/', get_class($controller[0]), $match)) {
+        if (!preg_match('/Controller\\\(.*)Controller$/', get_class($controller[0]), $matchController)) {
             throw new \InvalidArgumentException(sprintf('The "%s" class does not look like a controller class (it does not end with Controller)', get_class($controller[0])));
+        }
+        if( !preg_match('/(.*)Action$/', $controller[1], $matchAction)) {
+            throw new \InvalidArgumentException(sprintf('The "%s" method does not look like an action method (it does not end with Action)', $controller[1]));
         }
 
         $bundle = $this->getBundleForClass(get_class($controller[0]));
 
-        return new TemplateReference($bundle->getName(), $match[1], substr($controller[1], 0, -6), $request->getRequestFormat(), 'twig');
+        $name = $matchController[1].':'.$matchAction[1];
+
+        return $bundle->getName().':'.$name.'.'.$request->getRequestFormat().'.twig';
     }
 
     /**
