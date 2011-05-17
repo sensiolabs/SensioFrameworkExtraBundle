@@ -2,7 +2,7 @@
 
 namespace Sensio\Bundle\FrameworkExtraBundle\Controller;
 
-use Annotations\ReaderInterface;
+use Doctrine\Common\Annotations\ReaderInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
