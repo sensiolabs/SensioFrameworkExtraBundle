@@ -2,7 +2,7 @@
 
 namespace Sensio\Bundle\FrameworkExtraBundle\Controller;
 
-use Doctrine\Common\Annotations\ReaderInterface;
+use Doctrine\Common\Annotations\Reader;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
@@ -32,9 +32,9 @@ class ControllerAnnotationParser
     /**
      * Constructor.
      *
-     * @param ReaderInterface $reader An AnnotationReader instance
+     * @param Reader $reader An AnnotationReader instance
      */
-    public function __construct(ReaderInterface $reader)
+    public function __construct(Reader $reader)
     {
         $this->reader = $reader;
     }
