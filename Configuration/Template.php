@@ -18,7 +18,7 @@ use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class Template implements ConfigurationInterface
+class Template extends ConfigurationAnnotation
 {
     /**
      * The template reference.

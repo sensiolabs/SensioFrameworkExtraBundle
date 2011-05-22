@@ -14,11 +14,11 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
 /**
  * The ParamConverter class handles the @extra:ParamConverter annotation parts.
  *
- * @extra:ParamConverter("post", class="BlogBundle:Post")
+ * @ParamConverter("post", class="BlogBundle:Post")
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class ParamConverter implements ConfigurationInterface
+class ParamConverter extends ConfigurationAnnotation
 {
     /**
      * The parameter name.

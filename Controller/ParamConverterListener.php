@@ -17,7 +17,7 @@ use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
  */
 
 /**
- * The ParamConverterListener handles the @extra:ParamConverter annotation.
+ * The ParamConverterListener handles the @ParamConverter annotation.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
@@ -62,10 +62,9 @@ class ParamConverterListener
         // automatically apply conversion for non-configured objects
         foreach ($r->getParameters() as $param) {
             if ($param->getClass() && !$request->attributes->get($param->getName())) {
-                $configuration = new ParamConverter();
+                $configuration = new ParamConverter(array());
                 $configuration->setName($param->getName());
                 $configuration->setClass($param->getClass()->getName());
-
                 $configuration->setIsOptional($param->isOptional());
 
                 $configurations[] = $configuration;

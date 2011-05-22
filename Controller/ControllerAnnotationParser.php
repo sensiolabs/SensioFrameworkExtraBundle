@@ -2,10 +2,10 @@
 
 namespace Sensio\Bundle\FrameworkExtraBundle\Controller;
 
+use Doctrine\Common\Annotations\Reader;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\AnnotationReader;
 
 /*
  * This file is part of the Symfony framework.
@@ -17,7 +17,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\AnnotationReader;
  */
 
 /**
- * The ControllerAnnotationParser class parses annotation blocks located in 
+ * The ControllerAnnotationParser class parses annotation blocks located in
  * controller classes.
  *
  * @author Fabien Potencier <fabien@symfony.com>
@@ -32,16 +32,16 @@ class ControllerAnnotationParser
     /**
      * Constructor.
      *
-     * @param AnnotationReader $reader An AnnotationReader instance
+     * @param Reader $reader An AnnotationReader instance
      */
-    public function __construct(AnnotationReader $reader)
+    public function __construct(Reader $reader)
     {
         $this->reader = $reader;
     }
 
     /**
      * Modifies the Request object to apply configuration information found in
-     * controllers annotations like the template to render or HTTP caching 
+     * controllers annotations like the template to render or HTTP caching
      * configuration.
      *
      * @param FilterControllerEvent $event A FilterControllerEvent instance

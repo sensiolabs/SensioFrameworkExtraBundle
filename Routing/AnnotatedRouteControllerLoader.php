@@ -4,7 +4,6 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Routing;
 
 use Symfony\Component\Routing\Loader\AnnotationClassLoader;
 use Symfony\Component\Routing\Route;
-use Doctrine\Common\Annotations\AnnotationReader;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\AnnotationReader as ConfigurationAnnotationReader;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
@@ -21,32 +20,14 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
  * AnnotatedRouteControllerLoader is an implementation of AnnotationClassLoader
  * that sets the '_controller' default based on the class and method names.
  *
- * It also parse the @extra:Method annotation.
+ * It also parse the @Method annotation.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
 class AnnotatedRouteControllerLoader extends AnnotationClassLoader
 {
     /**
-     * @var Sensio\Bundle\FrameworkExtraBundle\Configuration\AnnotationReader
-     */
-    protected $configReader;
-
-    /**
-     * Constructor.
-     *
-     * @param AnnotationReader $reader An AnnotationReader instance
-     * @param ConfigurationAnnotationReader $configReader A ConfigurationAnnotationReader instance
-     */
-    public function __construct(AnnotationReader $reader, ConfigurationAnnotationReader $configReader)
-    {
-        $this->configReader = $configReader;
-
-        parent::__construct($reader);
-    }
-
-    /**
-     * Configures the _controller default parameter and eventually the _method 
+     * Configures the _controller default parameter and eventually the _method
      * requirement of a given Route instance.
      *
      * @param Route $route A Route instance
@@ -63,8 +44,8 @@ class AnnotatedRouteControllerLoader extends AnnotationClassLoader
             $route->setDefault('_controller', $class->getName().'::'.$method->getName());
         }
 
-        // requirements (@extra:Method)
-        foreach ($this->configReader->getMethodAnnotations($method) as $configuration) {
+        // requirements (@Method)
+        foreach ($this->reader->getMethodAnnotations($method) as $configuration) {
             if ($configuration instanceof Method) {
                 $route->setRequirement('_method', implode('|', $configuration->getMethods()));
             }

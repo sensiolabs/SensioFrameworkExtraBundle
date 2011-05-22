@@ -12,11 +12,11 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
  */
 
 /**
- * The Cache class handles the @extra:Cache annotation parts.
+ * The Cache class handles the @Cache annotation parts.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class Cache implements ConfigurationInterface
+class Cache extends ConfigurationAnnotation
 {
     /**
      * The expiration date as a valid date for the strtotime() function.
@@ -26,7 +26,7 @@ class Cache implements ConfigurationInterface
     protected $expires;
 
     /**
-     * The number of seconds that the response is considered fresh by a private 
+     * The number of seconds that the response is considered fresh by a private
      * cache like a web browser.
      *
      * @var integer
@@ -34,7 +34,7 @@ class Cache implements ConfigurationInterface
     protected $maxage;
 
     /**
-     * The number of seconds that the response is considered fresh by a public 
+     * The number of seconds that the response is considered fresh by a public
      * cache like a reverse proxy cache.
      *
      * @var integer
@@ -79,7 +79,7 @@ class Cache implements ConfigurationInterface
     }
 
     /**
-     * Returns the number of seconds the response is considered fresh by a 
+     * Returns the number of seconds the response is considered fresh by a
      * private cache.
      *
      * @return integer
@@ -100,7 +100,7 @@ class Cache implements ConfigurationInterface
     }
 
     /**
-     * Returns the number of seconds the response is considered fresh by a 
+     * Returns the number of seconds the response is considered fresh by a
      * public cache.
      *
      * @return integer
