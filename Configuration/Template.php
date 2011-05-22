@@ -14,7 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference;
  */
 
 /**
- * The Template class handles the @extra:Template annotation parts.
+ * The Template class handles the @Template annotation parts.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */

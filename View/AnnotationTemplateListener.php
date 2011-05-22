@@ -21,7 +21,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
  */
 
 /**
- * The AnnotationTemplateListener class handles the @extra:Template annotation.
+ * The AnnotationTemplateListener class handles the @Template annotation.
  *
  * @author     Fabien Potencier <fabien@symfony.com>
  */
