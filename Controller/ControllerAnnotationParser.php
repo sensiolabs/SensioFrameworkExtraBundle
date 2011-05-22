@@ -25,14 +25,14 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
 class ControllerAnnotationParser
 {
     /**
-     * @var Sensio\Bundle\FrameworkExtraBundle\Configuration\AnnotationReader
+     * @var \Doctrine\Common\Annotations\Reader
      */
     protected $reader;
 
     /**
      * Constructor.
      *
-     * @param Reader $reader An AnnotationReader instance
+     * @param Reader $reader An Reader instance
      */
     public function __construct(Reader $reader)
     {
