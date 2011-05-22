@@ -1,13 +1,15 @@
-@extra:Template
-===============
+@Template
+=========
 
 Usage
 -----
 
-The ``@extra:Template`` annotation associates a controller with a template name::
+The ``@Template`` annotation associates a controller with a template name::
+
+    use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
     /**
-     * @extra:Template("SensioBlogBundle:Post:show")
+     * @Template("SensioBlogBundle:Post:show")
      */
     public function showAction($id)
     {
@@ -17,18 +19,18 @@ The ``@extra:Template`` annotation associates a controller with a template name:
         return array('post' => $post);
     }
 
-When using the ``@extra:Template`` annotation, the controller should return an
+When using the ``@Template`` annotation, the controller should return an
 array of parameters to pass to the view instead of a ``Response`` object.
 
 .. tip::
-   If the action returns a ``Response`` object, the ``@extra:Template`` 
+   If the action returns a ``Response`` object, the ``@Template`` 
    annotation is simply ignored.
 
 If the template is named after the controller and action names, which is the
 case for the above example, you can even omit the annotation value::
 
     /**
-     * @extra:Template
+     * @Template
      */
     public function showAction($id)
     {
@@ -40,12 +42,12 @@ case for the above example, you can even omit the annotation value::
 
 And if the only parameters to pass to the template are method arguments, you
 can use the ``vars`` attribute instead of returning an array. This is very
-useful in combination with the ``@extra:ParamConverter`` :doc:`annotation
+useful in combination with the ``@ParamConverter`` :doc:`annotation
 <converters>`::
 
     /**
-     * @extra:ParamConverter("post", class="SensioBlogBundle:Post")
-     * @extra:Template("SensioBlogBundle:Post:show", vars={"post"})
+     * @ParamConverter("post", class="SensioBlogBundle:Post")
+     * @Template("SensioBlogBundle:Post:show", vars={"post"})
      */
     public function showAction(Post $post)
     {
@@ -54,7 +56,7 @@ useful in combination with the ``@extra:ParamConverter`` :doc:`annotation
 which, thanks to conventions, is equivalent to the following configuration::
 
     /**
-     * @extra:Template(vars={"post"})
+     * @Template(vars={"post"})
      */
     public function showAction(Post $post)
     {
@@ -65,7 +67,7 @@ passed to the template if the method returns ``null`` and no ``vars``
 attribute is defined::
 
     /**
-     * @extra:Template
+     * @Template
      */
     public function showAction(Post $post)
     {

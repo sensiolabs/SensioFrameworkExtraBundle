@@ -1,13 +1,15 @@
-@extra:Cache
-============
+@Cache
+======
 
 Usage
 -----
 
-The ``@extra:Cache`` annotation makes it easy to define HTTP caching::
+The ``@Cache`` annotation makes it easy to define HTTP caching::
+
+    use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 
     /**
-     * @extra:Cache(expires="tomorrow")
+     * @Cache(expires="tomorrow")
      */
     public function indexAction()
     {
@@ -16,7 +18,7 @@ The ``@extra:Cache`` annotation makes it easy to define HTTP caching::
 You can also use the annotation on a class to define caching for all methods::
 
     /**
-     * @extra:Cache(expires="tomorrow")
+     * @Cache(expires="tomorrow")
      */
     class BlogController extends Controller
     {
@@ -26,12 +28,12 @@ When there is a conflict between the class configuration and the method
 configuration, the latter overrides the former::
 
     /**
-     * @extra:Cache(expires="tomorrow")
+     * @Cache(expires="tomorrow")
      */
     class BlogController extends Controller
     {
         /**
-         * @extra:Cache(expires="+2 days")
+         * @Cache(expires="+2 days")
          */
         public function indexAction()
         {
@@ -46,9 +48,9 @@ Here is a list of accepted attributes and their HTTP header equivalent:
 ==================================== ===============
 Annotation                           Response Method
 ==================================== ===============
-``@extra:Cache(expires="tomorrow")`` ``$response->setExpires()``
-``@extra:Cache(smaxage="15")``       ``$response->setSharedMaxAge()``
-``@extra:Cache(maxage="15")``        ``$response->setMaxAge()``
+``@Cache(expires="tomorrow")`` ``$response->setExpires()``
+``@Cache(smaxage="15")``       ``$response->setSharedMaxAge()``
+``@Cache(maxage="15")``        ``$response->setMaxAge()``
 ==================================== ===============
 
 .. note::

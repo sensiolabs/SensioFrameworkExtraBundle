@@ -1,16 +1,18 @@
-@extra:ParamConverter
-=====================
+@ParamConverter
+===============
 
 Usage
 -----
 
-The ``@extra:ParamConverter`` annotation calls *converters* to convert request
+The ``@ParamConverter`` annotation calls *converters* to convert request
 parameters to objects. These objects are stored as request attributes and so
 they can be injected as controller method arguments::
 
+    use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+
     /**
-     * @extra:Route("/blog/:id")
-     * @extra:ParamConverter("post", class="SensioBlogBundle:Post")
+     * @Route("/blog/:id")
+     * @ParamConverter("post", class="SensioBlogBundle:Post")
      */
     public function showAction(Post $post)
     {
@@ -31,7 +33,7 @@ Several things happens under the hood:
   controller when present in the method signature.
 
 If you use type hinting as in the example above, you can even omit the
-``@extra:ParamConverter`` annotation altogether::
+``@ParamConverter`` annotation altogether::
 
     // automatic with method signature
     public function showAction(Post $post)
