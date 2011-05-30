@@ -3,7 +3,6 @@
 namespace Sensio\Bundle\FrameworkExtraBundle\Controller;
 
 use Doctrine\Common\Annotations\Reader;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
 
