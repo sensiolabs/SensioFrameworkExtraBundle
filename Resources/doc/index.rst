@@ -136,7 +136,7 @@ This example shows all the available annotations in action::
         }
 
         /**
-         * @Route("/:id")
+         * @Route("/{id}")
          * @ParamConverter("post", class="SensioBlogBundle:Post")
          * @Template("SensioBlogBundle:Annot:post", vars={"post"})
          * @Cache(smaxage="15")
@@ -150,7 +150,7 @@ As the ``showAction`` method follows some conventions, you can omit some
 annotations::
 
     /**
-     * @Route("/:id")
+     * @Route("/{id}")
      * @Cache(smaxage="15")
      */
     public function showAction(Post $post)

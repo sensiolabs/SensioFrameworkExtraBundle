@@ -11,7 +11,7 @@ they can be injected as controller method arguments::
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
     /**
-     * @Route("/blog/:id")
+     * @Route("/blog/{id}")
      * @ParamConverter("post", class="SensioBlogBundle:Post")
      */
     public function showAction(Post $post)
