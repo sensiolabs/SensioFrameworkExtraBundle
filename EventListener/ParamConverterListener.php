@@ -1,6 +1,6 @@
 <?php
 
-namespace Sensio\Bundle\FrameworkExtraBundle\Controller;
+namespace Sensio\Bundle\FrameworkExtraBundle\EventListener;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager;

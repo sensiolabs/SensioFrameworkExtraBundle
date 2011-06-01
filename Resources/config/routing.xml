@@ -5,32 +5,32 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="routing.loader.annot_glob.class">Symfony\Component\Routing\Loader\AnnotationGlobLoader</parameter>
-        <parameter key="routing.loader.annot_dir.class">Symfony\Component\Routing\Loader\AnnotationDirectoryLoader</parameter>
-        <parameter key="routing.loader.annot_file.class">Symfony\Component\Routing\Loader\AnnotationFileLoader</parameter>
-        <parameter key="routing.loader.annot_class.class">Sensio\Bundle\FrameworkExtraBundle\Routing\AnnotatedRouteControllerLoader</parameter>
+        <parameter key="sensio_framework_extra.routing.loader.annot_glob.class">Symfony\Component\Routing\Loader\AnnotationGlobLoader</parameter>
+        <parameter key="sensio_framework_extra.routing.loader.annot_dir.class">Symfony\Component\Routing\Loader\AnnotationDirectoryLoader</parameter>
+        <parameter key="sensio_framework_extra.routing.loader.annot_file.class">Symfony\Component\Routing\Loader\AnnotationFileLoader</parameter>
+        <parameter key="sensio_framework_extra.routing.loader.annot_class.class">Sensio\Bundle\FrameworkExtraBundle\Routing\AnnotatedRouteControllerLoader</parameter>
     </parameters>
 
     <services>
-        <service id="routing.loader.annot_glob" class="%routing.loader.annot_glob.class%" public="false">
+        <service id="sensio_framework_extra.routing.loader.annot_glob" class="%sensio_framework_extra.routing.loader.annot_glob.class%" public="false">
             <tag name="routing.loader" />
             <argument type="service" id="file_locator" />
-            <argument type="service" id="routing.loader.annot_class" />
+            <argument type="service" id="sensio_framework_extra.routing.loader.annot_class" />
         </service>
 
-        <service id="routing.loader.annot_dir" class="%routing.loader.annot_dir.class%" public="false">
+        <service id="sensio_framework_extra.routing.loader.annot_dir" class="%sensio_framework_extra.routing.loader.annot_dir.class%" public="false">
             <tag name="routing.loader" />
             <argument type="service" id="file_locator" />
-            <argument type="service" id="routing.loader.annot_class" />
+            <argument type="service" id="sensio_framework_extra.routing.loader.annot_class" />
         </service>
 
-        <service id="routing.loader.annot_file" class="%routing.loader.annot_file.class%" public="false">
+        <service id="sensio_framework_extra.routing.loader.annot_file" class="%sensio_framework_extra.routing.loader.annot_file.class%" public="false">
             <tag name="routing.loader" />
             <argument type="service" id="file_locator" />
-            <argument type="service" id="routing.loader.annot_class" />
+            <argument type="service" id="sensio_framework_extra.routing.loader.annot_class" />
         </service>
 
-        <service id="routing.loader.annot_class" class="%routing.loader.annot_class.class%" public="false">
+        <service id="sensio_framework_extra.routing.loader.annot_class" class="%sensio_framework_extra.routing.loader.annot_class.class%" public="false">
             <tag name="routing.loader" />
             <argument type="service" id="annotation_reader" />
         </service>

@@ -1,6 +1,6 @@
 <?php
 
-namespace Sensio\Bundle\FrameworkExtraBundle\View;
+namespace Sensio\Bundle\FrameworkExtraBundle\EventListener;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
@@ -20,11 +20,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
  */
 
 /**
- * The AnnotationTemplateListener class handles the @Template annotation.
+ * The TemplateListener class handles the @Template annotation.
  *
  * @author     Fabien Potencier <fabien@symfony.com>
  */
-class AnnotationTemplateListener
+class TemplateListener
 {
     /**
      * @var Symfony\Component\DependencyInjection\ContainerInterface

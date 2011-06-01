@@ -5,11 +5,11 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="annotations.controller_parser.class">Sensio\Bundle\FrameworkExtraBundle\Controller\ControllerAnnotationParser</parameter>
+        <parameter key="sensio_framework_extra.controller.listener.class">Sensio\Bundle\FrameworkExtraBundle\EventListener\ControllerListener</parameter>
     </parameters>
 
     <services>
-        <service id="annotations.controller_parser" class="%annotations.controller_parser.class%">
+        <service id="sensio_framework_extra.controller.listener" class="%sensio_framework_extra.controller.listener.class%">
             <tag name="kernel.listener" event="core.controller" method="onCoreController" />
             <argument type="service" id="annotation_reader" />
         </service>

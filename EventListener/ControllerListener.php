@@ -1,6 +1,6 @@
 <?php
 
-namespace Sensio\Bundle\FrameworkExtraBundle\Controller;
+namespace Sensio\Bundle\FrameworkExtraBundle\EventListener;
 
 use Doctrine\Common\Annotations\Reader;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
@@ -16,12 +16,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
  */
 
 /**
- * The ControllerAnnotationParser class parses annotation blocks located in
+ * The ControllerListener class parses annotation blocks located in
  * controller classes.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class ControllerAnnotationParser
+class ControllerListener
 {
     /**
      * @var \Doctrine\Common\Annotations\Reader

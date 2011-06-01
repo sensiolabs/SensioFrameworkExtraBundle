@@ -5,27 +5,27 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="converter.listener.class">Sensio\Bundle\FrameworkExtraBundle\Controller\ParamConverterListener</parameter>
-        <parameter key="converter.manager.class">Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager</parameter>
-        <parameter key="converter.doctrine.class">Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter</parameter>
+        <parameter key="sensio_framework_extra.converter.listener.class">Sensio\Bundle\FrameworkExtraBundle\EventListener\ParamConverterListener</parameter>
+        <parameter key="sensio_framework_extra.converter.manager.class">Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager</parameter>
+        <parameter key="sensio_framework_extra.converter.doctrine.class">Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter</parameter>
     </parameters>
 
     <services>
-        <service id="converter.listener" class="%converter.listener.class%">
+        <service id="sensio_framework_extra.converter.listener" class="%sensio_framework_extra.converter.listener.class%">
             <tag name="kernel.listener" event="core.controller" method="onCoreController" />
-            <argument type="service" id="converter.manager" />
+            <argument type="service" id="sensio_framework_extra.converter.manager" />
         </service>
 
-        <service id="converter.manager" class="%converter.manager.class%">
+        <service id="sensio_framework_extra.converter.manager" class="%sensio_framework_extra.converter.manager.class%">
             <argument type="collection" />
         </service>
 
-        <service id="converter.doctrine.orm" class="%converter.doctrine.class%">
+        <service id="sensio_framework_extra.converter.doctrine.orm" class="%sensio_framework_extra.converter.doctrine.class%">
             <tag name="request.param_converter" />
             <argument type="service" id="doctrine.orm.entity_manager" on-invalid="ignore" />
         </service>
 
-        <service id="converter.doctrine.mongodb.odm" class="%converter.doctrine.class%">
+        <service id="sensio_framework_extra.converter.doctrine.mongodb.odm" class="%sensio_framework_extra.converter.doctrine.class%">
             <tag name="request.param_converter" />
             <argument type="service" id="doctrine.odm.mongodb.document_manager" on-invalid="ignore" />
         </service>

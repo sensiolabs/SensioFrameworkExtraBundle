@@ -24,11 +24,11 @@ class AddParamConverterPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        if (false === $container->hasDefinition('converter.manager')) {
+        if (false === $container->hasDefinition('sensio_framework_extra.converter.manager')) {
             return;
         }
 
-        $definition = $container->getDefinition('converter.manager');
+        $definition = $container->getDefinition('sensio_framework_extra.converter.manager');
         foreach ($container->findTaggedServiceIds('request.param_converter') as $id => $attributes) {
             $definition->addMethodCall('add', array(new Reference($id), isset($attributes[0]['priority']) ? $attributes[0]['priority'] : 0));
         }

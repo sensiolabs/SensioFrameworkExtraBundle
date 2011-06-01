@@ -1,6 +1,6 @@
 <?php
 
-namespace Sensio\Bundle\FrameworkExtraBundle\Cache;
+namespace Sensio\Bundle\FrameworkExtraBundle\EventListener;
 
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,12 +15,12 @@ use Symfony\Component\HttpFoundation\Response;
  */
 
 /**
- * The AnnotationCacheListener class has the responsability to modify the
+ * The CacheListener class has the responsability to modify the
  * Response object when a controller uses the @Cache annotation.
  *
  * @author     Fabien Potencier <fabien@symfony.com>
  */
-class AnnotationCacheListener
+class CacheListener
 {
     /**
      * Modifies the response to apply HTTP expiration header fields.
