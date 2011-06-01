@@ -38,6 +38,17 @@ values::
     {
     }
 
+You can also match more than one URL by defining additional ``@Route``
+annotations::
+
+    /**
+     * @Route("/", default={"id" = 1})
+     * @Route("/{id}")
+     */
+    public function showAction($id)
+    {
+    }
+
 Activation
 ----------
 
