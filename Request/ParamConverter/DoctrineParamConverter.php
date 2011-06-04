@@ -68,10 +68,7 @@ class DoctrineParamConverter implements ParamConverterInterface
         $class = $configuration->getClass();
 
         // named identifier ?
-        $from = $configuration->getFrom();
-        if (null === $from) {
-            $from = 'id';
-        }
+        $from = $configuration->getFrom() ?: 'id';
 
         if (!$request->attributes->has($from)) {
             return false;
