@@ -47,9 +47,10 @@ class ParamConverterListener
     {
         $controller = $event->getController();
         $request = $event->getRequest();
-        $configurations = array();
 
-        $configurations = $request->attributes->get('_converters');
+        if (!$configurations = $request->attributes->get('_converters')) {
+            $configurations = array();
+        }
 
         if (is_array($controller)) {
             $r = new \ReflectionMethod($controller[0], $controller[1]);

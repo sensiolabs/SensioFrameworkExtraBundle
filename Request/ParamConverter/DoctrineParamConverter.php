@@ -48,14 +48,8 @@ class DoctrineParamConverter implements ParamConverterInterface
     {
         $class = $configuration->getClass();
 
-        // named identifier ?
-        $from = $configuration->getFrom();
-        if (null === $from) {
-            $from = 'id';
-        }
-
         // find by identifier?
-        if (false === $object = $this->find($class, $request, $from)) {
+        if (false === $object = $this->find($request, $configuration)) {
             // find by criteria
             if (false === $object = $this->findOneBy($class, $request)) {
                 throw new \LogicException('Unable to guess how to get a Doctrine instance from the request information.');
@@ -69,8 +63,16 @@ class DoctrineParamConverter implements ParamConverterInterface
         $request->attributes->set($configuration->getName(), $object);
     }
 
-    protected function find($class, Request $request, $from)
+    protected function find(Request $request, ConfigurationInterface $configuration)
     {
+        $class = $configuration->getClass();
+
+        // named identifier ?
+        $from = $configuration->getFrom();
+        if (null === $from) {
+            $from = 'id';
+        }
+
         if (!$request->attributes->has($from)) {
             return false;
         }
