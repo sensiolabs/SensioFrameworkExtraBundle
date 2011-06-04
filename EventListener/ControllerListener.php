@@ -59,10 +59,7 @@ class ControllerListener
         foreach ($this->reader->getMethodAnnotations($method) as $configuration) {
             if ($configuration instanceof ParamConverter) {
                 // allow multiple @ParamConverter annotations
-                $previous = $request->attributes->get('_'.$configuration->getAliasName());
-                if (null === $previous) {
-                    $previous = array();
-                }
+                $previous = $request->attributes->get('_'.$configuration->getAliasName()) ?: array();
                 $previous[] = $configuration;
                 $request->attributes->set('_'.$configuration->getAliasName(), $previous);
             } else if ($configuration instanceof ConfigurationInterface) {
