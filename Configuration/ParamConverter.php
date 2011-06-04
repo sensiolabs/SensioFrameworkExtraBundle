@@ -14,7 +14,7 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
 /**
  * The ParamConverter class handles the @ParamConverter annotation parts.
  *
- * @ParamConverter("post", class="BlogBundle:Post")
+ * @ParamConverter("post", class="BlogBundle:Post", from="postId")
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
@@ -33,6 +33,13 @@ class ParamConverter extends ConfigurationAnnotation
      * @var string
      */
     protected $class;
+
+    /**
+     * The routing parameter to convert from.
+     *
+     * @var string
+     */
+    protected $from;
 
     /**
      * An array of options.
@@ -96,6 +103,26 @@ class ParamConverter extends ConfigurationAnnotation
     public function setClass($class)
     {
         $this->class = $class;
+    }
+
+    /**
+     * Returns the routing parameter to convert from.
+     *
+     * @return string $from
+     */
+    public function getFrom()
+    {
+        return $this->from;
+    }
+
+    /**
+     * Sets the routing parameter to convert from.
+     *
+     * @param string $from The routing parameter
+     */
+    public function setFrom($from)
+    {
+        $this->from = $from;
     }
 
     /**
