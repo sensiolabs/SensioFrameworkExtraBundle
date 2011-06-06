@@ -126,7 +126,7 @@ class TemplateListener
     protected function guessTemplateName($controller, Request $request)
     {
         if (!preg_match('/Controller\\\(.*)Controller$/', get_class($controller[0]), $match)) {
-            throw new \InvalidArgumentException(sprintf('The "%s" class does not look like a controller class (it does not end with Controller)', get_class($controller[0])));
+            throw new \InvalidArgumentException(sprintf('The "%s" class does not look like a controller class (it must be in a "Controller" sub-namespace and the class name must end with "Controller")', get_class($controller[0])));
         }
 
         $bundle = $this->getBundleForClass(get_class($controller[0]));
