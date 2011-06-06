@@ -50,7 +50,9 @@ class ParamConverterListener
         $configurations = array();
 
         if ($configuration = $request->attributes->get('_converters')) {
-            $configurations = is_array($configuration) ? $configuration : array($configuration);
+            foreach (is_array($configuration) ? $configuration : array($configuration) as $configuration) {
+                $configurations[$configuration->getName()] = $configuration;
+            }
         }
 
         if (is_array($controller)) {
@@ -61,16 +63,29 @@ class ParamConverterListener
 
         // automatically apply conversion for non-configured objects
         foreach ($r->getParameters() as $param) {
-            if ($param->getClass() && !$request->attributes->get($param->getName())) {
-                $configuration = new ParamConverter(array());
-                $configuration->setName($param->getName());
-                $configuration->setClass($param->getClass()->getName());
+            if (!$param->getClass()) {
+                continue;
+            }
+
+            $name = $param->getName();
+
+            // the parameter is already set, so disable the conversion
+            if ($request->attributes->has($name)) {
+                unset($configurations[$name]);
+            } else {
+                if (isset($configurations[$name])) {
+                    $configuration = $configurations[$name];
+                } else {
+                    $configuration = new ParamConverter(array());
+                    $configuration->setName($name);
+                    $configuration->setClass($param->getClass()->getName());
+                }
                 $configuration->setIsOptional($param->isOptional());
 
-                $configurations[] = $configuration;
+                $configurations[$name] = $configuration;
             }
         }
 
-        $this->manager->apply($request, $configurations);
+        $this->manager->apply($request, array_values($configurations));
     }
 }
