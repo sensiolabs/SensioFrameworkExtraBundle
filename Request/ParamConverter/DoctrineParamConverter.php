@@ -66,9 +66,7 @@ class DoctrineParamConverter implements ParamConverterInterface
     protected function find(Request $request, ConfigurationInterface $configuration)
     {
         $class = $configuration->getClass();
-
-        // named identifier ?
-        $from = $configuration->getFrom() ?: 'id';
+        $from  = $configuration->getFrom();
 
         if (!$request->attributes->has($from)) {
             return false;

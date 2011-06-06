@@ -39,7 +39,7 @@ class ParamConverter extends ConfigurationAnnotation
      *
      * @var string
      */
-    protected $from;
+    protected $from = 'id';
 
     /**
      * An array of options.
