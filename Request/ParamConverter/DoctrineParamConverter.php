@@ -5,13 +5,10 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\DoctrineBundle\Registry;
 
 use Doctrine\ORM\NoResultException;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\MappingException;
-
-use Doctrine\ODM\MongoDB\DocumentManager;
-use Doctrine\ODM\MongoDB\MongoDBException;
 
 /*
  * This file is part of the Symfony framework.
@@ -29,41 +26,38 @@ use Doctrine\ODM\MongoDB\MongoDBException;
  */
 class DoctrineParamConverter implements ParamConverterInterface
 {
-    protected $manager;
+    protected $registry;
 
-    public function __construct($manager = null)
+    public function __construct(Registry $registry = null)
     {
-        if (is_null($manager)) {
+        if (is_null($registry)) {
             return;
         }
 
-        if (false === (($manager instanceof EntityManager) || ($manager instanceof DocumentManager))) {
-            throw new \InvalidArgumentException('$manager must be an instance of Doctrine\ORM\EntityManager or Doctrine\ODM\MongoDB\DocumentManager.');
-        }
-
-        $this->manager = $manager;
+        $this->registry = $registry;
     }
 
     public function apply(Request $request, ConfigurationInterface $configuration)
     {
         $class = $configuration->getClass();
+        $options = $this->getOptions($configuration);
 
         // find by identifier?
-        if (false === $object = $this->find($request, $configuration)) {
+        if (false === $object = $this->find($request, $configuration, $options)) {
             // find by criteria
-            if (false === $object = $this->findOneBy($class, $request)) {
+            if (false === $object = $this->findOneBy($class, $request, $options)) {
                 throw new \LogicException('Unable to guess how to get a Doctrine instance from the request information.');
             }
         }
 
-        if (null === $object) {
+        if (null === $object && false === $configuration->isOptional()) {
             throw new NotFoundHttpException(sprintf('%s object not found.', $class));
         }
 
         $request->attributes->set($configuration->getName(), $object);
     }
 
-    protected function find(Request $request, ConfigurationInterface $configuration)
+    protected function find(Request $request, ConfigurationInterface $configuration, $options)
     {
         $class = $configuration->getClass();
         $from  = $configuration->getFrom();
@@ -72,13 +66,13 @@ class DoctrineParamConverter implements ParamConverterInterface
             return false;
         }
 
-        return $this->manager->getRepository($class)->find($request->attributes->get($from));
+        return $this->registry->getRepository($class, $options['entity_manager'])->find($request->attributes->get($from));
     }
 
-    protected function findOneBy($class, Request $request)
+    protected function findOneBy($class, Request $request, $options)
     {
         $criteria = array();
-        $metadata = $this->manager->getClassMetadata($class);
+        $metadata = $this->registry->getEntityManager($options['entity_manager'])->getClassMetadata($class);
         foreach ($request->attributes->all() as $key => $value) {
             if ($metadata->hasField($key)) {
                 $criteria[$key] = $value;
@@ -89,12 +83,12 @@ class DoctrineParamConverter implements ParamConverterInterface
             return false;
         }
 
-        return $this->manager->getRepository($class)->findOneBy($criteria);
+        return $this->registry->getRepository($class, $options['entity_manager'])->findOneBy($criteria);
     }
 
     public function supports(ConfigurationInterface $configuration)
     {
-        if (null === $this->manager) {
+        if (null === $this->registry) {
             return false;
         }
 
@@ -102,15 +96,22 @@ class DoctrineParamConverter implements ParamConverterInterface
             return false;
         }
 
+        $options = $this->getOptions($configuration);
+
         // Doctrine Entity?
         try {
-            $this->manager->getClassMetadata($configuration->getClass());
+            $this->registry->getEntityManager($options['entity_manager'])->getClassMetadata($configuration->getClass());
 
             return true;
         } catch (MappingException $e) {
             return false;
-        } catch (MongoDBException $e) {
-            return false;
         }
+    }
+
+    protected function getOptions(ConfigurationInterface $configuration)
+    {
+        return array_replace(array(
+            'entity_manager' => 'default',
+        ), $configuration->getOptions());
     }
 }

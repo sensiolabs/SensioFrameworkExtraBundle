@@ -46,6 +46,23 @@ Built-in Converters
 
 The bundle has only one built-in converter, the Doctrine one.
 
+Doctrine Converter
+~~~~~~~~~~~~~~~~~~
+
+By default, the Doctrine converter uses the *default* entity manager. This can
+configured with the ``entity_manager`` option::
+
+    use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+    use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+
+    /**
+     * @Route("/blog/{id}")
+     * @ParamConverter("post", class="SensioBlogBundle:Post", options={"entity_manager" = "foo"})
+     */
+    public function showAction(Post $post)
+    {
+    }
+
 Creating a Converter
 --------------------
 

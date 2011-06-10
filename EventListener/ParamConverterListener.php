@@ -48,7 +48,11 @@ class ParamConverterListener
         $controller = $event->getController();
         $request = $event->getRequest();
 
-        $configurations = $request->attributes->get('_converters') ?: array();
+        $configuration = $request->attributes->get('_converters') ?: array();
+        $configurations = array();
+        foreach ($configuration as $conf) {
+            $configurations[$conf->getName()] = $conf;
+        }
 
         if (is_array($controller)) {
             $r = new \ReflectionMethod($controller[0], $controller[1]);
@@ -58,16 +62,29 @@ class ParamConverterListener
 
         // automatically apply conversion for non-configured objects
         foreach ($r->getParameters() as $param) {
-            if ($param->getClass() && !$request->attributes->get($param->getName())) {
-                $configuration = new ParamConverter(array());
-                $configuration->setName($param->getName());
-                $configuration->setClass($param->getClass()->getName());
+            if (!$param->getClass()) {
+                continue;
+            }
+
+            $name = $param->getName();
+
+            // the parameter is already set, so disable the conversion
+            if ($request->attributes->has($name)) {
+                unset($configurations[$name]);
+            } else {
+                if (isset($configurations[$name])) {
+                    $configuration = $configurations[$name];
+                } else {
+                    $configuration = new ParamConverter(array());
+                    $configuration->setName($name);
+                    $configuration->setClass($param->getClass()->getName());
+                }
                 $configuration->setIsOptional($param->isOptional());
 
-                $configurations[] = $configuration;
+                $configurations[$name] = $configuration;
             }
         }
 
-        $this->manager->apply($request, $configurations);
+        $this->manager->apply($request, array_values($configurations));
     }
 }
