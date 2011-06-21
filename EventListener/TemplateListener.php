@@ -42,12 +42,12 @@ class TemplateListener
     }
 
     /**
-     * Guesses the template name to render and its variables and adds them to 
+     * Guesses the template name to render and its variables and adds them to
      * the request object.
      *
      * @param FilterControllerEvent $event A FilterControllerEvent instance
      */
-    public function onCoreController(FilterControllerEvent $event)
+    public function onKernelController(FilterControllerEvent $event)
     {
         if (!is_array($controller = $event->getController())) {
             return;
@@ -80,12 +80,12 @@ class TemplateListener
     }
 
     /**
-     * Renders the template and initializes a new response object with the 
+     * Renders the template and initializes a new response object with the
      * rendered template content.
      *
      * @param GetResponseForControllerResultEvent $event A GetResponseForControllerResultEvent instance
      */
-    public function onCoreView(GetResponseForControllerResultEvent $event)
+    public function onKernelView(GetResponseForControllerResultEvent $event)
     {
         $request = $event->getRequest();
         $parameters = $event->getControllerResult();
@@ -115,7 +115,7 @@ class TemplateListener
     }
 
     /**
-     * Guesses and returns the template name to render based on the controller 
+     * Guesses and returns the template name to render based on the controller
      * and action names.
      *
      * @param array $controller An array storing the controller object and action method
