@@ -2,13 +2,13 @@ SensioFrameworkExtraBundle
 ==========================
 
 The default Symfony2 ``FrameworkBundle`` implements a basic but robust and
-flexible MVC framework. ``SensioFrameworkExtraBundle`` extends it to add sweet
+flexible MVC framework. `SensioFrameworkExtraBundle`_ extends it to add sweet
 conventions and annotations. It allows for more concise controllers.
 
 Installation
 ------------
 
-`Download`_ the bundle and put it under the ``Sensio\\Bundle\\`` namespace.
+`Download`_ the bundle and put it under the ``Sensio\Bundle\`` namespace.
 Then, like for any other bundle, include it in your Kernel class::
 
     public function registerBundles()
@@ -77,8 +77,6 @@ settings:
             'view'    => array('converters' => false, 'manage_null_arguments' => false),
             'cache'   => array('converters' => false),
         ));
-
-.. _Download: http://github.com/sensio/SensioFrameworkExtraBundle
 
 Annotations for Controllers
 ---------------------------
@@ -155,3 +153,6 @@ annotations::
     public function showAction(Post $post)
     {
     }
+
+.. _`SensioFrameworkExtraBundle`: https://github.com/sensio/SensioFrameworkExtraBundle
+.. _`Download`: http://github.com/sensio/SensioFrameworkExtraBundle
