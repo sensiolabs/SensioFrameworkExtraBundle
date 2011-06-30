@@ -15,6 +15,7 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
  * The Method class handles the @Method annotation parts.
  *
  * @author Fabien Potencier <fabien@symfony.com>
+ * @Annotation
  */
 class Method extends ConfigurationAnnotation
 {
