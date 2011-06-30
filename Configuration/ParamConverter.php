@@ -17,6 +17,7 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
  * @ParamConverter("post", class="BlogBundle:Post")
  *
  * @author Fabien Potencier <fabien@symfony.com>
+ * @Annotation
  */
 class ParamConverter extends ConfigurationAnnotation
 {

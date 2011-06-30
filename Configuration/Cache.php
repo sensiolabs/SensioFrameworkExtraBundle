@@ -15,6 +15,7 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
  * The Cache class handles the @Cache annotation parts.
  *
  * @author Fabien Potencier <fabien@symfony.com>
+ * @Annotation
  */
 class Cache extends ConfigurationAnnotation
 {
