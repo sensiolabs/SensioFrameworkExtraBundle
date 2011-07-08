@@ -94,10 +94,11 @@ As for any other resource, you can "mount" the routes under a given prefix:
 Route Name
 ----------
 
-By default, a route defined with the ``@Route`` annotation is given a name
-based on the controller class and method names:
-``sensioblogbundle_controller_postcontroller_indexaction`` for the above example;
-the ``name`` attribute overrides the generated route name::
+A route defined with the ``@Route`` annotation is given a default name composed
+of the bundle name, the controller name and the action name. That would be
+``sensio_blog_post_index`` for the above example;
+
+The ``name`` attribute can be used to override this default route name::
 
     /**
      * @Route("/", name="blog_home")
