@@ -1,5 +1,5 @@
-@Route
-======
+@Route and @Method
+==================
 
 Usage
 -----
@@ -119,3 +119,30 @@ routes::
     }
 
 The ``show`` action is now mapped to the ``/blog/{id}`` pattern.
+
+Route Method
+------------
+
+There is a shortcut ``@Method`` annotation to specify the HTTP method allowed
+for the route::
+
+    /**
+     * @Route("/blog")
+     */
+    class PostController extends Controller
+    {
+        /**
+         * @Route("/edit/{id}")
+         * @Method({"GET", "POST"})
+         */
+        public function editAction($id)
+        {
+        }
+    }
+
+The ``edit`` action is now mapped to the ``/blog/edit/{id}`` pattern if the HTTP
+method used is either GET or POST.
+
+The ``@Method`` annotation is only considered when an action is annotated with
+``@Route``.
+
