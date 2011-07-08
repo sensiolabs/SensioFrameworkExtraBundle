@@ -73,15 +73,6 @@ You can also import a whole directory:
         resource: "@SensioBlogBundle/Controller"
         type:     annotation
 
-Or even import all controllers:
-
-.. code-block:: yaml
-
-    # import routes from all controllers
-    all:
-        resource: */Controller
-        type:     annotation
-
 As for any other resource, you can "mount" the routes under a given prefix:
 
 .. code-block:: yaml
