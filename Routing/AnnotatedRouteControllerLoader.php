@@ -59,17 +59,17 @@ class AnnotatedRouteControllerLoader extends AnnotationClassLoader
      * @param  ReflectionMethod $method A ReflectionMethod instance
      * @return string
      */
-    public function getDefaultRouteName(\ReflectionClass $class, \ReflectionMethod $method)
+    protected function getDefaultRouteName(\ReflectionClass $class, \ReflectionMethod $method)
     {
         $routeName = parent::getDefaultRouteName($class, $method);
 
         return preg_replace(array(
             '/(bundle|controller)_/',
-            '/action$/',
+            '/action(_\d+)?$/',
             '/__/'
         ), array(
             '_',
-            null,
+            '\\1',
             '_'
         ), $routeName);
     }
