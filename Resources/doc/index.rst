@@ -25,58 +25,43 @@ Then, like for any other bundle, include it in your Kernel class::
 Configuration
 -------------
 
-To enable all features provided by the bundle, add the following to your
-configuration:
+All features provided by the bundle are enabled by default when the bundle is
+registered in your Kernel class.
 
-.. configuration-block::
-
-    .. code-block:: yaml
-
-        sensio_framework_extra: ~
-
-    .. code-block:: xml
-
-        <!-- xmlns:sensio-framework-extra="http://www.symfony-project.org/schema/dic/sensio-framework-extra" -->
-        <sensio-framework-extra:config />
-
-    .. code-block:: php
-
-        // load the profiler
-        $container->loadFromExtension('sensio_framework_extra', array(
-        ));
-
-You can disable some annotations and conventions by defining one or more
-settings:
+The default configuration is as follow:
 
 .. configuration-block::
 
     .. code-block:: yaml
 
         sensio_framework_extra:
-            router:  { annotations: false }
-            request: { converters: false }
-            view:    { annotations: false, manage_null_arguments: false }
-            cache:   { annotations: false }
+            router:  { annotations: true }
+            request: { converters: true }
+            view:    { annotations: true }
+            cache:   { annotations: true }
 
     .. code-block:: xml
 
         <!-- xmlns:sensio-framework-extra="http://www.symfony-project.org/schema/dic/sensio-framework-extra" -->
         <sensio-framework-extra:config>
-            <router annotations="false" />
-            <request converters="false" />
-            <view annotations="false" manage-null-arguments="false" />
-            <cache converters="false" />
+            <router annotations="true" />
+            <request converters="true" />
+            <view annotations="true" />
+            <cache annotations="true" />
         </sensio-framework-extra:config>
 
     .. code-block:: php
 
         // load the profiler
         $container->loadFromExtension('sensio_framework_extra', array(
-            'router'  => array('annotations' => false),
-            'request' => array('converters' => false),
-            'view'    => array('converters' => false, 'manage_null_arguments' => false),
-            'cache'   => array('converters' => false),
+            'router'  => array('annotations' => true),
+            'request' => array('converters' => true),
+            'view'    => array('annotations' => true),
+            'cache'   => array('annotations' => true),
         ));
+
+You can disable some annotations and conventions by defining one or more
+settings to false.
 
 Annotations for Controllers
 ---------------------------
@@ -134,6 +119,7 @@ This example shows all the available annotations in action::
 
         /**
          * @Route("/{id}")
+         * @Method("GET")
          * @ParamConverter("post", class="SensioBlogBundle:Post")
          * @Template("SensioBlogBundle:Annot:post", vars={"post"})
          * @Cache(smaxage="15")
