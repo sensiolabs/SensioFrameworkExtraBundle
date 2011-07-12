@@ -38,19 +38,19 @@ class SensioFrameworkExtraExtension extends Extension
 
         $annotationsToLoad = array();
 
-        if (!isset($config['router']['annotations']) || $config['router']['annotations']) {
+        if ($config['router']['annotations']) {
             $annotationsToLoad[] = 'routing.xml';
         }
 
-        if (!isset($config['request']['converters']) || $config['request']['converters']) {
+        if ($config['request']['converters']) {
             $annotationsToLoad[] = 'converters.xml';
         }
 
-        if (!isset($config['view']['annotations']) || $config['view']['annotations']) {
+        if ($config['view']['annotations']) {
             $annotationsToLoad[] = 'view.xml';
         }
 
-        if (!isset($config['cache']['annotations']) || $config['cache']['annotations']) {
+        if ($config['cache']['annotations']) {
             $annotationsToLoad[] = 'cache.xml';
         }
 

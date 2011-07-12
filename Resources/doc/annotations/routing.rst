@@ -1,5 +1,5 @@
-@Route
-======
+@Route and @Method
+==================
 
 Usage
 -----
@@ -73,15 +73,6 @@ You can also import a whole directory:
         resource: "@SensioBlogBundle/Controller"
         type:     annotation
 
-Or even import all controllers:
-
-.. code-block:: yaml
-
-    # import routes from all controllers
-    all:
-        resource: */Controller
-        type:     annotation
-
 As for any other resource, you can "mount" the routes under a given prefix:
 
 .. code-block:: yaml
@@ -94,10 +85,11 @@ As for any other resource, you can "mount" the routes under a given prefix:
 Route Name
 ----------
 
-By default, a route defined with the ``@Route`` annotation is given a name
-based on the controller class and method names:
-``sensioblogbundle_controller_postcontroller_indexaction`` for the above example;
-the ``name`` attribute overrides the generated route name::
+A route defined with the ``@Route`` annotation is given a default name composed
+of the bundle name, the controller name and the action name. That would be
+``sensio_blog_post_index`` for the above example;
+
+The ``name`` attribute can be used to override this default route name::
 
     /**
      * @Route("/", name="blog_home")
@@ -127,3 +119,30 @@ routes::
     }
 
 The ``show`` action is now mapped to the ``/blog/{id}`` pattern.
+
+Route Method
+------------
+
+There is a shortcut ``@Method`` annotation to specify the HTTP method allowed
+for the route::
+
+    /**
+     * @Route("/blog")
+     */
+    class PostController extends Controller
+    {
+        /**
+         * @Route("/edit/{id}")
+         * @Method({"GET", "POST"})
+         */
+        public function editAction($id)
+        {
+        }
+    }
+
+The ``edit`` action is now mapped to the ``/blog/edit/{id}`` pattern if the HTTP
+method used is either GET or POST.
+
+The ``@Method`` annotation is only considered when an action is annotated with
+``@Route``.
+
