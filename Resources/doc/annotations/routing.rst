@@ -38,12 +38,32 @@ values::
     {
     }
 
+Route Name
+----------
+
+A route defined with the ``@Route`` annotation is given a default name composed
+of the bundle name, the controller name and the action name. That would be
+``sensio_blog_post_index`` for the above example;
+
+The ``name`` attribute can be used to override this default route name::
+
+    /**
+     * @Route("/", name="blog_home")
+     */
+    public function indexAction()
+    {
+        // ...
+    }
+
+Multiple Routes
+----------
+
 You can also match more than one URL by defining additional ``@Route``
 annotations::
 
     /**
-     * @Route("/", defaults={"id" = 1})
-     * @Route("/{id}")
+     * @Route("/", defaults={"id" = 1}, name="sensio_blog_post_show_default")
+     * @Route("/{id}", name="sensio_blog_post_show_id")
      */
     public function showAction($id)
     {
@@ -81,23 +101,6 @@ As for any other resource, you can "mount" the routes under a given prefix:
         resource: "@SensioBlogBundle/Controller/PostController.php"
         prefix:   /blog
         type:     annotation
-
-Route Name
-----------
-
-A route defined with the ``@Route`` annotation is given a default name composed
-of the bundle name, the controller name and the action name. That would be
-``sensio_blog_post_index`` for the above example;
-
-The ``name`` attribute can be used to override this default route name::
-
-    /**
-     * @Route("/", name="blog_home")
-     */
-    public function indexAction()
-    {
-        // ...
-    }
 
 Route Prefix
 ------------
