@@ -36,9 +36,15 @@ class AnnotatedRouteControllerLoader extends AnnotationClassLoader
      */
     protected function configureRoute(Route $route, \ReflectionClass $class, \ReflectionMethod $method, $annot)
     {
-        // controller
         $classAnnot = $this->reader->getClassAnnotation($class, $this->routeAnnotationClass);
-        if ($classAnnot && $service = $classAnnot->getService()) {
+        $jmsAnnot = $this->reader->getClassAnnotation($class, 'JMS\\DiExtraBundle\\Annotation\\Service');
+
+        // controller
+        if (
+            ($classAnnot && $service = $classAnnot->getService())
+            ||
+            ($jmsAnnot && $service = $jmsAnnot->id)
+        ) {
             $route->setDefault('_controller', $service.':'.$method->getName());
         } else {
             $route->setDefault('_controller', $class->getName().'::'.$method->getName());
