@@ -36,15 +36,12 @@ class AnnotatedRouteControllerLoader extends AnnotationClassLoader
      */
     protected function configureRoute(Route $route, \ReflectionClass $class, \ReflectionMethod $method, $annot)
     {
-        $classAnnot = $this->reader->getClassAnnotation($class, $this->routeAnnotationClass);
-        $jmsAnnot = $this->reader->getClassAnnotation($class, 'JMS\\DiExtraBundle\\Annotation\\Service');
-
         // controller
-        if (
-            ($classAnnot && $service = $classAnnot->getService())
-            ||
-            ($jmsAnnot && $service = $jmsAnnot->id)
-        ) {
+        $classAnnot = $this->reader->getClassAnnotation($class, $this->routeAnnotationClass);
+        if ($classAnnot && $service = $classAnnot->getService()) {
+            $route->setDefault('_controller', $service.':'.$method->getName());
+        } elseif ($jmsAnnot = $this->reader->getClassAnnotation($class, 'JMS\\DiExtraBundle\\Annotation\\Service')) {
+            $service = $jmsAnnot->id ?: $this->getDefaultServiceId($class);
             $route->setDefault('_controller', $service.':'.$method->getName());
         } else {
             $route->setDefault('_controller', $class->getName().'::'.$method->getName());
@@ -63,6 +60,7 @@ class AnnotatedRouteControllerLoader extends AnnotationClassLoader
      *
      * @param  ReflectionClass $class A ReflectionClass instance
      * @param  ReflectionMethod $method A ReflectionMethod instance
+     *
      * @return string
      */
     protected function getDefaultRouteName(\ReflectionClass $class, \ReflectionMethod $method)
@@ -78,5 +76,21 @@ class AnnotatedRouteControllerLoader extends AnnotationClassLoader
             '\\1',
             '_'
         ), $routeName);
+    }
+
+    /**
+     * Chooses a default service id.
+     *
+     * This inflector was copied from JMSDiExtraBundle and should not be changed.
+     *
+     * @param ReflectionClass $class A ReflectionClass instance
+     *
+     * @return string
+     */
+    final protected function getDefaultServiceId(\ReflectionClass $class)
+    {
+        $name = preg_replace('/(?<=[a-zA-Z0-9])[A-Z]/', '_\\0', $class->getName());
+
+        return strtolower(strtr($name, '\\', '.'));
     }
 }
