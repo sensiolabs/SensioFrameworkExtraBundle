@@ -135,8 +135,9 @@ class TemplateListener
         }
 
         $bundle = $this->getBundleForClass(get_class($controller[0]));
+        $engine = current($this->container->getParameter('templating.engines'));
 
-        return new TemplateReference($bundle->getName(), $matchController[1], $matchAction[1], $request->getRequestFormat(), 'twig');
+        return new TemplateReference($bundle->getName(), $matchController[1], $matchAction[1], $request->getRequestFormat(), $engine);
     }
 
     /**
