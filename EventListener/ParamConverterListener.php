@@ -69,23 +69,19 @@ class ParamConverterListener
 
             $name = $param->getName();
 
-            // the parameter is already set, so disable the conversion
-            if ($request->attributes->has($name)) {
-                unset($configurations[$name]);
+            if (isset($configurations[$name])) {
+                $configuration = $configurations[$name];
             } else {
-                if (isset($configurations[$name])) {
-                    $configuration = $configurations[$name];
-                } else {
-                    $configuration = new ParamConverter(array());
-                    $configuration->setName($name);
-                    $configuration->setClass($param->getClass()->getName());
-                }
-                $configuration->setIsOptional($param->isOptional());
-
-                $configurations[$name] = $configuration;
+                $configuration = new ParamConverter(array());
+                $configuration->setName($name);
+                $configuration->setClass($param->getClass()->getName());
             }
+
+            $configuration->setIsOptional($param->isOptional());
+
+            $configurations[$name] = $configuration;
         }
 
-        $this->manager->apply($request, array_values($configurations));
+        $this->manager->apply($request, $configurations);
     }
 }
