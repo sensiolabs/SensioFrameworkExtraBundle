@@ -69,17 +69,15 @@ class ParamConverterListener
 
             $name = $param->getName();
 
-            if (isset($configurations[$name])) {
-                $configuration = $configurations[$name];
-            } else {
+            if (!isset($configurations[$name])) {
                 $configuration = new ParamConverter(array());
                 $configuration->setName($name);
                 $configuration->setClass($param->getClass()->getName());
+
+                $configurations[$name] = $configuration;
             }
 
-            $configuration->setIsOptional($param->isOptional());
-
-            $configurations[$name] = $configuration;
+            $configurations[$name]->setIsOptional($param->isOptional());
         }
 
         $this->manager->apply($request, $configurations);
