@@ -124,7 +124,10 @@ Route Method
 ------------
 
 There is a shortcut ``@Method`` annotation to specify the HTTP method allowed
-for the route::
+for the route. To use it, import the ``Method`` annotation namespace::
+
+    use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+    use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
     /**
      * @Route("/blog")
