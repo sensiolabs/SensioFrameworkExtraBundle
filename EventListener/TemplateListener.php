@@ -60,7 +60,7 @@ class TemplateListener
         }
 
         if (!$configuration->getTemplate()) {
-            $configuration->setTemplate($this->guessTemplateName($controller, $request));
+            $configuration->setTemplate($this->guessTemplateName($controller, $request, $configuration->getEngine()));
         }
 
         $request->attributes->set('_template', $configuration->getTemplate());
@@ -120,10 +120,11 @@ class TemplateListener
      *
      * @param array $controller An array storing the controller object and action method
      * @param Request $request A Request instance
+     * @param string $engine
      * @return TemplateReference template reference
      * @throws \InvalidArgumentException
      */
-    protected function guessTemplateName($controller, Request $request)
+    protected function guessTemplateName($controller, Request $request, $engine = 'twig')
     {
         if (!preg_match('/Controller\\\(.+)Controller$/', get_class($controller[0]), $matchController)) {
             throw new \InvalidArgumentException(sprintf('The "%s" class does not look like a controller class (it must be in a "Controller" sub-namespace and the class name must end with "Controller")', get_class($controller[0])));
@@ -136,7 +137,7 @@ class TemplateListener
 
         $bundle = $this->getBundleForClass(get_class($controller[0]));
 
-        return new TemplateReference($bundle->getName(), $matchController[1], $matchAction[1], $request->getRequestFormat(), 'twig');
+        return new TemplateReference($bundle->getName(), $matchController[1], $matchAction[1], $request->getRequestFormat(), $engine);
     }
 
     /**
