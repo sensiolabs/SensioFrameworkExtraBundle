@@ -40,7 +40,7 @@ class ParamConverterManagerTest extends \PHPUnit_Framework_TestCase
         $supported
             ->expects($this->once())
             ->method('apply')
-            ->will($this->returnValue(true))
+            ->will($this->returnValue(false))
         ;
 
         $invalid = $this->createParamConverterMock();
