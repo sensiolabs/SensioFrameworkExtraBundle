@@ -15,6 +15,9 @@
             <tag name="routing.loader" />
             <argument type="service" id="file_locator" />
             <argument type="service" id="sensio_framework_extra.routing.loader.annot_class" />
+            <call method="setReader">
+                <argument type="service" id="annotation_reader" />
+            </call>
         </service>
 
         <service id="sensio_framework_extra.routing.loader.annot_file" class="%sensio_framework_extra.routing.loader.annot_file.class%" public="false">
