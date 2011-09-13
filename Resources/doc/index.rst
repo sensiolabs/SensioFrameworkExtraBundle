@@ -42,7 +42,7 @@ The default configuration is as follow:
 
     .. code-block:: xml
 
-        <!-- xmlns:sensio-framework-extra="http://www.symfony-project.org/schema/dic/sensio-framework-extra" -->
+        <!-- xmlns:sensio-framework-extra="http://symfony.com/schema/dic/symfony_extra" -->
         <sensio-framework-extra:config>
             <router annotations="true" />
             <request converters="true" />
