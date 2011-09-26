@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Annotation\Route as BaseRoute;
  * @author Kris Wallsmith <kris@symfony.com>
  * @Annotation
  */
-class Route extends BaseRoute
+class Route extends BaseRoute implements ConfigurationInterface
 {
     protected $service;
 
@@ -29,5 +29,10 @@ class Route extends BaseRoute
     public function getService()
     {
         return $this->service;
+    }
+
+    public function getAliasName()
+    {
+        return 'route_config';
     }
 }
