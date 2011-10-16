@@ -16,9 +16,7 @@
             <argument type="service" id="sensio_framework_extra.converter.manager" />
         </service>
 
-        <service id="sensio_framework_extra.converter.manager" class="%sensio_framework_extra.converter.manager.class%">
-            <argument type="collection" />
-        </service>
+        <service id="sensio_framework_extra.converter.manager" class="%sensio_framework_extra.converter.manager.class%" />
 
         <service id="sensio_framework_extra.converter.doctrine.orm" class="%sensio_framework_extra.converter.doctrine.class%">
             <tag name="request.param_converter" />
