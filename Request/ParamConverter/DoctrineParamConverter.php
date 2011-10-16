@@ -30,10 +30,6 @@ class DoctrineParamConverter implements ParamConverterInterface
 
     public function __construct(Registry $registry = null)
     {
-        if (is_null($registry)) {
-            return;
-        }
-
         $this->registry = $registry;
     }
 
