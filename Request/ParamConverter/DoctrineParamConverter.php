@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\DoctrineBundle\Registry;
 
 use Doctrine\ORM\Mapping\MappingException;
+use Doctrine\ORM\ORMException;
 
 /*
  * This file is part of the Symfony framework.
@@ -96,6 +97,8 @@ class DoctrineParamConverter implements ParamConverterInterface
 
             return true;
         } catch (MappingException $e) {
+            return false;
+        } catch (ORMException $e) { 
             return false;
         }
     }
