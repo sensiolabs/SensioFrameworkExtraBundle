@@ -5,10 +5,9 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\DoctrineBundle\Registry;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Doctrine\ORM\Mapping\MappingException;
-use Doctrine\ORM\ORMException;
 
 /*
  * This file is part of the Symfony framework.
@@ -20,17 +19,17 @@ use Doctrine\ORM\ORMException;
  */
 
 /**
- * DoctrineConverter.
+ * DoctrineMongoDBConverter.
  *
- * @author     Fabien Potencier <fabien@symfony.com>
+ * @author     Kacper Gunia <cakper@gmail.com>
  */
-class DoctrineParamConverter implements ParamConverterInterface
+class DoctrineMongoDBParamConverter implements ParamConverterInterface
 {
-    protected $registry;
+    protected $container;
 
-    public function __construct(Registry $registry = null)
+    public function __construct(ContainerInterface $container = null)
     {
-        $this->registry = $registry;
+        $this->container = $container;
     }
 
     public function apply(Request $request, ConfigurationInterface $configuration)
@@ -58,14 +57,14 @@ class DoctrineParamConverter implements ParamConverterInterface
         if (!$request->attributes->has('id')) {
             return false;
         }
-
-        return $this->registry->getRepository($class, $options['entity_manager'])->find($request->attributes->get('id'));
+        
+        return $this->container->get(sprintf('doctrine.odm.mongodb.%s_document_manager', $options['document_manager']))->find($class, $request->attributes->get('id'));
     }
 
     protected function findOneBy($class, Request $request, $options)
     {
         $criteria = array();
-        $metadata = $this->registry->getEntityManager($options['entity_manager'])->getClassMetadata($class);
+        $metadata = $this->container->get(sprintf('doctrine.odm.mongodb.%s_document_manager', $options['document_manager']))->getClassMetadata($class);
         foreach ($request->attributes->all() as $key => $value) {
             if ($metadata->hasField($key)) {
                 $criteria[$key] = $value;
@@ -75,30 +74,29 @@ class DoctrineParamConverter implements ParamConverterInterface
         if (!$criteria) {
             return false;
         }
-
-        return $this->registry->getRepository($class, $options['entity_manager'])->findOneBy($criteria);
+        
+        return $this->container->get(sprintf('doctrine.odm.mongodb.%s_document_manager', $options['document_manager']))->getRepository($class)->findOneBy($criteria);
     }
 
     public function supports(ConfigurationInterface $configuration)
     {
-        if (null === $this->registry) {
+        if (null === $this->container) {
             return false;
         }
 
         if (null === $configuration->getClass()) {
             return false;
         }
-
+        
         $options = $this->getOptions($configuration);
 
-        // Doctrine Entity?
         try {
-            $this->registry->getEntityManager($options['entity_manager'])->getClassMetadata($configuration->getClass());
-
+            $this->container->get(sprintf('doctrine.odm.mongodb.%s_document_manager', $options['document_manager']))->getClassMetadata($configuration->getClass());
+            
             return true;
         } catch (MappingException $e) {
             return false;
-        } catch (ORMException $e) { 
+        } catch (\ErrorException $e) {
             return false;
         }
     }
@@ -106,7 +104,8 @@ class DoctrineParamConverter implements ParamConverterInterface
     protected function getOptions(ConfigurationInterface $configuration)
     {
         return array_replace(array(
-            'entity_manager' => 'default',
+            'document_manager' => 'default',
         ), $configuration->getOptions());
     }
 }
+
