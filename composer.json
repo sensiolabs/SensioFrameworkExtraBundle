@@ -1,0 +1,20 @@
+{
+    "name": "sensio/framework-extra-bundle",
+    "description": "This bundle provides a way to configure your controllers with annotations",
+    "keywords": ["annotations","controllers"],
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Fabien Potencier",
+            "email": "fabien@symfony.com"
+        }
+    ],
+    "require": {
+        "symfony/framework-bundle": "2.*"
+    },
+    "autoload": {
+        "psr-0": { "Sensio\\Bundle\\FrameworkExtraBundle": "" }
+    },
+    "target-dir": "Sensio/Bundle/FrameworkExtraBundle"
+}
