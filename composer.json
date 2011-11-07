@@ -11,7 +11,8 @@
         }
     ],
     "require": {
-        "symfony/framework-bundle": "2.*"
+        "symfony/framework-bundle": "2.*",
+        "doctrine/common": ">=2.0"
     },
     "autoload": {
         "psr-0": { "Sensio\\Bundle\\FrameworkExtraBundle": "" }
