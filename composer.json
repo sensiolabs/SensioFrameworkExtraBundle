@@ -11,7 +11,7 @@
         }
     ],
     "require": {
-        "symfony/framework-bundle": "2.*",
+        "symfony/framework-bundle": ">=2.0",
         "doctrine/common": ">=2.0"
     },
     "autoload": {
