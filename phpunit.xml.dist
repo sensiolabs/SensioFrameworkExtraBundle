@@ -3,7 +3,7 @@
 <phpunit bootstrap="./Tests/bootstrap.php" colors="true">
 <!--
     <php>
-        <server name="SYMFONY" value="../../vendor/symfony/src" />
+        <server name="SYMFONY" value="../../../../symfony/src" />
     </php>
 -->
     <testsuites>
