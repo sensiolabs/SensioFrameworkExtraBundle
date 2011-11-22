@@ -92,13 +92,9 @@ class DoctrineParamConverter implements ParamConverterInterface
         $options = $this->getOptions($configuration);
 
         // Doctrine Entity?
-        try {
-            $this->registry->getManager($options['entity_manager'])->getClassMetadata($configuration->getClass());
-
-            return true;
-        } catch (\Exception $e) {
-            return false;
-        }
+        return ! $this->registry->getManager($options['entity_manager'])
+                                ->getMetadataFactory()
+                                ->isTransient($configuration->getClass());
     }
 
     protected function getOptions(ConfigurationInterface $configuration)
