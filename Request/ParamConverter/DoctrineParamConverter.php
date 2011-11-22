@@ -5,10 +5,7 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\DoctrineBundle\Registry;
-
-use Doctrine\ORM\NoResultException;
-use Doctrine\ORM\Mapping\MappingException;
+use Doctrine\Common\Persistence\ManagerRegistry;
 
 /*
  * This file is part of the Symfony framework.
@@ -26,9 +23,12 @@ use Doctrine\ORM\Mapping\MappingException;
  */
 class DoctrineParamConverter implements ParamConverterInterface
 {
+    /**
+     * @var ManagerRegistry
+     */
     protected $registry;
 
-    public function __construct(Registry $registry = null)
+    public function __construct(ManagerRegistry $registry = null)
     {
         $this->registry = $registry;
     }
@@ -65,7 +65,7 @@ class DoctrineParamConverter implements ParamConverterInterface
     protected function findOneBy($class, Request $request, $options)
     {
         $criteria = array();
-        $metadata = $this->registry->getEntityManager($options['entity_manager'])->getClassMetadata($class);
+        $metadata = $this->registry->getManager($options['entity_manager'])->getClassMetadata($class);
         foreach ($request->attributes->all() as $key => $value) {
             if ($metadata->hasField($key)) {
                 $criteria[$key] = $value;
@@ -93,10 +93,10 @@ class DoctrineParamConverter implements ParamConverterInterface
 
         // Doctrine Entity?
         try {
-            $this->registry->getEntityManager($options['entity_manager'])->getClassMetadata($configuration->getClass());
+            $this->registry->getManager($options['entity_manager'])->getClassMetadata($configuration->getClass());
 
             return true;
-        } catch (MappingException $e) {
+        } catch (\Exception $e) {
             return false;
         }
     }
