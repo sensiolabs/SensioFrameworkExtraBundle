@@ -19,8 +19,8 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-        if (!class_exists('Doctrine\Common\Persistence\ManagerRegistry')) {
-            $this->markTestSkipped('ManagerRegistry cannot be autoloadet');
+        if (!interface_exists('Doctrine\Common\Persistence\ManagerRegistry')) {
+            $this->markTestSkipped();
         }
 
         $this->manager = $this->getMock('Doctrine\Common\Persistence\ManagerRegistry');
