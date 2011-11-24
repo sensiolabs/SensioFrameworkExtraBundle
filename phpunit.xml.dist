@@ -4,6 +4,7 @@
 <!--
     <php>
         <server name="SYMFONY" value="../../../../symfony/src" />
+        <server name="DOCTRINE_COMMON" value="../../../../doctrine-common/lib" />
     </php>
 -->
     <testsuites>
