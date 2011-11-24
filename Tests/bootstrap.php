@@ -20,5 +20,6 @@ spl_autoload_register(function($class) {
 $loader = new UniversalClassLoader();
 $loader->registerNamespaces(array(
     'Symfony' => $_SERVER['SYMFONY'],
+    'Doctrine\\Common' => $_SERVER['DOCTRINE_COMMON'],
 ));
 $loader->register();
