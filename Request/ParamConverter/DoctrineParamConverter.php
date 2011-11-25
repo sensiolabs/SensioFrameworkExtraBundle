@@ -51,6 +51,8 @@ class DoctrineParamConverter implements ParamConverterInterface
         }
 
         $request->attributes->set($configuration->getName(), $object);
+
+        return true;
     }
 
     protected function find($class, Request $request, $options)
