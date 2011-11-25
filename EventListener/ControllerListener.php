@@ -5,6 +5,7 @@ namespace Sensio\Bundle\FrameworkExtraBundle\EventListener;
 use Doctrine\Common\Annotations\Reader;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 /*
  * This file is part of the Symfony framework.
@@ -56,7 +57,12 @@ class ControllerListener
 
         $request = $event->getRequest();
         foreach ($this->reader->getMethodAnnotations($method) as $configuration) {
-            if ($configuration instanceof ConfigurationInterface) {
+            if ($configuration instanceof ParamConverter) {
+                // allow multiple @ParamConverter annotations
+                $previous = $request->attributes->get('_'.$configuration->getAliasName()) ?: array();
+                $previous[] = $configuration;
+                $request->attributes->set('_'.$configuration->getAliasName(), $previous);
+            } else if ($configuration instanceof ConfigurationInterface) {
                 $request->attributes->set('_'.$configuration->getAliasName(), $configuration);
             }
         }

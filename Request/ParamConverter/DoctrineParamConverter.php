@@ -39,7 +39,7 @@ class DoctrineParamConverter implements ParamConverterInterface
         $options = $this->getOptions($configuration);
 
         // find by identifier?
-        if (false === $object = $this->find($class, $request, $options)) {
+        if (false === $object = $this->find($request, $configuration, $options)) {
             // find by criteria
             if (false === $object = $this->findOneBy($class, $request, $options)) {
                 throw new \LogicException('Unable to guess how to get a Doctrine instance from the request information.');
@@ -53,13 +53,16 @@ class DoctrineParamConverter implements ParamConverterInterface
         $request->attributes->set($configuration->getName(), $object);
     }
 
-    protected function find($class, Request $request, $options)
+    protected function find(Request $request, ConfigurationInterface $configuration, $options)
     {
-        if (!$request->attributes->has('id')) {
+        $class = $configuration->getClass();
+        $from  = $configuration->getFrom();
+
+        if (!$request->attributes->has($from)) {
             return false;
         }
 
-        return $this->registry->getRepository($class, $options['entity_manager'])->find($request->attributes->get('id'));
+        return $this->registry->getRepository($class, $options['entity_manager'])->find($request->attributes->get($from));
     }
 
     protected function findOneBy($class, Request $request, $options)

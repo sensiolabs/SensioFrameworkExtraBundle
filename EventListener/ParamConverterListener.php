@@ -49,10 +49,9 @@ class ParamConverterListener
         $request = $event->getRequest();
         $configurations = array();
 
-        if ($configuration = $request->attributes->get('_converters')) {
-            foreach (is_array($configuration) ? $configuration : array($configuration) as $configuration) {
-                $configurations[$configuration->getName()] = $configuration;
-            }
+        $configuration = $request->attributes->get('_converters') ?: array();
+        foreach ($configuration as $conf) {
+            $configurations[$conf->getName()] = $conf;
         }
 
         if (is_array($controller)) {
@@ -69,8 +68,8 @@ class ParamConverterListener
 
             $name = $param->getName();
 
-            // the parameter is already set, so disable the conversion
             if ($request->attributes->has($name)) {
+                // the parameter is already set, so disable the conversion
                 unset($configurations[$name]);
             } else {
                 if (isset($configurations[$name])) {
