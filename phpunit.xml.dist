@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <phpunit bootstrap="./Tests/bootstrap.php" colors="true">
-<!--
-    <php>
-        <server name="SYMFONY" value="../../../../symfony/src" />
-        <server name="DOCTRINE_COMMON" value="../../../../doctrine-common/lib" />
-    </php>
--->
     <testsuites>
         <testsuite name="SensioFrameworkExtraBundle">
             <directory suffix="Test.php">./Tests</directory>

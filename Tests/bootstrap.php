@@ -1,9 +1,13 @@
 <?php
 
-require_once $_SERVER['SYMFONY'] . '/Symfony/Component/ClassLoader/UniversalClassLoader.php';
-
-use Symfony\Component\ClassLoader\UniversalClassLoader;
-
+if (!@include __DIR__ . '/../vendor/.composer/autoload.php') {
+    die(<<<'EOT'
+You must set up the project dependencies, run the following commands:
+wget http://getcomposer.org/composer.phar
+php composer.phar install
+EOT
+    );
+}
 
 spl_autoload_register(function($class) {
     if (0 === (strpos($class, 'Sensio\\Bundle\\FrameworkExtraBundle\\'))) {
@@ -16,10 +20,3 @@ spl_autoload_register(function($class) {
         return true;
     }
 });
-
-$loader = new UniversalClassLoader();
-$loader->registerNamespaces(array(
-    'Symfony' => $_SERVER['SYMFONY'],
-    'Doctrine\\Common' => $_SERVER['DOCTRINE_COMMON'],
-));
-$loader->register();
