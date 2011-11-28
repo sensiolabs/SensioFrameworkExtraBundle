@@ -1,8 +1,12 @@
 <?php
 
-require_once $_SERVER['SYMFONY'] . '/Symfony/Component/ClassLoader/UniversalClassLoader.php';
+spl_autoload_register(function($class) {
+    if (0 === strpos($class, 'Sensio\\Bundle\\FrameworkExtraBundle\\')) {
+        $path = __DIR__.'/../../'.implode('/', array_slice(explode('\\', $class), 2)).'.php';
 
-use Symfony\Component\ClassLoader\UniversalClassLoader;
+        if (!stream_resolve_include_path($path)) {
+            return false;
+        }
 
 
 spl_autoload_register(function($class) {
