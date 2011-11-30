@@ -6,8 +6,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 /*
@@ -60,7 +58,8 @@ class TemplateListener
         }
 
         if (!$configuration->getTemplate()) {
-            $configuration->setTemplate($this->guessTemplateName($controller, $request, $configuration->getEngine()));
+            $guesser = $this->container->get('sensio_framework_extra.view.guesser');
+            $configuration->setTemplate($guesser->guessTemplateName($controller, $request, $configuration->getEngine()));
         }
 
         $request->attributes->set('_template', $configuration->getTemplate());
@@ -112,50 +111,5 @@ class TemplateListener
         }
 
         $event->setResponse(new Response($this->container->get('templating')->render($template, $parameters)));
-    }
-
-    /**
-     * Guesses and returns the template name to render based on the controller
-     * and action names.
-     *
-     * @param array $controller An array storing the controller object and action method
-     * @param Request $request A Request instance
-     * @param string $engine
-     * @return TemplateReference template reference
-     * @throws \InvalidArgumentException
-     */
-    protected function guessTemplateName($controller, Request $request, $engine = 'twig')
-    {
-        if (!preg_match('/Controller\\\(.+)Controller$/', get_class($controller[0]), $matchController)) {
-            throw new \InvalidArgumentException(sprintf('The "%s" class does not look like a controller class (it must be in a "Controller" sub-namespace and the class name must end with "Controller")', get_class($controller[0])));
-
-        }
-
-        if (!preg_match('/^(.+)Action$/', $controller[1], $matchAction)) {
-            throw new \InvalidArgumentException(sprintf('The "%s" method does not look like an action method (it does not end with Action)', $controller[1]));
-        }
-
-        $bundle = $this->getBundleForClass(get_class($controller[0]));
-
-        return new TemplateReference($bundle->getName(), $matchController[1], $matchAction[1], $request->getRequestFormat(), $engine);
-    }
-
-    /**
-     * Returns the Bundle instance in which the given class name is located.
-     *
-     * @param string $class A fully qualified controller class name
-     * @param Bundle $bundle A Bundle instance
-     * @throws \InvalidArgumentException
-     */
-    protected function getBundleForClass($class)
-    {
-        $namespace = strtr(dirname(strtr($class, '\\', '/')), '/', '\\');
-        foreach ($this->container->get('kernel')->getBundles() as $bundle) {
-            if (0 === strpos($namespace, $bundle->getNamespace())) {
-                return $bundle;
-            }
-        }
-
-        throw new \InvalidArgumentException(sprintf('The "%s" class does not belong to a registered bundle.', $class));
     }
 }
