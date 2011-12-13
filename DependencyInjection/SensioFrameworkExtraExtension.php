@@ -35,6 +35,8 @@ class SensioFrameworkExtraExtension extends Extension
         $configuration = new Configuration();
 
         $config = $processor->process($configuration->getConfigTree(), $configs);
+        
+        $loader->load('services.xml');
 
         $annotationsToLoad = array();
 
