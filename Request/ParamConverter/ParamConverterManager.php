@@ -41,9 +41,10 @@ class ParamConverterManager
 
         foreach ($configurations as $configuration) {
             // If the value is already an instance of the class we are trying to convert it into
-            // we should continue as no convertion is required `is_a` was un-deprecated in 5.3
+            // we should continue as no convertion is required 
             $value = $request->attributes->get($configuration->getName());
-            if (is_object($value) && is_a($value, $configuration->getClass())) {
+            $className = $configuration->getClass();
+            if (is_object($value) && $value instanceof $className) {
                 continue;
             }
 
