@@ -40,6 +40,14 @@ class ParamConverterManager
         }
 
         foreach ($configurations as $configuration) {
+            // If the value is already an instance of the class we are trying to convert it into
+            // we should continue as no convertion is required 
+            $value = $request->attributes->get($configuration->getName());
+            $className = $configuration->getClass();
+            if (is_object($value) && $value instanceof $className) {
+                continue;
+            }
+
             foreach ($this->all() as $converter) {
                 if ($converter->supports($configuration)) {
                     if ($converter->apply($request, $configuration)) {
