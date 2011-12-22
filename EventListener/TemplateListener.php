@@ -65,7 +65,7 @@ class TemplateListener
 
         $request->attributes->set('_template', $configuration->getTemplate());
         $request->attributes->set('_template_vars', $configuration->getVars());
-        $request->attribytes->set('_template_streamable', $configuration->isStreamable());
+        $request->attributes->set('_template_streamable', $configuration->isStreamable());
 
         // all controller method arguments
         if (!$configuration->getVars()) {
