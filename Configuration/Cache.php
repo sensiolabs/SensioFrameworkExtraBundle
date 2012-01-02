@@ -2,14 +2,10 @@
 
 namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+use Sensio\Bundle\FrameworkExtraBundle\Caching\CacheValidationProviderInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\DependencyInjection\Container;
 
 /**
  * The Cache class handles the @Cache annotation parts.
@@ -19,6 +15,18 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
  */
 class Cache extends ConfigurationAnnotation
 {
+    /**
+     * The buffer
+     * 
+     * The goal of the buffer is to store datas from the validation provider.
+     * As the annotation configuration is stored in the request, it's a link 
+     * beetween the validation provider and the controller, it can be used to
+     * avoid duplicate code between them.
+     *
+     * @var ParameterBag
+     */
+    public $buffer;
+
     /**
      * The expiration date as a valid date for the strtotime() function.
      *
@@ -43,11 +51,89 @@ class Cache extends ConfigurationAnnotation
     protected $smaxage;
 
     /**
-     * Whether or not the response is public or not.
+     * Whether or not the response is public.
      *
-     * @var integer
+     * @var Boolean
      */
     protected $public;
+
+    /**
+     * The validation provider.
+     *
+     * @var CacheValidationProviderInterface
+     */
+    protected $validation;
+
+    /**
+     * Whether or not the response should be sent on kernel.controller event 
+     * if it's a valid one.
+     *
+     * @var Boolean
+     */
+    protected $autoreturn;
+
+    /**
+     * Constructor
+     * 
+     * Creates the buffer, tries to load the validation provider, and finally
+     * initialize other properties with the parent class constructor
+     *
+     * @param array $values Attributes from the annotation
+     */
+    public function __construct(array $values)
+    {
+        $this->buffer = new ParameterBag;
+        
+        if (isset($values['validation'])) {
+            $validation = new $values['validation'];
+
+            if (!$validation instanceof CacheValidationProviderInterface) {
+                throw new \InvalidArgumentException('The "validation" attribute for a Cache Annotation
+                 must be a class implementing the CacheValidationProviderInterface.');
+            }
+
+            $this->validation = $validation;
+        }
+
+        // we unset those values to avoid the parent constructor setting object's properties
+        unset($values['validation'], $values['buffer']);
+
+        parent::__construct($values);
+    }
+
+    /**
+     * Returns whether or not the autoreturn is enabled
+     *
+     * @return Boolean
+     */
+    public function getAutoReturn()
+    {
+        return (Boolean) $this->autoreturn;
+    }
+
+    /**
+     * Sets the autoreturn value
+     *
+     * @param Boolean $public A boolean value
+     */
+    public function setAutoReturn($autoreturn)
+    {
+        $this->autoreturn = (Boolean) $autoreturn;
+    }
+
+    /**
+     * Returns wether or not the configuration has a validation provider
+     *
+     * @return Boolean
+     */
+    public function hasValidationProvider()
+    {
+        if (null === $this->validation) {
+            return false;
+        }
+
+        return true;
+    }
 
     /**
      * Returns the expiration date for the Expires header field.
@@ -58,7 +144,7 @@ class Cache extends ConfigurationAnnotation
     {
         return $this->expires;
     }
-
+    
     /**
      * Sets the expiration date for the Expires header field.
      *
@@ -68,7 +154,7 @@ class Cache extends ConfigurationAnnotation
     {
         $this->expires = $expires;
     }
-
+    
     /**
      * Sets the number of seconds for the max-age cache-control header field.
      *
@@ -78,7 +164,7 @@ class Cache extends ConfigurationAnnotation
     {
         $this->maxage = $maxage;
     }
-
+    
     /**
      * Returns the number of seconds the response is considered fresh by a
      * private cache.
@@ -89,7 +175,7 @@ class Cache extends ConfigurationAnnotation
     {
         return $this->maxage;
     }
-
+    
     /**
      * Sets the number of seconds for the s-maxage cache-control header field.
      *
@@ -99,7 +185,7 @@ class Cache extends ConfigurationAnnotation
     {
         $this->smaxage = $smaxage;
     }
-
+    
     /**
      * Returns the number of seconds the response is considered fresh by a
      * public cache.
@@ -110,7 +196,7 @@ class Cache extends ConfigurationAnnotation
     {
         return $this->smaxage;
     }
-
+    
     /**
      * Returns whether or not a response is public.
      *
@@ -120,7 +206,7 @@ class Cache extends ConfigurationAnnotation
     {
         return (Boolean) $this->public;
     }
-
+    
     /**
      * Sets a response public.
      *
@@ -129,6 +215,35 @@ class Cache extends ConfigurationAnnotation
     public function setPublic($public)
     {
         $this->public = (Boolean) $public;
+    }
+
+    /**
+     * Loads the buffer with the validation provider etag and last_modified 
+     * headers, adds also a "parameters" key if the validation provider 
+     * returns an array.
+     *
+     * @param Container $container The container instance
+     */
+    public function loadBuffer(Container $container)
+    {
+        if ($this->validation instanceof ContainerAwareInterface) {
+            $this->validation->setContainer($container);
+        }
+
+        $bufferParameters = $this->validation->process();
+
+        // if it's an array, we store the process() method's return in the buffer
+        if (null !== $bufferParameters && is_array($bufferParameters)) {
+            $this->buffer->set('parameters', $bufferParameters);
+        }
+
+        if (null !== $eTag = $this->validation->getETag()) {
+            $this->buffer->set('etag', $eTag);
+        }
+
+        if (null !== $lastModified = $this->validation->getLastModified()) {
+            $this->buffer->set('last_modified', $lastModified);
+        }
     }
 
     /**
