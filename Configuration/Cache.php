@@ -5,7 +5,7 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
 use Sensio\Bundle\FrameworkExtraBundle\Caching\CacheValidationProviderInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
-use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * The Cache class handles the @Cache annotation parts.
@@ -16,12 +16,11 @@ use Symfony\Component\DependencyInjection\Container;
 class Cache extends ConfigurationAnnotation
 {
     /**
-     * The buffer
+     * The buffer.
      * 
-     * The goal of the buffer is to store datas from the validation provider.
-     * As the annotation configuration is stored in the request, it's a link 
-     * beetween the validation provider and the controller, it can be used to
-     * avoid duplicate code between them.
+     * The buffer is a place to store data from the validation provider. As annotation
+     * configuration's is stored in the request, it's a bridge between the validation
+     * provider and the controller, it can be used to avoid duplicate code between them.
      *
      * @var ParameterBag
      */
@@ -73,17 +72,17 @@ class Cache extends ConfigurationAnnotation
     protected $autoreturn;
 
     /**
-     * Constructor
+     * Constructor.
      * 
      * Creates the buffer, tries to load the validation provider, and finally
-     * initialize other properties with the parent class constructor
+     * initialize other properties with the parent class constructor.
      *
      * @param array $values Attributes from the annotation
      */
     public function __construct(array $values)
     {
         $this->buffer = new ParameterBag;
-        
+
         if (isset($values['validation'])) {
             $validation = new $values['validation'];
 
@@ -102,7 +101,7 @@ class Cache extends ConfigurationAnnotation
     }
 
     /**
-     * Returns whether or not the autoreturn is enabled
+     * Returns whether or not the autoreturn is enabled.
      *
      * @return Boolean
      */
@@ -122,7 +121,7 @@ class Cache extends ConfigurationAnnotation
     }
 
     /**
-     * Returns wether or not the configuration has a validation provider
+     * Returns wether or not the configuration has a validation provider.
      *
      * @return Boolean
      */
@@ -144,7 +143,7 @@ class Cache extends ConfigurationAnnotation
     {
         return $this->expires;
     }
-    
+
     /**
      * Sets the expiration date for the Expires header field.
      *
@@ -154,7 +153,7 @@ class Cache extends ConfigurationAnnotation
     {
         $this->expires = $expires;
     }
-    
+
     /**
      * Sets the number of seconds for the max-age cache-control header field.
      *
@@ -164,7 +163,7 @@ class Cache extends ConfigurationAnnotation
     {
         $this->maxage = $maxage;
     }
-    
+
     /**
      * Returns the number of seconds the response is considered fresh by a
      * private cache.
@@ -175,7 +174,7 @@ class Cache extends ConfigurationAnnotation
     {
         return $this->maxage;
     }
-    
+
     /**
      * Sets the number of seconds for the s-maxage cache-control header field.
      *
@@ -185,7 +184,7 @@ class Cache extends ConfigurationAnnotation
     {
         $this->smaxage = $smaxage;
     }
-    
+
     /**
      * Returns the number of seconds the response is considered fresh by a
      * public cache.
@@ -196,7 +195,7 @@ class Cache extends ConfigurationAnnotation
     {
         return $this->smaxage;
     }
-    
+
     /**
      * Returns whether or not a response is public.
      *
@@ -206,7 +205,7 @@ class Cache extends ConfigurationAnnotation
     {
         return (Boolean) $this->public;
     }
-    
+
     /**
      * Sets a response public.
      *
@@ -218,13 +217,11 @@ class Cache extends ConfigurationAnnotation
     }
 
     /**
-     * Loads the buffer with the validation provider etag and last_modified 
-     * headers, adds also a "parameters" key if the validation provider 
-     * returns an array.
+     * Loads the buffer with validation provider's etag and last_modified headers.
      *
-     * @param Container $container The container instance
+     * @param ContainerInterface $container A ContainerInterface instance
      */
-    public function loadBuffer(Container $container)
+    public function loadBuffer(ContainerInterface $container)
     {
         if ($this->validation instanceof ContainerAwareInterface) {
             $this->validation->setContainer($container);

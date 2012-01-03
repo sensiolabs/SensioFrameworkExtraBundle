@@ -6,35 +6,33 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
-* The CacheListener class has the responsability to modify the
-* Response object when a controller uses the @Cache annotation.
-*
-* @author     Fabien Potencier <fabien@symfony.com>
-*/
+ * The CacheListener class has the responsability to modify the
+ * Response object when a controller uses the @Cache annotation.
+ *
+ * @author Fabien Potencier <fabien@symfony.com>
+ */
 class CacheListener
 {
     /**
-     * The container
-     *
-     * @var Container
+     * @var ContainerInterface
      */
     private $container;
 
     /**
-    * Constructor
-    *
-    * @param Container $container The container instance
-    */
-    public function __construct(Container $container)
+     * Constructor.
+     *
+     * @param ContainerInterface $container A ContainerInterface instance
+     */
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
 
     /**
-     * Modifies the Request object to apply cache validation information
+     * Modifies the Request object to apply cache validation information.
      * 
      * It can also send a 304 response if the autoreturn attribute is enabled.
      * 
@@ -102,7 +100,7 @@ class CacheListener
 
     /**
      * Modifies or create a response and apply HTTP expiration/validation
-     * header fields for a given annotation configuration
+     * header fields for a given annotation configuration.
      *
      * @param Cache $configuration The annotation configuration
      * @param Response $response The response to populate
