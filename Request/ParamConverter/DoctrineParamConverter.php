@@ -104,7 +104,7 @@ class DoctrineParamConverter implements ParamConverterInterface
     protected function getOptions(ConfigurationInterface $configuration)
     {
         return array_replace(array(
-            'entity_manager' => 'default',
+            'entity_manager' => null,
         ), $configuration->getOptions());
     }
 }
