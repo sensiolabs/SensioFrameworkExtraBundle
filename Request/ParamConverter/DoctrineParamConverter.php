@@ -17,7 +17,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 
 /**
- * DoctrineConverter.
+ * DoctrineParamConverter.
  *
  * @author     Fabien Potencier <fabien@symfony.com>
  */
