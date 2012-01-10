@@ -23,9 +23,6 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  *   entity_manager - the entity manager to user for fetching the object
  * 2. request_atttribute - the name of the attribute you should use to fetch the item (Defaults to 'id').
  * 3. object_attribute - the name of the object attribute used for fetching the object (Defaults to false - i.e. use the objects natural ID.).
- * 
- * 
- * 
  *
  * @author     Fabien Potencier <fabien@symfony.com>
  */
@@ -46,8 +43,9 @@ class DoctrineParamConverter implements ParamConverterInterface
         $class = $configuration->getClass();
         $options = $this->getOptions($configuration);
         
-        $attribute = (isset($options['request_attribute']) ? $options['request_attribute'] : 'id' );
-        $queryAttribute = (isset($options['object_attribute']) ? $options['object_attribute'] : false );
+        $attribute = $configuration->getName();
+        $queryAttribute = $options['object_attribute'];
+
         
         if (false === $queryAttribute) {
             // find by identifier?
@@ -117,8 +115,7 @@ class DoctrineParamConverter implements ParamConverterInterface
     protected function getOptions(ConfigurationInterface $configuration)
     {
         return array_replace(array(
-            'entity_manager' => 'default',
-            'request_atttribute' => 'id',
+            'entity_manager' => null,
             'object_attribute' => false
         ), $configuration->getOptions());
     }
