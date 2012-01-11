@@ -46,9 +46,6 @@ Built-in Converters
 
 The bundle has only one built-in converter, the Doctrine one.
 
-
-   
-
 Doctrine Converter
 ~~~~~~~~~~~~~~~~~~
 
@@ -94,7 +91,7 @@ that as a parameter to the repository of the entitys `find()` method::
     }
     
     ... in the code:
-    $criteria = array ('name' =>  $request->attributes->get("name");
+    $criteria = array ('name' =>  $request->attributes->get("name"));
     $this->registry->getRepository($class, $options['entity_manager'])->findOneBy($criteria);
 
 3. If you want to use an explicit attribute to map the object you can use the object_attribute::
@@ -109,7 +106,7 @@ that as a parameter to the repository of the entitys `find()` method::
 
     ... in the code:
     $value = $request->attributes->get("post");
-    $critera = array('name' => $value)
+    $critera = array('name' => $value);
     $this->registry->getRepository($class, $options['entity_manager'])->findOneBy($criteria);
 
 
