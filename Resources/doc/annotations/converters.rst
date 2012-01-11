@@ -98,4 +98,4 @@ on the request attributes, it should set an attribute named
 
 .. tip::
 
-   Use the ``DoctrineConverter`` class as a template for your own converters.
+   Use the ``DoctrineParamConverter`` class as a template for your own converters.
