@@ -30,7 +30,7 @@ class TemplateGuesser
     /**
      * Constructor.
      *
-     * @param ContainerInterface $container The service container instance
+     * @param KernelInterface $kernel A KernelInterface instance
      */
     public function __construct(KernelInterface $kernel)
     {
