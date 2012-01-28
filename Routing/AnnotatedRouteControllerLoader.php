@@ -73,4 +73,15 @@ class AnnotatedRouteControllerLoader extends AnnotationClassLoader
             '_'
         ), $routeName);
     }
+
+    /**
+     * Removes the action keyword from the route name
+     *
+     * @param  string $prefix
+     * @param  ReflectionMethod $method A ReflectionMethod instance
+     * @return string
+     */    
+    protected function getDefaultMethodRouteName($prefix, \ReflectionMethod $method) {
+        return str_replace('action', '', parent::getDefaultMethodRouteName($prefix, $method));
+    }
 }
