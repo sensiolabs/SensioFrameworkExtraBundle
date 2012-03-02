@@ -43,6 +43,13 @@ class Template extends ConfigurationAnnotation
     protected $vars = array();
 
     /**
+     * Should the template be streamed?
+     *
+     * @var Boolean
+     */
+    protected $isStreamable = false;
+
+    /**
      * Returns the array of templates variables.
      *
      * @return array
@@ -50,6 +57,22 @@ class Template extends ConfigurationAnnotation
     public function getVars()
     {
         return $this->vars;
+    }
+
+    /**
+     * @param Boolean $streamable
+     */
+    public function setIsStreamable($streamable)
+    {
+        $this->streamable = $streamable;
+    }
+
+    /**
+     * @return Boolean
+     */
+    public function isStreamable()
+    {
+        return (Boolean) $this->streamable;
     }
 
     /**

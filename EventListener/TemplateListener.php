@@ -6,6 +6,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 /*
@@ -64,6 +65,7 @@ class TemplateListener
 
         $request->attributes->set('_template', $configuration->getTemplate());
         $request->attributes->set('_template_vars', $configuration->getVars());
+        $request->attributes->set('_template_streamable', $configuration->isStreamable());
 
         // all controller method arguments
         if (!$configuration->getVars()) {
@@ -88,6 +90,7 @@ class TemplateListener
     {
         $request = $event->getRequest();
         $parameters = $event->getControllerResult();
+        $templating = $this->container->get('templating');
 
         if (null === $parameters) {
             if (!$vars = $request->attributes->get('_template_vars')) {
@@ -110,6 +113,15 @@ class TemplateListener
             return $parameters;
         }
 
-        $event->setResponse(new Response($this->container->get('templating')->render($template, $parameters)));
+        if (!$request->attributes->get('_template_streamable')) {
+            $event->setResponse($templating->renderResponse($template, $parameters));
+        } else {
+            $callback = function () use ($templating, $template, $parameters) {
+                return $templating->stream($template, $parameters);
+            };
+
+
+            $event->setResponse(new StreamedResponse($callback));
+        }
     }
 }
