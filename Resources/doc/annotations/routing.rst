@@ -153,14 +153,14 @@ Controller as Service
 ---------------------
 
 The ``@Route`` annotation on a controller class can also be used to assign the
-controller class to a service so that the controller resolver will instatiate
-the controller by fetching it from the DI container instead of calling
-``new PostController()`` itself::
+controller class to a service so that the controller resolver will instantiate
+the controller by fetching it from the DI container instead of calling ``new
+PostController()`` itself::
 
     /**
      * @Route(service="my_post_controller_service")
      */
     class PostController extends Controller
     {
-
+        // ...
     }
