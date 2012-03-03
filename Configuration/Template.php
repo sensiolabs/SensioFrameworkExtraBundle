@@ -47,7 +47,7 @@ class Template extends ConfigurationAnnotation
      *
      * @var Boolean
      */
-    protected $isStreamable = false;
+    protected $streamable = false;
 
     /**
      * Returns the array of templates variables.
