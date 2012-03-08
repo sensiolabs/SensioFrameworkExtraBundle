@@ -71,12 +71,19 @@ class TemplateGuesser
      */
     protected function getBundleForClass($class)
     {
-        $namespace = strtr(dirname(strtr($class, '\\', '/')), '/', '\\');
-        foreach ($this->kernel->getBundles() as $bundle) {
-            if (0 === strpos($namespace, $bundle->getNamespace())) {
-                return $bundle;
+        $reflectionClass = new \ReflectionClass($class);
+        $bundles = $this->kernel->getBundles();
+
+        $currentClass = $reflectionClass;
+        do {
+            $namespace = $currentClass->getNamespaceName();
+            foreach ($bundles as $bundle) {
+                if (0 === strpos($namespace, $bundle->getNamespace())) {
+                    return $bundle;
+                }
             }
-        }
+            $currentClass = $currentClass->getParentClass();
+        } while ($currentClass);
 
         throw new \InvalidArgumentException(sprintf('The "%s" class does not belong to a registered bundle.', $class));
     }
