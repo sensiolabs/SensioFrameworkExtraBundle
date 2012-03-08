@@ -74,16 +74,15 @@ class TemplateGuesser
         $reflectionClass = new \ReflectionClass($class);
         $bundles = $this->kernel->getBundles();
 
-        $currentClass = $reflectionClass;
         do {
-            $namespace = $currentClass->getNamespaceName();
+            $namespace = $reflectionClass->getNamespaceName();
             foreach ($bundles as $bundle) {
                 if (0 === strpos($namespace, $bundle->getNamespace())) {
                     return $bundle;
                 }
             }
-            $currentClass = $currentClass->getParentClass();
-        } while ($currentClass);
+            $reflectionClass = $reflectionClass->getParentClass();
+        } while ($reflectionClass);
 
         throw new \InvalidArgumentException(sprintf('The "%s" class does not belong to a registered bundle.', $class));
     }
