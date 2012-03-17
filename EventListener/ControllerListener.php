@@ -55,13 +55,6 @@ class ControllerListener
         $method = $object->getMethod($controller[1]);
 
         $request = $event->getRequest();
-        
-        foreach ($this->reader->getClassAnnotations($object) as $configuration) {
-            if ($configuration instanceof ConfigurationInterface) {
-                $request->attributes->set('_'.$configuration->getAliasName(), $configuration);
-            }
-        }
-        
         foreach ($this->reader->getMethodAnnotations($method) as $configuration) {
             if ($configuration instanceof ConfigurationInterface) {
                 $request->attributes->set('_'.$configuration->getAliasName(), $configuration);
