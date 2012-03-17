@@ -31,7 +31,7 @@ class ControllerListener
     /**
      * Constructor.
      *
-     * @param Reader $reader An Reader instance
+     * @param \Doctrine\Common\Annotations\Reader $reader An Reader instance
      */
     public function __construct(Reader $reader)
     {
@@ -43,7 +43,7 @@ class ControllerListener
      * controllers annotations like the template to render or HTTP caching
      * configuration.
      *
-     * @param FilterControllerEvent $event A FilterControllerEvent instance
+     * @param \Symfony\Component\HttpKernel\Event\FilterControllerEvent $event A FilterControllerEvent instance
      */
     public function onKernelController(FilterControllerEvent $event)
     {
