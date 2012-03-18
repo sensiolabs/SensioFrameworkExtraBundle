@@ -6,6 +6,8 @@ use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference;
 
+use CG\Core\ClassUtils;
+
 /*
  * This file is part of the Symfony framework.
  *
@@ -49,7 +51,14 @@ class TemplateGuesser
      */
     public function guessTemplateName($controller, Request $request, $engine = 'twig')
     {
-        if (!preg_match('/Controller\\\(.+)Controller$/', get_class($controller[0]), $matchController)) {
+        $className = get_class($controller[0]);
+
+        // When JMSSecurityExtraBundle is used it generates Controller classes as MyAccountController__CG__
+        if (class_exists('CG\\Core\\ClassUtils')) {
+            $className = ClassUtils::getUserClass($className);
+        }
+
+        if (!preg_match('/Controller\\\(.+)Controller$/', $className, $matchController)) {
             throw new \InvalidArgumentException(sprintf('The "%s" class does not look like a controller class (it must be in a "Controller" sub-namespace and the class name must end with "Controller")', get_class($controller[0])));
 
         }
@@ -57,7 +66,7 @@ class TemplateGuesser
             throw new \InvalidArgumentException(sprintf('The "%s" method does not look like an action method (it does not end with Action)', $controller[1]));
         }
 
-        $bundle = $this->getBundleForClass(get_class($controller[0]));
+        $bundle = $this->getBundleForClass($className);
 
         return new TemplateReference($bundle->getName(), $matchController[1], $matchAction[1], $request->getRequestFormat(), $engine);
     }
