@@ -57,7 +57,25 @@ class TemplateGuesser
             throw new \InvalidArgumentException(sprintf('The "%s" method does not look like an action method (it does not end with Action)', $controller[1]));
         }
 
-        $bundle = $this->getBundleForClass(get_class($controller[0]));
+        // Incase there is some form of proxying going on, we will climb up the tree
+        $bundleName = get_class($controller[0]);
+        try {
+            $bundle = $this->getBundleForClass($bundleName);
+        }catch(\InvalidArgumentException $e) {
+            $parents = class_parents($bundleName);
+            foreach($parents as $parent) {
+                try {
+                    $bundle = $this->getBundleForClass($parent);
+                    break;
+                }catch(\InvalidArgumentException $ex) {
+                }
+            }
+            
+            if(!$bundle) {
+                throw $e;
+            }
+            
+        }
 
         return new TemplateReference($bundle->getName(), $matchController[1], $matchAction[1], $request->getRequestFormat(), $engine);
     }
