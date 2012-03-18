@@ -67,6 +67,12 @@ class TemplateListener
         $request->attributes->set('_template_vars', $configuration->getVars());
         $request->attributes->set('_template_streamable', $configuration->isStreamable());
 
+        if ($configuration->isStreamable()) {
+            $request->attributes->set('_response', new StreamedResponse());
+        } else {
+            $request->attributes->set('_response', new Response());
+        }
+
         // all controller method arguments
         if (!$configuration->getVars()) {
             $r = new \ReflectionObject($controller[0]);
@@ -113,15 +119,16 @@ class TemplateListener
             return $parameters;
         }
 
+        $response = $request->attributes->get('_response');
+
         if (!$request->attributes->get('_template_streamable')) {
-            $event->setResponse($templating->renderResponse($template, $parameters));
+            $response = $templating->renderResponse($template, $parameters, $response);
         } else {
-            $callback = function () use ($templating, $template, $parameters) {
+            $response->setCallback(function () use ($templating, $template, $parameters) {
                 return $templating->stream($template, $parameters);
-            };
-
-
-            $event->setResponse(new StreamedResponse($callback));
+            });
         }
+
+        $event->setResponse($response);
     }
 }
