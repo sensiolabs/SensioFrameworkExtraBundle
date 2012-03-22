@@ -52,6 +52,10 @@ class CacheListener
             $response->setExpires($date);
         }
 
+        if (null !== $configuration->getVary()) {
+            $response->setVary($configuration->getVary());
+        }
+
         if ($configuration->isPublic()) {
             $response->setPublic();
         }

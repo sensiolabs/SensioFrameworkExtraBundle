@@ -51,6 +51,7 @@ Annotation                     Response Method
 ``@Cache(expires="tomorrow")`` ``$response->setExpires()``
 ``@Cache(smaxage="15")``       ``$response->setSharedMaxAge()``
 ``@Cache(maxage="15")``        ``$response->setMaxAge()``
+``@Cache(vary=["Cookie"])``    ``$response->setVary()``
 ============================== ===============
 
 .. note::
