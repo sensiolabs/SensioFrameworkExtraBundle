@@ -50,6 +50,13 @@ class Cache extends ConfigurationAnnotation
     protected $public;
 
     /**
+     * Additional "Vary:"-headers
+     *
+     * @var array
+     */
+    protected $vary = array();
+
+    /**
      * Returns the expiration date for the Expires header field.
      *
      * @return string
@@ -129,6 +136,26 @@ class Cache extends ConfigurationAnnotation
     public function setPublic($public)
     {
         $this->public = (Boolean) $public;
+    }
+
+    /**
+     * Returns the custom "Vary"-headers
+     *
+     * @return array
+     */
+    public function getVary()
+    {
+        return $this->vary;
+    }
+
+    /**
+     * Add additional "Vary:"-headers
+     *
+     * @param array $vary
+     */
+    public function setVary($vary)
+    {
+        $this->vary = $vary;
     }
 
     /**
