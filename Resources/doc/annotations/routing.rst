@@ -135,8 +135,8 @@ for the route. To use it, import the ``Method`` annotation namespace::
     class PostController extends Controller
     {
         /**
-         * @Route("/edit/{id}")
          * @Method({"GET", "POST"})
+         * @Route("/edit/{id}")
          */
         public function editAction($id)
         {
