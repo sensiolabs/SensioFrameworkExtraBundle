@@ -27,11 +27,11 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
         $this->converter = new DoctrineParamConverter($this->manager);
     }
     
-    public function createConfiguration($class = null, array $options = null)
+    public function createConfiguration($class = null, $name = null, array $options = null)
     {
         $config = $this->getMock(
             'Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface', array(
-            'getClass', 'getAliasName', 'getOptions'
+            'getClass', 'getAliasName', 'getName', 'getOptions',
         ));
         if ($options !== null) {
             $config->expects($this->once())
@@ -43,27 +43,32 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
                    ->method('getClass')
                    ->will($this->returnValue($class));
         }
+        if ($name !== null) {
+            $config->expects($this->any())
+                   ->method('getName')
+                   ->will($this->returnValue($name));
+        }
         return $config;
     }
-    
+
     public function testApplyWithNoIdAndData()
     {
         $request = new Request();
-        $config = $this->createConfiguration(null, array());
+        $config = $this->createConfiguration(null, 'test', array());
         $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
-        
+
         $this->manager->expects($this->never())->method('find');
         $this->manager->expects($this->once())
                       ->method('getManager')
                       ->will($this->returnValue($objectManager));
-        
+
         $this->setExpectedException('LogicException');
         $this->converter->apply($request, $config);
     }
-    
+
     public function testSupports()
     {
-        $config = $this->createConfiguration('stdClass', array());
+        $config = $this->createConfiguration('stdClass', 'test', array());
         $metadataFactory = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadataFactory');
         $metadataFactory->expects($this->once())
                         ->method('isTransient')
