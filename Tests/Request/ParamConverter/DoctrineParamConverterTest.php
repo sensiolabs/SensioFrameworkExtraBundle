@@ -77,7 +77,6 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
         
         $this->manager->expects($this->once())
                       ->method('getManager')
-                      ->with($this->equalTo('default'))
                       ->will($this->returnValue($objectManager));
         
         $ret = $this->converter->supports($config);
