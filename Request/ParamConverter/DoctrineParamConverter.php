@@ -37,12 +37,11 @@ class DoctrineParamConverter implements ParamConverterInterface
     {
         $options = $this->getOptions($configuration);
 
-        // find by identifier?
-        if (false === $object = $this->find($configuration, $request, $options)) {
-            // find by criteria
-            if (false === $object = $this->findOneBy($configuration, $request, $options)) {
-                throw new \LogicException('Unable to guess how to get a Doctrine instance from the request information.');
-            }
+        if (null !== $options['method']) {
+            $object = $this->useMethod($configuration, $request, $options);
+        } elseif ((false === $object = $this->find($configuration, $request, $options)) &&
+            (false === $object = $this->findOneBy($configuration, $request, $options))) {
+            throw new \LogicException('Unable to guess how to get a Doctrine instance from the request information.');
         }
 
         if (null === $object && false === $configuration->isOptional()) {
@@ -52,6 +51,41 @@ class DoctrineParamConverter implements ParamConverterInterface
         $request->attributes->set($configuration->getName(), $object);
 
         return true;
+    }
+
+    protected function useMethod(ConfigurationInterface $configuration, Request $request, $options)
+    {
+        $class = $configuration->getClass();
+        $repository = $this->registry->getRepository($class, $options['entity_manager']);
+
+        try {
+            $method = new \ReflectionMethod($repository, $options['method']);
+        } catch(\ReflectionException $e) {
+            throw new \LogicException(sprintf('The method "%s::%s" does not exist.', get_class($repository), $options['method']), 0, $e);
+        }
+
+        if (!$method->isPublic()) {
+            throw new \LogicException(sprintf('The method "%s::%s" cannot be accessed.', get_class($repository), $options['method']));
+        }
+
+        $invokeParameters = array();
+
+        foreach ($method->getParameters() as $parameter) {
+            /** @var $parameter \ReflectionParameter  */
+            $name = $parameter->getName();
+
+            if (null === $value = $request->attributes->get($name)) {
+                if (!$parameter->isOptional() || !$parameter->isDefaultValueAvailable()) {
+                    throw new \LogicException(sprintf('Cannot find a value for parameter "%s" in "%s::%s".', $name, get_class($repository), $options['method']));
+                }
+
+                $value = $parameter->getDefaultValue();
+            }
+
+            $invokeParameters[] = $value;
+        }
+
+        return $method->invokeArgs($repository, $invokeParameters);
     }
 
     protected function find(ConfigurationInterface $configuration, Request $request, $options)
@@ -73,15 +107,15 @@ class DoctrineParamConverter implements ParamConverterInterface
         $class = $configuration->getClass();
         $metadata = $this->registry->getManager($options['entity_manager'])->getClassMetadata($class);
         $criteria = array();
-        $parameter_prefix = $configuration->getName() . '_';
+        $attribute_prefix = $configuration->getName() . '_';
 
         foreach ($request->attributes->all() as $key => $value) {
             if (!$metadata->hasField($key) && !$metadata->hasAssociation($key)) {
-                if (false === strpos($key, $parameter_prefix)) {
+                if (false === strpos($key, $attribute_prefix)) {
                     continue;
                 }
 
-                $key = substr($key, strlen($parameter_prefix));
+                $key = substr($key, strlen($attribute_prefix));
 
                 if (!$metadata->hasField($key) && !$metadata->hasAssociation($key)) {
                     continue;
@@ -95,7 +129,7 @@ class DoctrineParamConverter implements ParamConverterInterface
             return false;
         }
 
-        return call_user_func(array($this->registry->getRepository($class, $options['entity_manager']), $options['method']), $criteria);
+        return $this->registry->getRepository($class, $options['entity_manager'])->findOneBy($criteria);
     }
 
     public function supports(ConfigurationInterface $configuration)
@@ -120,7 +154,7 @@ class DoctrineParamConverter implements ParamConverterInterface
     {
         return array_replace(array(
             'entity_manager' => null,
-            'method' => 'findOneBy',
+            'method' => null,
         ), $configuration->getOptions());
     }
 }
