@@ -226,7 +226,22 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
 
     public function testApplyWithCustomRepositoryMethod()
     {
-        $this->markTestIncomplete('Need a way to test the reflection process.');
+        $request = new Request();
+        $config = $this->createConfiguration(array(
+            'method' => 'find',
+        ));
+
+        $request->attributes->set('id', 42);
+
+        $entity = new \stdClass();
+
+        $this->repository->expects($this->once())
+            ->method('find')
+            ->with($this->equalTo(42))
+            ->will($this->returnValue($entity));
+
+        $this->assertTrue($this->converter->apply($request, $config));
+        $this->assertEquals($entity, $request->attributes->get(self::PARAMETER_NAME));
     }
 
     public function testApplyWithOptional()
