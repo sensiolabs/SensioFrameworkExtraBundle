@@ -74,6 +74,14 @@ class DoctrineParamConverter implements ParamConverterInterface
             /** @var $parameter \ReflectionParameter  */
             $name = $parameter->getName();
 
+            if (null !== $class = $parameter->getClass()) {
+                throw new \LogicException(sprintf('Cannot set parameter "%s" in "%s::%s". Expects instances of "%s".', $name, get_class($repository), $options['method'], $class->getName()));
+            }
+
+            if ($parameter->isArray()) {
+                throw new \LogicException(sprintf('Cannot set parameter "%s" in "%s::%s". Expects array.', $name, get_class($repository), $options['method']));
+            }
+
             if (null === $value = $request->attributes->get($name)) {
                 if (!$parameter->isOptional() || !$parameter->isDefaultValueAvailable()) {
                     throw new \LogicException(sprintf('Cannot find a value for parameter "%s" in "%s::%s".', $name, get_class($repository), $options['method']));
