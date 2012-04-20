@@ -18,12 +18,12 @@
 
         <service id="sensio_framework_extra.converter.manager" class="%sensio_framework_extra.converter.manager.class%" />
 
-        <service id="sensio_framework_extra.converter.doctrine.orm" class="%sensio_framework_extra.converter.doctrine.class%">
+        <service id="sensio_framework_extra.converter.doctrine.orm" class="%sensio_framework_extra.converter.doctrine.class%" public="false">
             <tag name="request.param_converter" />
             <argument type="service" id="doctrine" on-invalid="ignore" />
         </service>
 
-        <service id="sensio_framework_extra.converter.doctrine.phpcr" class="%sensio_framework_extra.converter.doctrine.class%">
+        <service id="sensio_framework_extra.converter.doctrine.phpcr" class="%sensio_framework_extra.converter.doctrine.class%" public="false">
             <tag name="request.param_converter"/>
             <argument type="service" id="doctrine_phpcr" on-invalid="ignore"/>
         </service>
