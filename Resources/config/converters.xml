@@ -22,5 +22,10 @@
             <tag name="request.param_converter" />
             <argument type="service" id="doctrine" on-invalid="ignore" />
         </service>
+
+        <service id="sensio_framework_extra.converter.doctrine.phpcr" class="%sensio_framework_extra.converter.doctrine.class%">
+            <tag name="request.param_converter"/>
+            <argument type="service" id="doctrine_phpcr" on-invalid="ignore"/>
+        </service>
     </services>
 </container>
