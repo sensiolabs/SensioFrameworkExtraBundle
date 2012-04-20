@@ -30,6 +30,12 @@ class AddParamConverterPass implements CompilerPassInterface
 
         $definition = $container->getDefinition('sensio_framework_extra.converter.manager');
         foreach ($container->findTaggedServiceIds('request.param_converter') as $id => $attributes) {
+            $service = $container->getDefinition($id);
+            foreach ($service->getArguments() as $argument) {
+                if ($argument instanceof Reference && !$container->hasDefinition((string) $argument)) {
+                    continue 2;
+                }
+            }
             $definition->addMethodCall('add', array(new Reference($id), isset($attributes[0]['priority']) ? $attributes[0]['priority'] : 0));
         }
     }
