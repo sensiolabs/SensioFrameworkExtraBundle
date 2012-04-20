@@ -1,5 +1,15 @@
 <?php
 
+/*
+ * This file is part of the Symfony framework.
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
+
 namespace Sensio\Bundle\FrameworkExtraBundle\Tests\Request\ParamConverter;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -86,7 +96,7 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
             ->method('getManager')
             ->will($this->returnValue($this->objectManager));
 
-        $this->repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+        $this->repository = $this->getMock('Sensio\Bundle\FrameworkExtraBundle\Tests\Fixtures\TestRepository');
 
         $this->registry->expects($this->any())
             ->method('getRepository')
@@ -224,20 +234,67 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($entity, $request->attributes->get(self::PARAMETER_NAME));
     }
 
-    public function testApplyWithCustomRepositoryMethod()
+    public function testCustomMethod()
     {
         $request = new Request();
         $config = $this->createConfiguration(array(
-            'method' => 'find',
+            'method' => 'customMethod',
         ));
 
-        $request->attributes->set('id', 42);
+        $request->attributes->set('group', 'group');
+        $request->attributes->set('user', 'user');
 
         $entity = new \stdClass();
 
         $this->repository->expects($this->once())
-            ->method('find')
-            ->with($this->equalTo(42))
+            ->method('customMethod')
+            ->with($this->equalTo('group'), $this->equalTo('user'))
+            ->will($this->returnValue($entity));
+
+        $this->assertTrue($this->converter->apply($request, $config));
+        $this->assertEquals($entity, $request->attributes->get(self::PARAMETER_NAME));
+    }
+
+    public function testArrayInCustomMethod()
+    {
+        $request = new Request();
+        $config = $this->createConfiguration(array(
+            'method' => 'customArrayMethod',
+        ));
+
+        $request->attributes->set('users', 'users');
+
+        $this->setExpectedException('LogicException');
+        $this->converter->apply($request, $config);
+    }
+
+    public function testClassInCustomMethod()
+    {
+        $request = new Request();
+        $config = $this->createConfiguration(array(
+            'method' => 'customClassMethod',
+        ));
+
+        $request->attributes->set('user', 'user');
+
+        $this->setExpectedException('LogicException');
+        $this->converter->apply($request, $config);
+    }
+
+    public function testDefaultValueInRepositoryMethod()
+    {
+        $request = new Request();
+        $config = $this->createConfiguration(array(
+            'method' => 'customDefaultMethod',
+        ));
+
+        $request->attributes->set('group', 'group');
+
+        $entity = new \stdClass();
+
+        $this->repository->expects($this->once())
+            ->method('customDefaultMethod')
+            ->with($this->equalTo('group'))
             ->will($this->returnValue($entity));
 
         $this->assertTrue($this->converter->apply($request, $config));
@@ -249,7 +306,7 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
         $request = new Request();
         $config  = $this->createConfiguration();
 
-        $request->attributes->set('id', '42');
+        $request->attributes->set('id', 42);
 
         $config->expects($this->once())
             ->method('isOptional')
@@ -257,7 +314,7 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
 
         $this->repository->expects($this->once())
             ->method('find')
-            ->with($this->equalTo('42'))
+            ->with($this->equalTo(42))
             ->will($this->returnValue(null));
 
         $this->setExpectedException('Symfony\Component\HttpKernel\Exception\NotFoundHttpException');
