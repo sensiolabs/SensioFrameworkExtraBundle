@@ -1,6 +1,6 @@
 <?php
 
-namespace Sensio\Bundle\FrameworkExtraBunde\Tests\Configuration;
+namespace Sensio\Bundle\FrameworkExtraBundle\Tests\Configuration;
 
 class ConfigurationAnnotationTest extends \PHPUnit_Framework_TestCase
 {
