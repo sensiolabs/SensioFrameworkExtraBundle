@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
  */
 
 /**
- * 
+ *
  *
  * @author     Fabien Potencier <fabien@symfony.com>
  */

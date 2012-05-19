@@ -38,14 +38,14 @@ class TemplateGuesser
     {
         $this->kernel = $kernel;
     }
-    
+
     /**
      * Guesses and returns the template name to render based on the controller
      * and action names.
      *
-     * @param array $controller An array storing the controller object and action method
-     * @param Request $request A Request instance
-     * @param string $engine
+     * @param array   $controller An array storing the controller object and action method
+     * @param Request $request    A Request instance
+     * @param string  $engine
      * @return TemplateReference template reference
      * @throws \InvalidArgumentException
      */
@@ -74,7 +74,7 @@ class TemplateGuesser
     /**
      * Returns the Bundle instance in which the given class name is located.
      *
-     * @param string $class A fully qualified controller class name
+     * @param string $class  A fully qualified controller class name
      * @param Bundle $bundle A Bundle instance
      * @throws \InvalidArgumentException
      */

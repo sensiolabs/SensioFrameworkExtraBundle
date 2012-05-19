@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
  */
 
 /**
- * Managers converters. 
+ * Managers converters.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Henrik Bjornskov <henrik@bjrnskov.dk>
@@ -27,10 +27,10 @@ class ParamConverterManager
     protected $converters = array();
 
     /**
-     * Applies all converters to the passed configurations and stops when a 
+     * Applies all converters to the passed configurations and stops when a
      * converter is applied it will move on to the next configuration and so on.
      *
-     * @param Request $request
+     * @param Request      $request
      * @param array|object $configurations
      */
     public function apply(Request $request, $configurations)
@@ -41,7 +41,7 @@ class ParamConverterManager
 
         foreach ($configurations as $configuration) {
             // If the value is already an instance of the class we are trying to convert it into
-            // we should continue as no convertion is required 
+            // we should continue as no convertion is required
             $value = $request->attributes->get($configuration->getName());
             $className = $configuration->getClass();
             if (is_object($value) && $value instanceof $className) {

@@ -10,7 +10,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Tests\EventListener\Fixture\FooController
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
@@ -75,6 +74,7 @@ class ControllerListenerTest extends \PHPUnit_Framework_TestCase
     protected function getFilterControllerEvent($controller, Request $request)
     {
         $mockKernel = $this->getMockForAbstractClass('Symfony\Component\HttpKernel\Kernel', array('', ''));
+
         return new FilterControllerEvent($mockKernel, $controller, $request, HttpKernelInterface::MASTER_REQUEST);
     }
 
