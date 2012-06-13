@@ -49,10 +49,14 @@ class ParamConverterListener
         $request = $event->getRequest();
         $configurations = array();
 
-        if ($configuration = $request->attributes->get('_converters')) {
-            foreach (is_array($configuration) ? $configuration : array($configuration) as $configuration) {
-                $configurations[$configuration->getName()] = $configuration;
-            }
+        // there is no work for us if paramConverter annotation was not imported.
+        if (!$request->attributes->has('_converters')) {
+            return;
+        }
+        
+        $configuration = $request->attributes->get('_converters');
+        foreach (is_array($configuration) ? $configuration : array($configuration) as $configuration) {
+            $configurations[$configuration->getName()] = $configuration;
         }
 
         if (is_array($controller)) {
