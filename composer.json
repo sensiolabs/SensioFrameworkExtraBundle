@@ -17,5 +17,10 @@
     "autoload": {
         "psr-0": { "Sensio\\Bundle\\FrameworkExtraBundle": "" }
     },
-    "target-dir": "Sensio/Bundle/FrameworkExtraBundle"
+    "target-dir": "Sensio/Bundle/FrameworkExtraBundle",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.1.x-dev"
+        }
+    }
 }
