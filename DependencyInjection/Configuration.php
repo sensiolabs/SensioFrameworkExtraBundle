@@ -16,7 +16,7 @@ class Configuration
      *
      * @return Symfony\Component\Config\Definition\NodeInterface
      */
-    public function getConfigTree()
+    public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('sensio_framework_extra', 'array');
@@ -50,6 +50,16 @@ class Configuration
             ->end()
         ;
 
-        return $treeBuilder->buildTree();
+        return $treeBuilder;
+    }
+
+    /**
+     * Generates the configuration tree.
+     *
+     * @return Symfony\Component\Config\Definition\NodeInterface
+     */
+    public function getConfigTree()
+    {
+        return $this->getConfigTreeBuilder()->buildTree();
     }
 }
