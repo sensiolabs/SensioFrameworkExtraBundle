@@ -69,6 +69,12 @@ class ParamConverterListener
 
             $name = $param->getName();
 
+            if ($request->attributes->has($name)
+                || $param->getClass()->isInstance($request)
+            ) {
+                continue;
+            }
+
             if (!isset($configurations[$name])) {
                 $configuration = new ParamConverter(array());
                 $configuration->setName($name);
