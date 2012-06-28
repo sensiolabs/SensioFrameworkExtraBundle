@@ -3,18 +3,20 @@
 namespace Sensio\Bundle\FrameworkExtraBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Symfony\Component\Config\Definition\NodeInterface;
 
 /**
  * FrameworkExtraBundle configuration structure.
  *
  * @author Henrik Bjornskov <hb@peytz.dk>
  */
-class Configuration
+class Configuration implements ConfigurationInterface
 {
     /**
      * Generates the configuration tree.
      *
-     * @return Symfony\Component\Config\Definition\NodeInterface
+     * @return NodeInterface
      */
     public function getConfigTreeBuilder()
     {
@@ -51,15 +53,5 @@ class Configuration
         ;
 
         return $treeBuilder;
-    }
-
-    /**
-     * Generates the configuration tree.
-     *
-     * @return Symfony\Component\Config\Definition\NodeInterface
-     */
-    public function getConfigTree()
-    {
-        return $this->getConfigTreeBuilder()->buildTree();
     }
 }

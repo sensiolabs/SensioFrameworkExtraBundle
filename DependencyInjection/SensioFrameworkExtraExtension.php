@@ -7,7 +7,6 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\Config\FileLocator;
-use Symfony\Component\Config\Definition\Processor;
 
 /*
  * This file is part of the Symfony framework.
@@ -21,19 +20,16 @@ use Symfony\Component\Config\Definition\Processor;
 /**
  * SensioFrameworkExtraExtension.
  *
- * @author     Fabien Potencier <fabien@symfony.com>
+ * @author Fabien Potencier <fabien@symfony.com>
  */
 class SensioFrameworkExtraExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container)
     {
+        $configuration = $this->getConfiguration($configs, $container);
+        $config = $this->processConfiguration($configuration, $configs);
+
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-
-        $processor     = new Processor();
-        $configuration = new Configuration();
-
-        $config = $processor->process($configuration->getConfigTree(), $configs);
-
         $loader->load('services.xml');
 
         $annotationsToLoad = array();
