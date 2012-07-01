@@ -57,11 +57,12 @@ class DoctrineParamConverter implements ParamConverterInterface
 
     protected function find($class, Request $request, $options)
     {
-        if (!$request->attributes->has('id')) {
+        $key = isset($options['id']) ? $options['id'] : 'id';
+        if (!$request->attributes->has($key)) {
             return false;
         }
 
-        return $this->registry->getRepository($class, $options['entity_manager'])->find($request->attributes->get('id'));
+        return $this->registry->getRepository($class, $options['entity_manager'])->find($request->attributes->get($key));
     }
 
     protected function findOneBy($class, Request $request, $options)
