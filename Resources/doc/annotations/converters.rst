@@ -74,6 +74,19 @@ option::
     {
     }
 
+This also allows you to have multiple converters in one action::
+
+    /**
+     * @Route("/blog/{id}/comments/{comment_id}")
+     * @ParamConverter("comment", class="SensioBlogBundle:Comment", options={"id" = "comment_id"})
+     */
+    public function showAction(Post $post, Comment $comment)
+    {
+    }
+
+In the example above, the post parameter is handled automatically, but the comment is 
+configured with the annotation since they can not both follow the default convention.
+
 Creating a Converter
 --------------------
 
