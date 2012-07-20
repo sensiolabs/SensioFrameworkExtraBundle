@@ -23,10 +23,13 @@ class DateTimeParamConverter implements ParamConverterInterface
 {
     public function apply(Request $request, ConfigurationInterface $configuration)
     {
-        $request->attributes->set(
-            $configuration->getName(),
-            new \DateTime($request->get($configuration->getName()))
-        );
+        $param = $configuration->getName();
+
+        if ( ! $request->get($param)) {
+            return;
+        }
+
+        $request->attributes->set($param, new \DateTime($request->get($param)));
     }
 
     public function supports(ConfigurationInterface $configuration)
@@ -36,7 +39,7 @@ class DateTimeParamConverter implements ParamConverterInterface
         }
 
         return "DateTime" === $configuration->getClass() ||
-               is_suclass_of($configuration->getClass(), "DateTime");
+               is_subclass_of($configuration->getClass(), "DateTime");
     }
 }
 
