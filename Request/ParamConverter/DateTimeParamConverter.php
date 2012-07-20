@@ -4,6 +4,7 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
 use Symfony\Component\HttpFoundation\Request;
+use DateTime;
 
 /*
  * This file is part of the Symfony framework.
@@ -29,7 +30,15 @@ class DateTimeParamConverter implements ParamConverterInterface
             return;
         }
 
-        $request->attributes->set($param, new \DateTime($request->get($param)));
+        $options = $configuration->getOptions();
+
+        if (isset($options['format'])) {
+            $date = DateTime::createFromFormat($options['format'], $request->get($param));
+        } else {
+            $date = new DateTime($request->get($param));
+        }
+
+        $request->attributes->set($param, $date);
     }
 
     public function supports(ConfigurationInterface $configuration)
@@ -38,8 +47,7 @@ class DateTimeParamConverter implements ParamConverterInterface
             return false;
         }
 
-        return "DateTime" === $configuration->getClass() ||
-               is_subclass_of($configuration->getClass(), "DateTime");
+        return "DateTime" === $configuration->getClass();
     }
 }
 
