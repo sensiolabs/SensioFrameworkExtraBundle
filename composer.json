@@ -12,7 +12,8 @@
     ],
     "require": {
         "symfony/framework-bundle": "2.1.*",
-        "doctrine/common": ">=2.1,<2.4-dev"
+        "doctrine/common": ">=2.1,<2.4-dev",
+        "symfony/validator": "2.1.*"
     },
     "autoload": {
         "psr-0": { "Sensio\\Bundle\\FrameworkExtraBundle": "" }

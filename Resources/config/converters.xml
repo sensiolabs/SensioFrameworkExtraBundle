@@ -8,7 +8,11 @@
         <parameter key="sensio_framework_extra.converter.listener.class">Sensio\Bundle\FrameworkExtraBundle\EventListener\ParamConverterListener</parameter>
         <parameter key="sensio_framework_extra.converter.manager.class">Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager</parameter>
         <parameter key="sensio_framework_extra.converter.doctrine.class">Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter</parameter>
+<<<<<<< HEAD
         <parameter key="sensio_framework_extra.converter.datetime.class">Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DateTimeParamConverter</parameter>
+=======
+        <parameter key="sensio_framework_extra.converter.object.class">Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ObjectParamConverter</parameter>
+>>>>>>> ObjectParamConverter
     </parameters>
 
     <services>
@@ -26,6 +30,10 @@
 
         <service id="sensio_framework_extra.converter.datetime" class="%sensio_framework_extra.converter.datetime.class%">
             <tag name="request.param_converter" converter="datetime" />
+        </service>
+
+        <service id="sensio_framework_extra.converter.object" class="%sensio_framework_extra.converter.object.class%">
+            <tag name="request.param_converter" priority="-255" converter="object" /><!-- has to be the very last one -->
         </service>
     </services>
 </container>

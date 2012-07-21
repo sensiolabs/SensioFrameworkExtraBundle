@@ -54,8 +54,7 @@ To detect which converter is run on a parameter the following process is run:
 Built-in Converters
 -------------------
 
-The bundle has two built-in converter, the Doctrine one and a DateTime
-converter.
+The bundle has several built-in converters that are detailed here.
 
 Doctrine Converter
 ~~~~~~~~~~~~~~~~~~
@@ -163,6 +162,65 @@ is accepted. You can be stricter with input given through the options::
     public function archiveAction(DateTime $start, DateTime $end)
     {
     }
+
+Object Converter
+----------------
+
+If the Doctrine Converter (or any other Persistent Object Converter) could not
+convert an object, you can use the generic object converter to map request data
+to an object.
+
+- If the option 'part' is specified with 'request', 'query', 'cookies' or
+  'attributes' the given part is used as source of data to create the object.
+  When the option is not given the 'query' part is used automatically.
+- If the data is an array, the keys are matched against parameter variable names in the
+  target object constructor.
+- If the data is a scalar value it is assumed to be a one-parameter
+  constructor.
+- If the object has a static ``__set_state`` method it will be used instead
+  of the constructor to create the object.
+- The request data is only matched against the constructor of the target
+  object to allow the developer to have full control over the accepted user
+  input.
+- The construction is recursive and allows to assemble object graphs. DateTime
+  is handled as special case. Persistent objects cannot be converted as
+  children of an object.
+- If a non-optional parameter is not part of the request, a HTTP 400 exception
+  is thrown.
+
+Example::
+
+    /**
+     * @Route("/blog")
+     * @ParamConverter("criteria", options={"part": "query"})
+     */
+    public function listAction(PostCriteria $criteria)
+    {
+    }
+
+    class PostCriteria
+    {
+        private $page;
+        private $count;
+
+        public function __construct($page = 1, $count = 20)
+        {
+            $this->page = $page;
+            $this->count = $count;
+        }
+    }
+
+Example requests for this action could be:
+
+    curl http://example.com/blog
+    curl http://example.com/blog?criteria[page]=4&criteria[count]=50
+
+.. note::
+
+    For security reasons the object converter has to run AFTER persistent
+    object parameter converters such as the DoctrineParam Converter. Otherwise
+    attackers could inject objects in your action that would normally be
+    persistent objects and not objects from user input.
 
 Creating a Converter
 --------------------
