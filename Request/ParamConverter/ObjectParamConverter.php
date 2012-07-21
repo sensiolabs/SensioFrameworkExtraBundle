@@ -22,8 +22,8 @@ use Symfony\Component\HttpFoundation\Request;
  * parameters only, security problems can be avoided and a central
  * location for filtering input data is available.
  *
- * Data is retrieved from query when GET/HEAD request
- * and from "request" if else.
+ * Data is only ever retrieved from the query part of the request,
+ * use the form framework for transorming POST data into objects.
  *
  * Converter can be used to generate criteria/filtering struct objects
  * that are passed to the model layer.
@@ -51,10 +51,8 @@ class ObjectParamConverter implements ParamConverterInterface
         $param  = $configuration->getName();
         $method = $request->getMethod();
 
-        if (in_array($method, array("GET", "HEAD")) && $request->query->has($param)) {
+        if ($request->query->has($param) && !$request->request->has($param)) {
             $data = $request->query->get($param, array());
-        } else if ($request->request->has($param)) {
-            $data = $request->request->get($param, array());
         } else {
             $data = array();
         }

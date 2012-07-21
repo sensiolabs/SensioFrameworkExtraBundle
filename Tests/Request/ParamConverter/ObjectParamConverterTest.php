@@ -16,7 +16,9 @@ class ObjectParamConverterTest extends \PHPUnit_Framework_TestCase
 
     public function testApply()
     {
-        $request = Request::create('/', 'POST', array('foo' => array('bar' => array('foo' => 1), 'baz' => '2012-07-21')));
+        $request = Request::create('/', 'POST');
+        $request->query->set('foo', array('bar' => array('foo' => 1), 'baz' => '2012-07-21'));
+
         $config  = $this->createConfiguration('foo', __NAMESPACE__ . '\\Foo');
 
         $this->converter->apply($request, $config);
