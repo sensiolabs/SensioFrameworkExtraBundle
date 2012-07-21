@@ -1,12 +1,5 @@
 <?php
 
-namespace Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter;
-
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\HttpFoundation\Request;
-
 /*
  * This file is part of the Symfony framework.
  *
@@ -15,6 +8,13 @@ use Symfony\Component\HttpFoundation\Request;
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+
+namespace Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter;
+
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Converts arrays into objects by mapping keys onto
@@ -74,6 +74,8 @@ class ObjectParamConverter implements ParamConverterInterface
         }
 
         $request->attributes->set($param, $object);
+
+        return true;
     }
 
     private function convertClass($class, $data)
@@ -89,7 +91,7 @@ class ObjectParamConverter implements ParamConverterInterface
     {
         $args = array();
 
-        if ( ! $constructor) {
+        if (!$constructor) {
             return array();
         }
 
