@@ -12,6 +12,7 @@
     ],
     "require": {
         "symfony/framework-bundle": "2.1.*",
+        "symfony/form": "*",
         "doctrine/common": ">=2.1,<2.4-dev"
     },
     "autoload": {
