@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\Request;
  * location for filtering input data is available.
  *
  * Data is only ever retrieved from the query part of the request,
- * use the form framework for transorming POST data into objects.
+ * use the form framework for transforming POST data into objects.
  *
  * Converter can be used to generate criteria/filtering struct objects
  * that are passed to the model layer.
@@ -39,13 +39,6 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class ObjectParamConverter implements ParamConverterInterface
 {
-    private $validator;
-
-    public function __construct(ValidatorInterface $validator = null)
-    {
-        $this->validator = $validator;
-    }
-
     public function apply(Request $request, ConfigurationInterface $configuration)
     {
         $param  = $configuration->getName();
@@ -59,19 +52,6 @@ class ObjectParamConverter implements ParamConverterInterface
 
         $class  = $configuration->getClass();
         $object = $this->convertClass($class, $data);
-
-        if ($this->validator) {
-            $options = $configuration->getOptions();
-            $groups  = isset($options['validation_groups'])
-                ? (array)$options['validation_groups']
-                : null;
-
-            $cvl = $this->validator->validate($object, $groups);
-
-            if (count($cvl) > 0) {
-                throw new HttpException(400, (string)$cvl);
-            }
-        }
 
         $request->attributes->set($param, $object);
 
