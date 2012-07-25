@@ -41,6 +41,16 @@ If you use type hinting as in the example above, you can even omit the
     {
     }
 
+To detect which converter is run on a parameter the following process is run:
+
+* If an explicit converter choice was made with
+  ``@ParamConverter(converter="name")`` the converter with the given name is
+  chosen.
+* Otherwise all registered parameter converters are iterated by priority.
+  The ``supports()`` method is invoked to check if a param converter can
+  convert the request into the required parameter. If it returns ``true``
+  the param converter is invoked.
+
 Built-in Converters
 -------------------
 
@@ -49,6 +59,8 @@ converter.
 
 Doctrine Converter
 ~~~~~~~~~~~~~~~~~~
+
+Converter Name: ``doctrine.orm``
 
 By default, the Doctrine converter uses the *default* entity manager. This can
 be configured with the ``entity_manager`` option::
@@ -89,7 +101,9 @@ In the example above, the post parameter is handled automatically, but the comme
 configured with the annotation since they can not both follow the default convention.
 
 DateTime Converter
-------------------
+~~~~~~~~~~~~~~~~~~
+
+Converter Name: ``datetime``
 
 The datetime converter converts any route or request attribute into a datetime
 instance::
