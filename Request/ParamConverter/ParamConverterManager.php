@@ -57,11 +57,11 @@ class ParamConverterManager
      */
     protected function applyConverter(Request $request, $configuration)
     {
-        // If the value is already an instance of the class we are trying to convert it into
-        // we should continue as no convertion is required
         $value     = $request->attributes->get($configuration->getName());
         $className = $configuration->getClass();
 
+        // If the value is already an instance of the class we are trying to convert it into
+        // we should continue as no convertion is required
         if (is_object($value) && $value instanceof $className) {
             return;
         }
@@ -84,6 +84,7 @@ class ParamConverterManager
             }
 
             $converter->apply($request, $configuration);
+            return;
         }
 
         foreach ($this->all() as $converter) {
