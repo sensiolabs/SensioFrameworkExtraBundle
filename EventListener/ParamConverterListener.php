@@ -75,6 +75,8 @@ class ParamConverterListener
                 $configuration->setClass($param->getClass()->getName());
 
                 $configurations[$name] = $configuration;
+            } elseif (null === $configurations[$name]->getClass()) {
+                $configurations[$name]->setClass($param->getClass()->getName());
             }
 
             $configurations[$name]->setIsOptional($param->isOptional());
