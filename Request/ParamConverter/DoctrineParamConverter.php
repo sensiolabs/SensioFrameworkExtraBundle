@@ -42,7 +42,11 @@ class DoctrineParamConverter implements ParamConverterInterface
         if (false === $object = $this->find($class, $request, $options)) {
             // find by criteria
             if (false === $object = $this->findOneBy($class, $request, $options)) {
-                throw new \LogicException('Unable to guess how to get a Doctrine instance from the request information.');
+                if ($configuration->isOptional()) {
+                    $object = null;
+                } else {
+                    throw new \LogicException('Unable to guess how to get a Doctrine instance from the request information.');
+                }
             }
         }
 
@@ -57,21 +61,45 @@ class DoctrineParamConverter implements ParamConverterInterface
 
     protected function find($class, Request $request, $options)
     {
-        $key = isset($options['id']) ? $options['id'] : 'id';
-        if (!$request->attributes->has($key)) {
+        if ($options['mapping'] || $options['exclude']) {
             return false;
         }
 
-        return $this->registry->getRepository($class, $options['entity_manager'])->find($request->attributes->get($key));
+        if (!is_array($options['id']) && $request->attributes->has($options['id'])) {
+            $id = $request->attributes->get($options['id']);
+        } else if (is_array($options['id'])) {
+            $id = array();
+            foreach ($options['id'] as $field) {
+                $id[$field] = $request->attributes->get($field);
+            }
+        } else {
+            return false;
+        }
+
+        return $this->registry->getRepository($class, $options['entity_manager'])->find($id);
     }
 
     protected function findOneBy($class, Request $request, $options)
     {
+        if (!$options['mapping']) {
+            $keys               = $request->attributes->keys();
+            $options['mapping'] = $keys ? array_combine($keys, $keys) : array();
+        }
+
+        foreach ($options['exclude'] as $exclude) {
+            unset($options['mapping'][$exclude]);
+        }
+
+        if (!$options['mapping']) {
+            return false;
+        }
+
         $criteria = array();
         $metadata = $this->registry->getManager($options['entity_manager'])->getClassMetadata($class);
-        foreach ($request->attributes->all() as $key => $value) {
-            if ($metadata->hasField($key)) {
-                $criteria[$key] = $value;
+
+        foreach ($options['mapping'] as $attribute => $field) {
+            if ($metadata->hasField($field)) {
+                $criteria[$field] = $request->attributes->get($attribute);
             }
         }
 
@@ -104,6 +132,9 @@ class DoctrineParamConverter implements ParamConverterInterface
     {
         return array_replace(array(
             'entity_manager' => null,
+            'exclude'        => array(),
+            'mapping'        => array(),
+            'id'             => 'id',
         ), $configuration->getOptions());
     }
 }

@@ -50,6 +50,21 @@ converter.
 Doctrine Converter
 ~~~~~~~~~~~~~~~~~~
 
+The Doctrine Converter attempts to convert request attributes to Doctrine
+entities fetched from the database. Two different approaches are possible:
+
+- Fetch object by primary key
+- Fetch object by one or several fields which contain unique values in the
+  database.
+
+The following algorithm determines which operation will be performed.
+
+- If an ``{id}`` parameter is present in the route, find object by primary key.
+- If an option ``'id'`` is configured and matches route parameters, find object by primary key.
+- If the previous rules do not apply, attempt to find one entity by matching
+  route parameters to entity fields. You can control this process by
+  configuring ``exclude`` parameters or a attribute to field name ``mapping``.
+
 By default, the Doctrine converter uses the *default* entity manager. This can
 be configured with the ``entity_manager`` option::
 
@@ -87,6 +102,28 @@ This also allows you to have multiple converters in one action::
 
 In the example above, the post parameter is handled automatically, but the comment is 
 configured with the annotation since they can not both follow the default convention.
+
+If you want to match an entity using multiple fields use ``mapping``::
+
+    /**
+     * @Route("/blog/{date}/{slug}/comments/{comment_slug}")
+     * @ParamConverter("post", options={"mapping": {"date": "date", "slug": "slug"})
+     * @ParamConverter("comment", options={"mapping": {"comment_slug": "slug"})
+     */
+    public function showAction(Post $post, Comment $comment)
+    {
+    }
+
+If you are matching an entity using several fields, but you want to exclude a
+route parameter from being part of the criteria::
+
+    /**
+     * @Route("/blog/{date}/{slug}")
+     * @ParamConverter("post", options={"exclude": ["date"]})
+     */
+    public function showAction(Post $post, \DateTime $date)
+    {
+    }
 
 DateTime Converter
 ------------------
