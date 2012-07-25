@@ -67,7 +67,7 @@ class DoctrineParamConverter implements ParamConverterInterface
 
         if (!is_array($options['id']) && $request->attributes->has($options['id'])) {
             $id = $request->attributes->get($options['id']);
-        } else if (is_array($options['id'])) {
+        } elseif (is_array($options['id'])) {
             $id = array();
             foreach ($options['id'] as $field) {
                 $id[$field] = $request->attributes->get($field);
