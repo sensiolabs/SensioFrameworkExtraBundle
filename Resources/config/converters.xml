@@ -8,6 +8,7 @@
         <parameter key="sensio_framework_extra.converter.listener.class">Sensio\Bundle\FrameworkExtraBundle\EventListener\ParamConverterListener</parameter>
         <parameter key="sensio_framework_extra.converter.manager.class">Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager</parameter>
         <parameter key="sensio_framework_extra.converter.doctrine.class">Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter</parameter>
+        <parameter key="sensio_framework_extra.converter.datetime.class">Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DateTimeParamConverter</parameter>
     </parameters>
 
     <services>
@@ -21,6 +22,10 @@
         <service id="sensio_framework_extra.converter.doctrine.orm" class="%sensio_framework_extra.converter.doctrine.class%">
             <tag name="request.param_converter" />
             <argument type="service" id="doctrine" on-invalid="ignore" />
+        </service>
+
+        <service id="sensio_framework_extra.converter.datetime" class="%sensio_framework_extra.converter.datetime.class%">
+            <tag name="request.param_converter" />
         </service>
     </services>
 </container>

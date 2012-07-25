@@ -44,7 +44,8 @@ If you use type hinting as in the example above, you can even omit the
 Built-in Converters
 -------------------
 
-The bundle has only one built-in converter, the Doctrine one.
+The bundle has two built-in converter, the Doctrine one and a DateTime
+converter.
 
 Doctrine Converter
 ~~~~~~~~~~~~~~~~~~
@@ -86,6 +87,31 @@ This also allows you to have multiple converters in one action::
 
 In the example above, the post parameter is handled automatically, but the comment is 
 configured with the annotation since they can not both follow the default convention.
+
+DateTime Converter
+------------------
+
+The datetime converter converts any route or request attribute into a datetime
+instance::
+
+    /**
+     * @Route("/blog/archive/{start}/{end}")
+     */
+    public function archiveAction(DateTime $start, DateTime $end)
+    {
+    }
+
+By default any date format that can be parsed by the ``DateTime`` constructor
+is accepted. You can be stricter with input given through the options::
+
+    /**
+     * @Route("/blog/archive/{start}/{end}")
+     * @ParamConverter("start", options={"format": "Y-m-d"})
+     * @ParamConverter("end", options={"format": "Y-m-d"})
+     */
+    public function archiveAction(DateTime $start, DateTime $end)
+    {
+    }
 
 Creating a Converter
 --------------------
