@@ -41,11 +41,16 @@ class ObjectParamConverter implements ParamConverterInterface
 {
     public function apply(Request $request, ConfigurationInterface $configuration)
     {
-        $param  = $configuration->getName();
-        $method = $request->getMethod();
+        $param   = $configuration->getName();
+        $options = $configuration->getOptions();
+        $part    = isset($options['part']) ? $options['part'] : 'query';
 
-        if ($request->query->has($param) && !$request->request->has($param)) {
-            $data = $request->query->get($param, array());
+        if (!in_array($part, array('attributes', 'query', 'request', 'cookies'))) {
+            throw new \RuntmeException("Invalid part to retrieve data from.");
+        }
+
+        if ($request->$part->has($param)) {
+            $data = $request->$part->get($param, array());
         } else {
             $data = array();
         }
@@ -61,10 +66,14 @@ class ObjectParamConverter implements ParamConverterInterface
     private function convertClass($class, $data)
     {
         $reflClass   = new \ReflectionClass($class);
-        $constructor = $reflClass->getConstructor();
-        $args        = $this->convertClassArguments($constructor, $data);
 
-        return $reflClass->newInstanceArgs($args);
+        if ($reflClass->hasMethod('__set_state')) {
+            return $class::__set_state($data);
+        }
+
+        $constructor = $reflClass->getConstructor();
+
+        return $reflClass->newInstanceArgs($this->convertClassArguments($constructor, $data));
     }
 
     private function convertClassArguments($constructor, $data)

@@ -30,6 +30,39 @@ class ObjectParamConverterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $foo->bar->foo);
     }
 
+    public function testApplyPartRequest()
+    {
+        $request = Request::create('/', 'POST');
+        $request->request->set('foo', array('bar' => array('foo' => 1), 'baz' => '2012-07-21'));
+
+        $config  = $this->createConfiguration('foo', __NAMESPACE__ . '\\Foo');
+        $config->expects($this->once())->method('getOptions')->will($this->returnValue(array('part' => 'request')));
+
+        $this->converter->apply($request, $config);
+
+        $foo = $request->attributes->get('foo');
+        $this->assertInstanceOf(__NAMESPACE__ . '\\Foo', $foo);
+        $this->assertInstanceOf(__NAMESPACE__ . '\\Bar', $foo->bar);
+        $this->assertInstanceOf('DateTime', $foo->baz);
+        $this->assertEquals(1, $foo->bar->foo);
+    }
+
+    public function testApplySetState()
+    {
+        $request = Request::create('/', 'POST');
+        $request->query->set('foo', array('foo' => 1, 'bar' => 2));
+
+        $config  = $this->createConfiguration('foo', __NAMESPACE__ . '\\Baz');
+
+        $this->converter->apply($request, $config);
+
+        $baz = $request->attributes->get('foo');
+        $this->assertInstanceOf(__NAMESPACE__ . '\\Baz', $baz);
+
+        $this->assertEquals(1, $baz->foo);
+        $this->assertEquals(2, $baz->bar);
+    }
+
     public function createConfiguration($name, $class, array $options = null)
     {
         $config = $this->getMock(
@@ -73,3 +106,19 @@ class Bar
         $this->foo = $foo;
     }
 }
+
+class Baz
+{
+    public $foo;
+    public $bar;
+
+    static public function __set_state(array $vars)
+    {
+        $baz = new self();
+        $baz->foo = $vars['foo'];
+        $baz->bar = $vars['bar'];
+
+        return $baz;
+    }
+}
+
