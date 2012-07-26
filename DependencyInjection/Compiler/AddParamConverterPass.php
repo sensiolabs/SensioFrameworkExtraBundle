@@ -32,8 +32,12 @@ class AddParamConverterPass implements CompilerPassInterface
 
         foreach ($container->findTaggedServiceIds('request.param_converter') as $id => $converters) {
             foreach ($converters as $converter) {
-                $priority = isset($converter[0]['priority']) ? $converter[0]['priority'] : 0;
                 $name     = isset($converter[0]['converter']) ? $converter[0]['converter'] : null;
+                $priority = isset($converter[0]['priority']) ? $converter[0]['priority'] : 0;
+
+                if ($priority == "false") {
+                    $priority = null;
+                }
 
                 $definition->addMethodCall('add', array(new Reference($id), $priority, $name));
             }

@@ -160,6 +160,22 @@ on the request attributes, it should set an attribute named
 ``$configuration->getName()``, which stores an object of class
 ``$configuration->getClass()``.
 
+To register your converter service you must add a tag to your service
+
+.. configuration-block::
+
+    .. code-block:: xml
+
+        <service id="my_converter" class="MyBundle/Request/ParamConverter/MyConverter">
+            <tag name="request.param_converter" priority="-2" name="my_converter" />
+        </service>
+
+You can register a converter by priority, by name or both. If you don't
+specifiy a priority or name the converter will be added to the converter stack
+with a priority of `0`. To explicitly disable the registration by priority you
+have to set `priority="false"` in your tag definition.
+
 .. tip::
 
    Use the ``DoctrineParamConverter`` class as a template for your own converters.
+
