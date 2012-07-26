@@ -13,10 +13,11 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use DateTime;
 
 /**
- * Convert DateTime instances from request variables.
+ * Convert DateTime instances from request attribute variable.
  *
  * @author Benjamin Eberlei <kontakt@beberlei.de>
  */
@@ -26,16 +27,19 @@ class DateTimeParamConverter implements ParamConverterInterface
     {
         $param = $configuration->getName();
 
-        if (!$request->get($param)) {
+        if (!$request->attributes->has($param)) {
             return false;
         }
 
         $options = $configuration->getOptions();
+        $value   = $request->attributes->get($param);
 
-        if (isset($options['format'])) {
-            $date = DateTime::createFromFormat($options['format'], $request->get($param));
-        } else {
-            $date = new DateTime($request->get($param));
+        $date = isset($options['format'])
+            ? DateTime::createFromFormat($options['format'], $value)
+            : new DateTime($value);
+
+        if (!$date) {
+            throw new NotFoundHttpException('Invalid date given.');
         }
 
         $request->attributes->set($param, $date);
