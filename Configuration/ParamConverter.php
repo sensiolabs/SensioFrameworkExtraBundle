@@ -50,6 +50,13 @@ class ParamConverter extends ConfigurationAnnotation
     protected $optional = false;
 
     /**
+     * Use explicitly named converter instead of iterating by priorities.
+     *
+     * @var string
+     */
+    protected $converter;
+
+    /**
      * Returns the parameter name.
      *
      * @return string
@@ -137,6 +144,26 @@ class ParamConverter extends ConfigurationAnnotation
     public function isOptional()
     {
         return $this->optional;
+    }
+
+    /**
+     * Get explicit converter name.
+     *
+     * @return string
+     */
+    public function getConverter()
+    {
+        return $this->converter;
+    }
+
+    /**
+     * Set explicit converter name
+     *
+     * @param string $converter
+     */
+    public function setConverter($converter)
+    {
+        $this->converter = $converter;
     }
 
     /**

@@ -65,6 +65,73 @@ class ParamConverterManagerTest extends \PHPUnit_Framework_TestCase
         $this->manager->apply(new Request(), $configurations);
     }
 
+    public function testApplyNamedConverter()
+    {
+        $converter = $this->createParamConverterMock();
+        $converter
+            ->expects($this->any())
+            ->method('supports')
+            ->will($this->returnValue(True))
+        ;
+
+        $converter
+            ->expects($this->any())
+            ->method('apply')
+        ;
+
+        $this->manager->add($converter, 0, "test");
+
+        $request = new Request();
+        $request->attributes->set('param', '1234');
+
+        $configuration = new Configuration\ParamConverter(array(
+            'name' => 'param',
+            'class' => 'stdClass',
+            'converter' => 'test',
+        ));
+
+        $this->manager->apply($request, array($configuration));
+    }
+
+    public function testApplyNamedConverterNotSupportsParameter()
+    {
+        $converter = $this->createParamConverterMock();
+        $converter
+            ->expects($this->any())
+            ->method('supports')
+            ->will($this->returnValue(false))
+        ;
+
+        $this->manager->add($converter, 0, "test");
+
+        $request = new Request();
+        $request->attributes->set('param', '1234');
+
+        $configuration = new Configuration\ParamConverter(array(
+            'name' => 'param',
+            'class' => 'stdClass',
+            'converter' => 'test',
+        ));
+
+        $this->setExpectedException("RuntimeException", "Converter 'test' does not support conversion of parameter 'param'.");
+        $this->manager->apply($request, array($configuration));
+    }
+
+    public function testApplyNamedConverterNoConverter()
+    {
+        $request = new Request();
+        $request->attributes->set('param', '1234');
+
+        $configuration = new Configuration\ParamConverter(array(
+            'name' => 'param',
+            'class' => 'stdClass',
+            'converter' => 'test',
+        ));
+
+        $this->setExpectedException("RuntimeException", "No converter named 'test' found for conversion of parameter 'param'.");
+        $this->manager->apply($request, array($configuration));
+    }
+
     public function testApplyNotCalledOnAlreadyConvertedObjects()
     {
 

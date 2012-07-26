@@ -41,6 +41,16 @@ If you use type hinting as in the example above, you can even omit the
     {
     }
 
+To detect which converter is run on a parameter the following process is run:
+
+* If an explicit converter choice was made with
+  ``@ParamConverter(converter="name")`` the converter with the given name is
+  chosen.
+* Otherwise all registered parameter converters are iterated by priority.
+  The ``supports()`` method is invoked to check if a param converter can
+  convert the request into the required parameter. If it returns ``true``
+  the param converter is invoked.
+
 Built-in Converters
 -------------------
 
@@ -49,6 +59,8 @@ converter.
 
 Doctrine Converter
 ~~~~~~~~~~~~~~~~~~
+
+Converter Name: ``doctrine.orm``
 
 The Doctrine Converter attempts to convert request attributes to Doctrine
 entities fetched from the database. Two different approaches are possible:
@@ -126,7 +138,9 @@ route parameter from being part of the criteria::
     }
 
 DateTime Converter
-------------------
+~~~~~~~~~~~~~~~~~~
+
+Converter Name: ``datetime``
 
 The datetime converter converts any route or request attribute into a datetime
 instance::
@@ -183,6 +197,22 @@ on the request attributes, it should set an attribute named
 ``$configuration->getName()``, which stores an object of class
 ``$configuration->getClass()``.
 
+To register your converter service you must add a tag to your service
+
+.. configuration-block::
+
+    .. code-block:: xml
+
+        <service id="my_converter" class="MyBundle/Request/ParamConverter/MyConverter">
+            <tag name="request.param_converter" priority="-2" name="my_converter" />
+        </service>
+
+You can register a converter by priority, by name or both. If you don't
+specifiy a priority or name the converter will be added to the converter stack
+with a priority of `0`. To explicitly disable the registration by priority you
+have to set `priority="false"` in your tag definition.
+
 .. tip::
 
    Use the ``DoctrineParamConverter`` class as a template for your own converters.
+

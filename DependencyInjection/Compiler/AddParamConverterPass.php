@@ -29,8 +29,18 @@ class AddParamConverterPass implements CompilerPassInterface
         }
 
         $definition = $container->getDefinition('sensio_framework_extra.converter.manager');
-        foreach ($container->findTaggedServiceIds('request.param_converter') as $id => $attributes) {
-            $definition->addMethodCall('add', array(new Reference($id), isset($attributes[0]['priority']) ? $attributes[0]['priority'] : 0));
+
+        foreach ($container->findTaggedServiceIds('request.param_converter') as $id => $converters) {
+            foreach ($converters as $converter) {
+                $name     = isset($converter['converter']) ? $converter['converter'] : null;
+                $priority = isset($converter['priority']) ? $converter['priority'] : 0;
+
+                if ($priority === "false") {
+                    $priority = null;
+                }
+
+                $definition->addMethodCall('add', array(new Reference($id), $priority, $name));
+            }
         }
     }
 }

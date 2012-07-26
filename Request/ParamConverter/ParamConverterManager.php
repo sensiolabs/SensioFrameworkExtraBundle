@@ -27,6 +27,11 @@ class ParamConverterManager
     protected $converters = array();
 
     /**
+     * @var array
+     */
+    protected $namedConverters = array();
+
+    /**
      * Applies all converters to the passed configurations and stops when a
      * converter is applied it will move on to the next configuration and so on.
      *
@@ -40,19 +45,52 @@ class ParamConverterManager
         }
 
         foreach ($configurations as $configuration) {
-            // If the value is already an instance of the class we are trying to convert it into
-            // we should continue as no convertion is required
-            $value = $request->attributes->get($configuration->getName());
-            $className = $configuration->getClass();
-            if (is_object($value) && $value instanceof $className) {
-                continue;
+            $this->applyConverter($request, $configuration);
+        }
+    }
+
+    /**
+     * Apply converter on request based on the given configuration.
+     *
+     * @param Request $request
+     * @param ConfigurationInterface $configuration
+     */
+    protected function applyConverter(Request $request, $configuration)
+    {
+        $value     = $request->attributes->get($configuration->getName());
+        $className = $configuration->getClass();
+
+        // If the value is already an instance of the class we are trying to convert it into
+        // we should continue as no convertion is required
+        if (is_object($value) && $value instanceof $className) {
+            return;
+        }
+
+        if ($converterName = $configuration->getConverter()) {
+            if (!isset($this->namedConverters[$converterName])) {
+                throw new \RuntimeException(sprintf(
+                    "No converter named '%s' found for conversion of parameter '%s'.",
+                    $converterName, $configuration->getName()
+                ));
             }
 
-            foreach ($this->all() as $converter) {
-                if ($converter->supports($configuration)) {
-                    if ($converter->apply($request, $configuration)) {
-                        continue 2;
-                    }
+            $converter = $this->namedConverters[$converterName];
+
+            if (!$converter->supports($configuration)) {
+                throw new \RuntimeException(sprintf(
+                    "Converter '%s' does not support conversion of parameter '%s'.",
+                    $converterName, $configuration->getName()
+                ));
+            }
+
+            $converter->apply($request, $configuration);
+            return;
+        }
+
+        foreach ($this->all() as $converter) {
+            if ($converter->supports($configuration)) {
+                if ($converter->apply($request, $configuration)) {
+                    return;
                 }
             }
         }
@@ -61,16 +99,28 @@ class ParamConverterManager
    /**
     * Adds a parameter converter.
     *
+    * Converters match either explicitly via $name or by iteration over all
+    * converters with a $priority. If you pass a $priority = null then the
+    * added converter will not be part of the iteration chain and can only
+    * be invoked explicitly.
+    *
     * @param ParamConverterInterface $converter A ParamConverterInterface instance
-    * @param integer                 $priority  The priority (between -10 and 10)
+    * @param integer                 $priority  The priority (between -10 and 10).
+    * @param string                  $name      Name of the converter.
     */
-    public function add(ParamConverterInterface $converter, $priority = 0)
+    public function add(ParamConverterInterface $converter, $priority = 0, $name = null)
     {
-       if (!isset($this->converters[$priority])) {
-           $this->converters[$priority] = array();
-       }
+        if ($priority !== null) {
+            if (!isset($this->converters[$priority])) {
+                $this->converters[$priority] = array();
+            }
 
-       $this->converters[$priority][] = $converter;
+            $this->converters[$priority][] = $converter;
+        }
+
+        if (null !== $name) {
+            $this->namedConverters[$name] = $converter;
+        }
     }
 
    /**
