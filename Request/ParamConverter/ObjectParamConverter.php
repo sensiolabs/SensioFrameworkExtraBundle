@@ -45,8 +45,8 @@ class ObjectParamConverter implements ParamConverterInterface
         $options = $configuration->getOptions();
         $part    = isset($options['part']) ? $options['part'] : 'query';
 
-        if (!in_array($part, array('attributes', 'query', 'request', 'cookies'))) {
-            throw new \RuntmeException("Invalid part to retrieve data from.");
+        if (!in_array($part, array('attributes', 'query'))) {
+            throw new \RuntimeException("Invalid part to retrieve data from, has to be either 'attributes' or 'query'.");
         }
 
         if ($request->$part->has($param)) {

@@ -30,23 +30,6 @@ class ObjectParamConverterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $foo->bar->foo);
     }
 
-    public function testApplyPartRequest()
-    {
-        $request = Request::create('/', 'POST');
-        $request->request->set('foo', array('bar' => array('foo' => 1), 'baz' => '2012-07-21'));
-
-        $config  = $this->createConfiguration('foo', __NAMESPACE__ . '\\Foo');
-        $config->expects($this->once())->method('getOptions')->will($this->returnValue(array('part' => 'request')));
-
-        $this->converter->apply($request, $config);
-
-        $foo = $request->attributes->get('foo');
-        $this->assertInstanceOf(__NAMESPACE__ . '\\Foo', $foo);
-        $this->assertInstanceOf(__NAMESPACE__ . '\\Bar', $foo->bar);
-        $this->assertInstanceOf('DateTime', $foo->baz);
-        $this->assertEquals(1, $foo->bar->foo);
-    }
-
     public function testApplySetState()
     {
         $request = Request::create('/', 'POST');
