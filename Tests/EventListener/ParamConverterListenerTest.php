@@ -21,7 +21,7 @@ class ParamConverterListenerTest extends \PHPUnit_Framework_TestCase
                 ->with($this->equalTo($request), $this->equalTo(array()));
 
         $listener = new ParamConverterListener($manager);
-        $event    = new FilterControllerEvent($kernel, array($this, 'testRequestIsSkipped'), $request, null);
+        $event    = new FilterControllerEvent($kernel, array(new TestController(), 'execute'), $request, null);
 
         $listener->onKernelController($event);
     }
