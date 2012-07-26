@@ -98,7 +98,7 @@ class DoctrineParamConverter implements ParamConverterInterface
         $metadata = $this->registry->getManager($options['entity_manager'])->getClassMetadata($class);
 
         foreach ($options['mapping'] as $attribute => $field) {
-            if ($metadata->hasField($field)) {
+            if ($metadata->hasField($field) || ($metadata->hasAssociation($field) && $metadata->isSingleValuedAssociation($field))) {
                 $criteria[$field] = $request->attributes->get($attribute);
             }
         }
