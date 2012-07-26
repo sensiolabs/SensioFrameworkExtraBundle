@@ -91,7 +91,9 @@ class DoctrineParamConverter implements ParamConverterInterface
 
         if ($request->attributes->has($name)) {
             return $request->attributes->get($name);
-        } elseif ($request->attributes->has('id')) {
+        }
+
+        if ($request->attributes->has('id')) {
             return $request->attributes->get('id');
         }
 
