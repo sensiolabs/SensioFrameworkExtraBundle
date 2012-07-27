@@ -40,6 +40,19 @@ case for the above example, you can even omit the annotation value::
         return array('post' => $post);
     }
 
+..note::
+
+    If you are using PHP as a templating system, you need to make it
+    explicit::
+
+        /**
+         * @Template(engine="php")
+         */
+        public function showAction($id)
+        {
+            // ...
+        }
+
 And if the only parameters to pass to the template are method arguments, you
 can use the ``vars`` attribute instead of returning an array. This is very
 useful in combination with the ``@ParamConverter`` :doc:`annotation
