@@ -4,6 +4,7 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Routing;
 
 use Symfony\Component\Routing\Loader\AnnotationClassLoader;
 use Symfony\Component\Routing\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route as FrameworkExtraBundleRoute;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 /*
@@ -37,7 +38,7 @@ class AnnotatedRouteControllerLoader extends AnnotationClassLoader
     {
         // controller
         $classAnnot = $this->reader->getClassAnnotation($class, $this->routeAnnotationClass);
-        if ($classAnnot && $service = $classAnnot->getService()) {
+        if ($classAnnot instanceof FrameworkExtraBundleRoute && $service = $classAnnot->getService()) {
             $route->setDefault('_controller', $service.':'.$method->getName());
         } else {
             $route->setDefault('_controller', $class->getName().'::'.$method->getName());
