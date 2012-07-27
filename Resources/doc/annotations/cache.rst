@@ -15,31 +15,6 @@ The ``@Cache`` annotation makes it easy to define HTTP caching::
     {
     }
 
-You can also use the annotation on a class to define caching for all methods::
-
-    /**
-     * @Cache(expires="tomorrow")
-     */
-    class BlogController extends Controller
-    {
-    }
-
-When there is a conflict between the class configuration and the method
-configuration, the latter overrides the former::
-
-    /**
-     * @Cache(expires="tomorrow")
-     */
-    class BlogController extends Controller
-    {
-        /**
-         * @Cache(expires="+2 days")
-         */
-        public function indexAction()
-        {
-        }
-    }
-
 Attributes
 ----------
 
