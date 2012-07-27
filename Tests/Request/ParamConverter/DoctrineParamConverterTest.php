@@ -156,6 +156,10 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
                       ->will($this->returnValue($metadataFactory));
 
         $this->manager->expects($this->once())
+                    ->method('getManagers')
+                    ->will($this->returnValue(array($objectManager)));
+
+        $this->manager->expects($this->once())
                       ->method('getManager')
                       ->will($this->returnValue($objectManager));
 
