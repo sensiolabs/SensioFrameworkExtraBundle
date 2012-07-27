@@ -133,7 +133,8 @@ class DoctrineParamConverter implements ParamConverterInterface
 
     public function supports(ConfigurationInterface $configuration)
     {
-        if (null === $this->registry) {
+        // if there is no manager, this means that only Doctrine DBAL is configured
+        if (null === $this->registry || !count($this->registry->getManagers())) {
             return false;
         }
 
