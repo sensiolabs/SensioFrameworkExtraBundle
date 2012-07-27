@@ -3,10 +3,12 @@
 namespace Sensio\Bundle\FrameworkExtraBundle\Tests\EventListener;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\EventListener\ControllerListener;
 use Sensio\Bundle\FrameworkExtraBundle\Tests\EventListener\Fixture\FooControllerCacheAtClass;
 use Sensio\Bundle\FrameworkExtraBundle\Tests\EventListener\Fixture\FooControllerCacheAtClassAndMethod;
 use Sensio\Bundle\FrameworkExtraBundle\Tests\EventListener\Fixture\FooControllerCacheAtMethod;
+use Sensio\Bundle\FrameworkExtraBundle\Tests\EventListener\Fixture\FooControllerParamConverterAtMethod;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Symfony\Component\HttpFoundation\Request;
@@ -62,6 +64,21 @@ class ControllerListenerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertNotNull($this->getReadedCache());
         $this->assertEquals(FooControllerCacheAtClassAndMethod::CLASS_SMAXAGE, $this->getReadedCache()->getSMaxAge());
+
+        $this->event = $this->getFilterControllerEvent(array($controller, 'bar3Action'), $this->request);
+        $this->listener->onKernelController($this->event);
+
+        $annotations = $this->getReadedCache();
+        $this->assertNotNull($annotations);
+        $this->assertArrayHasKey(0, $annotations);
+        $this->assertInstanceOf('Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache', $annotations[0]);
+        $this->assertEquals(FooControllerCacheAtClassAndMethod::METHOD_SMAXAGE, $annotations[0]->getSMaxAge());
+
+        $this->assertArrayHasKey(1, $annotations);
+        $this->assertInstanceOf('Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache', $annotations[1]);
+        $this->assertEquals(FooControllerCacheAtClassAndMethod::METHOD_SECOND_SMAXAGE, $annotations[1]->getSMaxAge());
+
+        $this->assertEquals(2, count($annotations));
     }
 
     protected function createRequest(Cache $cache = null)
