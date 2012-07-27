@@ -215,4 +215,3 @@ have to set `priority="false"` in your tag definition.
 .. tip::
 
    Use the ``DoctrineParamConverter`` class as a template for your own converters.
-
