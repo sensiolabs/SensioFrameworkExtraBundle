@@ -35,11 +35,12 @@ class DoctrineParamConverter implements ParamConverterInterface
 
     public function apply(Request $request, ConfigurationInterface $configuration)
     {
-        $class = $configuration->getClass();
+        $name    = $configuration->getName();
+        $class   = $configuration->getClass();
         $options = $this->getOptions($configuration);
 
         // find by identifier?
-        if (false === $object = $this->find($class, $request, $options)) {
+        if (false === $object = $this->find($class, $request, $options, $name)) {
             // find by criteria
             if (false === $object = $this->findOneBy($class, $request, $options)) {
                 if ($configuration->isOptional()) {
@@ -54,29 +55,49 @@ class DoctrineParamConverter implements ParamConverterInterface
             throw new NotFoundHttpException(sprintf('%s object not found.', $class));
         }
 
-        $request->attributes->set($configuration->getName(), $object);
+        $request->attributes->set($name, $object);
 
         return true;
     }
 
-    protected function find($class, Request $request, $options)
+    protected function find($class, Request $request, $options, $name)
     {
         if ($options['mapping'] || $options['exclude']) {
             return false;
         }
 
-        if (!is_array($options['id']) && $request->attributes->has($options['id'])) {
-            $id = $request->attributes->get($options['id']);
-        } elseif (is_array($options['id'])) {
-            $id = array();
-            foreach ($options['id'] as $field) {
-                $id[$field] = $request->attributes->get($field);
-            }
-        } else {
+        $id = $this->getIdentifier($request, $options, $name);
+
+        if (!$id) {
             return false;
         }
 
         return $this->registry->getRepository($class, $options['entity_manager'])->find($id);
+    }
+
+    protected function getIdentifier(Request $request, $options, $name)
+    {
+        if (isset($options['id'])) {
+            if (!is_array($options['id'])) {
+                $name = $options['id'];
+            } elseif (is_array($options['id'])) {
+                $id = array();
+                foreach ($options['id'] as $field) {
+                    $id[$field] = $request->attributes->get($field);
+                }
+                return $id;
+            }
+        }
+
+        if ($request->attributes->has($name)) {
+            return $request->attributes->get($name);
+        }
+
+        if ($request->attributes->has('id')) {
+            return $request->attributes->get('id');
+        }
+
+        return false;
     }
 
     protected function findOneBy($class, Request $request, $options)
@@ -134,7 +155,6 @@ class DoctrineParamConverter implements ParamConverterInterface
             'entity_manager' => null,
             'exclude'        => array(),
             'mapping'        => array(),
-            'id'             => 'id',
         ), $configuration->getOptions());
     }
 }

@@ -1,6 +1,15 @@
 UPGRADE FROM 2.0 to 2.1
 =======================
 
+### DoctrineParamConverter: Request Attributes with same name as Arguments
+
+Previously the DoctrineParamConverter defaulted to finding objects by 'id'
+parameter. This is unintuitive and is now overwritten by a behavior where
+the request attributes with the same name as entity arguments is matched
+with higher priority.
+
+This might cause problems if you are using this parameter for another object conversion.
+
 ### DoctrineParamConverter with multiple Arguments may clash
 
 In 2.0 the parameter converter matched only entity fields against route parameters.
