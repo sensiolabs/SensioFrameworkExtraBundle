@@ -5,7 +5,7 @@ namespace Sensio\Bundle\FrameworkExtraBundle\EventListener;
 use Doctrine\Common\Annotations\Reader;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
-use CG\Core\ClassUtils;
+use Doctrine\Common\Util\ClassUtils;
 
 /*
  * This file is part of the Symfony framework.
@@ -52,7 +52,7 @@ class ControllerListener
             return;
         }
 
-        $className = class_exists('CG\Core\ClassUtils') ? ClassUtils::getUserClass(get_class($controller[0])) : get_class($controller[0]);
+        $className = class_exists('Doctrine\Common\Util\ClassUtils') ? ClassUtils::getClass($controller[0]) : get_class($controller[0]);
         $object    = new \ReflectionClass($className);
         $method    = $object->getMethod($controller[1]);
 
