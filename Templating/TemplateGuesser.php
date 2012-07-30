@@ -5,8 +5,7 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Templating;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference;
-
-use CG\Core\ClassUtils;
+use Doctrine\Common\Util\ClassUtils;
 
 /*
  * This file is part of the Symfony framework.
@@ -51,12 +50,7 @@ class TemplateGuesser
      */
     public function guessTemplateName($controller, Request $request, $engine = 'twig')
     {
-        $className = get_class($controller[0]);
-
-        // When JMSSecurityExtraBundle is used it generates Controller classes as MyAccountController__CG__
-        if (class_exists('CG\\Core\\ClassUtils')) {
-            $className = ClassUtils::getUserClass($className);
-        }
+        $className = class_exists('Doctrine\Common\Util\ClassUtils') ? ClassUtils::getClass($controller[0]) : get_class($controller[0]);
 
         if (!preg_match('/Controller\\\(.+)Controller$/', $className, $matchController)) {
             throw new \InvalidArgumentException(sprintf('The "%s" class does not look like a controller class (it must be in a "Controller" sub-namespace and the class name must end with "Controller")', get_class($controller[0])));
