@@ -62,7 +62,11 @@ class ControllerListenerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertNotNull($this->getReadedCache());
         $this->assertEquals(FooControllerCacheAtClassAndMethod::CLASS_SMAXAGE, $this->getReadedCache()->getSMaxAge());
+    }
 
+    public function testMultipleAnnotationsOnMethod()
+    {
+        $controller = new FooControllerCacheAtClassAndMethod();
         $this->event = $this->getFilterControllerEvent(array($controller, 'bar3Action'), $this->request);
         $this->listener->onKernelController($this->event);
 
