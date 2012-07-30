@@ -5,6 +5,7 @@ namespace Sensio\Bundle\FrameworkExtraBundle\EventListener;
 use Doctrine\Common\Annotations\Reader;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
+use Doctrine\Common\Util\ClassUtils;
 
 /*
  * This file is part of the Symfony framework.
@@ -51,14 +52,33 @@ class ControllerListener
             return;
         }
 
-        $object = new \ReflectionObject($controller[0]);
-        $method = $object->getMethod($controller[1]);
+        $className = class_exists('Doctrine\Common\Util\ClassUtils') ? ClassUtils::getClass($controller[0]) : get_class($controller[0]);
+        $object    = new \ReflectionClass($className);
+        $method    = $object->getMethod($controller[1]);
+
+        $classConfigurations  = $this->getConfigurations($this->reader->getClassAnnotations($object));
+        $methodConfigurations = $this->getConfigurations($this->reader->getMethodAnnotations($method));
+
+        $configurations = array_merge($classConfigurations, $methodConfigurations);
 
         $request = $event->getRequest();
-        foreach (array_merge($this->reader->getClassAnnotations($object), $this->reader->getMethodAnnotations($method)) as $configuration) {
+        foreach ($configurations as $key => $attributes) {
+            if (is_array($attributes) && count($attributes) == 1) {
+                $attributes = $attributes[0];
+            }
+            $request->attributes->set($key, $attributes);
+        }
+    }
+
+    protected function getConfigurations(array $annotations)
+    {
+        $configurations = array();
+        foreach ($annotations as $configuration) {
             if ($configuration instanceof ConfigurationInterface) {
-                $request->attributes->set('_'.$configuration->getAliasName(), $configuration);
+                $configurations['_'.$configuration->getAliasName()][] = $configuration;
             }
         }
+
+        return $configurations;
     }
 }
