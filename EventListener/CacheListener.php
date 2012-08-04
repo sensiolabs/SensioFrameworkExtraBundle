@@ -15,8 +15,8 @@ use Symfony\Component\HttpFoundation\Response;
  */
 
 /**
- * The CacheListener class has the responsability to modify the
- * Response object when a controller uses the @Cache annotation.
+ * The CacheListener class has the responsibility to modify the
+ * Response object when a controller uses the "@Cache" annotation.
  *
  * @author     Fabien Potencier <fabien@symfony.com>
  */
