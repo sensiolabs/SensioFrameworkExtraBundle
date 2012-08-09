@@ -45,6 +45,10 @@ class SensioFrameworkExtraExtension extends Extension
         if ($config['view']['annotations']) {
             $annotationsToLoad[] = 'view.xml';
         }
+        
+        if ($config['json']['annotations']) {
+            $annotationsToLoad[] = 'json.xml';
+        }
 
         if ($config['cache']['annotations']) {
             $annotationsToLoad[] = 'cache.xml';
