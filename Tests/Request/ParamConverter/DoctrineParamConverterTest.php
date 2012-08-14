@@ -141,6 +141,73 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($object, $request->attributes->get('arg'));
     }
 
+    public function testApplyWithRepositoryMethod()
+    {
+        $request = new Request();
+        $request->attributes->set('id', 1);
+
+        $config = $this->createConfiguration(
+            'stdClass',
+            array('repository_method' => 'getClassName'),
+            'arg'
+        );
+
+        $objectRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+        $this->manager->expects($this->once())
+                      ->method('getRepository')
+                      ->will($this->returnValue($objectRepository));
+
+        $objectRepository->expects($this->once())
+                      ->method('getClassName')
+                      ->will($this->returnValue($className = 'ObjectRepository'));
+
+        $ret = $this->converter->apply($request, $config);
+
+        $this->assertTrue($ret);
+        $this->assertSame($className, $request->attributes->get('arg'));
+    }
+
+    public function testApplyWithRepositoryMethodAndMapping()
+    {
+        $request = new Request();
+        $request->attributes->set('id', 1);
+
+        $config = $this->createConfiguration(
+            'stdClass',
+            array('repository_method' => 'getClassName', 'mapping' => array('foo' => 'Foo')),
+            'arg'
+        );
+
+        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $metadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+
+        $this->manager->expects($this->once())
+                      ->method('getManager')
+                      ->will($this->returnValue($objectManager));
+        $objectManager->expects($this->once())
+                      ->method('getClassMetadata')
+                      ->will($this->returnValue($metadata));
+
+        $metadata->expects($this->once())
+                 ->method('hasField')
+                 ->with($this->equalTo('Foo'))
+                 ->will($this->returnValue(true));
+
+        $objectRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+        $this->manager->expects($this->once())
+                      ->method('getRepository')
+                      ->will($this->returnValue($objectRepository));
+
+        $objectRepository->expects($this->once())
+                      ->method('getClassName')
+                      ->will($this->returnValue($className = 'ObjectRepository'));
+
+        $ret = $this->converter->apply($request, $config);
+
+        $this->assertTrue($ret);
+        $this->assertSame($className, $request->attributes->get('arg'));
+    }
+
     public function testSupports()
     {
         $config = $this->createConfiguration('stdClass', array());
