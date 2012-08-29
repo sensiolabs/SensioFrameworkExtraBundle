@@ -148,7 +148,7 @@ instance::
     /**
      * @Route("/blog/archive/{start}/{end}")
      */
-    public function archiveAction(DateTime $start, DateTime $end)
+    public function archiveAction(\DateTime $start, \DateTime $end)
     {
     }
 
@@ -160,7 +160,7 @@ is accepted. You can be stricter with input given through the options::
      * @ParamConverter("start", options={"format": "Y-m-d"})
      * @ParamConverter("end", options={"format": "Y-m-d"})
      */
-    public function archiveAction(DateTime $start, DateTime $end)
+    public function archiveAction(\DateTime $start, \DateTime $end)
     {
     }
 
