@@ -11,7 +11,7 @@
         }
     ],
     "require": {
-        "symfony/framework-bundle": "2.1.*",
+        "symfony/framework-bundle": "2.2.*",
         "doctrine/common": ">=2.1,<2.4-dev"
     },
     "autoload": {
@@ -20,7 +20,7 @@
     "target-dir": "Sensio/Bundle/FrameworkExtraBundle",
     "extra": {
         "branch-alias": {
-            "dev-master": "2.1.x-dev"
+            "dev-master": "2.2.x-dev"
         }
     },
     "minimum-stability": "dev"
