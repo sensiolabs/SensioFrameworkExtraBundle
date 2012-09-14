@@ -10,7 +10,7 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
     /**
      * @var Doctrine\Common\Persistence\ManagerRegistry
      */
-    private $manager;
+    private $registry;
 
     /**
      * @var DoctrineParamConverter
@@ -23,8 +23,8 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped();
         }
 
-        $this->manager = $this->getMock('Doctrine\Common\Persistence\ManagerRegistry');
-        $this->converter = new DoctrineParamConverter($this->manager);
+        $this->registry = $this->getMock('Doctrine\Common\Persistence\ManagerRegistry');
+        $this->converter = new DoctrineParamConverter($this->registry);
     }
 
     public function createConfiguration($class = null, array $options = null, $name = 'arg', $isOptional = false)
@@ -82,10 +82,17 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
 
         $config = $this->createConfiguration('stdClass', array('id' => 'id'), 'arg');
 
+        $manager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
         $objectRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
-        $this->manager->expects($this->once())
-                      ->method('getRepository')
-                      ->will($this->returnValue($objectRepository));
+        $this->registry->expects($this->once())
+              ->method('getManagerForClass')
+              ->with('stdClass')
+              ->will($this->returnValue($manager));
+
+        $manager->expects($this->once())
+            ->method('getRepository')
+            ->with('stdClass')
+            ->will($this->returnValue($objectRepository));
 
         $objectRepository->expects($this->once())
                       ->method('find')
@@ -110,27 +117,30 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
             'arg'
         );
 
-        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $manager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
         $metadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+        $repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
 
-        $this->manager->expects($this->once())
-                      ->method('getManager')
-                      ->will($this->returnValue($objectManager));
-        $objectManager->expects($this->once())
-                      ->method('getClassMetadata')
-                      ->will($this->returnValue($metadata));
+        $this->registry->expects($this->once())
+                ->method('getManagerForClass')
+                ->with('stdClass')
+                ->will($this->returnValue($manager));
+
+        $manager->expects($this->once())
+                ->method('getClassMetadata')
+                ->with('stdClass')
+                ->will($this->returnValue($metadata));
+        $manager->expects($this->once())
+                ->method('getRepository')
+                ->with('stdClass')
+                ->will($this->returnValue($repository));
 
         $metadata->expects($this->once())
                  ->method('hasField')
                  ->with($this->equalTo('Foo'))
                  ->will($this->returnValue(true));
 
-        $objectRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
-        $this->manager->expects($this->once())
-                      ->method('getRepository')
-                      ->will($this->returnValue($objectRepository));
-
-        $objectRepository->expects($this->once())
+        $repository->expects($this->once())
                       ->method('findOneBy')
                       ->with($this->equalTo(array('Foo' => 1)))
                       ->will($this->returnValue($object =new \stdClass));
@@ -155,12 +165,41 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
                       ->method('getMetadataFactory')
                       ->will($this->returnValue($metadataFactory));
 
-        $this->manager->expects($this->once())
+        $this->registry->expects($this->once())
                     ->method('getManagers')
                     ->will($this->returnValue(array($objectManager)));
 
-        $this->manager->expects($this->once())
+        $this->registry->expects($this->once())
+                      ->method('getManagerForClass')
+                      ->with('stdClass')
+                      ->will($this->returnValue($objectManager));
+
+        $ret = $this->converter->supports($config);
+
+        $this->assertTrue($ret, "Should be supported");
+    }
+
+    public function testSupportsWithConfiguredEntityManager()
+    {
+        $config = $this->createConfiguration('stdClass', array('entity_manager' => 'foo'));
+        $metadataFactory = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadataFactory');
+        $metadataFactory->expects($this->once())
+                        ->method('isTransient')
+                        ->with($this->equalTo('stdClass'))
+                        ->will($this->returnValue( false ));
+
+        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager->expects($this->once())
+                      ->method('getMetadataFactory')
+                      ->will($this->returnValue($metadataFactory));
+
+        $this->registry->expects($this->once())
+                    ->method('getManagers')
+                    ->will($this->returnValue(array($objectManager)));
+
+        $this->registry->expects($this->once())
                       ->method('getManager')
+                      ->with('foo')
                       ->will($this->returnValue($objectManager));
 
         $ret = $this->converter->supports($config);
