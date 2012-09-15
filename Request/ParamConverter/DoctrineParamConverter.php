@@ -72,7 +72,7 @@ class DoctrineParamConverter implements ParamConverterInterface
             return false;
         }
 
-        return $this->registry->getRepository($class, $options['entity_manager'])->find($id);
+        return $this->getManager($options['entity_manager'], $class)->getRepository($class)->find($id);
     }
 
     protected function getIdentifier(Request $request, $options, $name)
@@ -116,7 +116,8 @@ class DoctrineParamConverter implements ParamConverterInterface
         }
 
         $criteria = array();
-        $metadata = $this->registry->getManager($options['entity_manager'])->getClassMetadata($class);
+        $em = $this->getManager($options['entity_manager'], $class);
+        $metadata = $em->getClassMetadata($class);
 
         foreach ($options['mapping'] as $attribute => $field) {
             if ($metadata->hasField($field) || ($metadata->hasAssociation($field) && $metadata->isSingleValuedAssociation($field))) {
@@ -128,7 +129,7 @@ class DoctrineParamConverter implements ParamConverterInterface
             return false;
         }
 
-        return $this->registry->getRepository($class, $options['entity_manager'])->findOneBy($criteria);
+        return $em->getRepository($class)->findOneBy($criteria);
     }
 
     public function supports(ConfigurationInterface $configuration)
@@ -145,7 +146,7 @@ class DoctrineParamConverter implements ParamConverterInterface
         $options = $this->getOptions($configuration);
 
         // Doctrine Entity?
-        return ! $this->registry->getManager($options['entity_manager'])
+        return ! $this->getManager($options['entity_manager'], $configuration->getClass())
                                 ->getMetadataFactory()
                                 ->isTransient($configuration->getClass());
     }
@@ -157,5 +158,14 @@ class DoctrineParamConverter implements ParamConverterInterface
             'exclude'        => array(),
             'mapping'        => array(),
         ), $configuration->getOptions());
+    }
+
+    private function getManager($name, $class)
+    {
+        if (null === $name) {
+            return $this->registry->getManagerForClass($class);
+        }
+
+        return $this->registry->getManager($name);
     }
 }
