@@ -62,7 +62,11 @@ class TemplateGuesser
 
         $bundle = $this->getBundleForClass($className);
 
-        return new TemplateReference($bundle->getName(), $matchController[1], $matchAction[1], $request->getRequestFormat(), $engine);
+        if (null === $bundleName = $bundle->getParent()) {
+            $bundleName = $bundle->getName();
+        }
+
+        return new TemplateReference($bundleName, $matchController[1], $matchAction[1], $request->getRequestFormat(), $engine);
     }
 
     /**
