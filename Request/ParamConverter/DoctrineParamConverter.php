@@ -151,7 +151,7 @@ class DoctrineParamConverter implements ParamConverterInterface
             return false;
         }
         
-        return $em->getMetadataFactory()->isTransient($configuration->getClass());
+        return ! $em->getMetadataFactory()->isTransient($configuration->getClass());
     }
 
     protected function getOptions(ConfigurationInterface $configuration)
