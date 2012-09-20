@@ -61,12 +61,14 @@ class TemplateGuesser
         }
 
         $bundle = $this->getBundleForClass($className);
-
-        if (null === $bundleName = $bundle->getParent()) {
-            $bundleName = $bundle->getName();
+        $parentBundleName = $bundle->getName();
+        while (null !== $bundleName = $bundle->getParent()) {
+            $parentBundleName = $bundleName;
+            $bundles = $this->kernel->getBundle($bundleName, false);
+            $bundle = array_pop($bundles);
         }
 
-        return new TemplateReference($bundleName, $matchController[1], $matchAction[1], $request->getRequestFormat(), $engine);
+        return new TemplateReference($parentBundleName, $matchController[1], $matchAction[1], $request->getRequestFormat(), $engine);
     }
 
     /**
