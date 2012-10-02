@@ -5,7 +5,7 @@ namespace Sensio\Bundle\FrameworkExtraBundle\EventListener;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /*
  * This file is part of the Symfony framework.
@@ -49,11 +49,7 @@ class JsonListener
         $data = $event->getControllerResult();
 
         if ($configuration = $request->attributes->get('_json')) {
-            $charset = $this->container->get('kernel')->getCharset();
-            $response = new Response;
-            $response->headers->set('Content-type', 'application/json; charset=' . $charset);
-            $response->setContent(json_encode($data));
-            $event->setResponse($response);
+            $event->setResponse(new JsonResponse($data));
         }
     }
 }
