@@ -72,7 +72,13 @@ class DoctrineParamConverter implements ParamConverterInterface
             return false;
         }
 
-        return $this->registry->getRepository($class, $options['entity_manager'])->find($id);
+        if (isset($options['repository_method'])) {
+            $method = $options['repository_method'];
+        } else {
+            $method = 'find';
+        }
+
+        return $this->registry->getRepository($class, $options['entity_manager'])->$method($id);
     }
 
     protected function getIdentifier(Request $request, $options, $name)
@@ -128,7 +134,13 @@ class DoctrineParamConverter implements ParamConverterInterface
             return false;
         }
 
-        return $this->registry->getRepository($class, $options['entity_manager'])->findOneBy($criteria);
+        if (isset($options['repository_method'])) {
+            $method = $options['repository_method'];
+        } else {
+            $method = 'findOneBy';
+        }
+
+        return $this->registry->getRepository($class, $options['entity_manager'])->$method($criteria);
     }
 
     public function supports(ConfigurationInterface $configuration)
