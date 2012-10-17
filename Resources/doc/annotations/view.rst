@@ -40,7 +40,7 @@ case for the above example, you can even omit the annotation value::
         return array('post' => $post);
     }
 
-..note::
+.. note::
 
     If you are using PHP as a templating system, you need to make it
     explicit::
