@@ -7,6 +7,7 @@ use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 /*
  * This file is part of the Symfony framework.
@@ -110,6 +111,10 @@ class TemplateListener
 
         if (!$template = $request->attributes->get('_template')) {
             return $parameters;
+        }
+
+        if ($request->getRequestType() === HttpKernelInterface::SUB_REQUEST && !empty($parameters['embeddedTemplate'])) {
+            $template = $template->set('name', $parameters['embeddedTemplate'];
         }
 
         if (!$request->attributes->get('_template_streamable')) {
