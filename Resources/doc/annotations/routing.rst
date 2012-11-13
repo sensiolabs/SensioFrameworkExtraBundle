@@ -32,9 +32,19 @@ Like any route pattern, you can define placeholders, requirements, and default
 values::
 
     /**
-     * @Route("/{id}", requirements={"id" = "\d+"}, defaults={"foo" = "bar"})
+     * @Route("/{id}", requirements={"id" = "\d+"}, defaults={"id" = 1})
      */
     public function showAction($id)
+    {
+    }
+
+You can also define the default value for a placeholder with
+the PHP default value::
+
+    /**
+     * @Route("/{id}", requirements={"id" = "\d+"})
+     */
+    public function showAction($id = 1)
     {
     }
 
