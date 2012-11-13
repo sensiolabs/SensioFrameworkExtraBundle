@@ -38,6 +38,16 @@ values::
     {
     }
 
+You can also define the default value for a placeholder with
+the PHP default value::
+
+    /**
+     * @Route("/{id}", requirements={"id" = "\d+"})
+     */
+    public function showAction($id = 1)
+    {
+    }
+
 You can also match more than one URL by defining additional ``@Route``
 annotations::
 
