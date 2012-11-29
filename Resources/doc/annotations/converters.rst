@@ -119,8 +119,8 @@ If you want to match an entity using multiple fields use ``mapping``::
 
     /**
      * @Route("/blog/{date}/{slug}/comments/{comment_slug}")
-     * @ParamConverter("post", options={"mapping": {"date": "date", "slug": "slug"})
-     * @ParamConverter("comment", options={"mapping": {"comment_slug": "slug"})
+     * @ParamConverter("post", options={"mapping": {"date": "date", "slug": "slug"}})
+     * @ParamConverter("comment", options={"mapping": {"comment_slug": "slug"}})
      */
     public function showAction(Post $post, Comment $comment)
     {
