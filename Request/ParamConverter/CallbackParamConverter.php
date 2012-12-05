@@ -109,6 +109,7 @@ class CallbackParamConverter implements ParamConverterInterface
         }
 
         $request->attributes->set($configuration->getName(), $object);
+        return true;
     }
 
     public function supports(ConfigurationInterface $configuration)
