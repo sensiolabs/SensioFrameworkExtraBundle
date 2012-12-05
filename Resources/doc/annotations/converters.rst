@@ -164,6 +164,30 @@ is accepted. You can be stricter with input given through the options::
     {
     }
 
+Callback Converter
+~~~~~~~~~~~~~~~~~~
+
+The callback converter can be used with a provider or factory service to convert
+a parameter to an object via a callback::
+
+    use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+    use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+    use Full\Name\For\Class\Post
+
+    /**
+     * @Route("/blog/{id}")
+     * @ParamConverter("post")
+     */
+    public function showAction(Post $post)
+    {
+    }
+
+To register a callback service with the converter::
+
+    <service id="post.provider" ...>
+        <tag name="request.param_converter.callback" class="Full\Name\For\Class\Post" method="getPost"/>
+    </service>
+
 Creating a Converter
 --------------------
 

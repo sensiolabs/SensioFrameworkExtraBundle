@@ -9,6 +9,7 @@
         <parameter key="sensio_framework_extra.converter.manager.class">Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager</parameter>
         <parameter key="sensio_framework_extra.converter.doctrine.class">Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter</parameter>
         <parameter key="sensio_framework_extra.converter.datetime.class">Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DateTimeParamConverter</parameter>
+        <parameter key="sensio_framework_extra.converter.callback.class">Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\CallbackParamConverter</parameter>
     </parameters>
 
     <services>
@@ -26,6 +27,11 @@
 
         <service id="sensio_framework_extra.converter.datetime" class="%sensio_framework_extra.converter.datetime.class%">
             <tag name="request.param_converter" converter="datetime" />
+        </service>
+
+        <service id="sensio_framework_extra.converter.callback" class="%sensio_framework_extra.converter.callback.class%">
+            <tag name="request.param_converter" converter="callback"/>
+            <argument type="service" id="service_container" on-invalid="ignore" />
         </service>
     </services>
 </container>
