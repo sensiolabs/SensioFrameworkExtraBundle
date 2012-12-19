@@ -170,8 +170,18 @@ annotations::
     {
     }
 
-The routes need to be imported to be active as any other routing resources,
-see :ref:`Annotated Routes Activation<frameworkextra-annotations-routing-activation>` for
-details.
+The routes need to be imported to be active as any other routing resources, for
+example:
+
+.. code-block:: yaml
+
+    # app/config/routing.yml
+
+    # import routes from a controller directory
+    annot:
+        resource: "@AnnotRoutingBundle/Controller"
+        type:     annotation
+
+see :ref:`Annotated Routes Activation<frameworkextra-annotations-routing-activation>` for more details.
 
 .. _`SensioFrameworkExtraBundle`: https://github.com/sensiolabs/SensioFrameworkExtraBundle
