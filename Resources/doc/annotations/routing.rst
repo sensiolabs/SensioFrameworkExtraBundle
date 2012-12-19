@@ -49,6 +49,8 @@ annotations::
     {
     }
 
+.. _annotated-routes-activation:
+
 Activation
 ----------
 
