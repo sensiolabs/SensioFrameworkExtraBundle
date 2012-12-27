@@ -68,7 +68,7 @@ class DoctrineParamConverter implements ParamConverterInterface
 
         $id = $this->getIdentifier($request, $options, $name);
 
-        if (!$id) {
+        if (false === $id) {
             return false;
         }
 
