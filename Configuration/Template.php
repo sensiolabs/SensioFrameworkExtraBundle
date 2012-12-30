@@ -33,7 +33,7 @@ class Template extends ConfigurationAnnotation
      *
      * @var string
      */
-    protected $engine = 'twig';
+    protected $engine;
 
     /**
      * The associative array of template variables.

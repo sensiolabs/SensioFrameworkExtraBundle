@@ -53,6 +53,8 @@ case for the above example, you can even omit the annotation value::
             // ...
         }
 
+    This will override the default templating engine set in the configuration.
+
 And if the only parameters to pass to the template are method arguments, you
 can use the ``vars`` attribute instead of returning an array. This is very
 useful in combination with the ``@ParamConverter`` :doc:`annotation
