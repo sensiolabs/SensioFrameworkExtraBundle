@@ -1,4 +1,5 @@
 <?php
+
 namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationAnnotation;
 
@@ -24,5 +25,3 @@ class AJAX extends ConfigurationAnnotation
         return 'ajax';
     }
 }
-
-?>
