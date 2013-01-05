@@ -4,7 +4,7 @@
 Usage
 -----
 
-The ``@Ajax`` annotation defines an action as "AJAX only"::
+The ``@AJAX`` annotation defines an action as "AJAX only"::
 
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\AJAX;
 
