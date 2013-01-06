@@ -36,7 +36,7 @@ class AjaxListener
         $request = $event->getRequest();
 
         if ($request->attributes->get('_ajax')) {
-            if(false === $request->isXmlHttpRequest()) {
+            if (false === $request->isXmlHttpRequest()) {
                 throw new HttpException(403,'This action only responds to AJAX Requests.');
             }
         }    
