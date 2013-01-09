@@ -31,7 +31,7 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
     {
         $config = $this->getMock(
             'Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface', array(
-            'getClass', 'getAliasName', 'getOptions', 'isOptional', 'getName',
+            'getClass', 'getAliasName', 'getOptions', 'isOptional', 'getName', 'allowArray'
         ));
         if ($options !== null) {
             $config->expects($this->once())
