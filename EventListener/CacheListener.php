@@ -35,7 +35,8 @@ class CacheListener
 
         $response = $event->getResponse();
 
-        if (!$response->isSuccessful()) {
+        // http://tools.ietf.org/html/draft-ietf-httpbis-p4-conditional-12#section-3.1
+        if (!$response->isSuccessful() && 304 != $response->getStatusCode()) {
             return;
         }
 
