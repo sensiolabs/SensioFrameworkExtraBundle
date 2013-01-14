@@ -78,7 +78,7 @@ class DoctrineParamConverter implements ParamConverterInterface
             $method = 'find';
         }
 
-        return $this->getManager($options['entity_manager'], $class)->getRepository($class)->find($id);
+        return $this->getManager($options['entity_manager'], $class)->getRepository($class)->$method($id);
     }
 
     protected function getIdentifier(Request $request, $options, $name)
@@ -141,7 +141,7 @@ class DoctrineParamConverter implements ParamConverterInterface
             $method = 'findOneBy';
         }
 
-        return $em->getRepository($class)->findOneBy($criteria);
+        return $em->getRepository($class)->$method($criteria);
     }
 
     public function supports(ConfigurationInterface $configuration)
