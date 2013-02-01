@@ -29,6 +29,13 @@ class Template extends ConfigurationAnnotation
     protected $template;
 
     /**
+     * The template used on non-master requests
+     *
+     * @var TemplateReference
+     */
+    protected $embeddedTemplate;
+
+    /**
      * The template engine used when a specific template isnt specified
      *
      * @var string
@@ -133,6 +140,22 @@ class Template extends ConfigurationAnnotation
     public function setTemplate($template)
     {
         $this->template = $template;
+    }
+
+    /**
+     * @param TemplateReference|string $template
+     */
+    public function setEmbeddedTemplate($template)
+    {
+        $this->embeddedTemplate = $template;
+    }
+
+    /**
+     * @return TemplateReference
+     */
+    public function getEmbeddedTemplate()
+    {
+        return $this->embeddedTemplate;
     }
 
     /**
