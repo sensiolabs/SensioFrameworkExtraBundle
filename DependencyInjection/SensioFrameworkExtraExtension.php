@@ -32,6 +32,8 @@ class SensioFrameworkExtraExtension extends Extension
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
 
+        $container->setParameter('sensio_framework_extra.view.engine', $config['view']['engine']);
+
         $annotationsToLoad = array();
 
         if ($config['router']['annotations']) {

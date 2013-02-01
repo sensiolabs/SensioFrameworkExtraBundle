@@ -58,6 +58,10 @@ class TemplateListener
         }
 
         if (!$configuration->getTemplate()) {
+            if (null === $configuration->getEngine()) {
+                $configuration->setEngine($this->container->getParameter('sensio_framework_extra.view.engine'));
+            }
+
             $guesser = $this->container->get('sensio_framework_extra.view.guesser');
             $configuration->setTemplate($guesser->guessTemplateName($controller, $request, $configuration->getEngine()));
         }

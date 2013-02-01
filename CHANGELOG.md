@@ -6,6 +6,8 @@ CHANGELOG
 
  * added the possibility to configure the repository method to use for the
    Doctrine converter via the repository_method option.
+ * [BC break] Added the possibility to configure the default templating engine
+   in a configuration file.
 
 2.1
 ---

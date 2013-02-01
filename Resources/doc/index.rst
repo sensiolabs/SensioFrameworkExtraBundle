@@ -37,7 +37,7 @@ The default configuration is as follow:
         sensio_framework_extra:
             router:  { annotations: true }
             request: { converters: true }
-            view:    { annotations: true }
+            view:    { annotations: true, engine: twig }
             cache:   { annotations: true }
 
     .. code-block:: xml
@@ -46,7 +46,7 @@ The default configuration is as follow:
         <sensio-framework-extra:config>
             <router annotations="true" />
             <request converters="true" />
-            <view annotations="true" />
+            <view annotations="true" engine="php" />
             <cache annotations="true" />
         </sensio-framework-extra:config>
 
@@ -56,12 +56,15 @@ The default configuration is as follow:
         $container->loadFromExtension('sensio_framework_extra', array(
             'router'  => array('annotations' => true),
             'request' => array('converters' => true),
-            'view'    => array('annotations' => true),
+            'view'    => array('annotations' => true, 'engine' => 'twig'),
             'cache'   => array('annotations' => true),
         ));
 
 You can disable some annotations and conventions by defining one or more
 settings to false.
+
+You can set the defult templating engine in the engine option. This will
+default to ``twig``.
 
 Annotations for Controllers
 ---------------------------
