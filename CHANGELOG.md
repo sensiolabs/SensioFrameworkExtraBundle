@@ -6,6 +6,8 @@ CHANGELOG
 
  * added the possibility to configure the repository method to use for the
    Doctrine converter via the repository_method option.
+ * [BC break] When defining multiple @Cache, @Method or @Template annotations on
+   a controller class or method, the latter now overrules the former
 
 2.1
 ---

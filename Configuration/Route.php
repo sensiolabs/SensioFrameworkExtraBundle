@@ -30,4 +30,15 @@ class Route extends BaseRoute
     {
         return $this->service;
     }
+
+    /**
+     * Multiple route annotations are allowed
+     *
+     * @return Boolean
+     * @see ConfigurationInterface
+     */
+    public function allowArray()
+    {
+        return true;
+    }
 }
