@@ -60,7 +60,7 @@ class ControllerListener
         $methodConfigurations = $this->getConfigurations($this->reader->getMethodAnnotations($method));
 
         $configurations = array();
-        foreach(array_merge(array_keys($classConfigurations), array_keys($methodConfigurations)) as $key) {
+        foreach (array_merge(array_keys($classConfigurations), array_keys($methodConfigurations)) as $key) {
             if (!array_key_exists($key, $classConfigurations)) {
                 $configurations[$key] = $methodConfigurations[$key];
             } elseif (!array_key_exists($key, $methodConfigurations)) {

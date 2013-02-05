@@ -42,10 +42,10 @@ class TemplateGuesser
      * Guesses and returns the template name to render based on the controller
      * and action names.
      *
-     * @param array   $controller An array storing the controller object and action method
-     * @param Request $request    A Request instance
-     * @param string  $engine
-     * @return TemplateReference template reference
+     * @param  array                     $controller An array storing the controller object and action method
+     * @param  Request                   $request    A Request instance
+     * @param  string                    $engine
+     * @return TemplateReference         template reference
      * @throws \InvalidArgumentException
      */
     public function guessTemplateName($controller, Request $request, $engine = 'twig')
@@ -77,8 +77,8 @@ class TemplateGuesser
     /**
      * Returns the Bundle instance in which the given class name is located.
      *
-     * @param string $class  A fully qualified controller class name
-     * @param Bundle $bundle A Bundle instance
+     * @param  string                    $class  A fully qualified controller class name
+     * @param  Bundle                    $bundle A Bundle instance
      * @throws \InvalidArgumentException
      */
     protected function getBundleForClass($class)

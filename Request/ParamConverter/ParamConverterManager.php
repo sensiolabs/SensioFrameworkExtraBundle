@@ -52,7 +52,7 @@ class ParamConverterManager
     /**
      * Apply converter on request based on the given configuration.
      *
-     * @param Request $request
+     * @param Request                $request
      * @param ConfigurationInterface $configuration
      */
     protected function applyConverter(Request $request, $configuration)
@@ -84,6 +84,7 @@ class ParamConverterManager
             }
 
             $converter->apply($request, $configuration);
+
             return;
         }
 

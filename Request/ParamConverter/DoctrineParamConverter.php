@@ -91,6 +91,7 @@ class DoctrineParamConverter implements ParamConverterInterface
                 foreach ($options['id'] as $field) {
                     $id[$field] = $request->attributes->get($field);
                 }
+
                 return $id;
             }
         }
@@ -162,7 +163,7 @@ class DoctrineParamConverter implements ParamConverterInterface
         if (null === $em) {
             return false;
         }
-        
+
         return ! $em->getMetadataFactory()->isTransient($configuration->getClass());
     }
 

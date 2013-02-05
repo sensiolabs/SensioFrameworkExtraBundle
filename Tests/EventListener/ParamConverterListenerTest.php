@@ -31,4 +31,3 @@ class TestController
 {
     public function execute(Request $request) {}
 }
-

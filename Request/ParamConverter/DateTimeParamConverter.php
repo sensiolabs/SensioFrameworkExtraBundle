@@ -56,4 +56,3 @@ class DateTimeParamConverter implements ParamConverterInterface
         return "DateTime" === $configuration->getClass();
     }
 }
-

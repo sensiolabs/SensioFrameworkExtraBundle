@@ -40,7 +40,6 @@ class TemplateGuesserTest extends \PHPUnit_Framework_TestCase
             'indexAction',
         ), new Request());
 
-
         $this->assertEquals('FooBundle:Foo:index.html.twig', (string) $templateReference);;
     }
 

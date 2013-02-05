@@ -55,8 +55,8 @@ class AnnotatedRouteControllerLoader extends AnnotationClassLoader
     /**
      * Makes the default route name more sane by removing common keywords.
      *
-     * @param ReflectionClass  $class  A ReflectionClass instance
-     * @param ReflectionMethod $method A ReflectionMethod instance
+     * @param  ReflectionClass  $class  A ReflectionClass instance
+     * @param  ReflectionMethod $method A ReflectionMethod instance
      * @return string
      */
     protected function getDefaultRouteName(\ReflectionClass $class, \ReflectionMethod $method)
