@@ -163,9 +163,14 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
         );
 
         $objectRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
-        $this->manager->expects($this->once())
-                      ->method('getRepository')
-                      ->will($this->returnValue($objectRepository));
+        $manager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $manager->expects($this->once())
+            ->method('getRepository')
+            ->with('stdClass')
+            ->will($this->returnValue($objectRepository));
+        $this->registry->expects($this->once())
+                      ->method('getManagerForClass')
+                      ->will($this->returnValue($manager));
 
         $objectRepository->expects($this->once())
                       ->method('getClassName')
@@ -189,24 +194,30 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
         );
 
         $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
         $metadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
 
-        $this->manager->expects($this->once())
-                      ->method('getManager')
-                      ->will($this->returnValue($objectManager));
         $objectManager->expects($this->once())
-                      ->method('getClassMetadata')
-                      ->will($this->returnValue($metadata));
+            ->method('getRepository')
+            ->with('stdClass')
+            ->will($this->returnValue($objectRepository));
+
+        $this->registry->expects($this->once())
+                    ->method('getManagerForClass')
+                    ->will($this->returnValue($objectManager));
 
         $metadata->expects($this->once())
                  ->method('hasField')
                  ->with($this->equalTo('Foo'))
                  ->will($this->returnValue(true));
 
-        $objectRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
-        $this->manager->expects($this->once())
-                      ->method('getRepository')
-                      ->will($this->returnValue($objectRepository));
+        $objectManager->expects($this->once())
+                      ->method('getClassMetadata')
+                      ->will($this->returnValue($metadata));
+        $objectManager->expects($this->once())
+            ->method('getRepository')
+            ->with('stdClass')
+            ->will($this->returnValue($objectRepository));
 
         $objectRepository->expects($this->once())
                       ->method('getClassName')
