@@ -7,6 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\EventListener\ControllerListener;
 use Sensio\Bundle\FrameworkExtraBundle\Tests\EventListener\Fixture\FooControllerCacheAtClass;
 use Sensio\Bundle\FrameworkExtraBundle\Tests\EventListener\Fixture\FooControllerCacheAtClassAndMethod;
 use Sensio\Bundle\FrameworkExtraBundle\Tests\EventListener\Fixture\FooControllerCacheAtMethod;
+use Sensio\Bundle\FrameworkExtraBundle\Tests\EventListener\Fixture\FooControllerParamConverterAtClassAndMethod;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Symfony\Component\HttpFoundation\Request;
@@ -70,15 +71,28 @@ class ControllerListenerTest extends \PHPUnit_Framework_TestCase
         $this->event = $this->getFilterControllerEvent(array($controller, 'bar3Action'), $this->request);
         $this->listener->onKernelController($this->event);
 
-        $annotations = $this->getReadedCache();
+        $annotation = $this->getReadedCache();
+        $this->assertNotNull($annotation);
+        $this->assertInstanceOf('Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache', $annotation);
+        $this->assertEquals(FooControllerCacheAtClassAndMethod::METHOD_SMAXAGE, $annotation->getSMaxAge());
+    }
+
+    public function testMultipleParamConverterAnnotationsOnMethod()
+    {
+        $paramConverter = new \Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter(array());
+        $controller = new FooControllerParamConverterAtClassAndMethod();
+        $this->event = $this->getFilterControllerEvent(array($controller, 'barAction'), $this->request);
+        $this->listener->onKernelController($this->event);
+
+        $annotations = $this->request->attributes->get('_converters');
         $this->assertNotNull($annotations);
         $this->assertArrayHasKey(0, $annotations);
-        $this->assertInstanceOf('Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache', $annotations[0]);
-        $this->assertEquals(FooControllerCacheAtClassAndMethod::METHOD_SMAXAGE, $annotations[0]->getSMaxAge());
+        $this->assertInstanceOf('Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter', $annotations[0]);
+        $this->assertEquals('test', $annotations[0]->getName());
 
         $this->assertArrayHasKey(1, $annotations);
-        $this->assertInstanceOf('Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache', $annotations[1]);
-        $this->assertEquals(FooControllerCacheAtClassAndMethod::METHOD_SECOND_SMAXAGE, $annotations[1]->getSMaxAge());
+        $this->assertInstanceOf('Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter', $annotations[1]);
+        $this->assertEquals('test2', $annotations[1]->getName());
 
         $this->assertEquals(2, count($annotations));
     }
