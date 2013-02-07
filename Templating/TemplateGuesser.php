@@ -59,16 +59,18 @@ class TemplateGuesser
             throw new \InvalidArgumentException(sprintf('The "%s" method does not look like an action method (it does not end with Action)', $controller[1]));
         }
 
-        $bundle = $this->getBundleForClass($className);
-        while ($bundleName = $bundle->getName()) {
-            if (null === $parentBundleName = $bundle->getParent()) {
-                $bundleName = $bundle->getName();
+        $bundleName = null;
+        if ($bundle = $this->getBundleForClass($className)) {
+            while ($bundleName = $bundle->getName()) {
+                if (null === $parentBundleName = $bundle->getParent()) {
+                    $bundleName = $bundle->getName();
 
-                break;
+                    break;
+                }
+
+                $bundles = $this->kernel->getBundle($parentBundleName, false);
+                $bundle = array_pop($bundles);
             }
-
-            $bundles = $this->kernel->getBundle($parentBundleName, false);
-            $bundle = array_pop($bundles);
         }
 
         return new TemplateReference($bundleName, $matchController[1], $matchAction[1], $request->getRequestFormat(), $engine);
@@ -77,9 +79,8 @@ class TemplateGuesser
     /**
      * Returns the Bundle instance in which the given class name is located.
      *
-     * @param  string                    $class  A fully qualified controller class name
-     * @param  Bundle                    $bundle A Bundle instance
-     * @throws \InvalidArgumentException
+     * @param string $class  A fully qualified controller class name
+     * @param Bundle $bundle A Bundle instance
      */
     protected function getBundleForClass($class)
     {
@@ -96,6 +97,6 @@ class TemplateGuesser
             $reflectionClass = $reflectionClass->getParentClass();
         } while ($reflectionClass);
 
-        throw new \InvalidArgumentException(sprintf('The "%s" class does not belong to a registered bundle.', $class));
+        return null;
     }
 }
