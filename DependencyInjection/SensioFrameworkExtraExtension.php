@@ -57,6 +57,20 @@ class SensioFrameworkExtraExtension extends Extension
                 $loader->load($config);
             }
         }
+
+        $this->addClassesToCompile(array(
+            'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\ConfigurationAnnotation',
+            'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\ConfigurationInterface',
+            'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\ParamConverter',
+            'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\CacheListener',
+            'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\ControllerListener',
+            'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\ParamConverterListener',
+            'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\TemplateListener',
+            'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\DateTimeParamConverter',
+            'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\DoctrineParamConverter',
+            'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\ParamConverterInterface',
+            'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\ParamConverterManager',
+        ));
     }
 
     /**
