@@ -137,6 +137,17 @@ route parameter from being part of the criteria::
     {
     }
 
+If you want to specify the repository method to use to find the entity (for example,
+to add joins to the query), you can add the ``repository_method`` option::
+
+    /**
+     * @Route("/blog/{id}")
+     * @ParamConverter("post", class="SensioBlogBundle:Post", options={"repository_method" = "findWithJoins"})
+     */
+    public function showAction(Post $post)
+    {
+    }
+
 DateTime Converter
 ~~~~~~~~~~~~~~~~~~
 
