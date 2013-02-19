@@ -75,10 +75,13 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($request->attributes->get('arg'));
     }
 
-    public function testApplyWithId()
+    /**
+     * @dataProvider idsProvider
+     */
+    public function testApplyWithId($id)
     {
         $request = new Request();
-        $request->attributes->set('id', 1);
+        $request->attributes->set('id', $id);
 
         $config = $this->createConfiguration('stdClass', array('id' => 'id'), 'arg');
 
@@ -96,13 +99,22 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
 
         $objectRepository->expects($this->once())
                       ->method('find')
-                      ->with($this->equalTo(1))
+                      ->with($this->equalTo($id))
                       ->will($this->returnValue($object =new \stdClass));
 
         $ret = $this->converter->apply($request, $config);
 
         $this->assertTrue($ret);
         $this->assertSame($object, $request->attributes->get('arg'));
+    }
+
+    public function idsProvider()
+    {
+        return array(
+            array(1),
+            array(0),
+            array('foo'),
+        );
     }
 
     public function testApplyWithMappingAndExclude()
