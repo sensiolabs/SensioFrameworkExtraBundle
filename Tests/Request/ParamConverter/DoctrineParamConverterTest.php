@@ -29,10 +29,16 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
 
     public function createConfiguration($class = null, array $options = null, $name = 'arg', $isOptional = false)
     {
-        $config = $this->getMock(
-            'Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface', array(
-            'getClass', 'getAliasName', 'getOptions', 'isOptional', 'getName',
-        ));
+        $methods = array('getClass', 'getAliasName', 'getOptions', 'getName', 'allowArray');
+        if (null !== $isOptional) {
+            $methods[] = 'isOptional';
+        }
+        $config = $this
+            ->getMockBuilder('Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter')
+            ->setMethods($methods)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         if ($options !== null) {
             $config->expects($this->once())
                    ->method('getOptions')
@@ -46,9 +52,11 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
         $config->expects($this->any())
                ->method('getName')
                ->will($this->returnValue($name));
-        $config->expects($this->any())
-               ->method('isOptional')
-               ->will($this->returnValue($isOptional));
+        if (null !== $isOptional) {
+            $config->expects($this->any())
+                   ->method('isOptional')
+                   ->will($this->returnValue($isOptional));
+        }
 
         return $config;
     }
@@ -103,6 +111,37 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($ret);
         $this->assertSame($object, $request->attributes->get('arg'));
+    }
+
+    public function testApplyGuessOptional()
+    {
+        $request = new Request();
+        $request->attributes->set('arg', null);
+
+        $config = $this->createConfiguration('stdClass', array(), 'arg', null);
+
+        $classMetadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+        $manager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $manager->expects($this->once())
+            ->method('getClassMetadata')
+            ->with('stdClass')
+            ->will($this->returnValue($classMetadata));
+
+        $objectRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+        $this->registry->expects($this->once())
+              ->method('getManagerForClass')
+              ->with('stdClass')
+              ->will($this->returnValue($manager));
+
+        $manager->expects($this->never())->method('getRepository');
+
+        $objectRepository->expects($this->never())->method('find');
+        $objectRepository->expects($this->never())->method('findOneBy');
+
+        $ret = $this->converter->apply($request, $config);
+
+        $this->assertTrue($ret);
+        $this->assertNull($request->attributes->get('arg'));
     }
 
     public function testApplyWithMappingAndExclude()

@@ -39,6 +39,10 @@ class DoctrineParamConverter implements ParamConverterInterface
         $class   = $configuration->getClass();
         $options = $this->getOptions($configuration);
 
+        if (null === $request->attributes->get($name, false)) {
+            $configuration->setIsOptional(true);
+        }
+
         // find by identifier?
         if (false === $object = $this->find($class, $request, $options, $name)) {
             // find by criteria
@@ -68,7 +72,7 @@ class DoctrineParamConverter implements ParamConverterInterface
 
         $id = $this->getIdentifier($request, $options, $name);
 
-        if (!$id) {
+        if (false === $id || null === $id) {
             return false;
         }
 
