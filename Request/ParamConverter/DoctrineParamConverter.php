@@ -3,6 +3,7 @@
 namespace Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -39,6 +40,10 @@ class DoctrineParamConverter implements ParamConverterInterface
         $class   = $configuration->getClass();
         $options = $this->getOptions($configuration);
 
+        if (null === $request->attributes->get($name, false)) {
+            $configuration->setIsOptional(true);
+        }
+
         // find by identifier?
         if (false === $object = $this->find($class, $request, $options, $name)) {
             // find by criteria
@@ -68,7 +73,7 @@ class DoctrineParamConverter implements ParamConverterInterface
 
         $id = $this->getIdentifier($request, $options, $name);
 
-        if (false === $id) {
+        if (false === $id || null === $id) {
             return false;
         }
 
@@ -147,6 +152,10 @@ class DoctrineParamConverter implements ParamConverterInterface
 
     public function supports(ConfigurationInterface $configuration)
     {
+        if (!$configuration instanceof ParamConverter) {
+            return false;
+        }
+
         // if there is no manager, this means that only Doctrine DBAL is configured
         if (null === $this->registry || !count($this->registry->getManagers())) {
             return false;
