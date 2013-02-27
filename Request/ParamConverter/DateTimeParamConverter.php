@@ -23,6 +23,11 @@ use DateTime;
  */
 class DateTimeParamConverter implements ParamConverterInterface
 {
+    /**
+     * @{inheritdoc}
+     * 
+     * @throws NotFoundHttpException When invalid date given
+     */
     public function apply(Request $request, ConfigurationInterface $configuration)
     {
         $param = $configuration->getName();
@@ -47,6 +52,9 @@ class DateTimeParamConverter implements ParamConverterInterface
         return true;
     }
 
+    /**
+     * @{inheritdoc}
+     */
     public function supports(ConfigurationInterface $configuration)
     {
         if (null === $configuration->getClass()) {
