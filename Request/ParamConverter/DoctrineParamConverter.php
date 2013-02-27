@@ -20,7 +20,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 /**
  * DoctrineParamConverter.
  *
- * @author     Fabien Potencier <fabien@symfony.com>
+ * @author Fabien Potencier <fabien@symfony.com>
  */
 class DoctrineParamConverter implements ParamConverterInterface
 {
@@ -34,6 +34,12 @@ class DoctrineParamConverter implements ParamConverterInterface
         $this->registry = $registry;
     }
 
+    /**
+     * @{inheritdoc}
+     * 
+     * @throws \LogicException       When unable to guess how to get a Doctrine instance from the request information
+     * @throws NotFoundHttpException When object not found
+     */
     public function apply(Request $request, ConfigurationInterface $configuration)
     {
         $name    = $configuration->getName();
@@ -150,6 +156,9 @@ class DoctrineParamConverter implements ParamConverterInterface
         return $em->getRepository($class)->$method($criteria);
     }
 
+    /**
+     * @{inheritdoc}
+     */
     public function supports(ConfigurationInterface $configuration)
     {
         if (!$configuration instanceof ParamConverter) {
