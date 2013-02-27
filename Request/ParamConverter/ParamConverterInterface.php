@@ -25,8 +25,8 @@ interface ParamConverterInterface
     /**
      * Stores the object in the request.
      * 
-     * @param Request                $request The request
-     * @param ConfigurationInterface $configuration Containes the name, class and options of the object
+     * @param Request                $request       The request
+     * @param ConfigurationInterface $configuration Contains the name, class and options of the object
      * 
      * @return boolean True if the object has been successfully set, else false
      */
