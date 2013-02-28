@@ -35,41 +35,55 @@ class SensioFrameworkExtraExtension extends Extension
 
         if ($config['router']['annotations']) {
             $annotationsToLoad[] = 'routing.xml';
+
+
+            $this->addClassesToCompile(array(
+                'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\ControllerListener',
+            ));
         }
 
         if ($config['request']['converters']) {
             $annotationsToLoad[] = 'converters.xml';
+
+            $this->addClassesToCompile(array(
+                'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\ParamConverter',
+                'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\ParamConverterListener',
+                'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\DateTimeParamConverter',
+                'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\DoctrineParamConverter',
+                'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\ParamConverterInterface',
+                'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\ParamConverterManager',
+            ));
         }
 
         if ($config['view']['annotations']) {
             $annotationsToLoad[] = 'view.xml';
+
+            $this->addClassesToCompile(array(
+                'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\TemplateListener',
+            ));
         }
 
         if ($config['cache']['annotations']) {
             $annotationsToLoad[] = 'cache.xml';
+
+            $this->addClassesToCompile(array(
+                'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\CacheListener',
+            ));
         }
 
-        if ($annotationsToLoad) {
-            // must be first
-            $loader->load('annotations.xml');
+        if (empty($annotationsToLoad)) {
+            return ;
+        }
 
-            foreach ($annotationsToLoad as $config) {
-                $loader->load($config);
-            }
+        // must be first
+        $loader->load('annotations.xml');
+
+        foreach ($annotationsToLoad as $config) {
+            $loader->load($config);
         }
 
         $this->addClassesToCompile(array(
             'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\ConfigurationAnnotation',
-            'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\ConfigurationInterface',
-            'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\ParamConverter',
-            'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\CacheListener',
-            'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\ControllerListener',
-            'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\ParamConverterListener',
-            'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\TemplateListener',
-            'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\DateTimeParamConverter',
-            'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\DoctrineParamConverter',
-            'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\ParamConverterInterface',
-            'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\ParamConverterManager',
         ));
     }
 
