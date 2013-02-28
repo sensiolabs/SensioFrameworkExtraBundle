@@ -212,6 +212,15 @@ To register your converter service you must add a tag to your service
 
 .. configuration-block::
 
+    .. code-block:: yaml
+
+        # app/config/config.yml
+        services:
+            my_converter:
+                class:        MyBundle/Request/ParamConverter/MyConverter
+                tags:
+                    - { name: request.param_converter, priority: -2, converter: my_converter }
+
     .. code-block:: xml
 
         <service id="my_converter" class="MyBundle/Request/ParamConverter/MyConverter">
