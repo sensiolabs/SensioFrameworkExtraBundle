@@ -36,7 +36,6 @@ class SensioFrameworkExtraExtension extends Extension
         if ($config['router']['annotations']) {
             $annotationsToLoad[] = 'routing.xml';
 
-
             $this->addClassesToCompile(array(
                 'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\ControllerListener',
             ));
@@ -71,20 +70,18 @@ class SensioFrameworkExtraExtension extends Extension
             ));
         }
 
-        if (empty($annotationsToLoad)) {
-            return ;
+        if ($annotationsToLoad) {
+            // must be first
+            $loader->load('annotations.xml');
+
+            foreach ($annotationsToLoad as $config) {
+                $loader->load($config);
+            }
+
+            $this->addClassesToCompile(array(
+                'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\ConfigurationAnnotation',
+            ));
         }
-
-        // must be first
-        $loader->load('annotations.xml');
-
-        foreach ($annotationsToLoad as $config) {
-            $loader->load($config);
-        }
-
-        $this->addClassesToCompile(array(
-            'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\ConfigurationAnnotation',
-        ));
     }
 
     /**
