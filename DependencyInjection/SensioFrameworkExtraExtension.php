@@ -45,7 +45,8 @@ class SensioFrameworkExtraExtension extends Extension
             $annotationsToLoad[] = 'converters.xml';
 
             $this->addClassesToCompile(array(
-                'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\ParamConverter',
+                // cannot be added because it has some annotations
+                //'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\ParamConverter',
                 'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\ParamConverterListener',
                 'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\DateTimeParamConverter',
                 'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\DoctrineParamConverter',
