@@ -48,36 +48,37 @@ class CacheListener
             return;
         }
 
-        if (!$this->debug) {
-
-            $response = $event->getResponse();
-
-            if (!$response->isSuccessful()) {
-                return;
-            }
-
-            if (null !== $configuration->getSMaxAge()) {
-                $response->setSharedMaxAge($configuration->getSMaxAge());
-            }
-
-            if (null !== $configuration->getMaxAge()) {
-                $response->setMaxAge($configuration->getMaxAge());
-            }
-
-            if (null !== $configuration->getExpires()) {
-                $date = \DateTime::createFromFormat('U', strtotime($configuration->getExpires()), new \DateTimeZone('UTC'));
-                $response->setExpires($date);
-            }
-
-            if (null !== $configuration->getVary()) {
-                $response->setVary($configuration->getVary());
-            }
-
-            if ($configuration->isPublic()) {
-                $response->setPublic();
-            }
-
-            $event->setResponse($response);
+        if ($this->debug) {
+            return;
         }
+
+        $response = $event->getResponse();
+
+        if (!$response->isSuccessful()) {
+            return;
+        }
+
+        if (null !== $configuration->getSMaxAge()) {
+            $response->setSharedMaxAge($configuration->getSMaxAge());
+        }
+
+        if (null !== $configuration->getMaxAge()) {
+            $response->setMaxAge($configuration->getMaxAge());
+        }
+
+        if (null !== $configuration->getExpires()) {
+            $date = \DateTime::createFromFormat('U', strtotime($configuration->getExpires()), new \DateTimeZone('UTC'));
+            $response->setExpires($date);
+        }
+
+        if (null !== $configuration->getVary()) {
+            $response->setVary($configuration->getVary());
+        }
+
+        if ($configuration->isPublic()) {
+            $response->setPublic();
+        }
+
+        $event->setResponse($response);
     }
 }
