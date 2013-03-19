@@ -6,6 +6,9 @@
 
     <services>
         <service id="sensio_framework_extra.cache.listener" class="Sensio\Bundle\FrameworkExtraBundle\EventListener\CacheListener">
+            <call method="setDebug">
+                <argument>%kernel.debug%</argument>
+            </call>
             <tag name="kernel.event_listener" event="kernel.response" method="onKernelResponse" />
         </service>
     </services>

@@ -23,6 +23,21 @@ use Symfony\Component\HttpFoundation\Response;
 class CacheListener
 {
     /**
+     * @var bool
+     */
+    protected $debug;
+
+    /**
+     * Sets the debug value
+     *
+     * @param bool $debug
+     */
+    public function setDebug($debug)
+    {
+        $this->debug = $debug;
+    }
+
+    /**
      * Modifies the response to apply HTTP expiration header fields.
      *
      * @param FilterResponseEvent $event The notified event
@@ -30,6 +45,10 @@ class CacheListener
     public function onKernelResponse(FilterResponseEvent $event)
     {
         if (!$configuration = $event->getRequest()->attributes->get('_cache')) {
+            return;
+        }
+
+        if ($this->debug) {
             return;
         }
 
