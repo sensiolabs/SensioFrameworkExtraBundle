@@ -36,7 +36,7 @@ class DoctrineParamConverter implements ParamConverterInterface
 
     /**
      * @{inheritdoc}
-     * 
+     *
      * @throws \LogicException       When unable to guess how to get a Doctrine instance from the request information
      * @throws NotFoundHttpException When object not found
      */
@@ -143,6 +143,10 @@ class DoctrineParamConverter implements ParamConverterInterface
             }
         }
 
+        if ($options['strip_null']) {
+            $criteria = array_filter($criteria, function ($value) { return !is_null($value); });
+        }
+
         if (!$criteria) {
             return false;
         }
@@ -191,6 +195,7 @@ class DoctrineParamConverter implements ParamConverterInterface
             'entity_manager' => null,
             'exclude'        => array(),
             'mapping'        => array(),
+            'strip_null'     => false,
         ), $configuration->getOptions());
     }
 
