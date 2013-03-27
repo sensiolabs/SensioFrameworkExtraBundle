@@ -6,6 +6,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
+use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /*
  * This file is part of the Symfony framework.
@@ -21,7 +23,7 @@ use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class ParamConverterListener
+class ParamConverterListener implements EventSubscriberInterface
 {
     /**
      * @var Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager
@@ -83,5 +85,12 @@ class ParamConverterListener
         }
 
         $this->manager->apply($request, $configurations);
+    }
+
+    public static function getSubscribedEvents()
+    {
+        return array(
+            KernelEvents::CONTROLLER => 'onKernelController',
+        );
     }
 }

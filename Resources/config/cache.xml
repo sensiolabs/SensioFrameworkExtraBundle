@@ -6,7 +6,7 @@
 
     <services>
         <service id="sensio_framework_extra.cache.listener" class="Sensio\Bundle\FrameworkExtraBundle\EventListener\CacheListener">
-            <tag name="kernel.event_listener" event="kernel.response" method="onKernelResponse" />
+            <tag name="kernel.event_subscriber" />
         </service>
     </services>
 </container>

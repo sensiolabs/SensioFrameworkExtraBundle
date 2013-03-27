@@ -13,7 +13,7 @@
 
     <services>
         <service id="sensio_framework_extra.converter.listener" class="%sensio_framework_extra.converter.listener.class%">
-            <tag name="kernel.event_listener" event="kernel.controller" method="onKernelController" />
+            <tag name="kernel.event_subscriber" />
             <argument type="service" id="sensio_framework_extra.converter.manager" />
         </service>
 
