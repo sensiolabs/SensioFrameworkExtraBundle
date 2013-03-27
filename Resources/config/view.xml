@@ -10,7 +10,7 @@
 
     <services>
         <service id="sensio_framework_extra.view.listener" class="%sensio_framework_extra.view.listener.class%">
-            <tag name="kernel.event_listener" event="kernel.controller" method="onKernelController" />
+            <tag name="kernel.event_listener" event="kernel.controller" method="onKernelController" priority="-10" />
             <tag name="kernel.event_listener" event="kernel.view" method="onKernelView" />
             <argument type="service" id="service_container" />
         </service>
