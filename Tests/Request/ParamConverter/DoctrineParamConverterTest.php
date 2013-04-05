@@ -82,6 +82,37 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($request->attributes->get('arg'));
     }
 
+    public function testApplyWithStripNulls()
+    {
+        $request = new Request();
+        $request->attributes->set('arg', null);
+        $config = $this->createConfiguration('stdClass', array('mapping' => array('arg' => 'arg'), 'strip_null' => true), 'arg', true);
+
+        $classMetadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+        $manager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $manager->expects($this->once())
+            ->method('getClassMetadata')
+            ->with('stdClass')
+            ->will($this->returnValue($classMetadata));
+
+        $manager->expects($this->never())
+            ->method('getRepository');
+
+        $this->registry->expects($this->once())
+            ->method('getManagerForClass')
+            ->with('stdClass')
+            ->will($this->returnValue($manager));
+
+        $classMetadata->expects($this->once())
+            ->method('hasField')
+            ->with($this->equalTo('arg'))
+            ->will($this->returnValue(true));
+
+        $this->converter->apply($request, $config);
+
+        $this->assertNull($request->attributes->get('arg'));
+    }
+
     /**
      * @dataProvider idsProvider
      */
