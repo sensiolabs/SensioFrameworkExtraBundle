@@ -27,7 +27,7 @@ array of parameters to pass to the view instead of a ``Response`` object.
     If you want to stream your template, you can make it with the following configuration::
 
         /**
-         * @Template(streamable=true)
+         * @Template(isStreamable=true)
          */
         public function showAction($id)
         {
