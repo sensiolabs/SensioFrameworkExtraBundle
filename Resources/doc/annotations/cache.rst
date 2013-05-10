@@ -9,7 +9,7 @@ The ``@Cache`` annotation makes it easy to define HTTP caching::
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 
     /**
-     * @Cache(expires="tomorrow")
+     * @Cache(expires="tomorrow", public="true")
      */
     public function indexAction()
     {
@@ -18,7 +18,7 @@ The ``@Cache`` annotation makes it easy to define HTTP caching::
 You can also use the annotation on a class to define caching for all methods::
 
     /**
-     * @Cache(expires="tomorrow")
+     * @Cache(expires="tomorrow", public="true")
      */
     class BlogController extends Controller
     {
@@ -52,6 +52,7 @@ Annotation                     Response Method
 ``@Cache(smaxage="15")``       ``$response->setSharedMaxAge()``
 ``@Cache(maxage="15")``        ``$response->setMaxAge()``
 ``@Cache(vary=["Cookie"])``    ``$response->setVary()``
+``@Cache(public="true")``      ``$response->setPublic()``
 ============================== ===============
 
 .. note::
