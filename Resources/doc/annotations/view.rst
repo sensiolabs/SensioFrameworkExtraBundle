@@ -22,6 +22,19 @@ The ``@Template`` annotation associates a controller with a template name::
 When using the ``@Template`` annotation, the controller should return an
 array of parameters to pass to the view instead of a ``Response`` object.
 
+.. note::
+
+    If you want to stream your template, you can make it with the following configuration::
+
+        /**
+         * @Template(isStreamable=true)
+         */
+        public function showAction($id)
+        {
+            // ...
+        }
+
+
 .. tip::
    If the action returns a ``Response`` object, the ``@Template`` 
    annotation is simply ignored.
