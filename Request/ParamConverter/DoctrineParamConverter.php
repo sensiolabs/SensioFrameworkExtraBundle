@@ -142,6 +142,15 @@ class DoctrineParamConverter implements ParamConverterInterface
                 $criteria[$field] = $request->attributes->get($attribute);
             }
         }
+        
+        if(isset($options['filter']))
+        {
+            foreach ($options['filter'] as $field => $value) {
+                if ($metadata->hasField($field) || ($metadata->hasAssociation($field) && $metadata->isSingleValuedAssociation($field))) {
+                    $criteria[$field] = $value;
+                }
+            }
+        }
 
         if ($options['strip_null']) {
             $criteria = array_filter($criteria, function ($value) { return !is_null($value); });
