@@ -29,13 +29,22 @@ class TemplateGuesser
     protected $kernel;
 
     /**
+     * The template engine used when a specific template isnt specified
+     *
+     * @var string
+     */
+    protected $defaultEngine;
+
+    /**
      * Constructor.
      *
      * @param KernelInterface $kernel A KernelInterface instance
+     * @param string $defaultEngine Templating engine to use for guesses
      */
-    public function __construct(KernelInterface $kernel)
+    public function __construct(KernelInterface $kernel, $defaultEngine = 'twig')
     {
         $this->kernel = $kernel;
+        $this->defaultEngine = $defaultEngine;
     }
 
     /**
@@ -48,8 +57,10 @@ class TemplateGuesser
      * @return TemplateReference         template reference
      * @throws \InvalidArgumentException
      */
-    public function guessTemplateName($controller, Request $request, $engine = 'twig')
+    public function guessTemplateName($controller, Request $request, $engine = null)
     {
+        $engine = isset($engine) ? $engine : $this->defaultEngine;
+
         $className = class_exists('Doctrine\Common\Util\ClassUtils') ? ClassUtils::getClass($controller[0]) : get_class($controller[0]);
 
         if (!preg_match('/Controller\\\(.+)Controller$/', $className, $matchController)) {

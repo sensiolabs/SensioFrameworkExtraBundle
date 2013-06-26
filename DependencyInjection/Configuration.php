@@ -41,6 +41,7 @@ class Configuration implements ConfigurationInterface
                     ->addDefaultsIfNotSet()
                     ->children()
                         ->booleanNode('annotations')->defaultTrue()->end()
+                        ->scalarNode('default_engine')->defaultValue('twig')->end()
                     ->end()
                 ->end()
                 ->arrayNode('cache')

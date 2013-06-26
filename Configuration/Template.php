@@ -29,11 +29,11 @@ class Template extends ConfigurationAnnotation
     protected $template;
 
     /**
-     * The template engine used when a specific template isnt specified
+     * The template engine to use
      *
      * @var string
      */
-    protected $engine = 'twig';
+    protected $engine;
 
     /**
      * The associative array of template variables.
