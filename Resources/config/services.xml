@@ -11,6 +11,7 @@
     <services>
         <service id="sensio_framework_extra.view.guesser" class="%sensio_framework_extra.view.guesser.class%">
             <argument type="service" id="kernel" />
+            <argument>%sensio_framework_extra.view.default_template_engine%</argument>
         </service>
     </services>
 

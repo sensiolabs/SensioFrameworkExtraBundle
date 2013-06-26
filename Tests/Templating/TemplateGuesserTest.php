@@ -34,7 +34,7 @@ class TemplateGuesserTest extends \PHPUnit_Framework_TestCase
             ->expects($this->never())
             ->method('getBundle');
 
-        $templateGuesser = new TemplateGuesser($this->kernel);
+        $templateGuesser = new TemplateGuesser($this->kernel, 'twig');
         $templateReference = $templateGuesser->guessTemplateName(array(
             new Fixture\FooBundle\Controller\FooController(),
             'indexAction',
@@ -51,7 +51,7 @@ class TemplateGuesserTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo('FooBundle'), false)
             ->will($this->returnValue(array($this->bundles['BarBundle'], $this->bundles['FooBundle'])));
 
-        $templateGuesser = new TemplateGuesser($this->kernel);
+        $templateGuesser = new TemplateGuesser($this->kernel, 'twig');
         $templateReference = $templateGuesser->guessTemplateName(array(
             new Fixture\BarBundle\Controller\BarController(),
             'indexAction',
@@ -74,13 +74,13 @@ class TemplateGuesserTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo('FooBundle'), false)
             ->will($this->returnValue(array($this->bundles['FooBarBundle'], $this->bundles['BarBundle'], $this->bundles['FooBundle'])));
 
-        $templateGuesser = new TemplateGuesser($this->kernel);
+        $templateGuesser = new TemplateGuesser($this->kernel, 'php');
         $templateReference = $templateGuesser->guessTemplateName(array(
             new Fixture\FooBarBundle\Controller\FooBarController(),
             'indexAction',
         ), new Request());
 
-        $this->assertEquals('FooBundle:FooBar:index.html.twig', (string) $templateReference);;
+        $this->assertEquals('FooBundle:FooBar:index.html.php', (string) $templateReference);
     }
 
     protected function getBundle($name, $namespace, $parent = null)

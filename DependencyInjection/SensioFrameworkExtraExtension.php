@@ -61,6 +61,11 @@ class SensioFrameworkExtraExtension extends Extension
             $this->addClassesToCompile(array(
                 'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\TemplateListener',
             ));
+
+            $container->setParameter(
+                'sensio_framework_extra.view.default_templating_engine',
+                $config['view']['default_engine']
+            );
         }
 
         if ($config['cache']['annotations']) {
