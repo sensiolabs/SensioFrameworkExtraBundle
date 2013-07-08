@@ -115,7 +115,7 @@ This also allows you to have multiple converters in one action::
 In the example above, the post parameter is handled automatically, but the comment is 
 configured with the annotation since they can not both follow the default convention.
 
-If you want to match an entity using multiple fields use ``mapping``::
+If you want to match an entity using multiple fields use ``mapping``, where key is placeholder and value is mapping field::
 
     /**
      * @Route("/blog/{date}/{slug}/comments/{comment_slug}")
