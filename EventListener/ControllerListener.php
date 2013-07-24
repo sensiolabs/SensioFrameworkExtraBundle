@@ -27,7 +27,7 @@ use Doctrine\Common\Util\ClassUtils;
 class ControllerListener implements EventSubscriberInterface
 {
     /**
-     * @var \Doctrine\Common\Annotations\Reader
+     * @var Reader
      */
     protected $reader;
 

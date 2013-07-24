@@ -24,7 +24,7 @@ use Doctrine\Common\Util\ClassUtils;
 class TemplateGuesser
 {
     /**
-     * @var Symfony\Component\HttpKernel\KernelInterface
+     * @var KernelInterface
      */
     protected $kernel;
 

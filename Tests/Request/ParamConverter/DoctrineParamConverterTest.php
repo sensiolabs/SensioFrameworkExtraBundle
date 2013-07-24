@@ -4,11 +4,12 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Tests\Request\ParamConverter;
 
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter;
+use Doctrine\Common\Persistence\ManagerRegistry;
 
 class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Doctrine\Common\Persistence\ManagerRegistry
+     * @var ManagerRegistry
      */
     private $registry;
 
