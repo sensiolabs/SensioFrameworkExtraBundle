@@ -45,6 +45,7 @@ The default configuration is as follow:
             request: { converters: true }
             view:    { annotations: true }
             cache:   { annotations: true }
+            last_modified: { annotations: true }
 
     .. code-block:: xml
 
@@ -54,6 +55,7 @@ The default configuration is as follow:
             <request converters="true" />
             <view annotations="true" />
             <cache annotations="true" />
+            <last_modified annotations="true" />
         </sensio-framework-extra:config>
 
     .. code-block:: php
@@ -64,6 +66,7 @@ The default configuration is as follow:
             'request' => array('converters' => true),
             'view'    => array('annotations' => true),
             'cache'   => array('annotations' => true),
+            'last_modified'   => array('annotations' => true),
         ));
 
 You can disable some annotations and conventions by defining one or more
@@ -98,6 +101,7 @@ The following annotations are defined by the bundle:
    annotations/converters
    annotations/view
    annotations/cache
+   annotations/last_modified
 
 This example shows all the available annotations in action::
 
@@ -106,6 +110,7 @@ This example shows all the available annotations in action::
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+    use Sensio\Bundle\FrameworkExtraBundle\Configuration\LastModified;
 
     /**
      * @Route("/blog")
@@ -130,6 +135,7 @@ This example shows all the available annotations in action::
          * @ParamConverter("post", class="SensioBlogBundle:Post")
          * @Template("SensioBlogBundle:Annot:post.html.twig", vars={"post"})
          * @Cache(smaxage="15")
+         * @LastModified(param="post", method="getUpdatedAt")
          */
         public function showAction(Post $post)
         {
