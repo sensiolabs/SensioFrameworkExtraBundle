@@ -5,8 +5,6 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Tests\EventListener;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\LastModified;
 use Sensio\Bundle\FrameworkExtraBundle\EventListener\LastModifiedException;
 use Sensio\Bundle\FrameworkExtraBundle\EventListener\LastModifiedListener;
-use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager;
-use Sensio\Bundle\FrameworkExtraBundle\EventListener\ParamConverterListener;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
