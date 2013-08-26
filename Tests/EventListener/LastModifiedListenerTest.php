@@ -46,7 +46,7 @@ class LastModifiedListenerTest extends \PHPUnit_Framework_TestCase
     public function testExceptionOnControllerEvent()
     {
         $listener           = new LastModifiedListener();
-        $controllerEvent    = new FilterControllerEvent($this->kernel, array(new TestController(), 'execute'),  $this->request, null);
+        $controllerEvent    = new FilterControllerEvent($this->kernel, array($this->getController(), 'execute'),  $this->request, null);
 
         $listener->onKernelController($controllerEvent);
     }
@@ -86,11 +86,13 @@ class LastModifiedListenerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($event->getResponse()->headers->has('Last-Modified'));
     }
 
-}
-
-class TestController
-{
-    public function execute(Request $request) {}
+    protected function getController()
+    {
+        return $this->getMockBuilder('Symfony\Bundle\FrameworkBundle\Controller\Controller')
+            ->disableOriginalConstructor()
+            ->setMethods(array('execute'))
+            ->getMock();
+    }
 }
 
 class TestEntity
