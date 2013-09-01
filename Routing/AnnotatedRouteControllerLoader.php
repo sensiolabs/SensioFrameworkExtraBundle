@@ -39,6 +39,16 @@ class AnnotatedRouteControllerLoader extends AnnotationClassLoader
      */
     protected function configureRoute(Route $route, \ReflectionClass $class, \ReflectionMethod $method, $annot)
     {
+		// parses methods requirements in path string @Route("GET|POST /hello/{name}")
+        if(true == strrpos($route->getPath(), " "))
+        {
+            list($methods, $pattern) = explode(" ", $route->getPath());
+            
+            $route->setRequirement('_method', ltrim($methods, "/"));
+            $route->setPath($pattern);
+        }
+	
+	
         // controller
         $classAnnot = $this->reader->getClassAnnotation($class, $this->routeAnnotationClass);
         if ($classAnnot instanceof FrameworkExtraBundleRoute && $service = $classAnnot->getService()) {
