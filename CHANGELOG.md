@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+3.0
+---
+
+ * added support for @Security
+ * added support for HTTP validation cache in @Cache (ETag and LastModified)
+
 2.2
 ---
 
