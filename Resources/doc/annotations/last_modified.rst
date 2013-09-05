@@ -1,22 +1,24 @@
-@Cache
-======
+@LastModified
+=============
 
 Usage
 -----
 
-The ``@LastModified`` annotation return not-modified 304 response when main parameter in request is not modified.::
+The ``@LastModified`` annotation adds a ``Last-Modified`` header to Responses
+and automatically returns a 304 response when the response is not modified
+based on the value of the ``If-Modified-Since`` Request header::
 
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 
     /**
-     * @ParamConverter("post", class="SensioBlogBundle:Post")
      * @LastModified(param="post", method="getUpdatedAt")
      */
-    public function indexAction()
+    public function indexAction(Post $post)
     {
+        // your code
     }
 
-It doing the same as ::
+It's doing the same as the following code::
 
     public function myAction(Request $request, Post $post)
     {
@@ -26,6 +28,5 @@ It doing the same as ::
             return $response;
         }
 
-        // ...
+        // your code
     }
-

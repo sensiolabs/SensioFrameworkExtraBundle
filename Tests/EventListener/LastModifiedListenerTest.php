@@ -1,97 +1,71 @@
 <?php
 
+/*
+ * This file is part of the Symfony package.
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Sensio\Bundle\FrameworkExtraBundle\Tests\EventListener;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\LastModified;
-use Sensio\Bundle\FrameworkExtraBundle\EventListener\LastModifiedException;
 use Sensio\Bundle\FrameworkExtraBundle\EventListener\LastModifiedListener;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class LastModifiedListenerTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var HttpKernelInterface
-     */
-    protected $kernel;
-
-    /**
-     * @var Request
-     */
-    protected $request;
-
-    public function setUp()
+    public function testNotModifiedResponse()
     {
-        $this->kernel = $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
-
-        $this->request  =  new Request();
-        $params = new LastModified(array(
-            'param'  => 'test',
-            'method' => 'getDate'
-        ));
-
-        $this->request->attributes->set('_last_modified', $params);
-        $this->request->attributes->set('test', new TestEntity());
-        $this->request->headers->add(array('If-Modified-Since' => 'Fri, 23 Aug 2013 00:00:00 GMT'));
-
-    }
-
-    /**
-     * @expectedException Sensio\Bundle\FrameworkExtraBundle\EventListener\LastModifiedException
-     */
-    public function testExceptionOnControllerEvent()
-    {
-        $listener           = new LastModifiedListener();
-        $controllerEvent    = new FilterControllerEvent($this->kernel, array($this->getController(), 'execute'),  $this->request, null);
-
-        $listener->onKernelController($controllerEvent);
-    }
-
-    public function testExceptionGetModifiedResponseAnother()
-    {
-        $event    = new GetResponseForExceptionEvent($this->kernel, $this->request, null, new LastModifiedException(500));
-        $event->setResponse(new Response('Fake exception', 500));
-
-        $controllerDefinedResponse = new Response();
-        $controllerDefinedResponse->setStatusCode(304);
+        $request = $this->getRequest();
+        $request->headers->add(array('If-Modified-Since' => 'Fri, 23 Aug 2013 00:00:00 GMT'));
 
         $listener = new LastModifiedListener();
+        $controllerEvent = new FilterControllerEvent($this->getKernel(), function () { return new Response(500); },  $request, null);
 
-        $r = new \ReflectionProperty('Sensio\Bundle\FrameworkExtraBundle\EventListener\LastModifiedListener', 'response');
-        $r->setAccessible(true);
-        $r->setValue($listener, $controllerDefinedResponse);
+        $listener->onKernelController($controllerEvent);
+        $response = call_user_func($controllerEvent->getController());
 
-        $listener->onKernelException($event);
-
-        $this->assertEquals(304, $event->getResponse()->getStatusCode());
+        $this->assertEquals(304, $response->getStatusCode());
     }
 
-    public function testLastModifiedHeaderInResponse()
+    public function testLastModifiedHeader()
     {
-        $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
+        $request = $this->getRequest();
         $response = new Response();
 
         $listener = new LastModifiedListener();
-        $r = new \ReflectionProperty('Sensio\Bundle\FrameworkExtraBundle\EventListener\LastModifiedListener', 'lastModifiedDate');
-        $r->setAccessible(true);
-        $r->setValue($listener, new \DateTime());
+        $controllerEvent = new FilterControllerEvent($this->getKernel(), function () { return new Response(); }, $request, null);
+        $listener->onKernelController($controllerEvent);
 
-        $event = new FilterResponseEvent($this->kernel, $request, null, $response);
-        $listener->onKernelResponse($event);
+        $responseEvent = new FilterResponseEvent($this->getKernel(), $request, null, call_user_func($controllerEvent->getController()));
+        $listener->onKernelResponse($responseEvent);
 
-        $this->assertTrue($event->getResponse()->headers->has('Last-Modified'));
+        $response = $responseEvent->getResponse();
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertTrue($response->headers->has('Last-Modified'));
+        $this->assertEquals('Fri, 23 Aug 2013 00:00:00 GMT', $response->headers->get('Last-Modified'));
     }
 
-    protected function getController()
+    private function getRequest()
     {
-        return $this->getMockBuilder('Symfony\Bundle\FrameworkBundle\Controller\Controller')
-            ->disableOriginalConstructor()
-            ->setMethods(array('execute'))
-            ->getMock();
+        $request = Request::create('/');
+        $request->attributes->set('_last_modified', new LastModified(array('param' => 'test', 'method' => 'getDate')));
+        $request->attributes->set('test', new TestEntity());
+
+        return $request;
+    }
+
+    private function getKernel()
+    {
+        return $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
     }
 }
 
@@ -99,7 +73,6 @@ class TestEntity
 {
     public function getDate()
     {
-        $pastTime = new \DateTime('Fri, 23 Aug 2013 00:00:00 GMT');
-        return $pastTime;
+        return new \DateTime('Fri, 23 Aug 2013 00:00:00 GMT');
     }
 }
