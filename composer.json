@@ -15,7 +15,8 @@
         "doctrine/common": "~2.2"
     },
     "require-dev": {
-        "symfony/expression-language": "~2.4"
+        "symfony/expression-language": "~2.4",
+        "symfony/security-bundle": "~2.2"
     },
     "autoload": {
         "psr-0": { "Sensio\\Bundle\\FrameworkExtraBundle": "" }

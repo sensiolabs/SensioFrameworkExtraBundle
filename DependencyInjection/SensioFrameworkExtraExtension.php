@@ -71,6 +71,14 @@ class SensioFrameworkExtraExtension extends Extension
             ));
         }
 
+        if ($config['security']['annotations']) {
+            $annotationsToLoad[] = 'security.xml';
+
+            $this->addClassesToCompile(array(
+                'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\SecurityListener',
+            ));
+        }
+
         if ($annotationsToLoad) {
             // must be first
             $loader->load('annotations.xml');
