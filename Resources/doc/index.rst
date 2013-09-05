@@ -129,7 +129,7 @@ This example shows all the available annotations in action::
          * @Method("GET")
          * @ParamConverter("post", class="SensioBlogBundle:Post")
          * @Template("SensioBlogBundle:Annot:show.html.twig", vars={"post"})
-         * @Cache(smaxage="15", lastModified="post.getUpdatedAt()")
+         * @Cache(smaxage="15", lastModified="post.getUpdatedAt()", ETag="'Post' ~ post.getId() ~ post.getUpdatedAt()")
          */
         public function showAction(Post $post)
         {
@@ -141,7 +141,7 @@ annotations::
 
     /**
      * @Route("/{id}")
-     * @Cache(smaxage="15")
+     * @Cache(smaxage="15", lastModified="post.getUpdatedAt()", ETag="'Post' ~ post.getId() ~ post.getUpdatedAt()")
      */
     public function showAction(Post $post)
     {

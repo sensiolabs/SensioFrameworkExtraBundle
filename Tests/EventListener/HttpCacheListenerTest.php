@@ -111,6 +111,41 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Fri, 23 Aug 2013 00:00:00 GMT', $response->headers->get('Last-Modified'));
     }
 
+    public function testETagNotModifiedResponse()
+    {
+        $request = $this->createRequest(new Cache(array('etag' => 'test.getId()')));
+        $request->attributes->set('test', $entity = new TestEntity());
+        $request->headers->add(array('If-None-Match' => sprintf('"%s"', hash('sha256', $entity->getId()))));
+
+        $listener = new HttpCacheListener();
+        $controllerEvent = new FilterControllerEvent($this->getKernel(), function () { return new Response(500); },  $request, null);
+
+        $listener->onKernelController($controllerEvent);
+        $response = call_user_func($controllerEvent->getController());
+
+        $this->assertEquals(304, $response->getStatusCode());
+    }
+
+    public function testETagHeader()
+    {
+        $request = $this->createRequest(new Cache(array('ETag' => 'test.getId()')));
+        $request->attributes->set('test', $entity = new TestEntity());
+        $response = new Response();
+
+        $listener = new HttpCacheListener();
+        $controllerEvent = new FilterControllerEvent($this->getKernel(), function () { return new Response(); }, $request, null);
+        $listener->onKernelController($controllerEvent);
+
+        $responseEvent = new FilterResponseEvent($this->getKernel(), $request, null, call_user_func($controllerEvent->getController()));
+        $listener->onKernelResponse($responseEvent);
+
+        $response = $responseEvent->getResponse();
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertTrue($response->headers->has('ETag'));
+        $this->assertContains(hash('sha256', $entity->getId()), $response->headers->get('ETag'));
+    }
+
     private function createRequest(Cache $cache = null)
     {
         return new Request(array(), array(), array(
@@ -147,5 +182,10 @@ class TestEntity
     public function getDate()
     {
         return new \DateTime('Fri, 23 Aug 2013 00:00:00 GMT');
+    }
+
+    public function getId()
+    {
+        return '12345';
     }
 }

@@ -28,11 +28,13 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 class HttpCacheListener implements EventSubscriberInterface
 {
     private $lastModifiedDates;
+    private $etags;
     private $expressionLanguage;
 
     public function __construct()
     {
         $this->lastModifiedDates = new \SplObjectStorage();
+        $this->etags = new \SplObjectStorage();
     }
 
     /**
@@ -45,17 +47,31 @@ class HttpCacheListener implements EventSubscriberInterface
             return;
         }
 
-        $lastModifiedDate = $this->getExpressionLanguage()->evaluate($configuration->getLastModified(), $request->attributes->all());
-
         $response = new Response();
-        $response->setLastModified($lastModifiedDate);
+
+        $lastModifiedDate = '';
+        if ($configuration->getLastModified()) {
+            $lastModifiedDate = $this->getExpressionLanguage()->evaluate($configuration->getLastModified(), $request->attributes->all());
+            $response->setLastModified($lastModifiedDate);
+        }
+
+        $etag = '';
+        if ($configuration->getETag()) {
+            $etag = hash('sha256', $this->getExpressionLanguage()->evaluate($configuration->getETag(), $request->attributes->all()));
+            $response->setETag($etag);
+        }
 
         if ($response->isNotModified($request)) {
             $event->setController(function () use ($response) {
                 return $response;
             });
         } else {
-            $this->lastModifiedDates[$request] = $lastModifiedDate;
+            if ($etag) {
+                $this->etags[$request] = $etag;
+            }
+            if ($lastModifiedDate) {
+                $this->lastModifiedDates[$request] = $lastModifiedDate;
+            }
         }
     }
 
@@ -101,6 +117,12 @@ class HttpCacheListener implements EventSubscriberInterface
             $response->setLastModified($this->lastModifiedDates[$request]);
 
             unset($this->lastModifiedDates[$request]);
+        }
+
+        if (isset($this->etags[$request])) {
+            $response->setETag($this->etags[$request]);
+
+            unset($this->etags[$request]);
         }
 
         $event->setResponse($response);
