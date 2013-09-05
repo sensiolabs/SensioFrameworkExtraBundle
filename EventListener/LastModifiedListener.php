@@ -17,6 +17,7 @@ use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 /**
  * The LastModifiedListener handles the @LastModified annotation.
@@ -27,6 +28,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class LastModifiedListener implements EventSubscriberInterface
 {
     private $lastModifiedDates;
+    private $expressionLanguage;
 
     public function __construct()
     {
@@ -44,7 +46,7 @@ class LastModifiedListener implements EventSubscriberInterface
             return;
         }
 
-        $lastModifiedDate = $request->attributes->get($configuration->getParam())->{$configuration->getMethod()}();
+        $lastModifiedDate = $this->getExpressionLanguage()->evaluate($configuration->getExpression(), $request->attributes->all());
 
         $response = new Response();
         $response->setLastModified($lastModifiedDate);
@@ -77,5 +79,17 @@ class LastModifiedListener implements EventSubscriberInterface
             KernelEvents::CONTROLLER => 'onKernelController',
             KernelEvents::RESPONSE => 'onKernelResponse',
         );
+    }
+
+    private function getExpressionLanguage()
+    {
+        if (null === $this->expressionLanguage) {
+            if (!class_exists('Symfony\Component\ExpressionLanguage\ExpressionLanguage')) {
+                throw new \RuntimeException('Unable to use expressions as the Symfony ExpressionLanguage component is not installed.');
+            }
+            $this->expressionLanguage = new ExpressionLanguage();
+        }
+
+        return $this->expressionLanguage;
     }
 }

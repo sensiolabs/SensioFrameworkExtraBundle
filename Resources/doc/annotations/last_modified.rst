@@ -11,7 +11,7 @@ based on the value of the ``If-Modified-Since`` Request header::
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 
     /**
-     * @LastModified(param="post", method="getUpdatedAt")
+     * @LastModified("post.getUpdatedAt()")
      */
     public function indexAction(Post $post)
     {

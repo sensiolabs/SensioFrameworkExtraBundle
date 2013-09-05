@@ -14,55 +14,29 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
 /**
  * The LastModified class handles the @LastModified annotation parts.
  *
- * @LastModified("post", method="getUpdatedAt")
+ * @LastModified("post.getUpdatedAt()")
  *
  * @author Alexandr Sidorov <asidorov01@gmail.com>
+ * @author Fabien Potencier <fabien@symfony.com>
  * @Annotation
  */
 class LastModified extends ConfigurationAnnotation
 {
-    /**
-     * Method in entity, must return \DateTime.
-     *
-     * @var string
-     */
-    protected $method;
+    protected $expression;
 
-    /**
-     * @var string
-     */
-    protected $param;
-
-    /**
-     * @param string $param
-     */
-    public function setParam($param)
+    public function setExpression($expression)
     {
-        $this->param = $param;
+        $this->expression = $expression;
     }
 
-    /**
-     * @return string
-     */
-    public function getParam()
+    public function getExpression()
     {
-        return $this->param;
+        return $this->expression;
     }
 
-    /**
-     * @param string $method
-     */
-    public function setMethod($method)
+    public function setValue($expression)
     {
-        $this->method = $method;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMethod()
-    {
-        return $this->method;
+        $this->setExpression($expression);
     }
 
     /**
@@ -84,5 +58,4 @@ class LastModified extends ConfigurationAnnotation
     {
         return false;
     }
-
 }

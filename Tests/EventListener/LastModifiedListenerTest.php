@@ -57,7 +57,7 @@ class LastModifiedListenerTest extends \PHPUnit_Framework_TestCase
     private function getRequest()
     {
         $request = Request::create('/');
-        $request->attributes->set('_last_modified', new LastModified(array('param' => 'test', 'method' => 'getDate')));
+        $request->attributes->set('_last_modified', new LastModified(array('value' => 'test.getDate()')));
         $request->attributes->set('test', new TestEntity());
 
         return $request;
