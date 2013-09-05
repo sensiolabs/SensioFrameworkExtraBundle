@@ -1,8 +1,11 @@
 @Cache
 ======
 
-Usage
------
+The ``@Cache`` annotation makes it easy to define HTTP caching headers for
+expiration and validation.
+
+HTTP Expiration Strategies
+--------------------------
 
 The ``@Cache`` annotation makes it easy to define HTTP caching::
 
@@ -15,7 +18,8 @@ The ``@Cache`` annotation makes it easy to define HTTP caching::
     {
     }
 
-You can also use the annotation on a class to define caching for all methods::
+You can also use the annotation on a class to define caching for all actions
+of a controller::
 
     /**
      * @Cache(expires="tomorrow", public="true")
@@ -38,6 +42,36 @@ configuration, the latter overrides the former::
         public function indexAction()
         {
         }
+    }
+
+HTTP Validation Strategies
+--------------------------
+
+The ``lastModified`` attribute adds a ``Last-Modified`` header to Responses
+and automatically returns a 304 response when the response is not modified
+based on the value of the ``If-Modified-Since`` Request header::
+
+    use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
+
+    /**
+     * @Cache(lastModified="post.getUpdatedAt()")
+     */
+    public function indexAction(Post $post)
+    {
+        // your code
+    }
+
+It's doing the same as the following code::
+
+    public function myAction(Request $request, Post $post)
+    {
+        $response = new Response();
+        $response->setLastModified($post->getUpdatedAt());
+        if ($response->isNotModified($request)) {
+            return $response;
+        }
+
+        // your code
     }
 
 Attributes

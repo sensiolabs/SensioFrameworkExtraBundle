@@ -4,15 +4,17 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Tests\EventListener;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
+use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
-use Sensio\Bundle\FrameworkExtraBundle\EventListener\CacheListener;
+use Sensio\Bundle\FrameworkExtraBundle\EventListener\HttpCacheListener;
 
-class CacheListenerTest extends \PHPUnit_Framework_TestCase
+class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $this->listener = new CacheListener();
+        $this->listener = new HttpCacheListener();
         $this->response = new Response();
         $this->cache = new Cache(array());
         $this->request = $this->createRequest($this->cache);
@@ -74,14 +76,49 @@ class CacheListenerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('DateTime', $this->response->getExpires());
     }
 
-    protected function createRequest(Cache $cache = null)
+    public function testLastModifiedNotModifiedResponse()
+    {
+        $request = $this->createRequest(new Cache(array('lastModified' => 'test.getDate()')));
+        $request->attributes->set('test', new TestEntity());
+        $request->headers->add(array('If-Modified-Since' => 'Fri, 23 Aug 2013 00:00:00 GMT'));
+
+        $listener = new HttpCacheListener();
+        $controllerEvent = new FilterControllerEvent($this->getKernel(), function () { return new Response(500); },  $request, null);
+
+        $listener->onKernelController($controllerEvent);
+        $response = call_user_func($controllerEvent->getController());
+
+        $this->assertEquals(304, $response->getStatusCode());
+    }
+
+    public function testLastModifiedHeader()
+    {
+        $request = $this->createRequest(new Cache(array('lastModified' => 'test.getDate()')));
+        $request->attributes->set('test', new TestEntity());
+        $response = new Response();
+
+        $listener = new HttpCacheListener();
+        $controllerEvent = new FilterControllerEvent($this->getKernel(), function () { return new Response(); }, $request, null);
+        $listener->onKernelController($controllerEvent);
+
+        $responseEvent = new FilterResponseEvent($this->getKernel(), $request, null, call_user_func($controllerEvent->getController()));
+        $listener->onKernelResponse($responseEvent);
+
+        $response = $responseEvent->getResponse();
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertTrue($response->headers->has('Last-Modified'));
+        $this->assertEquals('Fri, 23 Aug 2013 00:00:00 GMT', $response->headers->get('Last-Modified'));
+    }
+
+    private function createRequest(Cache $cache = null)
     {
         return new Request(array(), array(), array(
             '_cache' => $cache,
         ));
     }
 
-    protected function createEventMock(Request $request, Response $response)
+    private function createEventMock(Request $request, Response $response)
     {
         $event = $this->getMock('Symfony\Component\HttpKernel\Event\FilterResponseEvent', array(), array(), '', null);
         $event
@@ -97,5 +134,18 @@ class CacheListenerTest extends \PHPUnit_Framework_TestCase
         ;
 
         return $event;
+    }
+
+    private function getKernel()
+    {
+        return $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
+    }
+}
+
+class TestEntity
+{
+    public function getDate()
+    {
+        return new \DateTime('Fri, 23 Aug 2013 00:00:00 GMT');
     }
 }

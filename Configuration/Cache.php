@@ -57,6 +57,13 @@ class Cache extends ConfigurationAnnotation
     protected $vary = array();
 
     /**
+     * An expression to compute the Last-Modified HTTP header.
+     *
+     * @var string
+     */
+    protected $lastModified;
+
+    /**
      * Returns the expiration date for the Expires header field.
      *
      * @return string
@@ -156,6 +163,26 @@ class Cache extends ConfigurationAnnotation
     public function setVary($vary)
     {
         $this->vary = $vary;
+    }
+
+    /**
+     * Sets the "Last-Modified"-header expression.
+     *
+     * @param string $expression
+     */
+    public function setLastModified($expression)
+    {
+        $this->lastModified = $expression;
+    }
+
+    /**
+     * Returns the "Last-Modified"-header expression.
+     *
+     * @return string
+     */
+    public function getLastModified()
+    {
+        return $this->lastModified;
     }
 
     /**

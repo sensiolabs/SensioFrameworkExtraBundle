@@ -1,31 +1,31 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Sensio\Bundle\FrameworkExtraBundle\EventListener;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\LastModified;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
-/**
- * The LastModifiedListener handles the @LastModified annotation.
+/*
+ * This file is part of the Symfony framework.
  *
- * @author Alexandr Sidorov <asidorov01@gmail.com>
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
+/**
+ * HttpCacheListener handles HTTP cache headers.
+ *
+ * It can be configured via the @Cache annotation.
+ *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class LastModifiedListener implements EventSubscriberInterface
+class HttpCacheListener implements EventSubscriberInterface
 {
     private $lastModifiedDates;
     private $expressionLanguage;
@@ -36,17 +36,16 @@ class LastModifiedListener implements EventSubscriberInterface
     }
 
     /**
-     * Handles If-Modified-Since headers in request.
-     * Prevents controller call if content is not modified.
+     * Handles HTTP validation headers.
      */
     public function onKernelController(FilterControllerEvent $event)
     {
         $request = $event->getRequest();
-        if (!$configuration = $request->attributes->get('_last_modified')) {
+        if (!$configuration = $request->attributes->get('_cache')) {
             return;
         }
 
-        $lastModifiedDate = $this->getExpressionLanguage()->evaluate($configuration->getExpression(), $request->attributes->all());
+        $lastModifiedDate = $this->getExpressionLanguage()->evaluate($configuration->getLastModified(), $request->attributes->all());
 
         $response = new Response();
         $response->setLastModified($lastModifiedDate);
@@ -61,16 +60,50 @@ class LastModifiedListener implements EventSubscriberInterface
     }
 
     /**
-     * Modifies the response to add a Last-Modified header.
+     * Modifies the response to apply HTTP cache headers when needed.
      */
     public function onKernelResponse(FilterResponseEvent $event)
     {
         $request = $event->getRequest();
+
+        if (!$configuration = $request->attributes->get('_cache')) {
+            return;
+        }
+
+        $response = $event->getResponse();
+
+        if (!$response->isSuccessful()) {
+            return;
+        }
+
+        if (null !== $configuration->getSMaxAge()) {
+            $response->setSharedMaxAge($configuration->getSMaxAge());
+        }
+
+        if (null !== $configuration->getMaxAge()) {
+            $response->setMaxAge($configuration->getMaxAge());
+        }
+
+        if (null !== $configuration->getExpires()) {
+            $date = \DateTime::createFromFormat('U', strtotime($configuration->getExpires()), new \DateTimeZone('UTC'));
+            $response->setExpires($date);
+        }
+
+        if (null !== $configuration->getVary()) {
+            $response->setVary($configuration->getVary());
+        }
+
+        if ($configuration->isPublic()) {
+            $response->setPublic();
+        }
+
         if (isset($this->lastModifiedDates[$request])) {
-            $event->getResponse()->setLastModified($this->lastModifiedDates[$request]);
+            $response->setLastModified($this->lastModifiedDates[$request]);
 
             unset($this->lastModifiedDates[$request]);
         }
+
+        $event->setResponse($response);
     }
 
     public static function getSubscribedEvents()

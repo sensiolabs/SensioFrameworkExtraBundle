@@ -20,6 +20,9 @@ class ControllerListenerTest extends \PHPUnit_Framework_TestCase
     {
         $this->listener = new ControllerListener(new AnnotationReader());
         $this->request = $this->createRequest();
+
+        // trigger the autoloading of the @Cache annotation
+        class_exists('Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache');
     }
 
     public function tearDown()

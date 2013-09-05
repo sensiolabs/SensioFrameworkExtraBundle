@@ -49,12 +49,6 @@ class Configuration implements ConfigurationInterface
                         ->booleanNode('annotations')->defaultTrue()->end()
                     ->end()
                 ->end()
-                ->arrayNode('last_modified')
-                    ->addDefaultsIfNotSet()
-                    ->children()
-                        ->booleanNode('annotations')->defaultTrue()->end()
-                    ->end()
-                ->end()
             ->end()
         ;
 
