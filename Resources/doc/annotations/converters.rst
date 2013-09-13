@@ -102,6 +102,12 @@ option::
     {
     }
 
+.. tip::
+
+   ``id`` refers to the parameter passed to the repository method. For example, if your repository method was
+   ``findOneBySlug($slug)``, and your route is ``@Route("/blog/{slug}")`` you would configure the ParamConverter
+   with ``options={"id" = "slug"}``.
+
 This also allows you to have multiple converters in one action::
 
     /**
