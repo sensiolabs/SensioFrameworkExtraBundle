@@ -104,9 +104,8 @@ option::
 
 .. tip::
 
-   ``id`` refers to the parameter passed to the repository method. For example, if your repository method was
-   ``findOneBySlug($slug)``, and your route is ``@Route("/blog/{slug}")`` you would configure the ParamConverter
-   with ``options={"id" = "slug"}``.
+   The ``id`` option specifies which placeholder from the route gets passed to the repository
+   method used. If no repository method is specified, ``find()`` is used by default.
 
 This also allows you to have multiple converters in one action::
 
