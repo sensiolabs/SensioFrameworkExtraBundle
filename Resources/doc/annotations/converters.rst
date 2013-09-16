@@ -133,7 +133,7 @@ route parameter from being part of the criteria::
 
     /**
      * @Route("/blog/{date}/{slug}")
-     * @ParamConverter("post", options={"exclude": ["date"]})
+     * @ParamConverter("post", options={"exclude": {"date"}})
      */
     public function showAction(Post $post, \DateTime $date)
     {
