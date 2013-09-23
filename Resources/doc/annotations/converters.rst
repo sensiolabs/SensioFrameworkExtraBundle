@@ -102,6 +102,11 @@ option::
     {
     }
 
+.. tip::
+
+   The ``id`` option specifies which placeholder from the route gets passed to the repository
+   method used. If no repository method is specified, ``find()`` is used by default.
+
 This also allows you to have multiple converters in one action::
 
     /**
