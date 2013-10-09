@@ -39,6 +39,10 @@ class DateTimeParamConverter implements ParamConverterInterface
         $options = $configuration->getOptions();
         $value   = $request->attributes->get($param);
 
+        if (!$value and $configuration->isOptional()) {
+            return false;
+        }
+
         $date = isset($options['format'])
             ? DateTime::createFromFormat($options['format'], $value)
             : new DateTime($value);
