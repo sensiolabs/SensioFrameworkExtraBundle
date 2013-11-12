@@ -71,6 +71,14 @@ class SensioFrameworkExtraExtension extends Extension
             ));
         }
 
+        if ($config['last_modified']['annotations']) {
+            $annotationsToLoad[] = 'last_modified.xml';
+
+            $this->addClassesToCompile(array(
+                'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\LastModifiedListener',
+            ));
+        }
+
         if ($annotationsToLoad) {
             // must be first
             $loader->load('annotations.xml');
