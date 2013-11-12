@@ -39,7 +39,7 @@ class DateTimeParamConverter implements ParamConverterInterface
         $options = $configuration->getOptions();
         $value   = $request->attributes->get($param);
 
-        if (!$value and $configuration->isOptional()) {
+        if (!$value && $configuration->isOptional()) {
             return false;
         }
 
