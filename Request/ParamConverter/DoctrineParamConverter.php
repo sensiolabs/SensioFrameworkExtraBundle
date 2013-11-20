@@ -35,7 +35,7 @@ class DoctrineParamConverter implements ParamConverterInterface
     }
 
     /**
-     * @{inheritdoc}
+     * {@inheritdoc}
      *
      * @throws \LogicException       When unable to guess how to get a Doctrine instance from the request information
      * @throws NotFoundHttpException When object not found
@@ -161,7 +161,7 @@ class DoctrineParamConverter implements ParamConverterInterface
     }
 
     /**
-     * @{inheritdoc}
+     * {@inheritdoc}
      */
     public function supports(ConfigurationInterface $configuration)
     {

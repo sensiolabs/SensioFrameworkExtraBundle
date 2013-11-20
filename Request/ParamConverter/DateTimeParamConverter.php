@@ -24,7 +24,7 @@ use DateTime;
 class DateTimeParamConverter implements ParamConverterInterface
 {
     /**
-     * @{inheritdoc}
+     * {@inheritdoc}
      * 
      * @throws NotFoundHttpException When invalid date given
      */
@@ -57,7 +57,7 @@ class DateTimeParamConverter implements ParamConverterInterface
     }
 
     /**
-     * @{inheritdoc}
+     * {@inheritdoc}
      */
     public function supports(ConfigurationInterface $configuration)
     {
