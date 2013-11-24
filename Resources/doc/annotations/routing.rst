@@ -4,7 +4,7 @@
 Usage
 -----
 
-The @Route annotation maps a route pattern with a controller::
+The ``@Route`` annotation maps a route pattern with a controller::
 
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
@@ -25,7 +25,7 @@ URL. This is equivalent to the following YAML configuration:
 .. code-block:: yaml
 
     blog_home:
-        pattern:  /
+        path:     /
         defaults: { _controller: SensioBlogBundle:Post:index }
 
 Like any route pattern, you can define placeholders, requirements, and default
