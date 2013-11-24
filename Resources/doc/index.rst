@@ -128,7 +128,7 @@ This example shows all the available annotations in action::
          * @Route("/{id}")
          * @Method("GET")
          * @ParamConverter("post", class="SensioBlogBundle:Post")
-         * @Template("SensioBlogBundle:Annot:post.html.twig", vars={"post"})
+         * @Template("SensioBlogBundle:Annot:show.html.twig", vars={"post"})
          * @Cache(smaxage="15")
          */
         public function showAction(Post $post)
