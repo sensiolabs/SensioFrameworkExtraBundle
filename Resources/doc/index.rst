@@ -98,6 +98,7 @@ The following annotations are defined by the bundle:
    annotations/converters
    annotations/view
    annotations/cache
+   annotations/security
 
 This example shows all the available annotations in action::
 
@@ -129,7 +130,8 @@ This example shows all the available annotations in action::
          * @Method("GET")
          * @ParamConverter("post", class="SensioBlogBundle:Post")
          * @Template("SensioBlogBundle:Annot:show.html.twig", vars={"post"})
-         * @Cache(smaxage="15")
+         * @Cache(smaxage="15", lastmodified="post.getUpdatedAt()", etag="'Post' ~ post.getId() ~ post.getUpdatedAt()")
+         * @Security("has_role('ROLE_ADMIN') and is_granted('POST_SHOW', post)")
          */
         public function showAction(Post $post)
         {
@@ -141,7 +143,8 @@ annotations::
 
     /**
      * @Route("/{id}")
-     * @Cache(smaxage="15")
+     * @Cache(smaxage="15", lastModified="post.getUpdatedAt()", ETag="'Post' ~ post.getId() ~ post.getUpdatedAt()")
+     * @Security("has_role('ROLE_ADMIN') and is_granted('POST_SHOW', post)")
      */
     public function showAction(Post $post)
     {

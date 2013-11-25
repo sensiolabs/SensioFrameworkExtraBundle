@@ -67,7 +67,15 @@ class SensioFrameworkExtraExtension extends Extension
             $annotationsToLoad[] = 'cache.xml';
 
             $this->addClassesToCompile(array(
-                'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\CacheListener',
+                'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\HttpCacheListener',
+            ));
+        }
+
+        if ($config['security']['annotations']) {
+            $annotationsToLoad[] = 'security.xml';
+
+            $this->addClassesToCompile(array(
+                'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\SecurityListener',
             ));
         }
 

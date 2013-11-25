@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="sensio_framework_extra.security.listener" class="Sensio\Bundle\FrameworkExtraBundle\EventListener\SecurityListener">
+            <argument type="service" id="security.context" on-invalid="null" />
+            <argument type="service" id="sensio_framework_extra.security.expression_language" on-invalid="null" />
+            <argument type="service" id="security.authentication.trust_resolver" on-invalid="null" />
+            <argument type="service" id="security.role_hierarchy" on-invalid="null" />
+            <tag name="kernel.event_subscriber" />
+        </service>
+
+        <service id="sensio_framework_extra.security.expression_language" class="Sensio\Bundle\FrameworkExtraBundle\Security\ExpressionLanguage" public="false" />
+    </services>
+</container>

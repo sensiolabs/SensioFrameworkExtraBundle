@@ -11,8 +11,16 @@
         }
     ],
     "require": {
-        "symfony/framework-bundle": "~2.2",
+        "symfony/framework-bundle": "~2.4",
         "doctrine/common": "~2.2"
+    },
+    "require-dev": {
+        "symfony/expression-language": "~2.4",
+        "symfony/security-bundle": "~2.4"
+    },
+    "suggest": {
+        "symfony/expression-language": "",
+        "symfony/security-bundle": ""
     },
     "autoload": {
         "psr-0": { "Sensio\\Bundle\\FrameworkExtraBundle": "" }
@@ -20,7 +28,7 @@
     "target-dir": "Sensio/Bundle/FrameworkExtraBundle",
     "extra": {
         "branch-alias": {
-            "dev-master": "2.3.x-dev"
+            "dev-master": "3.0.x-dev"
         }
     },
     "minimum-stability": "dev"
