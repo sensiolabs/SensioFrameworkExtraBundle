@@ -18,6 +18,10 @@
         "symfony/expression-language": "~2.4",
         "symfony/security-bundle": "~2.4"
     },
+    "suggest": {
+        "symfony/expression-language": "",
+        "symfony/security-bundle": ""
+    },
     "autoload": {
         "psr-0": { "Sensio\\Bundle\\FrameworkExtraBundle": "" }
     },
