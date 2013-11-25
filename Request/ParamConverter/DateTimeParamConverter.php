@@ -25,7 +25,7 @@ class DateTimeParamConverter implements ParamConverterInterface
 {
     /**
      * {@inheritdoc}
-     * 
+     *
      * @throws NotFoundHttpException When invalid date given
      */
     public function apply(Request $request, ConfigurationInterface $configuration)
