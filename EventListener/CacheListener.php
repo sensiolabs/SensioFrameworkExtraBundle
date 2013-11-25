@@ -16,58 +16,14 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 
 /**
- * The CacheListener class has the responsibility to modify the
- * Response object when a controller uses the "@Cache" annotation.
+ * CacheListener handles HTTP cache headers.
  *
- * @author     Fabien Potencier <fabien@symfony.com>
+ * It can be configured via the @Cache, @LastModified, and @Etag annotations.
+ *
+ * @author Fabien Potencier <fabien@symfony.com>
+ *
+ * @deprecated Deprecated since 3.0, to be removed in 4.0. Use the HttpCacheListener instead.
  */
-class CacheListener implements EventSubscriberInterface
+class CacheListener extends HttpCacheListener
 {
-    /**
-     * Modifies the response to apply HTTP expiration header fields.
-     *
-     * @param FilterResponseEvent $event The notified event
-     */
-    public function onKernelResponse(FilterResponseEvent $event)
-    {
-        if (!$configuration = $event->getRequest()->attributes->get('_cache')) {
-            return;
-        }
-
-        $response = $event->getResponse();
-
-        if (!$response->isSuccessful()) {
-            return;
-        }
-
-        if (null !== $configuration->getSMaxAge()) {
-            $response->setSharedMaxAge($configuration->getSMaxAge());
-        }
-
-        if (null !== $configuration->getMaxAge()) {
-            $response->setMaxAge($configuration->getMaxAge());
-        }
-
-        if (null !== $configuration->getExpires()) {
-            $date = \DateTime::createFromFormat('U', strtotime($configuration->getExpires()), new \DateTimeZone('UTC'));
-            $response->setExpires($date);
-        }
-
-        if (null !== $configuration->getVary()) {
-            $response->setVary($configuration->getVary());
-        }
-
-        if ($configuration->isPublic()) {
-            $response->setPublic();
-        }
-
-        $event->setResponse($response);
-    }
-
-    public static function getSubscribedEvents()
-    {
-        return array(
-            KernelEvents::RESPONSE => 'onKernelResponse',
-        );
-    }
 }
