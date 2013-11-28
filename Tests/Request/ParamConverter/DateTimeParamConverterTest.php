@@ -61,10 +61,12 @@ class DateTimeParamConverterTest extends \PHPUnit_Framework_TestCase
 
     public function createConfiguration($class = null, $name = null)
     {
-        $config = $this->getMock(
-            'Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface', array(
-            'getClass', 'getAliasName', 'getOptions', 'getName', 'allowArray', 'isOptional'
-        ));
+        $config = $this
+            ->getMockBuilder('Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter')
+            ->setMethods(array('getClass', 'getAliasName', 'getOptions', 'getName', 'allowArray', 'isOptional'))
+            ->disableOriginalConstructor()
+            ->getMock();
+
         if ($name !== null) {
             $config->expects($this->any())
                    ->method('getName')

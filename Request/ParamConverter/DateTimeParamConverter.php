@@ -11,7 +11,7 @@
 
 namespace Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use DateTime;
@@ -28,7 +28,7 @@ class DateTimeParamConverter implements ParamConverterInterface
      *
      * @throws NotFoundHttpException When invalid date given
      */
-    public function apply(Request $request, ConfigurationInterface $configuration)
+    public function apply(Request $request, ParamConverter $configuration)
     {
         $param = $configuration->getName();
 
@@ -59,7 +59,7 @@ class DateTimeParamConverter implements ParamConverterInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(ConfigurationInterface $configuration)
+    public function supports(ParamConverter $configuration)
     {
         if (null === $configuration->getClass()) {
             return false;
