@@ -2,7 +2,6 @@
 
 namespace Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,7 +39,7 @@ class DoctrineParamConverter implements ParamConverterInterface
      * @throws \LogicException       When unable to guess how to get a Doctrine instance from the request information
      * @throws NotFoundHttpException When object not found
      */
-    public function apply(Request $request, ConfigurationInterface $configuration)
+    public function apply(Request $request, ParamConverter $configuration)
     {
         $name    = $configuration->getName();
         $class   = $configuration->getClass();
@@ -163,12 +162,8 @@ class DoctrineParamConverter implements ParamConverterInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(ConfigurationInterface $configuration)
+    public function supports(ParamConverter $configuration)
     {
-        if (!$configuration instanceof ParamConverter) {
-            return false;
-        }
-
         // if there is no manager, this means that only Doctrine DBAL is configured
         if (null === $this->registry || !count($this->registry->getManagers())) {
             return false;
@@ -189,7 +184,7 @@ class DoctrineParamConverter implements ParamConverterInterface
         return ! $em->getMetadataFactory()->isTransient($configuration->getClass());
     }
 
-    protected function getOptions(ConfigurationInterface $configuration)
+    protected function getOptions(ParamConverter $configuration)
     {
         return array_replace(array(
             'entity_manager' => null,
