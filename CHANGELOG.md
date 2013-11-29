@@ -4,6 +4,7 @@ CHANGELOG
 3.0
 ---
 
+ * ParamConverterInterface now uses ParamConverter as a type hint instead of ConfigurationInterface
  * added support for @Security
  * added support for HTTP validation cache in @Cache (ETag and LastModified)
 
