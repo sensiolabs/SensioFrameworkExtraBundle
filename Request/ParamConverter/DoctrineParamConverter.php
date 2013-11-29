@@ -6,6 +6,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\NoResultException;
 
 /*
  * This file is part of the Symfony framework.
@@ -88,7 +89,11 @@ class DoctrineParamConverter implements ParamConverterInterface
             $method = 'find';
         }
 
-        return $this->getManager($options['entity_manager'], $class)->getRepository($class)->$method($id);
+        try {
+            return $this->getManager($options['entity_manager'], $class)->getRepository($class)->$method($id);
+        } catch (NoResultException $e) {
+            return null;
+        }
     }
 
     protected function getIdentifier(Request $request, $options, $name)
@@ -156,7 +161,11 @@ class DoctrineParamConverter implements ParamConverterInterface
             $method = 'findOneBy';
         }
 
-        return $em->getRepository($class)->$method($criteria);
+        try {
+            return $em->getRepository($class)->$method($criteria);
+        } catch (NoResultException $e) {
+            return null;
+        }
     }
 
     /**
