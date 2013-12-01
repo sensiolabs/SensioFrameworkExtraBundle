@@ -6,7 +6,7 @@ Usage
 
 The ``@Security`` annotation restricts access on controllers::
 
-    use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+    use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
     class PostController extends Controller
     {
