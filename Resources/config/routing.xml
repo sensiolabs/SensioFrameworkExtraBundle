@@ -8,6 +8,7 @@
         <parameter key="sensio_framework_extra.routing.loader.annot_dir.class">Symfony\Component\Routing\Loader\AnnotationDirectoryLoader</parameter>
         <parameter key="sensio_framework_extra.routing.loader.annot_file.class">Symfony\Component\Routing\Loader\AnnotationFileLoader</parameter>
         <parameter key="sensio_framework_extra.routing.loader.annot_class.class">Sensio\Bundle\FrameworkExtraBundle\Routing\AnnotatedRouteControllerLoader</parameter>
+        <parameter key="sensio_framework_extra.routing.listener.class">Sensio\Bundle\FrameworkExtraBundle\EventListener\RouterListener</parameter>
     </parameters>
 
     <services>
@@ -26,6 +27,9 @@
         <service id="sensio_framework_extra.routing.loader.annot_class" class="%sensio_framework_extra.routing.loader.annot_class.class%" public="false">
             <tag name="routing.loader" />
             <argument type="service" id="annotation_reader" />
+        </service>
+        <service id="sensio_framework_extra.routing.listener_class" class="%sensio_framework_extra.routing.listener.class%">
+            <tag name="kernel.event_subscriber" />
         </service>
     </services>
 </container>
