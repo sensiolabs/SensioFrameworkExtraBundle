@@ -82,9 +82,7 @@ class ControllerListener implements EventSubscriberInterface
 
         $request = $event->getRequest();
         foreach ($configurations as $key => $attributes) {
-            if (!$request->attributes->has($key)) {
-                $request->attributes->set($key, $attributes);
-            }
+            $request->attributes->set($key, $attributes);
         }
     }
 

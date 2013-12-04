@@ -14,6 +14,7 @@ namespace Sensio\Bundle\FrameworkExtraBundle\EventListener;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 
 /**
  * Initializes the context from the request and sets request attributes based on a matching route.
@@ -22,6 +23,26 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class RouterListener implements EventSubscriberInterface
 {
+    /**
+     * Replace template to routeTemplate
+     *
+     * @param FilterControllerEvent $event A FilterControllerEvent instance
+     */
+    public function onKernelController(FilterControllerEvent $event)
+    {
+        $request = $event->getRequest();
+
+        if ($request->attributes->has('_routeTemplate')) {
+            $request->attributes->set('_template', $request->attributes->get('_routeTemplate'));
+            $request->attributes->remove('_routeTemplate');
+        }
+    }
+
+    /**
+     * Mask _template from route to _routeTemplate
+     *
+     * @param GetResponseEvent $event A GetResponseEvent instance
+     */
     public function onKernelRequest(GetResponseEvent $event)
     {
         $request = $event->getRequest();
@@ -29,6 +50,8 @@ class RouterListener implements EventSubscriberInterface
         $parameters = $request->attributes->get('_route_params');
 
         if (isset($parameters['_template'])) {
+            $request->attributes->set('_routeTemplate', $parameters['_template']);
+            $request->attributes->remove('_template');
             unset($parameters['_template']);
             $request->attributes->set('_route_params', $parameters);
         }
@@ -37,7 +60,8 @@ class RouterListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            KernelEvents::REQUEST => array(array('onKernelRequest', 31)),
+            KernelEvents::CONTROLLER => array('onKernelController', -196),
+            KernelEvents::REQUEST => array(array('onKernelRequest', 16)),
         );
     }
 }
