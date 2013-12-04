@@ -60,14 +60,6 @@ class TemplateListener implements EventSubscriberInterface
         }
 
         if (!$configuration->getTemplate()) {
-            $routeParams = $request->get('_route_params');
-
-            if ($routeParams && isset($routeParams['_template'])) {
-                $configuration->setTemplate($routeParams['_template']);
-            }
-        }
-
-        if (!$configuration->getTemplate()) {
             $guesser = $this->container->get('sensio_framework_extra.view.guesser');
             $configuration->setTemplate($guesser->guessTemplateName($controller, $request, $configuration->getEngine()));
         }
