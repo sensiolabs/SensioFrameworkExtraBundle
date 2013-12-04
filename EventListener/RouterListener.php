@@ -60,7 +60,7 @@ class RouterListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            KernelEvents::CONTROLLER => array('onKernelController', -196),
+            KernelEvents::CONTROLLER => array('onKernelController', -64),
             KernelEvents::REQUEST => array(array('onKernelRequest', 16)),
         );
     }
