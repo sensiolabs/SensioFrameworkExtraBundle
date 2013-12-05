@@ -48,17 +48,6 @@ the PHP default value::
     {
     }
 
-You can also match more than one URL by defining additional ``@Route``
-annotations::
-
-    /**
-     * @Route("/", defaults={"id" = 1})
-     * @Route("/{id}")
-     */
-    public function showAction($id)
-    {
-    }
-
 .. _frameworkextra-annotations-routing-activation:
 
 Activation
@@ -167,7 +156,7 @@ Controller as Service
 The ``@Route`` annotation on a controller class can also be used to assign the
 controller class to a service so that the controller resolver will instantiate
 the controller by fetching it from the DI container instead of calling ``new
-PostController()`` itself::
+PostController()`` itself::
 
     /**
      * @Route(service="my_post_controller_service")
