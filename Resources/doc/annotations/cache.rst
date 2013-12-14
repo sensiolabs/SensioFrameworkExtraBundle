@@ -100,7 +100,7 @@ Annotation                                            Response Method
 ``@Cache(smaxage="15")``                              ``$response->setSharedMaxAge()``
 ``@Cache(maxage="15")``                               ``$response->setMaxAge()``
 ``@Cache(vary={"Cookie"})``                           ``$response->setVary()``
-``@Cache(public="true")``                             ``$response->setPublic()``
+``@Cache(public=true)``                               ``$response->setPublic()``
 ``@Cache(lastModified="post.getUpdatedAt()")``        ``$response->setLastModified()``
 ``@Cache(ETag="post.getId() ~ post.getUpdatedAt()")`` ``$response->setETag()``
 ===================================================== ================================
