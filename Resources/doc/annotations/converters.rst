@@ -19,7 +19,7 @@ they can be injected as controller method arguments::
     {
     }
 
-Several things happens under the hood:
+Several things happen under the hood:
 
 * The converter tries to get a ``SensioBlogBundle:Post`` object from the
   request attributes (request attributes comes from route placeholders -- here
