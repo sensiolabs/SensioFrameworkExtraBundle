@@ -88,7 +88,7 @@ class HttpCacheListener implements EventSubscriberInterface
 
         $response = $event->getResponse();
 
-        if (!$response->isCacheable()) {
+        if (!$response->isSuccessful() && !$response->isCacheable()) {
             return;
         }
 
