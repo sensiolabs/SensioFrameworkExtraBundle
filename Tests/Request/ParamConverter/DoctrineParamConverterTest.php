@@ -366,4 +366,34 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($ret, "Should be supported");
     }
+
+    public function testSupportsWithGlobalDefaultEntityManager()
+    {
+        $config = $this->createConfiguration('stdClass', array());
+        $metadataFactory = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadataFactory');
+        $metadataFactory->expects($this->once())
+                        ->method('isTransient')
+                        ->with($this->equalTo('stdClass'))
+                        ->will($this->returnValue( false ));
+
+        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager->expects($this->once())
+                      ->method('getMetadataFactory')
+                      ->will($this->returnValue($metadataFactory));
+
+        $this->registry->expects($this->once())
+                    ->method('getManagers')
+                    ->will($this->returnValue(array($objectManager)));
+
+        $this->registry->expects($this->once())
+                      ->method('getManager')
+                      ->with('foo')
+                      ->will($this->returnValue($objectManager));
+
+        $this->converter->setDefaultManagerName('foo');
+
+        $ret = $this->converter->supports($config);
+
+        $this->assertTrue($ret, "Should be supported using 'foo' Entity Manager");
+    }
 }
