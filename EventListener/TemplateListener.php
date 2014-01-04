@@ -59,6 +59,20 @@ class TemplateListener implements EventSubscriberInterface
             return;
         }
 
+        $params = $request->attributes->get('_route_params');
+        unset($params['_template']);
+        $request->attributes->set('_route_params', $params);
+
+        if (true === $configuration) {
+            $configuration = new Template(array());
+        } elseif (is_string($configuration)) {
+            $configuration = new Template(array('template' => $configuration));
+        }
+
+        if (!($configuration instanceof Template)) {
+            return;
+        }
+
         if (!$configuration->getTemplate()) {
             $guesser = $this->container->get('sensio_framework_extra.view.guesser');
             $configuration->setTemplate($guesser->guessTemplateName($controller, $request, $configuration->getEngine()));
