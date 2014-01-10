@@ -36,7 +36,7 @@ class CacheListener implements EventSubscriberInterface
 
         $response = $event->getResponse();
 
-        if (!$response->isCacheable()) {
+        if (!in_array($response->getStatusCode(), array(200, 203, 300, 301, 302, 404, 410))) {
             return;
         }
 
