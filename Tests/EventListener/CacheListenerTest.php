@@ -26,7 +26,7 @@ class CacheListenerTest extends \PHPUnit_Framework_TestCase
             ->method('setResponse')
         ;
 
-        $this->response->setStatusCode(404);
+        $this->response->setStatusCode(500);
 
         $this->assertInternalType('null', $this->listener->onKernelResponse($this->event));
     }
