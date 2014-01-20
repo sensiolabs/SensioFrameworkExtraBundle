@@ -59,19 +59,46 @@ class TemplateListener implements EventSubscriberInterface
             return;
         }
 
-        $params = $request->attributes->get('_route_params');
-        unset($params['_template']);
-        $request->attributes->set('_route_params', $params);
+        $routeParams = $request->attributes->get('_route_params');
 
-        if (true === $configuration) {
-            $configuration = new Template(array());
-        } elseif (is_string($configuration)) {
-            $configuration = new Template(array('template' => $configuration));
+        if (!($configuration instanceof Template) &&
+            !(isset($routeParams['_template']) ||
+              isset($routeParams['_template_engine']) ||
+              isset($routeParams['_template_vars']) ||
+              isset($routeParams['_template_streamable']))) {
+            return;
         }
 
         if (!($configuration instanceof Template)) {
-            return;
+            $configuration = new Template(array());
         }
+
+        if (isset($routeParams['_template'])) {
+            if(is_string($routeParams['_template'])) {
+                $configuration->setTemplate($routeParams['_template']);
+            } elseif (true === $routeParams['_template']) {
+                $configuration->setTemplate(null);
+            }
+
+            unset($routeParams['_template']);
+        }
+
+        if (isset($routeParams['_template_engine'])) {
+            $configuration->setEngine($routeParams['_template_engine']);
+            unset($routeParams['_template_engine']);
+        }
+
+        if (isset($routeParams['_template_vars'])) {
+            $configuration->setVars($routeParams['_template_vars']);
+            unset($routeParams['_template_vars']);
+        }
+
+        if (isset($routeParams['_template_streamable'])) {
+            $configuration->setIsStreamable($routeParams['_template_streamable']);
+            unset($routeParams['_template_streamable']);
+        }
+
+        $request->attributes->set('_route_params', $routeParams);
 
         if (!$configuration->getTemplate()) {
             $guesser = $this->container->get('sensio_framework_extra.view.guesser');
