@@ -148,7 +148,9 @@ class DoctrineParamConverter implements ParamConverterInterface
         $metadata = $em->getClassMetadata($class);
 
         foreach ($options['mapping'] as $attribute => $field) {
-            if ($metadata->hasField($field) || ($metadata->hasAssociation($field) && $metadata->isSingleValuedAssociation($field))) {
+            if (($metadata->hasField($field) || ($metadata->hasAssociation($field) && $metadata->isSingleValuedAssociation($field)))
+                || isset($options['repository_method']))
+            {
                 $criteria[$field] = $request->attributes->get($attribute);
             }
         }
@@ -161,14 +163,15 @@ class DoctrineParamConverter implements ParamConverterInterface
             return false;
         }
 
-        if (isset($options['repository_method'])) {
-            $method = $options['repository_method'];
-        } else {
-            $method = 'findOneBy';
-        }
-
         try {
-            return $em->getRepository($class)->$method($criteria);
+            $repository = $em->getRepository($class);
+            if (isset($options['repository_method'])) {
+                $reflectionMethod = new \ReflectionMethod(get_class($repository), $options['repository_method']);
+
+                return $reflectionMethod->invokeArgs($repository, $criteria);
+            } else {
+                return $repository->findOneBy($criteria);
+            }
         } catch (NoResultException $e) {
             return null;
         }
