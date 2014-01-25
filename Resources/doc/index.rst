@@ -41,10 +41,11 @@ The default configuration is as follow:
     .. code-block:: yaml
 
         sensio_framework_extra:
-            router:  { annotations: true }
-            request: { converters: true }
-            view:    { annotations: true }
-            cache:   { annotations: true }
+            router:   { annotations: true }
+            request:  { converters: true }
+            view:     { annotations: true }
+            cache:    { annotations: true }
+            security: { annotations: true }
 
     .. code-block:: xml
 
@@ -54,16 +55,18 @@ The default configuration is as follow:
             <request converters="true" />
             <view annotations="true" />
             <cache annotations="true" />
+            <security annotations="true" />
         </sensio-framework-extra:config>
 
     .. code-block:: php
 
         // load the profiler
         $container->loadFromExtension('sensio_framework_extra', array(
-            'router'  => array('annotations' => true),
-            'request' => array('converters' => true),
-            'view'    => array('annotations' => true),
-            'cache'   => array('annotations' => true),
+            'router'   => array('annotations' => true),
+            'request'  => array('converters' => true),
+            'view'     => array('annotations' => true),
+            'cache'    => array('annotations' => true),
+            'security' => array('annotations' => true),
         ));
 
 You can disable some annotations and conventions by defining one or more
