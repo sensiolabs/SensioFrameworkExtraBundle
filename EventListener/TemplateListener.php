@@ -74,7 +74,7 @@ class TemplateListener implements EventSubscriberInterface
         }
 
         if (isset($routeParams['_template'])) {
-            if(is_string($routeParams['_template'])) {
+            if (is_string($routeParams['_template'])) {
                 $configuration->setTemplate($routeParams['_template']);
             } elseif (true === $routeParams['_template']) {
                 $configuration->setTemplate(null);
