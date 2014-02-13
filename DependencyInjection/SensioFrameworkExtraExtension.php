@@ -53,6 +53,11 @@ class SensioFrameworkExtraExtension extends Extension
                 'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\ParamConverterInterface',
                 'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\ParamConverterManager',
             ));
+
+            $container->setParameter(
+                'sensio_framework_extra.converter.auto_convert',
+                $config['request']['auto_convert']
+            );
         }
 
         if ($config['view']['annotations']) {
