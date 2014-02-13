@@ -40,7 +40,7 @@ class ParamConverterListener implements EventSubscriberInterface
      * @param ParamConverterManager $manager     A ParamConverterManager instance
      * @param bool                  $autoConvert Auto convert non-defined parameters
      */
-    public function __construct(ParamConverterManager $manager, $autoConvert)
+    public function __construct(ParamConverterManager $manager, $autoConvert = true)
     {
         $this->manager = $manager;
         $this->autoConvert = $autoConvert;
