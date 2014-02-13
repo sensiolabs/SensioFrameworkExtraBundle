@@ -40,6 +40,13 @@ If you use type hinting as in the example above, you can even omit the
     public function showAction(Post $post)
     {
     }
+You can disable this feature by setting to false the `auto_convert` config
+parameter. By default, this value is `true`
+
+    # config.yml
+    sensio_framework_extra:
+        request:
+            auto_convert: false
 
 To detect which converter is run on a parameter the following process is run:
 
