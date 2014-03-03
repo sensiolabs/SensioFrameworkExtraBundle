@@ -202,7 +202,7 @@ All converters must implement the ``ParamConverterInterface``::
 The ``supports()`` method must return ``true`` when it is able to convert the
 given configuration (a ``ParamConverter`` instance).
 
-The ``ParamConverter`` instance has three information about the annotation:
+The ``ParamConverter`` instance has three pieces of information about the annotation:
 
 * ``name``: The attribute name;
 * ``class``: The attribute class name (can be any string representing a class
