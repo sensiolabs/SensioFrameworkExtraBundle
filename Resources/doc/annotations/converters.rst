@@ -189,14 +189,14 @@ All converters must implement the ``ParamConverterInterface``::
 
     namespace Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter;
 
-    use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
+    use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
     use Symfony\Component\HttpFoundation\Request;
 
     interface ParamConverterInterface
     {
-        function apply(Request $request, ConfigurationInterface $configuration);
+        public function apply(Request $request, ParamConverter $configuration);
 
-        function supports(ConfigurationInterface $configuration);
+        public function supports(ParamConverter $configuration);
     }
 
 The ``supports()`` method must return ``true`` when it is able to convert the
