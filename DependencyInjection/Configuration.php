@@ -53,6 +53,7 @@ class Configuration implements ConfigurationInterface
                     ->addDefaultsIfNotSet()
                     ->children()
                         ->booleanNode('annotations')->defaultTrue()->end()
+                        ->scalarNode('expression_language')->defaultValue('sensio_framework_extra.security.expression_language.default')->end()
                     ->end()
                 ->end()
             ->end()
