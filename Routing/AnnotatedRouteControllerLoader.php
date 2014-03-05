@@ -57,6 +57,19 @@ class AnnotatedRouteControllerLoader extends AnnotationClassLoader
         }
     }
 
+    protected function getGlobals(\ReflectionClass $class)
+    {
+        $globals = parent::getGlobals($class);
+
+        foreach ($this->reader->getClassAnnotations($class) as $configuration) {
+            if ($configuration instanceof Method) {
+                $globals['methods'] = array_merge($globals['methods'], $configuration->getMethods());
+            }
+        }
+
+        return $globals;
+    }
+
     /**
      * Makes the default route name more sane by removing common keywords.
      *
