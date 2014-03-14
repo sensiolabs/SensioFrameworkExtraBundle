@@ -30,13 +30,20 @@ class ParamConverterListener implements EventSubscriberInterface
     protected $manager;
 
     /**
+     * @var bool
+     */
+    protected $autoConvert;
+
+    /**
      * Constructor.
      *
-     * @param ParamConverterManager $manager A ParamConverterManager instance
+     * @param ParamConverterManager $manager     A ParamConverterManager instance
+     * @param bool                  $autoConvert Auto convert non-defined parameters
      */
-    public function __construct(ParamConverterManager $manager)
+    public function __construct(ParamConverterManager $manager, $autoConvert = true)
     {
         $this->manager = $manager;
+        $this->autoConvert = $autoConvert;
     }
 
     /**
@@ -63,29 +70,36 @@ class ParamConverterListener implements EventSubscriberInterface
         }
 
         // automatically apply conversion for non-configured objects
-        foreach ($r->getParameters() as $param) {
-            if (!$param->getClass() || $param->getClass()->isInstance($request)) {
-                continue;
+        if ($this->autoConvert) {
+            foreach ($r->getParameters() as $param) {
+                if (!$param->getClass() || $param->getClass()->isInstance($request)) {
+                    continue;
+                }
+
+                $name = $param->getName();
+
+                if (!isset($configurations[$name])) {
+                    $configuration = new ParamConverter(array());
+                    $configuration->setName($name);
+                    $configuration->setClass($param->getClass()->getName());
+
+                    $configurations[$name] = $configuration;
+                } elseif (null === $configurations[$name]->getClass()) {
+                    $configurations[$name]->setClass($param->getClass()->getName());
+                }
+
+                $configurations[$name]->setIsOptional($param->isOptional());
             }
-
-            $name = $param->getName();
-
-            if (!isset($configurations[$name])) {
-                $configuration = new ParamConverter(array());
-                $configuration->setName($name);
-                $configuration->setClass($param->getClass()->getName());
-
-                $configurations[$name] = $configuration;
-            } elseif (null === $configurations[$name]->getClass()) {
-                $configurations[$name]->setClass($param->getClass()->getName());
-            }
-
-            $configurations[$name]->setIsOptional($param->isOptional());
         }
 
         $this->manager->apply($request, $configurations);
     }
 
+    /**
+     * Get subscribed events
+     *
+     * @return array Subscribed events
+     */
     public static function getSubscribedEvents()
     {
         return array(
