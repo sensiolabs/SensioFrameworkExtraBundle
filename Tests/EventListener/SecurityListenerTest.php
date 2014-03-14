@@ -29,7 +29,7 @@ class SecurityListenerTest extends \PHPUnit_Framework_TestCase
         $language = new ExpressionLanguage();
 
         $listener = new SecurityListener($securityContext, $language, $trustResolver);
-        $request = $this->createRequest(new Security(array('expression' => 'has_role("ROLE_ADMIN") and is_granted("FOO")')));
+        $request = $this->createRequest(new Security(array('expression' => 'has_role("ROLE_ADMIN") or is_granted("FOO")')));
 
         $event = new FilterControllerEvent($this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface'), function () { return new Response(); }, $request, null);
 
