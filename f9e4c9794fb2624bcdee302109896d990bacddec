@@ -1,0 +1,9 @@
+---------------------------------------------------------------------------
+
+by lyrixx at 2014-01-10T18:01:08Z
+
+The decision about the code is very hard. I took the same code as in `Symfony\Component\HttpFoundation\Response`. But I was not able to find a reference about theses codes in the HTTP RFC.
+
+The RFC said "A cache able response should be successful', But also: "Everything is cachable is headers said to cache".
+
+So maybe, we should remove the `if` block
