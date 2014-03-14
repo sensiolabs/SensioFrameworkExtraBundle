@@ -29,9 +29,16 @@ class DoctrineParamConverter implements ParamConverterInterface
      */
     protected $registry;
 
+    protected $defaultManagerName;
+
     public function __construct(ManagerRegistry $registry = null)
     {
         $this->registry = $registry;
+    }
+
+    public function setDefaultManagerName($defaultManagerName = null)
+    {
+        $this->defaultManagerName = $defaultManagerName;
     }
 
     /**
@@ -205,6 +212,10 @@ class DoctrineParamConverter implements ParamConverterInterface
 
     private function getManager($name, $class)
     {
+        if (null === $name) {
+            $name = $this->defaultManagerName;
+        }
+
         if (null === $name) {
             return $this->registry->getManagerForClass($class);
         }
