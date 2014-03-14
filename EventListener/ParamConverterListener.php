@@ -4,6 +4,7 @@ namespace Sensio\Bundle\FrameworkExtraBundle\EventListener;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -29,16 +30,13 @@ class ParamConverterListener implements EventSubscriberInterface
      */
     protected $manager;
 
-    /**
-     * @var bool
-     */
     protected $autoConvert;
 
     /**
      * Constructor.
      *
      * @param ParamConverterManager $manager     A ParamConverterManager instance
-     * @param bool                  $autoConvert Auto convert non-defined parameters
+     * @param Boolean               $autoConvert Auto convert non-configured objects
      */
     public function __construct(ParamConverterManager $manager, $autoConvert = true)
     {
@@ -71,28 +69,35 @@ class ParamConverterListener implements EventSubscriberInterface
 
         // automatically apply conversion for non-configured objects
         if ($this->autoConvert) {
-            foreach ($r->getParameters() as $param) {
-                if (!$param->getClass() || $param->getClass()->isInstance($request)) {
-                    continue;
-                }
-
-                $name = $param->getName();
-
-                if (!isset($configurations[$name])) {
-                    $configuration = new ParamConverter(array());
-                    $configuration->setName($name);
-                    $configuration->setClass($param->getClass()->getName());
-
-                    $configurations[$name] = $configuration;
-                } elseif (null === $configurations[$name]->getClass()) {
-                    $configurations[$name]->setClass($param->getClass()->getName());
-                }
-
-                $configurations[$name]->setIsOptional($param->isOptional());
-            }
+            $configurations = $this->autoConfigure($r, $request, $configurations);
         }
 
         $this->manager->apply($request, $configurations);
+    }
+
+    private function autoConfigure(\ReflectionFunctionAbstract $r, Request $request, $configurations)
+    {
+        foreach ($r->getParameters() as $param) {
+            if (!$param->getClass() || $param->getClass()->isInstance($request)) {
+                continue;
+            }
+
+            $name = $param->getName();
+
+            if (!isset($configurations[$name])) {
+                $configuration = new ParamConverter(array());
+                $configuration->setName($name);
+                $configuration->setClass($param->getClass()->getName());
+
+                $configurations[$name] = $configuration;
+            } elseif (null === $configurations[$name]->getClass()) {
+                $configurations[$name]->setClass($param->getClass()->getName());
+            }
+
+            $configurations[$name]->setIsOptional($param->isOptional());
+        }
+
+        return $configurations;
     }
 
     /**
