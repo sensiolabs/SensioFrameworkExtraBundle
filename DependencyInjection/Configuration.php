@@ -35,6 +35,7 @@ class Configuration implements ConfigurationInterface
                     ->addDefaultsIfNotSet()
                     ->children()
                         ->booleanNode('converters')->defaultTrue()->end()
+                        ->booleanNode('auto_convert')->defaultTrue()->end()
                     ->end()
                 ->end()
                 ->arrayNode('view')
