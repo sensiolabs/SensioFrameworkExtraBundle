@@ -15,7 +15,7 @@
         <service id="sensio_framework_extra.converter.listener" class="%sensio_framework_extra.converter.listener.class%">
             <tag name="kernel.event_subscriber" />
             <argument type="service" id="sensio_framework_extra.converter.manager" />
-            <argument>%sensio_framework_extra.converter.auto_convert%</argument>
+            <argument>true</argument>
         </service>
 
         <service id="sensio_framework_extra.converter.manager" class="%sensio_framework_extra.converter.manager.class%" />

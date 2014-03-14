@@ -43,7 +43,6 @@ class SensioFrameworkExtraExtension extends Extension
 
         if ($config['request']['converters']) {
             $annotationsToLoad[] = 'converters.xml';
-            $container->setParameter('sensio_framework_extra.converter.auto_convert', $config['request']['auto_convert']);
 
             $this->addClassesToCompile(array(
                 // cannot be added because it has some annotations
@@ -87,13 +86,17 @@ class SensioFrameworkExtraExtension extends Extension
             // must be first
             $loader->load('annotations.xml');
 
-            foreach ($annotationsToLoad as $config) {
-                $loader->load($config);
+            foreach ($annotationsToLoad as $configFile) {
+                $loader->load($configFile);
             }
 
             $this->addClassesToCompile(array(
                 'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\ConfigurationAnnotation',
             ));
+
+            if ($config['request']['converters']) {
+                $container->getDefinition('sensio_framework_extra.converter.listener')->replaceArgument(1, $config['request']['auto_convert']);
+            }
         }
     }
 
