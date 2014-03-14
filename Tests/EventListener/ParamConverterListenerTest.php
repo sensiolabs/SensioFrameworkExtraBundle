@@ -12,16 +12,18 @@ class ParamConverterListenerTest extends \PHPUnit_Framework_TestCase
 {
     public function testRequestIsSkipped()
     {
-        $kernel  = $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
+        $kernel = $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
         $request = new Request();
 
-        $manager  = $this->getMock('Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager');
-        $manager->expects($this->once())
-                ->method('apply')
-                ->with($this->equalTo($request), $this->equalTo(array()));
+        $manager = $this->getMock('Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager');
+        $manager
+            ->expects($this->once())
+            ->method('apply')
+            ->with($this->equalTo($request), $this->equalTo(array()))
+        ;
 
         $listener = new ParamConverterListener($manager);
-        $event    = new FilterControllerEvent($kernel, array(new TestController(), 'execute'), $request, null);
+        $event = new FilterControllerEvent($kernel, array(new TestController(), 'noArgAction'), $request, null);
 
         $listener->onKernelController($event);
     }
@@ -29,5 +31,7 @@ class ParamConverterListenerTest extends \PHPUnit_Framework_TestCase
 
 class TestController
 {
-    public function execute(Request $request) {}
+    public function noArgAction(Request $request)
+    {
+    }
 }

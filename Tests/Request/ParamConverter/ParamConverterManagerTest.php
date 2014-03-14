@@ -8,25 +8,18 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ParamConverterManagerTest extends \PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
-        $this->manager = new ParamConverterManager();
-    }
-
     public function testPriorities()
     {
-        $this->assertEquals(array(), $this->manager->all());
+        $manager = new ParamConverterManager();
+        $this->assertEquals(array(), $manager->all());
 
         $high = $this->createParamConverterMock();
         $low = $this->createParamConverterMock();
 
-        $this->manager->add($low);
-        $this->manager->add($high, 10);
+        $manager->add($low);
+        $manager->add($high, 10);
 
-        $this->assertEquals(array(
-            $high,
-            $low,
-        ), $this->manager->all());
+        $this->assertEquals(array($high, $low), $manager->all());
     }
 
     public function testApply()
@@ -60,9 +53,10 @@ class ParamConverterManagerTest extends \PHPUnit_Framework_TestCase
             )),
         );
 
-        $this->manager->add($supported);
-        $this->manager->add($invalid);
-        $this->manager->apply(new Request(), $configurations);
+        $manager = new ParamConverterManager();
+        $manager->add($supported);
+        $manager->add($invalid);
+        $manager->apply(new Request(), $configurations);
     }
 
     public function testApplyNamedConverter()
@@ -79,8 +73,6 @@ class ParamConverterManagerTest extends \PHPUnit_Framework_TestCase
             ->method('apply')
         ;
 
-        $this->manager->add($converter, 0, "test");
-
         $request = new Request();
         $request->attributes->set('param', '1234');
 
@@ -90,9 +82,15 @@ class ParamConverterManagerTest extends \PHPUnit_Framework_TestCase
             'converter' => 'test',
         ));
 
-        $this->manager->apply($request, array($configuration));
+        $manager = new ParamConverterManager();
+        $manager->add($converter, 0, "test");
+        $manager->apply($request, array($configuration));
     }
 
+    /**
+     * @expectedException        \RuntimeException
+     * @expectedExceptionMessage Converter 'test' does not support conversion of parameter 'param'.
+     */
     public function testApplyNamedConverterNotSupportsParameter()
     {
         $converter = $this->createParamConverterMock();
@@ -102,8 +100,6 @@ class ParamConverterManagerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(false))
         ;
 
-        $this->manager->add($converter, 0, "test");
-
         $request = new Request();
         $request->attributes->set('param', '1234');
 
@@ -113,10 +109,15 @@ class ParamConverterManagerTest extends \PHPUnit_Framework_TestCase
             'converter' => 'test',
         ));
 
-        $this->setExpectedException("RuntimeException", "Converter 'test' does not support conversion of parameter 'param'.");
-        $this->manager->apply($request, array($configuration));
+        $manager = new ParamConverterManager();
+        $manager->add($converter, 0, "test");
+        $manager->apply($request, array($configuration));
     }
 
+    /**
+     * @expectedException        \RuntimeException
+     * @expectedExceptionMessage No converter named 'test' found for conversion of parameter 'param'.
+     */
     public function testApplyNamedConverterNoConverter()
     {
         $request = new Request();
@@ -128,13 +129,12 @@ class ParamConverterManagerTest extends \PHPUnit_Framework_TestCase
             'converter' => 'test',
         ));
 
-        $this->setExpectedException("RuntimeException", "No converter named 'test' found for conversion of parameter 'param'.");
-        $this->manager->apply($request, array($configuration));
+        $manager = new ParamConverterManager();
+        $manager->apply($request, array($configuration));
     }
 
     public function testApplyNotCalledOnAlreadyConvertedObjects()
     {
-
         $converter = $this->createParamConverterMock();
         $converter
             ->expects($this->never())
@@ -146,8 +146,6 @@ class ParamConverterManagerTest extends \PHPUnit_Framework_TestCase
             ->method('apply')
         ;
 
-        $this->manager->add($converter);
-
         $request = new Request();
         $request->attributes->set('converted', new \stdClass);
 
@@ -156,7 +154,9 @@ class ParamConverterManagerTest extends \PHPUnit_Framework_TestCase
             'class' => 'stdClass',
         ));
 
-        $this->manager->apply($request, array($configuration));
+        $manager = new ParamConverterManager();
+        $manager->add($converter);
+        $manager->apply($request, array($configuration));
     }
 
     protected function createParamConverterMock()
