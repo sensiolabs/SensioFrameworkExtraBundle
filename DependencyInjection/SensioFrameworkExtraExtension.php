@@ -74,6 +74,9 @@ class SensioFrameworkExtraExtension extends Extension
         if ($config['security']['annotations']) {
             $annotationsToLoad[] = 'security.xml';
 
+            $container->setAlias('sensio_framework_extra.security.expression_language', $config['security']['expression_language']);
+            $container->getAlias('sensio_framework_extra.security.expression_language')->setPublic(false);
+
             $this->addClassesToCompile(array(
                 'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\SecurityListener',
             ));

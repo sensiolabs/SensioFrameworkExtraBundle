@@ -13,6 +13,6 @@
             <tag name="kernel.event_subscriber" />
         </service>
 
-        <service id="sensio_framework_extra.security.expression_language" class="Sensio\Bundle\FrameworkExtraBundle\Security\ExpressionLanguage" public="false" />
+        <service id="sensio_framework_extra.security.expression_language.default" class="Sensio\Bundle\FrameworkExtraBundle\Security\ExpressionLanguage" public="false" />
     </services>
 </container>
