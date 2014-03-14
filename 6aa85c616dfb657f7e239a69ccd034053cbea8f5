@@ -1,0 +1,49 @@
+---------------------------------------------------------------------------
+
+by Koc at 2014-02-13T18:49:46Z
+
+Awesome, thank you. But tests do not pass.
+
+---------------------------------------------------------------------------
+
+by mmoreram at 2014-02-13T19:04:47Z
+
+Tests do not pass without my changes.
+
+https://travis-ci.org/sensiolabs/SensioFrameworkExtraBundle/builds
+
+---------------------------------------------------------------------------
+
+by Koc at 2014-02-15T21:41:21Z
+
+@fabpot merge please. Very useful addition
+
+---------------------------------------------------------------------------
+
+by mmoreram at 2014-02-15T22:07:41Z
+
+Parameter in main documentation page was missing. Updated.
+
+---------------------------------------------------------------------------
+
+by alch at 2014-02-17T12:35:38Z
+
+It looks like the build is failing due to other changes (I suppose they are being fixed). @fabpot can you merge this PR? It's a very useful addition for people using their own entity annotations
+
+---------------------------------------------------------------------------
+
+by dewos at 2014-02-25T02:58:52Z
+
+ +1 for this, nice explicit addition.
+
+---------------------------------------------------------------------------
+
+by mmoreram at 2014-02-27T09:39:35Z
+
+Is there any problem about this PR?
+
+---------------------------------------------------------------------------
+
+by mrzard at 2014-03-06T14:57:05Z
+
++1, it's a great addition. @fabpot can this PR be merged, please? It really helps when using custom annotations.
