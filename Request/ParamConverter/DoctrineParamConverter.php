@@ -166,9 +166,24 @@ class DoctrineParamConverter implements ParamConverterInterface
         try {
             $repository = $em->getRepository($class);
             if (isset($options['repository_method'])) {
-                $reflectionMethod = new \ReflectionMethod(get_class($repository), $options['repository_method']);
+                $repositoryClass = get_class($repository);
+                $repositoryMethod = $options['repository_method'];
 
-                return $reflectionMethod->invokeArgs($repository, $criteria);
+                $reflectionMethod = new \ReflectionMethod($repositoryClass, $repositoryMethod);
+                $parameters = array();
+                for ($i = 0; $i < count($criteria); $i++) {
+                    $parameterName = new \ReflectionParameter(array($repositoryClass, $repositoryMethod), $i);
+                    $parameterName = $parameterName->name;
+                    if (!in_array($parameterName, array_keys($criteria))) {
+                        throw new \InvalidArgumentException(
+                            'Parameter ' . ($i + 1) . " in ${repositoryClass}::${repositoryMethod} should be \"${parameterName}\"!"
+                        );
+                    }
+
+                    $parameters[$parameterName] = $criteria[$parameterName];
+                }
+
+                return $reflectionMethod->invokeArgs($repository, $parameters);
             } else {
                 return $repository->findOneBy($criteria);
             }
