@@ -62,7 +62,7 @@ class ParamConverterManager
         $className = $configuration->getClass();
 
         // If the value is already an instance of the class we are trying to convert it into
-        // we should continue as no convertion is required
+        // we should continue as no conversion is required
         if (is_object($value) && $value instanceof $className) {
             return;
         }
