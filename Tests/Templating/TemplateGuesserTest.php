@@ -12,7 +12,6 @@
 namespace Sensio\Bundle\FrameworkExtraBundle\Tests\Templating;
 
 use Sensio\Bundle\FrameworkExtraBundle\Templating\TemplateGuesser;
-use Sensio\Bundle\FrameworkExtraBundle\Tests\Templating\Fixture;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\KernelInterface;
 
@@ -91,6 +90,17 @@ class TemplateGuesserTest extends \PHPUnit_Framework_TestCase
         ), new Request());
 
         $this->assertEquals('FooBundle:FooBar:index.html.twig', (string) $templateReference);;
+    }
+
+    public function testGuessTemplateWithoutBundle()
+    {
+        $templateGuesser = new TemplateGuesser($this->kernel);
+        $templateReference = $templateGuesser->guessTemplateName(array(
+            new Fixture\Controller\OutOfBundleController(),
+            'indexAction',
+        ), new Request());
+
+        $this->assertEquals(':OutOfBundle:index.html.twig', (string) $templateReference);
     }
 
     protected function getBundle($name, $namespace, $parent = null)
