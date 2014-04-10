@@ -45,7 +45,7 @@ class Cache extends ConfigurationAnnotation
     /**
      * Whether or not the response is public or not.
      *
-     * @var integer
+     * @var Boolean
      */
     protected $public;
 
