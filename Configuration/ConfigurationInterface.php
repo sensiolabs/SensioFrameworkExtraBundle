@@ -28,7 +28,7 @@ interface ConfigurationInterface
     /**
      * Returns whether multiple annotations of this type are allowed
      *
-     * @return Boolean
+     * @return bool
      */
     public function allowArray();
 }

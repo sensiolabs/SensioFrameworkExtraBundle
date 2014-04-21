@@ -45,7 +45,7 @@ class ParamConverter extends ConfigurationAnnotation
     /**
      * Whether or not the parameter is optional.
      *
-     * @var Boolean
+     * @var bool
      */
     protected $optional = false;
 
@@ -129,17 +129,17 @@ class ParamConverter extends ConfigurationAnnotation
     /**
      * Sets whether or not the parameter is optional.
      *
-     * @param Boolean $optional Wether the parameter is optional
+     * @param bool    $optional Wether the parameter is optional
      */
     public function setIsOptional($optional)
     {
-        $this->optional = (Boolean) $optional;
+        $this->optional = (bool) $optional;
     }
 
     /**
      * Returns whether or not the parameter is optional.
      *
-     * @return Boolean
+     * @return bool
      */
     public function isOptional()
     {
@@ -180,7 +180,7 @@ class ParamConverter extends ConfigurationAnnotation
     /**
      * Multiple ParamConverters are allowed
      *
-     * @return Boolean
+     * @return bool
      * @see ConfigurationInterface
      */
     public function allowArray()

@@ -45,7 +45,7 @@ class Template extends ConfigurationAnnotation
     /**
      * Should the template be streamed?
      *
-     * @var Boolean
+     * @var bool
      */
     protected $streamable = false;
 
@@ -60,7 +60,7 @@ class Template extends ConfigurationAnnotation
     }
 
     /**
-     * @param Boolean $streamable
+     * @param bool    $streamable
      */
     public function setIsStreamable($streamable)
     {
@@ -68,11 +68,11 @@ class Template extends ConfigurationAnnotation
     }
 
     /**
-     * @return Boolean
+     * @return bool
      */
     public function isStreamable()
     {
-        return (Boolean) $this->streamable;
+        return (bool) $this->streamable;
     }
 
     /**
@@ -149,7 +149,7 @@ class Template extends ConfigurationAnnotation
     /**
      * Only one template directive is allowed
      *
-     * @return Boolean
+     * @return bool
      * @see ConfigurationInterface
      */
     public function allowArray()

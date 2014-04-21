@@ -107,7 +107,7 @@ class ParamConverterManager
     * be invoked explicitly.
     *
     * @param ParamConverterInterface $converter A ParamConverterInterface instance
-    * @param integer                 $priority  The priority (between -10 and 10).
+    * @param int                     $priority  The priority (between -10 and 10).
     * @param string                  $name      Name of the converter.
     */
     public function add(ParamConverterInterface $converter, $priority = 0, $name = null)

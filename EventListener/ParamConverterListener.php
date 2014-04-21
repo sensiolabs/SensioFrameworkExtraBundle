@@ -36,7 +36,7 @@ class ParamConverterListener implements EventSubscriberInterface
      * Constructor.
      *
      * @param ParamConverterManager $manager     A ParamConverterManager instance
-     * @param Boolean               $autoConvert Auto convert non-configured objects
+     * @param bool                  $autoConvert Auto convert non-configured objects
      */
     public function __construct(ParamConverterManager $manager, $autoConvert = true)
     {

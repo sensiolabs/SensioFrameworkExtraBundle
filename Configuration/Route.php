@@ -34,7 +34,7 @@ class Route extends BaseRoute
     /**
      * Multiple route annotations are allowed
      *
-     * @return Boolean
+     * @return bool
      * @see ConfigurationInterface
      */
     public function allowArray()
