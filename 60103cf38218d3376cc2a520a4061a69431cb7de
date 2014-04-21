@@ -1,0 +1,17 @@
+---------------------------------------------------------------------------
+
+by ibasaw at 2014-04-18T15:12:15Z
+
+in my composer.json i got "sensio/framework-extra-bundle": "~3.0" and if i do a composer update i got the error
+
+  [Doctrine\Common\Annotations\AnnotationException]
+  [Semantical Error] The annotation "@Cache" in class Sensio\Bundle\FrameworkExtraBundle\EventListener\HttpCacheListener was never imported. Did you maybe forget to add a "use" statement for this annotation?
+
+Script Sensio\Bundle\DistributionBundle\Composer\ScriptHandler::clearCache handling the post-update-cmd event terminated with an exception
+
+  [RuntimeException]
+  An error occurred when executing the "'cache:clear --no-warmup'" command.
+
+Because in my vendor i don't have the good version of the file...
+
+The composer.json in the symfony/standard is not working !
