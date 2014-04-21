@@ -43,7 +43,7 @@ class Cache extends ConfigurationAnnotation
     protected $smaxage;
 
     /**
-     * Whether or not the response is public or not.
+     * Whether the response is public or not.
      *
      * @var Boolean
      */
