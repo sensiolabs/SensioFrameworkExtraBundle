@@ -22,7 +22,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 /**
  * HttpCacheListener handles HTTP cache headers.
  *
- * It can be configured via the @Cache annotation.
+ * It can be configured via the Cache annotation.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
