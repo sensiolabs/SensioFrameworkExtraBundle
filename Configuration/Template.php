@@ -1,9 +1,5 @@
 <?php
 
-namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
-
-use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference;
-
 /*
  * This file is part of the Symfony package.
  *
@@ -13,8 +9,12 @@ use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference;
  * file that was distributed with this source code.
  */
 
+namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
+
+use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference;
+
 /**
- * The Template class handles the @Template annotation parts.
+ * The Template class handles the Template annotation parts.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  * @Annotation

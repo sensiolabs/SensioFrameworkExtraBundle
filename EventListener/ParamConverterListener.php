@@ -1,14 +1,5 @@
 <?php
 
-namespace Sensio\Bundle\FrameworkExtraBundle\EventListener;
-
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
-use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-
 /*
  * This file is part of the Symfony framework.
  *
@@ -18,8 +9,17 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  * with this source code in the file LICENSE.
  */
 
+namespace Sensio\Bundle\FrameworkExtraBundle\EventListener;
+
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
+use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
 /**
- * The ParamConverterListener handles the @ParamConverter annotation.
+ * The ParamConverterListener handles the ParamConverter annotation.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */

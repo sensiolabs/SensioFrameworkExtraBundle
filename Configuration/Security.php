@@ -12,7 +12,7 @@
 namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
 
 /**
- * The Security class handles the @Security annotation.
+ * The Security class handles the Security annotation.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  * @Annotation

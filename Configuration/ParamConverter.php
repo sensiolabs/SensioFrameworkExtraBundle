@@ -1,7 +1,5 @@
 <?php
 
-namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
-
 /*
  * This file is part of the Symfony package.
  *
@@ -11,8 +9,10 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
  * file that was distributed with this source code.
  */
 
+namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
+
 /**
- * The ParamConverter class handles the @ParamConverter annotation parts.
+ * The ParamConverter class handles the ParamConverter annotation parts.
  *
  * @ParamConverter("post", class="BlogBundle:Post")
  *
