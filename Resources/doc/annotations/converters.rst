@@ -44,7 +44,7 @@ If you use type hinting as in the example above, you can even omit the
 .. tip::
 
     You can disable the auto-conversion of type-hinted method arguments feature
-    by setting the ``auto_convert`` flag to ``false``::
+    by setting the ``auto_convert`` flag to ``false``:
 
     .. configuration-block::
 
@@ -262,7 +262,7 @@ definition.
 
 .. tip::
 
-   If you would like to inject services or additional arguments to custom param converter, the priority shouldn't 
+   If you would like to inject services or additional arguments to custom param converter, the priority shouldn't
    be higher than 1. Otherwise, the service wouldn't be loaded.
 
 .. tip::
