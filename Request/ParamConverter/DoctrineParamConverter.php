@@ -16,6 +16,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\NoResultException;
+use DateTime;
 
 /**
  * DoctrineParamConverter.
@@ -119,20 +120,23 @@ class DoctrineParamConverter implements ParamConverterInterface
             return $request->attributes->get('id');
         }
 
+        if ($request->query->has('id')) {
+            return $request->query->get('id');
+        }
+
         return false;
     }
 
     protected function findOneBy($class, Request $request, $options)
     {
         if (!$options['mapping']) {
-            $keys               = $request->attributes->keys();
+            $keys               = array_merge($request->attributes->keys(), array_keys($request->query->all()));
             $options['mapping'] = $keys ? array_combine($keys, $keys) : array();
         }
 
         foreach ($options['exclude'] as $exclude) {
             unset($options['mapping'][$exclude]);
         }
-
         if (!$options['mapping']) {
             return false;
         }
@@ -144,6 +148,16 @@ class DoctrineParamConverter implements ParamConverterInterface
         foreach ($options['mapping'] as $attribute => $field) {
             if ($metadata->hasField($field) || ($metadata->hasAssociation($field) && $metadata->isSingleValuedAssociation($field))) {
                 $criteria[$field] = $request->attributes->get($attribute);
+                if (!$criteria[$field] && $request->query->has($attribute)) {
+                    $criteria[$field] = $request->query->get($attribute);
+                }
+                if ('datetime' === $metadata->getTypeOfField($field)) {
+                    try {
+                        $criteria[$field] = new \DateTime($criteria[$field]);
+                    } catch (\Exception $exception) {
+                        throw new NotFoundHttpException('Invalid date given.', $exception);
+                    }
+                }
             }
         }
 

@@ -156,6 +156,39 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($object, $request->attributes->get('arg'));
     }
 
+    /**
+     * @dataProvider idsProvider
+     */
+    public function testApplyWithIdInQuery($id)
+    {
+        $request = new Request();
+        $request->query->set('id', $id);
+
+        $config = $this->createConfiguration('stdClass', array('id' => 'id'), 'arg');
+
+        $manager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+        $this->registry->expects($this->once())
+            ->method('getManagerForClass')
+            ->with('stdClass')
+            ->will($this->returnValue($manager));
+
+        $manager->expects($this->once())
+            ->method('getRepository')
+            ->with('stdClass')
+            ->will($this->returnValue($objectRepository));
+
+        $objectRepository->expects($this->once())
+            ->method('find')
+            ->with($this->equalTo($id))
+            ->will($this->returnValue($object =new \stdClass));
+
+        $ret = $this->converter->apply($request, $config);
+
+        $this->assertTrue($ret);
+        $this->assertSame($object, $request->attributes->get('arg'));
+    }
+
     public function idsProvider()
     {
         return array(
@@ -201,10 +234,12 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
         $request = new Request();
         $request->attributes->set('foo', 1);
         $request->attributes->set('bar', 2);
+        $request->query->set('baz', 3);
+        $request->query->set('qux', 4);
 
         $config = $this->createConfiguration(
             'stdClass',
-            array('mapping' => array('foo' => 'Foo'), 'exclude' => array('bar')),
+            array('mapping' => array('foo' => 'Foo', 'baz' => 'Baz'), 'exclude' => array('bar', 'qux')),
             'arg'
         );
 
@@ -221,25 +256,134 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
                 ->method('getClassMetadata')
                 ->with('stdClass')
                 ->will($this->returnValue($metadata));
+
         $manager->expects($this->once())
                 ->method('getRepository')
                 ->with('stdClass')
                 ->will($this->returnValue($repository));
 
-        $metadata->expects($this->once())
+        $metadata->expects($this->exactly(2))
                  ->method('hasField')
-                 ->with($this->equalTo('Foo'))
+                 ->with($this->logicalOr(
+                    $this->equalTo('Foo'),
+                    $this->equalTo('Baz')
+                 ))
                  ->will($this->returnValue(true));
 
         $repository->expects($this->once())
                       ->method('findOneBy')
-                      ->with($this->equalTo(array('Foo' => 1)))
+                      ->with($this->equalTo(array('Foo' => 1, 'Baz' => 3)))
                       ->will($this->returnValue($object =new \stdClass));
 
         $ret = $this->converter->apply($request, $config);
 
         $this->assertTrue($ret);
         $this->assertSame($object, $request->attributes->get('arg'));
+    }
+
+    public function testApplyWithDateTimeInMapping()
+    {
+        $request = new Request();
+        $dateTimeText1 = '2014-06-11';
+        $dateTimeText2 = '2011-12-20';
+        $expected1 = new \DateTime($dateTimeText1);
+        $expected2 = new \DateTime($dateTimeText2);
+        $request->attributes->set('foo', $dateTimeText1);
+        $request->query->set('bar', $dateTimeText2);
+
+        $config = $this->createConfiguration(
+            'stdClass',
+            array('mapping' => array('foo' => 'Foo', 'bar' => 'Bar')),
+            'arg'
+        );
+
+        $manager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $metadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+        $repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+
+        $this->registry->expects($this->once())
+            ->method('getManagerForClass')
+            ->with('stdClass')
+            ->will($this->returnValue($manager));
+
+        $manager->expects($this->once())
+            ->method('getClassMetadata')
+            ->with('stdClass')
+            ->will($this->returnValue($metadata));
+
+        $manager->expects($this->once())
+            ->method('getRepository')
+            ->with('stdClass')
+            ->will($this->returnValue($repository));
+
+        $metadata->expects($this->exactly(2))
+            ->method('hasField')
+            ->with($this->logicalOr(
+                $this->equalTo('Foo'),
+                $this->equalTo('Bar')
+            ))
+            ->will($this->returnValue(true));
+
+        $metadata->expects($this->exactly(2))
+            ->method('getTypeOfField')
+            ->with($this->logicalOr(
+                $this->equalTo('Foo'),
+                $this->equalTo('Bar')
+            ))
+            ->will($this->returnValue('datetime'));
+
+        $repository->expects($this->once())
+            ->method('findOneBy')
+            ->with($this->equalTo(array('Foo' => $expected1, 'Bar' => $expected2)))
+            ->will($this->returnValue($object =new \stdClass));
+
+        $ret = $this->converter->apply($request, $config);
+
+        $this->assertTrue($ret);
+        $this->assertSame($object, $request->attributes->get('arg'));
+    }
+
+    public function testApplyWithInvalidDateTimeInMapping()
+    {
+        $request = new Request();
+        $dateTimeText = 'Not a valid date';
+        $request->attributes->set('foo', $dateTimeText);
+
+        $config = $this->createConfiguration(
+            'stdClass',
+            array('mapping' => array('foo' => 'Foo')),
+            'arg'
+        );
+
+        $manager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $metadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+
+        $this->registry->expects($this->once())
+            ->method('getManagerForClass')
+            ->with('stdClass')
+            ->will($this->returnValue($manager));
+
+        $manager->expects($this->once())
+            ->method('getClassMetadata')
+            ->with('stdClass')
+            ->will($this->returnValue($metadata));
+
+        $metadata->expects($this->once())
+            ->method('hasField')
+            ->with($this->logicalOr(
+                $this->equalTo('Foo'),
+                $this->equalTo('Bar')
+            ))
+            ->will($this->returnValue(true));
+
+        $metadata->expects($this->once())
+            ->method('getTypeOfField')
+            ->with($this->equalTo('Foo'))
+            ->will($this->returnValue('datetime'));
+
+        $this->setExpectedException('\Symfony\Component\HttpKernel\Exception\NotFoundHttpException');
+
+        $this->converter->apply($request, $config);
     }
 
     public function testApplyWithRepositoryMethod()
