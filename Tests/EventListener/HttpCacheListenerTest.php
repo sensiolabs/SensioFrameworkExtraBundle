@@ -85,6 +85,19 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('DateTime', $this->response->getExpires());
     }
 
+    public function testCacheMaxAgeSupportsStrtotimeFormat()
+    {
+        $this->request->attributes->set('_cache', new Cache(array(
+            'smaxage' => '1 day',
+            'maxage' => '1 day',
+        )));
+
+        $this->listener->onKernelResponse($this->event);
+
+        $this->assertEquals(60 * 60 * 24, $this->response->headers->getCacheControlDirective('s-maxage'));
+        $this->assertEquals(60 * 60 * 24, $this->response->getMaxAge());
+    }
+
     public function testLastModifiedNotModifiedResponse()
     {
         $request = $this->createRequest(new Cache(array('lastModified' => 'test.getDate()')));
