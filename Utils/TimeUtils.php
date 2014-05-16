@@ -38,9 +38,9 @@ class TimeUtils
             return (int) $duration;
         }
 
-        $zeroDate = new \DateTime();
+        $date = new \DateTime();
 
-        return $zeroDate
+        return $date
             // can't use new \DateTime("@0") as it will add 3600 seconds to the final output on php 5.3.9 - 5.4.7
             ->setTimestamp(0)
             ->add(\DateInterval::createFromDateString($duration))
