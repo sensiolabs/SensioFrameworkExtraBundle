@@ -173,7 +173,7 @@ PostController()`` itself::
     /**
      * @Route(service="my_post_controller_service")
      */
-    class PostController extends Controller
+    class PostController
     {
         // ...
     }
