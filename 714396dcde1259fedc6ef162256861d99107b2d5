@@ -1,0 +1,17 @@
+---------------------------------------------------------------------------
+
+by peterrehm at 2014-06-10T11:55:15Z
+
+Just updated but fabbot is not yet happy about it. Shall I change also the return statements even I have not touched them?
+
+---------------------------------------------------------------------------
+
+by fabpot at 2014-06-10T12:00:25Z
+
+No need to fix the fabbot issue, but can you add some unit tests to cover your changes.
+
+---------------------------------------------------------------------------
+
+by peterrehm at 2014-06-10T12:32:08Z
+
+Sure, just added one. However this test fails hard with the old code but it covers the current use case. Otherwise I have to add (useless) mocks.
