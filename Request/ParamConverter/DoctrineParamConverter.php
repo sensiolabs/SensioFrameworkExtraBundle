@@ -115,7 +115,7 @@ class DoctrineParamConverter implements ParamConverterInterface
             return $request->attributes->get($name);
         }
 
-        if ($request->attributes->has('id')) {
+        if ($request->attributes->has('id') && !isset($options['id'])) {
             return $request->attributes->get('id');
         }
 
@@ -134,6 +134,12 @@ class DoctrineParamConverter implements ParamConverterInterface
         }
 
         if (!$options['mapping']) {
+            return false;
+        }
+
+        // if a specific id has been defined in the options and there is no corresponding attribute
+        // return false in order to avoid a fallback to the id which might be of another object
+        if (isset($options['id']) && null === $request->attributes->get($options['id'])) {
             return false;
         }
 

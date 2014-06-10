@@ -156,6 +156,21 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($object, $request->attributes->get('arg'));
     }
 
+    public function testUsedProperIdentifier()
+    {
+        $request = new Request();
+        $request->attributes->set('id', 1);
+        $request->attributes->set('entity_id', null);
+        $request->attributes->set('arg', null);
+
+        $config = $this->createConfiguration('stdClass', array('id' => 'entity_id'), 'arg', null);
+
+        $ret = $this->converter->apply($request, $config);
+
+        $this->assertTrue($ret);
+        $this->assertNull($request->attributes->get('arg'));
+    }
+
     public function idsProvider()
     {
         return array(
