@@ -137,9 +137,9 @@ class DoctrineParamConverter implements ParamConverterInterface
             return false;
         }
 
-        // if a specific id has been defined in the options anf there is no corresponding attribute
+        // if a specific id has been defined in the options and there is no corresponding attribute
         // return false in order to avoid a fallback to the id which might be of another object
-        if(isset($options['id']) && null === $request->attributes->get($options['id'])) {
+        if (isset($options['id']) && null === $request->attributes->get($options['id'])) {
             return false;
         }
 
