@@ -11,6 +11,7 @@
 
 namespace Sensio\Bundle\FrameworkExtraBundle\Templating;
 
+use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference;
@@ -77,8 +78,8 @@ class TemplateGuesser
     /**
      * Returns the Bundle instance in which the given class name is located.
      *
-     * @param  string                    $class  A fully qualified controller class name
-     * @param  Bundle                    $bundle A Bundle instance
+     * @param  string $class  A fully qualified controller class name
+     * @return Bundle $bundle A Bundle instance
      * @throws \InvalidArgumentException
      */
     protected function getBundleForClass($class)
