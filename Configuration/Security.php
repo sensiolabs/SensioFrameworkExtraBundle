@@ -20,6 +20,17 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
 class Security extends ConfigurationAnnotation
 {
     protected $expression;
+    protected $message;
+
+    public function getMessage()
+    {
+        return $this->message;
+    }
+
+    public function setMessage($message)
+    {
+        $this->message = $message;
+    }
 
     public function getExpression()
     {

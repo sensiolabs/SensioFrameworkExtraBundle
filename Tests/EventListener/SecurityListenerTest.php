@@ -45,6 +45,29 @@ class SecurityListenerTest extends \PHPUnit_Framework_TestCase
         $listener->onKernelController($event);
     }
 
+    /**
+     * @expectedException \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     * @expectedExceptionMessage Test Access Denied Message
+     */
+    public function testExceptionMessage()
+    {
+        $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        $token->expects($this->once())->method('getRoles')->will($this->returnValue(array()));
+
+        $securityContext = $this->getMock('Symfony\Component\Security\Core\SecurityContextInterface');
+        $securityContext->expects($this->once())->method('getToken')->will($this->returnValue($token));
+
+        $trustResolver = $this->getMock('Symfony\Component\Security\Core\Authentication\AuthenticationTrustResolverInterface');
+
+        $language = new ExpressionLanguage();
+        $listener = new SecurityListener($securityContext, $language, $trustResolver);
+        $request = $this->createRequest(new Security(array('expression' => 'has_role("ROLE_ADMIN") or is_granted("FOO")', 'message'=>'Test Access Denied Message')));
+
+        $event = new FilterControllerEvent($this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface'), function () { return new Response(); }, $request, null);
+
+        $listener->onKernelController($event);
+    }
+
     private function createRequest(Security $security = null)
     {
         return new Request(array(), array(), array(

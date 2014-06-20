@@ -11,7 +11,7 @@ The ``@Security`` annotation restricts access on controllers::
     class PostController extends Controller
     {
         /**
-         * @Security("has_role('ROLE_ADMIN')")
+         * @Security("has_role('ROLE_ADMIN')", message="Staff only.")
          */
         public function indexAction()
         {
@@ -39,6 +39,16 @@ passed to the controller::
      */
     public function showAction(Post $post)
     {
+    }
+
+The message parameter allows you to customize the text shown to the user at the exception or error pages::
+
+    /**
+     * @Security("is_granted('POST_SHOW', post)",message="You have no rights to view this post.")
+     */
+    public function showAction(Post $post)
+    {
+
     }
 
 .. note::
