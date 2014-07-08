@@ -42,7 +42,7 @@ The default configuration is as follow:
 
         sensio_framework_extra:
             router:   { annotations: true }
-            request:  { converters: true, auto_convert: true }
+            request:  { converters: true }
             view:     { annotations: true }
             cache:    { annotations: true }
             security: { annotations: true }
@@ -52,7 +52,7 @@ The default configuration is as follow:
         <!-- xmlns:sensio-framework-extra="http://symfony.com/schema/dic/symfony_extra" -->
         <sensio-framework-extra:config>
             <router annotations="true" />
-            <request converters="true" auto_convert="true" />
+            <request converters="true" />
             <view annotations="true" />
             <cache annotations="true" />
             <security annotations="true" />
@@ -63,7 +63,7 @@ The default configuration is as follow:
         // load the profiler
         $container->loadFromExtension('sensio_framework_extra', array(
             'router'   => array('annotations' => true),
-            'request'  => array('converters' => true, 'auto_convert' => true),
+            'request'  => array('converters' => true ),
             'view'     => array('annotations' => true),
             'cache'    => array('annotations' => true),
             'security' => array('annotations' => true),
