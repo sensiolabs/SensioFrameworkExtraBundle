@@ -39,6 +39,14 @@ array of parameters to pass to the view instead of a ``Response`` object.
    If the action returns a ``Response`` object, the ``@Template`` 
    annotation is simply ignored.
 
+.. tip::
+   If you generate your routes using a custom procedure, you can directly
+   use the ``_template`` attribute in the route::
+
+        my_route:
+           path: /{product}-awesome
+           defaults: { _controller: Bundle:Product:show, _template: Bundle:Product:show-awesome.html.twig}
+
 If the template is named after the controller and action names, which is the
 case for the above example, you can even omit the annotation value::
 
@@ -52,6 +60,14 @@ case for the above example, you can even omit the annotation value::
 
         return array('post' => $post);
     }
+
+.. tip::
+   If you generate your routes using a custom procedure and use the ``_template``
+   attribute, you can specify the value ``true`` to use template this feature::
+
+        my_route:
+           path: /{product}-awesome
+           defaults: { _controller: Bundle:Product:show, _template: true}
 
 .. note::
 
