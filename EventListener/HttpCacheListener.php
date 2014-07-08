@@ -18,7 +18,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
-use Sensio\Bundle\FrameworkExtraBundle\Utils\TimeUtils;
 
 /**
  * HttpCacheListener handles HTTP cache headers.
@@ -94,12 +93,24 @@ class HttpCacheListener implements EventSubscriberInterface
             return;
         }
 
-        if (null !== $configuration->getSMaxAge()) {
-            $response->setSharedMaxAge(TimeUtils::durationToSeconds($configuration->getSMaxAge()));
+        if (null !== $age = $configuration->getSMaxAge()) {
+            if (!is_numeric($age)) {
+                $now = microtime(true);
+
+                $age = ceil(strtotime($configuration->getSMaxAge(), $now) - $now);
+            }
+
+            $response->setSharedMaxAge($age);
         }
 
-        if (null !== $configuration->getMaxAge()) {
-            $response->setMaxAge(TimeUtils::durationToSeconds($configuration->getMaxAge()));
+        if (null !== $age = $configuration->getMaxAge()) {
+            if (!is_numeric($age)) {
+                $now = microtime(true);
+
+                $age = ceil(strtotime($configuration->getMaxAge(), $now) - $now);
+            }
+
+            $response->setMaxAge($age);
         }
 
         if (null !== $configuration->getExpires()) {
