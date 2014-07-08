@@ -1,0 +1,11 @@
+---------------------------------------------------------------------------
+
+by fabpot at 2014-07-08T17:31:14Z
+
+Tests actually pass on HHVM, so no need to exclude them.
+
+---------------------------------------------------------------------------
+
+by Nyholm at 2014-07-08T17:40:43Z
+
+Updated the PR. The HHVM tests are not longer excluded.
