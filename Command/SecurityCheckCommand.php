@@ -269,7 +269,7 @@ EOF
     /**
      * Checks whether the current console has ANSI color support.
      *
-     * @return boolean True if it has color support, false otherwise
+     * @return bool True if it has color support, false otherwise
      */
     public function hasColorSupport()
     {
@@ -287,7 +287,8 @@ EOF
      *
      * @return string The certificate file path
      */
-    public function getCertFile() {
+    public function getCertFile()
+    {
         $certificateContents =
             "-----BEGIN CERTIFICATE-----\n".
             "MIIEdDCCA1ygAwIBAgIQRL4Mi1AAJLQR0zYq/mUK/TANBgkqhkiG9w0BAQUFADCB\n".
