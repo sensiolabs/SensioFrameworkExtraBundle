@@ -89,7 +89,15 @@ class HttpCacheListener implements EventSubscriberInterface
 
         $response = $event->getResponse();
 
-        if (!in_array($response->getStatusCode(), array(200, 203, 300, 301, 302, 404, 410))) {
+        if (!in_array($response->getStatusCode(), array(
+            Response::HTTP_OK,
+            Response::HTTP_NON_AUTHORITATIVE_INFORMATION,
+            Response::HTTP_MULTIPLE_CHOICES,
+            Response::HTTP_MOVED_PERMANENTLY,
+            Response::HTTP_FOUND,
+            Response::HTTP_NOT_FOUND,
+            Response::HTTP_GONE
+        ))) {
             return;
         }
 
