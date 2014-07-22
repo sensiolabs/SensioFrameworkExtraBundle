@@ -262,7 +262,7 @@ definition.
 
 .. tip::
 
-   If you would like to inject services or additional arguments to custom param converter, the priority shouldn't
+   If you would like to inject services or additional arguments into a custom param converter, the priority shouldn't
    be higher than 1. Otherwise, the service wouldn't be loaded.
 
 .. tip::
