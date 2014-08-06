@@ -1,0 +1,99 @@
+---------------------------------------------------------------------------
+
+by tvlooy at 2014-01-21T10:39:29Z
+
+ps: I'll add tests and docs if this is accepted
+
+---------------------------------------------------------------------------
+
+by Padam87 at 2014-03-20T11:41:15Z
+
+:+1: I really like this, because ATM if we use the param converter, we always have to use an alias method, with an array argument...
+
+---------------------------------------------------------------------------
+
+by fabpot at 2014-03-27T08:01:47Z
+
+This is BC break and I don't understand how you match the mapping fields to the method arguments; looks like you just rely on the order and not on the keys (that looks fragile to me).
+
+---------------------------------------------------------------------------
+
+by tvlooy at 2014-03-27T09:14:08Z
+
+Just to see if we are on the same page here.
+
+This is the method signature of the current implementation:
+
+    public function findForYmdLink($params)
+
+This seems bad. If I want to use this repository method somewhere else in my code I would have to pass an array with parameters. Bad things can happen if I forget a parameter.
+
+My patch does depend on the order of the parameters. But so do most functions. Eg:
+
+    implode(',', $arr); // works
+    implode($arr, ','); // doesn't
+
+It seems like you are suggesting that the following would be a better solution:
+
+    implode(array('pieces' => $arr, 'glue' => ',')); // should work
+    implode(array('glue' => ',', 'pieces' => $arr)); // should work
+
+But this is not the way it works, right?
+
+My implementation says that if you configure the parameter converter like this:
+
+    "repository_method" = "findForYmdLink",
+    "mapping": {"year": "year", "month": "month", "day": "day", "permalink": "permalink"}
+
+The function will be called like this:
+
+    findForYmdLink($year, $month, $day, $permalink)
+
+Isn't that a much better way of doing it?
+
+---------------------------------------------------------------------------
+
+by fabpot at 2014-03-27T09:21:44Z
+
+The `invokeArgs()` call takes an array of parameters which should be in the right order (the keys are not used here). So, how do you manage the right ordering? It does not seem to be taking care of in the code.
+
+---------------------------------------------------------------------------
+
+by tvlooy at 2014-03-27T09:28:53Z
+
+Hm, I think I understand what you are trying to say now. I'll take a look at this tonight. Thanks!
+
+---------------------------------------------------------------------------
+
+by tvlooy at 2014-03-27T19:20:13Z
+
+I just tested what I was assuming and it works like I expect it to work.
+
+    * @Route("/{year}/{month}/{day}/{permalink}",
+    * requirements={
+    *     "year"="\d{4}",
+    *     "month"="\d{2}",
+    *     "day"="\d{2}"
+    * }, name="read_post")
+    * @ParamConverter(
+    *    "post",
+    *    class="AcmeDemoBundle:Post",
+    *    options={
+    *        "repository_method" = "findForYmdLink",
+    *        "mapping": {"year": "year", "month": "month", "day": "day", "permalink": "permalink"}
+
+The "keys" are only used to make the mapping between the route and the repository method's arguments. The order of keys in the mapping can be changed to fit the repository method's signature. If you want the repository method to have this signature:
+
+    findForYmdLink($permalink, $year, $month, $day)
+
+You would have to change the mapping to:
+
+    * "mapping": {"permalink": "permalink", "year": "year", "month": "month", "day": "day"}
+
+The route doesn't have to be changed because it is mapped with the key fields. Currently there is nothing that will map the parameters to the repository method. They are passed 1 on 1. It is left to the developer to make sure the order is right.
+
+---------------------------------------------------------------------------
+
+by tvlooy at 2014-03-27T19:32:17Z
+
+The last commit changes the behaviour to map the ParamConverter keys to the repository method's signature "magically".
