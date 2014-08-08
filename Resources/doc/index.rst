@@ -8,7 +8,12 @@ conventions and annotations. It allows for more concise controllers.
 Installation
 ------------
 
-`Download`_ the bundle and put it under the ``Sensio\Bundle\`` namespace.
+You can install the bundle in 2 different ways:
+
+* `Install it via Composer`_ (``sensio/framework-extra-bundle`` on `Packagist`_);
+
+* Use the official Git repository (https://github.com/sensiolabs/SensioFrameworkExtraBundle).
+
 Then, like for any other bundle, include it in your Kernel class::
 
     public function registerBundles()
@@ -26,7 +31,6 @@ If you plan to use or create annotations for controllers, make sure to update
 your ``autoload.php`` by adding the following line::
 
     Doctrine\Common\Annotations\AnnotationRegistry::registerLoader(array($loader, 'loadClass'));
-
 
 Configuration
 -------------
@@ -159,4 +163,6 @@ see :ref:`Annotated Routes Activation<frameworkextra-annotations-routing-activat
 details.
 
 .. _`SensioFrameworkExtraBundle`: https://github.com/sensio/SensioFrameworkExtraBundle
+.. _`Install it via Composer`: https://getcomposer.org/doc/01-basic-usage.md#the-require-key
+.. _`Packagist`: https://packagist.org/
 .. _`Download`: http://github.com/sensio/SensioFrameworkExtraBundle
