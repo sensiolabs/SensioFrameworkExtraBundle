@@ -8,11 +8,11 @@ conventions and annotations. It allows for more concise controllers.
 Installation
 ------------
 
-You can install the bundle in 2 different ways:
+Before using this bundle in your project, add it to your ``composer.json`` file:
 
-* `Install it via Composer`_ (``sensio/framework-extra-bundle`` on `Packagist`_);
+.. code-block:: bash
 
-* Use the official Git repository (https://github.com/sensiolabs/SensioFrameworkExtraBundle).
+    $ composer require sensio/framework-extra-bundle
 
 Then, like for any other bundle, include it in your Kernel class::
 
@@ -174,7 +174,4 @@ The routes need to be imported to be active as any other routing resources,
 see :ref:`Annotated Routes Activation<frameworkextra-annotations-routing-activation>` for
 details.
 
-.. _`SensioFrameworkExtraBundle`: https://github.com/sensio/SensioFrameworkExtraBundle
-.. _`Install it via Composer`: https://getcomposer.org/doc/01-basic-usage.md#the-require-key
-.. _`Packagist`: https://packagist.org/
-.. _`Download`: http://github.com/sensio/SensioFrameworkExtraBundle
+.. _`SensioFrameworkExtraBundle`: https://github.com/sensiolabs/SensioFrameworkExtraBundle
