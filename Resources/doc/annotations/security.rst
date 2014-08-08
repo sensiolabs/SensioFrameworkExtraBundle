@@ -1,6 +1,12 @@
 @Security
 =========
 
+.. caution::
+
+    The ``@Security`` annotation was introduced in SensioFrameworkExtraBundle
+    3.0. This bundle version can only be used with Symfony 2.4 or later (see
+    :ref:`the SensioFrameworkExtraBundle release cycle <release-cycle-note>`).
+
 Usage
 -----
 
