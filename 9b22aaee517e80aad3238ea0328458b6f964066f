@@ -1,0 +1,45 @@
+---------------------------------------------------------------------------
+
+by stof at 2014-08-28T21:24:39Z
+
+Don't merge it yet. I need to check wehther all listeners using ExpressionLanguage are accepting to run without it in 2.3 (or could run with the 2.4 component only without the need of classes in other components 2.4)
+
+---------------------------------------------------------------------------
+
+by stof at 2014-08-28T21:37:30Z
+
+OK, to use the bundle on 2.3, we would have to disable the SecurityListener, as it relies on the ``\Symfony\Component\Security\Core\Authorization\ExpressionLanguage`` which exists only in security/core 2.4+.
+
+There is 3 solutions here:
+
+- making ``$config['security']['annotations']`` default to false when the class is not there (if it is set to ``true``, you get a fatal error at some point without the class)
+- force disabling security annotations when the class is not there
+- make the listener run (unless you explicitly disable it in the config) and throw an exception if your controller uses ``@Security`` telling you it cannot be used without the security component at 2.4+.
+
+I would vote for the third option as it is the safest one (we are talking about the security checks of your app being disabled here). People not wanting the overhead of the check if they know they don't use the annotations can still disable it in their config anyway, as done in newer versions as well.
+
+What do you think @lyrixx and @fabpot ?
+
+---------------------------------------------------------------------------
+
+by lyrixx at 2014-08-29T08:26:00Z
+
+I would vote for the third option too.
+
+---------------------------------------------------------------------------
+
+by fabpot at 2014-08-29T08:59:54Z
+
+Third option as well
+
+---------------------------------------------------------------------------
+
+by stof at 2014-08-29T09:00:30Z
+
+OK, then I will update the PR this evening
+
+---------------------------------------------------------------------------
+
+by stof at 2014-09-02T01:11:25Z
+
+PR is updated
