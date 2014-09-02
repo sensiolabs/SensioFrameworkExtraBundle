@@ -11,7 +11,7 @@
         }
     ],
     "require": {
-        "symfony/framework-bundle": "~2.5",
+        "symfony/framework-bundle": "~2.3",
         "doctrine/common": "~2.2"
     },
     "require-dev": {

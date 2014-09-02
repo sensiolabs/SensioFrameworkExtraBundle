@@ -16,7 +16,6 @@ use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Security\Core\Authentication\AuthenticationTrustResolverInterface;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -51,6 +50,10 @@ class SecurityListener implements EventSubscriberInterface
 
         if (null === $this->securityContext || null === $this->trustResolver) {
             throw new \LogicException('To use the @Security tag, you need to install the Symfony Security bundle.');
+        }
+
+        if (null === $this->language) {
+            throw new \LogicException('To use the @Security tag, you need to use the Security component 2.4 or newer and to install the ExpressionLanguage component.');
         }
 
         if (!$this->language->evaluate($configuration->getExpression(), $this->getVariables($request))) {
