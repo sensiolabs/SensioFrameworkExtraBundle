@@ -54,7 +54,7 @@ class DateTimeParamConverterTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('Symfony\Component\HttpKernel\Exception\NotFoundHttpException', 'Invalid date given.');
         $this->converter->apply($request, $config);
     }
-    
+
     public function testApplyWithFormatInvalidDate404Exception()
     {
         $request = new Request(array(), array(), array('start' => '2012-07-21'));
