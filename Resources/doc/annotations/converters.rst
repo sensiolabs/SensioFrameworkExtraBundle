@@ -258,7 +258,15 @@ You can register a converter by priority, by name (attribute "converter") or
 both. If you don't specifiy a priority or name the converter will be added to
 the converter stack with a priority of `0`. To explicitly disable the
 registration by priority you have to set `priority="false"` in your tag
-definition.
+definition. If you want to bypass standard converter stack on your action, you can specify "converter" attribute in your converter definition and use ``converter`` attribute inside of the ``@ParamConverter`` annotation at your action to specify which converter you want to use::
+
+    /**
+     * @Route("/blog/post-of-the-year/{year}")
+     * @ParamConverter("post", converter="my.post_of_the_year_converter")
+     */
+     public function postOfTheYearAction(Post $post)
+     {
+     }
 
 .. tip::
 
