@@ -67,7 +67,6 @@ class CurrentUserParamConverterTest extends \PHPUnit_Framework_TestCase
 
         $request = new Request();
 
-
         $this->setExpectedException('LogicException');
         $this->converter->apply($request, $config);
 
@@ -112,7 +111,6 @@ class CurrentUserParamConverterTest extends \PHPUnit_Framework_TestCase
 
         return $config;
     }
-
 
     private function getSecurityContextWithUser($user = null)
     {
