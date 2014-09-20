@@ -55,7 +55,7 @@ class CurrentUserParamConverter implements ParamConverterInterface
         $currentUser = $this->getUser();
 
         if (!$currentUser && !$configuration->isOptional()) {
-            throw new AccessDeniedException('A user was expected in the SecurityContext. Consider configuring a firewall in security.yml or making this argument optional');
+            throw new \LogicException('A user was expected in the SecurityContext. Consider configuring a firewall in security.yml or making this argument optional');
         }
 
         $request->attributes->set($param, $currentUser);

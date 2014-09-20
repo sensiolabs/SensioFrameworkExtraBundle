@@ -62,7 +62,7 @@ class CurrentUserParamConverterTest extends \PHPUnit_Framework_TestCase
         $request = new Request();
 
 
-        $this->setExpectedException('Symfony\Component\Security\Core\Exception\AccessDeniedException');
+        $this->setExpectedException('LogicException');
         $this->converter->apply($request, $config);
 
     }
