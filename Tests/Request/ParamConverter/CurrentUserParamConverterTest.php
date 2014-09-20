@@ -25,6 +25,12 @@ class CurrentUserParamConverterTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testThrowsExceptionWhenSecurityBundleNotEnabled()
+    {
+        $this->setExpectedException('LogicException');
+        new CurrentUserParamConverter(null);
+    }
+
     public function testSupports()
     {
         $config = $this->createConfiguration('Symfony\Component\Security\Core\User\UserInterface');

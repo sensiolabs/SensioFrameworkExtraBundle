@@ -228,6 +228,7 @@ could be handled by another ParamConverter.
      */
      public function sendMessageAction(User $currentUser, User $recipient)
 
+The SecurityBundle must be enabled for this converter to function.
 
 Creating a Converter
 --------------------

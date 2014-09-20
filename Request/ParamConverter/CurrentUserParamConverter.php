@@ -37,8 +37,13 @@ class CurrentUserParamConverter implements ParamConverterInterface
      */
     private $security;
 
-    public function __construct(SecurityContextInterface $security)
+    public function __construct(SecurityContextInterface $security = null)
     {
+        if (null === $security) {
+            throw new \LogicException(
+                'The SecurityBundle is required for the current_user ParamConverter annotation'
+            );
+        }
         $this->security = $security;
     }
 
