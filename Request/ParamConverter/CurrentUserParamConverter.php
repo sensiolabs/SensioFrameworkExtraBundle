@@ -19,7 +19,13 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 
 /**
- * Convert DateTime instances from request attribute variable.
+ * Inject the current user into controller methods.
+ *
+ * Alternative to getUser in base controller class, which relies on the
+ * whole service container.
+ *
+ * Does not require controllers to depend upon the entire
+ * SecurityContext object.
  *
  * @author Benjamin Eberlei <kontakt@beberlei.de>
  */

@@ -203,6 +203,32 @@ is accepted. You can be stricter with input given through the options::
     {
     }
 
+CurrentUser Converter
+~~~~~~~~~~~~~~~~~~~~~
+
+Converter Name: ``current_user``
+
+This converter injects the current user from the ``SecurityContext``, if available.
+
+This has several benefits:
+
+- Short syntax, reduce logic in controller
+- Alternative to ``getUser`` from base controller class, avoiding reliance on the
+  service container
+
+Its usage is simple. Provide the converter name and the parameter name you wish
+to be converted. These are both required in order to not conflict with the Doctrine
+ParamConverter.
+
+The example below illustrates applying this to one parameter, where the ``$recipient``
+could be handled by another ParamConverter.
+
+    /**
+     * @ParamConverter(converter="current_user", name="user")
+     */
+     public function sendMessageAction(User $currentUser, User $recipient)
+
+
 Creating a Converter
 --------------------
 
