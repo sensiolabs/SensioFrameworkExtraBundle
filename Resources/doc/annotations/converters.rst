@@ -75,8 +75,8 @@ To detect which converter is run on a parameter the following process is run:
 Built-in Converters
 -------------------
 
-The bundle has two built-in converters, the Doctrine one and a DateTime
-converter.
+The bundle has three built-in converters, the Doctrine one, a DateTime
+converter and a CurrentUser converter.
 
 Doctrine Converter
 ~~~~~~~~~~~~~~~~~~
@@ -212,8 +212,8 @@ This converter injects the current user from the ``SecurityContext``, if availab
 
 This has several benefits:
 
-- Short syntax, reduce logic in controller
-- Alternative to ``getUser`` from base controller class, avoiding reliance on the
+* Short syntax, reduce logic in controller
+* Alternative to ``getUser`` from base controller class, avoiding reliance on the
   service container
 
 Its usage is simple. Provide the converter name and the parameter name you wish

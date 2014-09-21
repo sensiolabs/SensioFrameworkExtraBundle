@@ -25,7 +25,7 @@ use Symfony\Component\Security\Core\SecurityContextInterface;
  * Does not require controllers to depend upon the entire
  * SecurityContext object.
  *
- * @author Benjamin Eberlei <kontakt@beberlei.de>
+ * @author Adam Quaile <adamquaile@gmail.com>
  */
 class CurrentUserParamConverter implements ParamConverterInterface
 {
@@ -37,11 +37,6 @@ class CurrentUserParamConverter implements ParamConverterInterface
 
     public function __construct(SecurityContextInterface $security = null)
     {
-        if (null === $security) {
-            throw new \LogicException(
-                'The SecurityBundle is required for the current_user ParamConverter annotation'
-            );
-        }
         $this->security = $security;
     }
 
@@ -52,6 +47,9 @@ class CurrentUserParamConverter implements ParamConverterInterface
      */
     public function apply(Request $request, ParamConverter $configuration)
     {
+        if (null === $this->security) {
+            throw new \LogicException('The SecurityBundle is required for the current_user ParamConverter annotation');
+        }
 
         $param = $configuration->getName();
 
@@ -73,7 +71,6 @@ class CurrentUserParamConverter implements ParamConverterInterface
      */
     private function getUser()
     {
-
         if (null === $token = $this->security->getToken()) {
             return;
         }
@@ -95,6 +92,5 @@ class CurrentUserParamConverter implements ParamConverterInterface
         $interfaces = class_implements($configuredClass);
 
         return in_array($userInterfaceClass, $interfaces) || ($configuredClass == $userInterfaceClass);
-
     }
 }
