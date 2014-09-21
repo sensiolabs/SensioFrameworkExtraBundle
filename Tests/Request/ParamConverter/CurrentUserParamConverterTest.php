@@ -46,13 +46,13 @@ class CurrentUserParamConverterTest extends \PHPUnit_Framework_TestCase
 
     public function testSupportsClassWhichImplementsUserInterface()
     {
-        $config = $this->createConfiguration($this->doubleNamespace . 'ConcreteDomainUser');
+        $config = $this->createConfiguration($this->doubleNamespace.'ConcreteDomainUser');
         $this->assertTrue($this->converter->supports($config));
     }
 
     public function testSupportsInterfaceWhichExtendsUserInterface()
     {
-        $config = $this->createConfiguration($this->doubleNamespace . 'DomainUserInterface');
+        $config = $this->createConfiguration($this->doubleNamespace.'DomainUserInterface');
         $this->assertTrue($this->converter->supports($config));
     }
 
