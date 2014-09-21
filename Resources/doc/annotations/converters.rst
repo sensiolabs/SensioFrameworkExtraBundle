@@ -228,6 +228,12 @@ could be handled by another ParamConverter.
      */
      public function sendMessageAction(User $currentUser, User $recipient)
 
+If you type-hint against the UserInterface, or an interface which extends UserInterface,
+you may omit this annotation entirely, like this:
+
+     public function myAccountAction(\Symfony\Component\Security\Core\User\UserInterface $currentUser)
+
+
 The SecurityBundle must be enabled for this converter to function.
 
 Creating a Converter
