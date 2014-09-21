@@ -18,6 +18,8 @@ class CurrentUserParamConverterTest extends \PHPUnit_Framework_TestCase
 {
     private $converter;
 
+    private $doubleNamespace = 'Sensio\Bundle\FrameworkExtraBundle\Tests\Request\ParamConverter\CurrentUser\Doubles\\';
+
     public function setUp()
     {
         $this->converter = new CurrentUserParamConverter(
@@ -36,14 +38,28 @@ class CurrentUserParamConverterTest extends \PHPUnit_Framework_TestCase
         $this->converter->apply(new Request(), $config);
     }
 
-    public function testSupports()
+    public function testSupportsUserInterfaceTypeHint()
     {
         $config = $this->createConfiguration('Symfony\Component\Security\Core\User\UserInterface');
         $this->assertTrue($this->converter->supports($config));
+    }
 
+    public function testSupportsClassWhichImplementsUserInterface()
+    {
+        $config = $this->createConfiguration($this->doubleNamespace . 'ConcreteDomainUser');
+        $this->assertTrue($this->converter->supports($config));
+    }
+
+    public function testSupportsInterfaceWhichExtendsUserInterface()
+    {
+        $config = $this->createConfiguration($this->doubleNamespace . 'DomainUserInterface');
+        $this->assertTrue($this->converter->supports($config));
+    }
+
+    public function testDoesNotSupportOtherClasses()
+    {
         $config = $this->createConfiguration(__CLASS__);
         $this->assertFalse($this->converter->supports($config));
-
     }
 
     public function testApply()
