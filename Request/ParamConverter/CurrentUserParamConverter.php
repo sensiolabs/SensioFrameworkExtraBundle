@@ -43,7 +43,7 @@ class CurrentUserParamConverter implements ParamConverterInterface
     /**
      * {@inheritdoc}
      *
-     * @throws NotFoundHttpException When invalid date given
+     * @throws \LogicException When SecurityBundle not enabled, or badly configured
      */
     public function apply(Request $request, ParamConverter $configuration)
     {
