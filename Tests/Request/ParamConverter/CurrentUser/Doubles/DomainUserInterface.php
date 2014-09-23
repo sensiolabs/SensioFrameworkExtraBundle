@@ -4,4 +4,6 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Tests\Request\ParamConverter\Curren
 
 use Symfony\Component\Security\Core\User\UserInterface;
 
-interface DomainUserInterface extends UserInterface {}
+interface DomainUserInterface extends UserInterface
+{
+}

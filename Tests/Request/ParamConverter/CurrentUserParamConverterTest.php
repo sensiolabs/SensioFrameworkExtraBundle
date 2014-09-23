@@ -90,7 +90,6 @@ class CurrentUserParamConverterTest extends \PHPUnit_Framework_TestCase
 
         $this->setExpectedException('LogicException');
         $this->converter->apply($request, $config);
-
     }
 
     public function testMissingUserNotSetIfNotRequired()
@@ -108,7 +107,6 @@ class CurrentUserParamConverterTest extends \PHPUnit_Framework_TestCase
         $request = new Request();
 
         $this->converter->apply($request, $config);
-
     }
 
     private function createConfiguration($class = null, $name = null)
@@ -140,7 +138,6 @@ class CurrentUserParamConverterTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         if ($user !== null) {
-
             $tokenMock->expects($this->any())
                 ->method('getUser')
                 ->will($this->returnValue($user));
@@ -155,7 +152,6 @@ class CurrentUserParamConverterTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($tokenMock));
 
         return $mock;
-
     }
 
     private function getMockUser()

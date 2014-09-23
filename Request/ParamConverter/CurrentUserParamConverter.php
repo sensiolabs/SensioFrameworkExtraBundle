@@ -13,7 +13,6 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 
 /**
@@ -29,7 +28,6 @@ use Symfony\Component\Security\Core\SecurityContextInterface;
  */
 class CurrentUserParamConverter implements ParamConverterInterface
 {
-
     /**
      * @var SecurityContextInterface
      */
