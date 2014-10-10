@@ -9,7 +9,6 @@
         <parameter key="sensio_framework_extra.converter.manager.class">Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager</parameter>
         <parameter key="sensio_framework_extra.converter.doctrine.class">Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter</parameter>
         <parameter key="sensio_framework_extra.converter.datetime.class">Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DateTimeParamConverter</parameter>
-        <parameter key="sensio_framework_extra.converter.current_user.class">Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\CurrentUserParamConverter</parameter>
     </parameters>
 
     <services>
@@ -30,7 +29,7 @@
             <tag name="request.param_converter" converter="datetime" />
         </service>
 
-        <service id="sensio_framework_extra.converter.current_user" class="%sensio_framework_extra.converter.current_user.class%">
+        <service id="sensio_framework_extra.converter.current_user" class="Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\CurrentUserParamConverter">
             <tag name="request.param_converter" converter="current_user" />
             <argument type="service" id="security.context" on-invalid="ignore" />
         </service>
