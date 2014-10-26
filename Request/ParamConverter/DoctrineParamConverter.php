@@ -147,9 +147,14 @@ class DoctrineParamConverter implements ParamConverterInterface
         $em = $this->getManager($options['entity_manager'], $class);
         $metadata = $em->getClassMetadata($class);
 
+        $mapMethodSignature = isset($options['repository_method'])
+            && isset($options['map_method_signature'])
+            && $options['map_method_signature'] === true;
+
         foreach ($options['mapping'] as $attribute => $field) {
-            if (($metadata->hasField($field) || ($metadata->hasAssociation($field) && $metadata->isSingleValuedAssociation($field)))
-                || isset($options['repository_method']))
+            if ($metadata->hasField($field)
+                || ($metadata->hasAssociation($field) && $metadata->isSingleValuedAssociation($field))
+                || $mapMethodSignature)
             {
                 $criteria[$field] = $request->attributes->get($attribute);
             }
@@ -163,32 +168,46 @@ class DoctrineParamConverter implements ParamConverterInterface
             return false;
         }
 
-        try {
-            $repository = $em->getRepository($class);
-            if (isset($options['repository_method'])) {
-                $repositoryClass = get_class($repository);
-                $repositoryMethod = $options['repository_method'];
+        if ($mapMethodSignature) {
+            try {
+                $repository = $em->getRepository($class);
+                if (isset($options['repository_method'])) {
+                    $repositoryClass = get_class($repository);
+                    $repositoryMethod = $options['repository_method'];
 
-                $reflectionMethod = new \ReflectionMethod($repositoryClass, $repositoryMethod);
-                $parameters = array();
-                for ($i = 0; $i < count($criteria); $i++) {
-                    $parameterName = new \ReflectionParameter(array($repositoryClass, $repositoryMethod), $i);
-                    $parameterName = $parameterName->name;
-                    if (!in_array($parameterName, array_keys($criteria))) {
-                        throw new \InvalidArgumentException(
-                            'Parameter ' . ($i + 1) . " in ${repositoryClass}::${repositoryMethod} should be \"${parameterName}\"!"
-                        );
+                    $reflectionMethod = new \ReflectionMethod($repositoryClass, $repositoryMethod);
+                    $parameters = array();
+                    for ($i = 0; $i < count($criteria); $i++) {
+                        $parameterName = new \ReflectionParameter(array($repositoryClass, $repositoryMethod), $i);
+                        $parameterName = $parameterName->name;
+                        if (!in_array($parameterName, array_keys($criteria))) {
+                            throw new \InvalidArgumentException(
+                                'Parameter ' . ($i + 1) . " in ${repositoryClass}::${repositoryMethod} should be \"${parameterName}\"!"
+                            );
+                        }
+
+                        $parameters[$parameterName] = $criteria[$parameterName];
                     }
 
-                    $parameters[$parameterName] = $criteria[$parameterName];
+                    return $reflectionMethod->invokeArgs($repository, $parameters);
+                } else {
+                    return $repository->findOneBy($criteria);
                 }
-
-                return $reflectionMethod->invokeArgs($repository, $parameters);
-            } else {
-                return $repository->findOneBy($criteria);
+            } catch (NoResultException $e) {
+                return null;
             }
-        } catch (NoResultException $e) {
-            return;
+        } else {
+            if (isset($options['repository_method'])) {
+                $method = $options['repository_method'];
+            } else {
+                $method = 'findOneBy';
+            }
+
+            try {
+                return $em->getRepository($class)->$method($criteria);
+            } catch (NoResultException $e) {
+                return null;
+            }
         }
     }
 
@@ -236,3 +255,4 @@ class DoctrineParamConverter implements ParamConverterInterface
         return $this->registry->getManager($name);
     }
 }
+
