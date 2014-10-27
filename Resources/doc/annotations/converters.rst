@@ -238,7 +238,7 @@ you may omit this annotation entirely, like this:
     public function myAccountAction(\Symfony\Component\Security\Core\User\UserInterface $currentUser)
 
 
-The SecurityBundle must be enabled for this converter to function.
+If the SecurityBundle is not enabled, this converter will have no effect, and will be skipped.
 
 Creating a Converter
 --------------------
