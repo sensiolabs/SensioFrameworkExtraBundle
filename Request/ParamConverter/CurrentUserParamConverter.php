@@ -45,10 +45,6 @@ class CurrentUserParamConverter implements ParamConverterInterface
      */
     public function apply(Request $request, ParamConverter $configuration)
     {
-        if (null === $this->security) {
-            throw new \LogicException('The SecurityBundle is required for the current_user ParamConverter annotation');
-        }
-
         $param = $configuration->getName();
 
         $currentUser = $this->getUser();
@@ -85,6 +81,10 @@ class CurrentUserParamConverter implements ParamConverterInterface
      */
     public function supports(ParamConverter $configuration)
     {
+        if (null === $this->security) {
+            return false;
+        }
+
         $userInterfaceClass = 'Symfony\Component\Security\Core\User\UserInterface';
         $configuredClass = $configuration->getClass();
         $interfaces = class_implements($configuredClass);
