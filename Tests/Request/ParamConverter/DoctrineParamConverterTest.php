@@ -335,6 +335,85 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($className, $request->attributes->get('arg'));
     }
 
+    public function testApplyWithRepositoryMethodAndMapMethodSignature()
+    {
+        $request = new Request();
+        $request->attributes->set('first_name', 'Fabien');
+        $request->attributes->set('last_name', 'Potencier');
+
+        $config = $this->createConfiguration(
+            'stdClass',
+            array(
+                'repository_method' => 'findByFullName',
+                'mapping' => array('first_name' => 'firstName', 'last_name' => 'lastName'),
+                'map_method_signature' => true,
+            ),
+            'arg'
+        );
+
+        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectRepository = new TestUserRepository();
+        $metadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+
+        $objectManager->expects($this->once())
+            ->method('getRepository')
+            ->with('stdClass')
+            ->will($this->returnValue($objectRepository));
+
+        $this->registry->expects($this->once())
+            ->method('getManagerForClass')
+            ->will($this->returnValue($objectManager));
+
+        $objectManager->expects($this->once())
+            ->method('getClassMetadata')
+            ->will($this->returnValue($metadata));
+
+        $ret = $this->converter->apply($request, $config);
+
+        $this->assertTrue($ret);
+        $this->assertSame('Fabien Potencier', $request->attributes->get('arg'));
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage Parameter 2 in Sensio\Bundle\FrameworkExtraBundle\Tests\Request\ParamConverter\TestUserRepository::findByFullName should be "lastName"!
+     */
+    public function testApplyWithRepositoryMethodAndMapMethodSignatureException()
+    {
+        $request = new Request();
+        $request->attributes->set('first_name', 'Fabien');
+        $request->attributes->set('last_name', 'Potencier');
+
+        $config = $this->createConfiguration(
+            'stdClass',
+            array(
+                'repository_method' => 'findByFullName',
+                'mapping' => array('first_name' => 'firstName', 'last_name' => 'lastNameXxx'),
+                'map_method_signature' => true,
+            ),
+            'arg'
+        );
+
+        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectRepository = new TestUserRepository();
+        $metadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+
+        $objectManager->expects($this->once())
+            ->method('getRepository')
+            ->with('stdClass')
+            ->will($this->returnValue($objectRepository));
+
+        $this->registry->expects($this->once())
+            ->method('getManagerForClass')
+            ->will($this->returnValue($objectManager));
+
+        $objectManager->expects($this->once())
+            ->method('getClassMetadata')
+            ->will($this->returnValue($metadata));
+
+        $this->converter->apply($request, $config);
+    }
+
     public function testSupports()
     {
         $config = $this->createConfiguration('stdClass', array());
