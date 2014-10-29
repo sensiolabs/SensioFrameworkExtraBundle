@@ -176,6 +176,37 @@ to add joins to the query), you can add the ``repository_method`` option::
     {
     }
 
+The specified repository method will be called with the criteria in an ``array`` as parameter. This is a good fit with
+Doctrine's ``findBy`` and ``findOneBy`` methods.
+
+There are cases where you want to you use your own repository method and you want to map the criteria to the method
+signature. This is possible when you set the ``map_method_signature`` option to true. The default is false.
+
+    /**
+     * @Route("/user/{first_name}/{last_name}")
+     * @ParamConverter("user", class="CtorsBlogBundle:User", options={
+     *    "repository_method" = "findByFullName",
+     *    "mapping": {"first_name": "firstName", "last_name": "lastName"},
+     *    "map_method_signature" = true
+     * })
+     */
+    public function showAction(User $user)
+    {
+    }
+
+    class UserRepository
+    {
+        public function findByFullName($firstName, $lastName)
+        {
+            ...
+        }
+    }
+
+.. tip::
+
+   With de default implementation, the ``firstName`` and ``lastName`` parameters have to be Doctrine fields. When using
+   ``map_method_signature``, they don't have to known by Doctrine.
+
 DateTime Converter
 ~~~~~~~~~~~~~~~~~~
 
