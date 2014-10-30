@@ -199,9 +199,7 @@ class DoctrineParamConverter implements ParamConverterInterface
             $parameterName = new \ReflectionParameter(array($repositoryClass, $repositoryMethod), $i);
             $parameterName = $parameterName->name;
             if (!in_array($parameterName, array_keys($criteria))) {
-                throw new \InvalidArgumentException(
-                    'Parameter '.($i + 1)." in ${repositoryClass}::${repositoryMethod} should be \"${parameterName}\"!"
-                );
+                throw new \InvalidArgumentException(sprintf('Parameter %s in %s::%s should be "%s"!', $i + 1, $repositoryClass, $repositoryMethod, $parameterName));
             }
 
             $parameters[$parameterName] = $criteria[$parameterName];
