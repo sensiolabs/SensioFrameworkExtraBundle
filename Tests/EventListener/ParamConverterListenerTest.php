@@ -37,7 +37,7 @@ class ParamConverterListenerTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array(array(new TestController(), 'noArgAction')),
-            array(new InvokableNoArgController())
+            array(new InvokableNoArgController()),
         );
     }
 
@@ -75,7 +75,7 @@ class ParamConverterListenerTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array(array(new TestController(), 'dateAction')),
-            array(new InvokableController())
+            array(new InvokableController()),
         );
     }
 
