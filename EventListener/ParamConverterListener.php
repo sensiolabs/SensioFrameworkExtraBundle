@@ -63,6 +63,8 @@ class ParamConverterListener implements EventSubscriberInterface
 
         if (is_array($controller)) {
             $r = new \ReflectionMethod($controller[0], $controller[1]);
+        } else if (is_object($controller) && is_callable($controller, '__invoke')) {
+            $r = new \ReflectionMethod(get_class($controller), '__invoke');
         } else {
             $r = new \ReflectionFunction($controller);
         }
