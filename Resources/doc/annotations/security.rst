@@ -51,7 +51,8 @@ passed to the controller::
 
     Defining a ``Security`` annotation has the same effect as defining an
     access control rule, but it is more efficient as the check is only done
-    when this specific route is accessed.
+    when this specific route is accessed. To create new acccess control
+    rules, please refer to :ref:`Security Voters<http://symfony.com/doc/current/cookbook/security/voters_data_permission.html>` page.
 
 .. tip::
 
