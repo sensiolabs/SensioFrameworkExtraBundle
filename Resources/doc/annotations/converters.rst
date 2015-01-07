@@ -30,7 +30,7 @@ Several things happen under the hood:
 * If a ``Post`` object is found, a new ``post`` request attribute is defined
   (accessible via ``$request->attributes->get('post')``);
 
-* As for any other request attribute, it is automatically injected in the
+* As for other request attributes, it is automatically injected in the
   controller when present in the method signature.
 
 If you use type hinting as in the example above, you can even omit the
@@ -67,10 +67,11 @@ To detect which converter is run on a parameter the following process is run:
 * If an explicit converter choice was made with
   ``@ParamConverter(converter="name")`` the converter with the given name is
   chosen.
-* Otherwise all registered parameter converters are iterated by priority.
-  The ``supports()`` method is invoked to check if a param converter can
-  convert the request into the required parameter. If it returns ``true``
-  the param converter is invoked.
+
+* Otherwise all registered parameter converters are iterated by priority. The
+  ``supports()`` method is invoked to check if a param converter can convert
+  the request into the required parameter. If it returns ``true`` the param
+  converter is invoked.
 
 Built-in Converters
 -------------------
@@ -235,7 +236,7 @@ on the request attributes, it should set an attribute named
 ``$configuration->getName()``, which stores an object of class
 ``$configuration->getClass()``.
 
-To register your converter service you must add a tag to your service:
+To register your converter service, you must add a tag to your service:
 
 .. configuration-block::
 
@@ -254,16 +255,17 @@ To register your converter service you must add a tag to your service:
             <tag name="request.param_converter" priority="-2" converter="my_converter" />
         </service>
 
-You can register a converter by priority, by name (attribute "converter") or
-both. If you don't specifiy a priority or name the converter will be added to
-the converter stack with a priority of `0`. To explicitly disable the
-registration by priority you have to set `priority="false"` in your tag
+You can register a converter by priority, by name (attribute "converter"), or
+both. If you don't specify a priority or a name, the converter will be added to
+the converter stack with a priority of ``0``. To explicitly disable the
+registration by priority you have to set ``priority="false"`` in your tag
 definition.
 
 .. tip::
 
-   If you would like to inject services or additional arguments into a custom param converter, the priority shouldn't
-   be higher than 1. Otherwise, the service wouldn't be loaded.
+   If you would like to inject services or additional arguments into a custom
+   param converter, the priority shouldn't be higher than ``1``. Otherwise, the
+   service wouldn't be loaded.
 
 .. tip::
 
