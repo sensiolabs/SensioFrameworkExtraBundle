@@ -77,6 +77,14 @@ class TemplateGuesser
             $bundleName = null;
         }
 
+        foreach (get_class_methods($className) as $method) {
+            if ($method !== $matchAction[0] && strtolower($method) === strtolower($matchAction[0])) {
+                preg_match('/^(.+)Action$/', $method, $matchAction);
+
+                break;
+            }
+        }
+
         return new TemplateReference($bundleName, $matchController[1], $matchAction[1], $request->getRequestFormat(), $engine);
     }
 
