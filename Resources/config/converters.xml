@@ -31,7 +31,7 @@
 
         <service id="sensio_framework_extra.converter.current_user" class="Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\CurrentUserParamConverter">
             <tag name="request.param_converter" converter="current_user" />
-            <argument type="service" id="security.context" on-invalid="ignore" />
+            <argument type="service" id="security.context" on-invalid="null" />
         </service>
     </services>
 </container>

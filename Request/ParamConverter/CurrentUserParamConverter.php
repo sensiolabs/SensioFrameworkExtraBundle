@@ -89,6 +89,6 @@ class CurrentUserParamConverter implements ParamConverterInterface
         $configuredClass = $configuration->getClass();
         $interfaces = class_implements($configuredClass);
 
-        return in_array($userInterfaceClass, $interfaces) || ($configuredClass == $userInterfaceClass);
+        return in_array($userInterfaceClass, $interfaces) || $configuredClass == $userInterfaceClass;
     }
 }
