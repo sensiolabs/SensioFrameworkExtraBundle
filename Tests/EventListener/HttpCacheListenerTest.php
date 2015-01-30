@@ -15,7 +15,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
-
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use Sensio\Bundle\FrameworkExtraBundle\EventListener\HttpCacheListener;
 
@@ -54,7 +53,7 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('null', $this->listener->onKernelResponse($this->event));
     }
 
-    public function testResponseIsPublicIfConfigurationIsPublic()
+    public function testResponseIsPublicIfConfigurationIsPublicTrue()
     {
         $request = $this->createRequest(new Cache(array(
             'public' => true,
@@ -64,6 +63,18 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($this->response->headers->hasCacheControlDirective('public'));
         $this->assertFalse($this->response->headers->hasCacheControlDirective('private'));
+    }
+
+    public function testResponseIsPrivateIfConfigurationIsPublicFalse()
+    {
+        $request = $this->createRequest(new Cache(array(
+                    'public' => false,
+                )));
+
+        $this->listener->onKernelResponse($this->createEventMock($request, $this->response));
+
+        $this->assertFalse($this->response->headers->hasCacheControlDirective('public'));
+        $this->assertTrue($this->response->headers->hasCacheControlDirective('private'));
     }
 
     public function testConfigurationAttributesAreSetOnResponse()
