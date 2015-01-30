@@ -73,8 +73,8 @@ class AnnotatedRouteControllerLoader extends AnnotationClassLoader
     /**
      * Makes the default route name more sane by removing common keywords.
      *
-     * @param  \ReflectionClass  $class  A ReflectionClass instance
-     * @param  \ReflectionMethod $method A ReflectionMethod instance
+     * @param \ReflectionClass  $class  A ReflectionClass instance
+     * @param \ReflectionMethod $method A ReflectionMethod instance
      *
      * @return string The default route name
      */
@@ -85,11 +85,11 @@ class AnnotatedRouteControllerLoader extends AnnotationClassLoader
         return preg_replace(array(
             '/(bundle|controller)_/',
             '/action(_\d+)?$/',
-            '/__/'
+            '/__/',
         ), array(
             '_',
             '\\1',
-            '_'
+            '_',
         ), $routeName);
     }
 }

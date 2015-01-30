@@ -16,7 +16,6 @@ class FoobarController
      */
     public function indexAction()
     {
-
     }
 
     /**
@@ -25,6 +24,5 @@ class FoobarController
      */
     public function newAction()
     {
-
     }
 }

@@ -13,10 +13,8 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Tests\Routing;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
-use Doctrine\Common\Annotations\SimpleAnnotationReader;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Routing\AnnotatedRouteControllerLoader;
-use Symfony\Component\Routing\Route as SymfonyRoute;
 
 class AnnotatedRouteControllerLoaderTest extends \PHPUnit_Framework_TestCase
 {

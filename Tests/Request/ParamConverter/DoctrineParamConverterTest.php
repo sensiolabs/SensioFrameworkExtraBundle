@@ -148,7 +148,7 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
         $objectRepository->expects($this->once())
                       ->method('find')
                       ->with($this->equalTo($id))
-                      ->will($this->returnValue($object =new \stdClass));
+                      ->will($this->returnValue($object = new \stdClass()));
 
         $ret = $this->converter->apply($request, $config);
 
@@ -249,7 +249,7 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
         $repository->expects($this->once())
                       ->method('findOneBy')
                       ->with($this->equalTo(array('Foo' => 1)))
-                      ->will($this->returnValue($object =new \stdClass));
+                      ->will($this->returnValue($object = new \stdClass()));
 
         $ret = $this->converter->apply($request, $config);
 
@@ -342,7 +342,7 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
         $metadataFactory->expects($this->once())
                         ->method('isTransient')
                         ->with($this->equalTo('stdClass'))
-                        ->will($this->returnValue( false ));
+                        ->will($this->returnValue(false));
 
         $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
         $objectManager->expects($this->once())
@@ -370,7 +370,7 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
         $metadataFactory->expects($this->once())
                         ->method('isTransient')
                         ->with($this->equalTo('stdClass'))
-                        ->will($this->returnValue( false ));
+                        ->will($this->returnValue(false));
 
         $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
         $objectManager->expects($this->once())
