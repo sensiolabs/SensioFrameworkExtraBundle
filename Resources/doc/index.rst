@@ -151,7 +151,7 @@ This example shows all the available annotations in action::
          * @ParamConverter("post", class="SensioBlogBundle:Post")
          * @Template("SensioBlogBundle:Annot:show.html.twig", vars={"post"})
          * @Cache(smaxage="15", lastmodified="post.getUpdatedAt()", etag="'Post' ~ post.getId() ~ post.getUpdatedAt()")
-         * @Security("has_role('ROLE_ADMIN') and is_granted('POST_SHOW', post)")
+         * @Security("has_role('ROLE_ADMIN') and is_granted('POST_SHOW', post)", message="You have no access to this post")
          */
         public function showAction(Post $post)
         {

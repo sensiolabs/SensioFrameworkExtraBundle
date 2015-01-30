@@ -57,7 +57,7 @@ class SecurityListener implements EventSubscriberInterface
         }
 
         if (!$this->language->evaluate($configuration->getExpression(), $this->getVariables($request))) {
-            throw new AccessDeniedException(sprintf('Expression "%s" denied access.', $configuration->getExpression()));
+            throw new AccessDeniedException($configuration->getMessage() ?: sprintf('Expression "%s" denied access.', $configuration->getExpression()));
         }
     }
 
