@@ -27,7 +27,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 class AnnotatedRouteControllerLoader extends AnnotationClassLoader
 {
     /**
-     * Configures the _controller default parameter and eventually the _method
+     * Configures the _controller default parameter and eventually the HTTP method
      * requirement of a given Route instance.
      *
      * @param Route             $route  A route instance
@@ -50,7 +50,7 @@ class AnnotatedRouteControllerLoader extends AnnotationClassLoader
         // requirements (@Method)
         foreach ($this->reader->getMethodAnnotations($method) as $configuration) {
             if ($configuration instanceof Method) {
-                $route->setRequirement('_method', implode('|', $configuration->getMethods()));
+                $route->setMethods(implode('|', $configuration->getMethods()));
             } elseif ($configuration instanceof FrameworkExtraBundleRoute && $configuration->getService()) {
                 throw new \LogicException('The service option can only be specified at class level.');
             }
