@@ -51,6 +51,63 @@ class TemplateGuesser
      */
     public function guessTemplateName($controller, Request $request, $engine = 'twig')
     {
+        list($bundleName, $controllerName, $actionName) = $this->parseParams($controller);
+
+        return new TemplateReference($bundleName, $controllerName, $actionName, $request->getRequestFormat(), $engine);
+    }
+
+    /**
+     * Guesses and returns the template name with namespace to render based on the controller
+     * and action names.
+     *
+     * @param  array                           $controller An array storing the controller object and action method
+     * @param  Request                         $request    A Request instance
+     * @param  string                          $engine
+     * @param  string                          $namespace
+     * @return NamespaceTemplateReference      template reference
+     * @throws \InvalidArgumentException
+     */
+    public function guessNamespaceTemplateName($controller, Request $request, $engine = 'twig', $namespace = null)
+    {
+        list($bundleName, $controllerName, $actionName) = $this->parseParams($controller);
+
+        if (!$namespace) {
+            $namespace = $bundleName;
+        }
+
+        return new NamespaceTemplateReference($namespace, $controllerName, $actionName, $request->getRequestFormat(), $engine);
+    }
+
+    /**
+     * Returns the Bundle instance in which the given class name is located.
+     *
+     * @param  string      $class A fully qualified controller class name
+     * @return Bundle|null $bundle A Bundle instance
+     */
+    protected function getBundleForClass($class)
+    {
+        $reflectionClass = new \ReflectionClass($class);
+        $bundles = $this->kernel->getBundles();
+
+        do {
+            $namespace = $reflectionClass->getNamespaceName();
+            foreach ($bundles as $bundle) {
+                if (0 === strpos($namespace, $bundle->getNamespace())) {
+                    return $bundle;
+                }
+            }
+            $reflectionClass = $reflectionClass->getParentClass();
+        } while ($reflectionClass);
+    }
+
+    /**
+     * Returns the controller name, bundle name, action name for controller
+     *
+     * @param  array                           $controller An array storing the controller object and action method
+     * @throws \InvalidArgumentException
+     */
+    private function parseParams($controller)
+    {
         $className = class_exists('Doctrine\Common\Util\ClassUtils') ? ClassUtils::getClass($controller[0]) : get_class($controller[0]);
 
         if (!preg_match('/Controller\\\(.+)Controller$/', $className, $matchController)) {
@@ -77,28 +134,6 @@ class TemplateGuesser
             $bundleName = null;
         }
 
-        return new TemplateReference($bundleName, $matchController[1], $matchAction[1], $request->getRequestFormat(), $engine);
-    }
-
-    /**
-     * Returns the Bundle instance in which the given class name is located.
-     *
-     * @param  string      $class A fully qualified controller class name
-     * @return Bundle|null $bundle A Bundle instance
-     */
-    protected function getBundleForClass($class)
-    {
-        $reflectionClass = new \ReflectionClass($class);
-        $bundles = $this->kernel->getBundles();
-
-        do {
-            $namespace = $reflectionClass->getNamespaceName();
-            foreach ($bundles as $bundle) {
-                if (0 === strpos($namespace, $bundle->getNamespace())) {
-                    return $bundle;
-                }
-            }
-            $reflectionClass = $reflectionClass->getParentClass();
-        } while ($reflectionClass);
+        return array($bundleName, $matchController[1], $matchAction[1]);
     }
 }
