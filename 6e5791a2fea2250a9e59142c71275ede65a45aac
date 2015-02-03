@@ -1,0 +1,11 @@
+---------------------------------------------------------------------------
+
+by stof at 2015-01-30T13:04:45Z
+
+you need to add a compiler pass to remove the injection of the ``security.context`` service when new services are available, to avoid triggering the deprecation notice of the SecurityContext
+
+---------------------------------------------------------------------------
+
+by fabpot at 2015-01-30T13:37:07Z
+
+@stof I've added the pass and some tests as well.
