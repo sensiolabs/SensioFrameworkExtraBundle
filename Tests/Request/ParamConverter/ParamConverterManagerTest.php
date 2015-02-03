@@ -74,7 +74,7 @@ class ParamConverterManagerTest extends \PHPUnit_Framework_TestCase
         $converter
             ->expects($this->any())
             ->method('supports')
-            ->will($this->returnValue(True))
+            ->will($this->returnValue(true))
         ;
 
         $converter
@@ -156,7 +156,7 @@ class ParamConverterManagerTest extends \PHPUnit_Framework_TestCase
         ;
 
         $request = new Request();
-        $request->attributes->set('converted', new \stdClass);
+        $request->attributes->set('converted', new \stdClass());
 
         $configuration = new Configuration\ParamConverter(array(
             'name' => 'converted',

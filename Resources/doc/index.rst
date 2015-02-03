@@ -35,8 +35,8 @@ Then, like for any other bundle, include it in your Kernel class::
     with Symfony's release cycle. This means that you can simply require
     ``sensio/framework-extra-bundle: ~3.0`` in your ``composer.json`` file
     and Composer will automatically pick the latest bundle version for you.
-    You have to use Symfony 2.4 or later for this workflow. Before Symfony
-    2.4, the required version of the SensioFrameworkExtraBundle should be
+    You have to use Symfony 2.3 or later for this workflow. Before Symfony
+    2.3, the required version of the SensioFrameworkExtraBundle should be
     the same as your Symfony version.
 
 If you plan to use or create annotations for controllers, make sure to update
