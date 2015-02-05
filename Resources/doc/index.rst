@@ -19,12 +19,12 @@ Then, like for any other bundle, include it in your Kernel class::
     public function registerBundles()
     {
         $bundles = array(
-            ...
+            // ...
 
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
         );
 
-        ...
+        // ...
     }
 
 .. _release-cycle-note:
