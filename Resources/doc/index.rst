@@ -14,12 +14,12 @@ Then, like for any other bundle, include it in your Kernel class::
     public function registerBundles()
     {
         $bundles = array(
-            ...
+            // ...
 
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
         );
 
-        ...
+        // ...
     }
 
 If you plan to use or create annotations for controllers, make sure to update
