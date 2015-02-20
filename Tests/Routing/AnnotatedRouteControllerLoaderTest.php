@@ -13,10 +13,8 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Tests\Routing;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
-use Doctrine\Common\Annotations\SimpleAnnotationReader;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Routing\AnnotatedRouteControllerLoader;
-use Symfony\Component\Routing\Route as SymfonyRoute;
 
 class AnnotatedRouteControllerLoaderTest extends \PHPUnit_Framework_TestCase
 {
@@ -132,7 +130,10 @@ class AnnotatedRouteControllerLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(2, $rc);
 
         $this->assertInstanceOf('Symfony\Component\Routing\Route', $rc->get('index'));
-        $this->assertEquals(array('GET'), $rc->get('index')->getMethods());
+        // depending on the Symfony version, it can return GET or an empty array (on 2.3)
+        // which has the same behavior anyway
+        $methods = $rc->get('index')->getMethods();
+        $this->assertTrue(empty($methods) || array('GET') == $methods);
 
         $this->assertInstanceOf('Symfony\Component\Routing\Route', $rc->get('new'));
         $this->assertEquals(array('POST'), $rc->get('new')->getMethods());

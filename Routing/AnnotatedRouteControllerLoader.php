@@ -27,7 +27,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 class AnnotatedRouteControllerLoader extends AnnotationClassLoader
 {
     /**
-     * Configures the _controller default parameter and eventually the _method
+     * Configures the _controller default parameter and eventually the HTTP method
      * requirement of a given Route instance.
      *
      * @param Route             $route  A route instance
@@ -50,7 +50,7 @@ class AnnotatedRouteControllerLoader extends AnnotationClassLoader
         // requirements (@Method)
         foreach ($this->reader->getMethodAnnotations($method) as $configuration) {
             if ($configuration instanceof Method) {
-                $route->setRequirement('_method', implode('|', $configuration->getMethods()));
+                $route->setMethods(implode('|', $configuration->getMethods()));
             } elseif ($configuration instanceof FrameworkExtraBundleRoute && $configuration->getService()) {
                 throw new \LogicException('The service option can only be specified at class level.');
             }
@@ -73,8 +73,8 @@ class AnnotatedRouteControllerLoader extends AnnotationClassLoader
     /**
      * Makes the default route name more sane by removing common keywords.
      *
-     * @param  \ReflectionClass  $class  A ReflectionClass instance
-     * @param  \ReflectionMethod $method A ReflectionMethod instance
+     * @param \ReflectionClass  $class  A ReflectionClass instance
+     * @param \ReflectionMethod $method A ReflectionMethod instance
      *
      * @return string The default route name
      */
@@ -85,11 +85,11 @@ class AnnotatedRouteControllerLoader extends AnnotationClassLoader
         return preg_replace(array(
             '/(bundle|controller)_/',
             '/action(_\d+)?$/',
-            '/__/'
+            '/__/',
         ), array(
             '_',
             '\\1',
-            '_'
+            '_',
         ), $routeName);
     }
 }

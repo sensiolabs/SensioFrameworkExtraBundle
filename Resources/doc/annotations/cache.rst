@@ -52,12 +52,6 @@ configuration, the latter overrides the former::
 HTTP Validation Strategies
 --------------------------
 
-.. caution::
-
-    Support for HTTP validation strategies was introduced in SensioFrameworkExtraBundle
-    3.0. This bundle version can only be used with Symfony 2.4 or later (see
-    :ref:`the SensioFrameworkExtraBundle release cycle <release-cycle-note>`).
-
 The ``lastModified`` and ``ETag`` attributes manages the HTTP validation cache
 headers. ``lastModified`` adds a ``Last-Modified`` header to Responses and
 ``ETag`` adds an ``ETag`` header.

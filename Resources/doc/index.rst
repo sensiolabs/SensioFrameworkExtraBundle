@@ -19,12 +19,12 @@ Then, like for any other bundle, include it in your Kernel class::
     public function registerBundles()
     {
         $bundles = array(
-            ...
+            // ...
 
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
         );
 
-        ...
+        // ...
     }
 
 .. _release-cycle-note:
@@ -35,8 +35,8 @@ Then, like for any other bundle, include it in your Kernel class::
     with Symfony's release cycle. This means that you can simply require
     ``sensio/framework-extra-bundle: ~3.0`` in your ``composer.json`` file
     and Composer will automatically pick the latest bundle version for you.
-    You have to use Symfony 2.4 or later for this workflow. Before Symfony
-    2.4, the required version of the SensioFrameworkExtraBundle should be
+    You have to use Symfony 2.3 or later for this workflow. Before Symfony
+    2.3, the required version of the SensioFrameworkExtraBundle should be
     the same as your Symfony version.
 
 If you plan to use or create annotations for controllers, make sure to update
@@ -170,8 +170,18 @@ annotations::
     {
     }
 
-The routes need to be imported to be active as any other routing resources,
-see :ref:`Annotated Routes Activation<frameworkextra-annotations-routing-activation>` for
-details.
+The routes need to be imported to be active as any other routing resources, for
+example:
+
+.. code-block:: yaml
+
+    # app/config/routing.yml
+
+    # import routes from a controller directory
+    annot:
+        resource: "@AnnotRoutingBundle/Controller"
+        type:     annotation
+
+see :ref:`Annotated Routes Activation<frameworkextra-annotations-routing-activation>` for more details.
 
 .. _`SensioFrameworkExtraBundle`: https://github.com/sensiolabs/SensioFrameworkExtraBundle

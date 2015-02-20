@@ -421,7 +421,7 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
         $metadataFactory->expects($this->once())
                         ->method('isTransient')
                         ->with($this->equalTo('stdClass'))
-                        ->will($this->returnValue( false ));
+                        ->will($this->returnValue(false));
 
         $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
         $objectManager->expects($this->once())
@@ -449,7 +449,7 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
         $metadataFactory->expects($this->once())
                         ->method('isTransient')
                         ->with($this->equalTo('stdClass'))
-                        ->will($this->returnValue( false ));
+                        ->will($this->returnValue(false));
 
         $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
         $objectManager->expects($this->once())
