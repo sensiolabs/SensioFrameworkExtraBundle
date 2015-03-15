@@ -46,7 +46,8 @@ class PreExecuteListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
       {
           return array(
-              KernelEvents::CONTROLLER => 'onKernelController',
+              // slightly positive so that it runs before things like @Security
+              KernelEvents::CONTROLLER => array('onKernelController', 10),
           );
       }
 }
