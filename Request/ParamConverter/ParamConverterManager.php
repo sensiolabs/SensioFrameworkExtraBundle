@@ -13,6 +13,7 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter;
 
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Managers converters.
@@ -84,14 +85,14 @@ class ParamConverterManager
                 ));
             }
 
-            $converter->apply($request, $configuration);
+            $converter->apply($request, $this->resolveConfigurationOptions($configuration, $converter));
 
             return;
         }
 
         foreach ($this->all() as $converter) {
             if ($converter->supports($configuration)) {
-                if ($converter->apply($request, $configuration)) {
+                if ($converter->apply($request, $this->resolveConfigurationOptions($configuration, $converter))) {
                     return;
                 }
             }
@@ -141,4 +142,23 @@ class ParamConverterManager
 
        return $converters;
    }
+
+    private function resolveConfigurationOptions($configuration, $converter)
+    {
+        if (!$converter instanceof ResolvedOptionsInterface) {
+            //Backward compatibility
+            return $configuration;
+        }
+
+        $options  = $configuration->getOptions();
+        $resolver = new OptionsResolver();
+
+        $converter->configureResolver($resolver);
+
+        $resolvedOptions = $resolver->resolve($options);
+
+        $configuration->setOptions($resolvedOptions);
+
+        return $configuration;
+    }
 }
