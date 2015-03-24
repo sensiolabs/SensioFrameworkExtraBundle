@@ -187,7 +187,7 @@ the ``map_method_signature`` option to true. The default is false::
 
     /**
      * @Route("/user/{first_name}/{last_name}")
-     * @ParamConverter("user", class="CtorsBlogBundle:User", options={
+     * @ParamConverter("user", class="AcmeBlogBundle:User", options={
      *    "repository_method" = "findByFullName",
      *    "mapping": {"first_name": "firstName", "last_name": "lastName"},
      *    "map_method_signature" = true
