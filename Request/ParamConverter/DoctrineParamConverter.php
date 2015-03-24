@@ -90,12 +90,10 @@ class DoctrineParamConverter implements ParamConverterInterface
         }
 
         try {
-            $result = $this->getManager($options['entity_manager'], $class)->getRepository($class)->$method($id);
+            return $this->getManager($options['entity_manager'], $class)->getRepository($class)->$method($id);
         } catch (NoResultException $e) {
-            $result = null;
+            return;
         }
-
-        return $result;
     }
 
     protected function getIdentifier(Request $request, $options, $name)
@@ -177,35 +175,31 @@ class DoctrineParamConverter implements ParamConverterInterface
 
         try {
             if ($mapMethodSignature) {
-                $result = $this->findDataByMapMethodSignature($em, $class, $repositoryMethod, $criteria);
-            } else {
-                $result = $em->getRepository($class)->$repositoryMethod($criteria);
+                return $this->findDataByMapMethodSignature($em, $class, $repositoryMethod, $criteria);
             }
-        } catch (NoResultException $e) {
-            $result = null;
-        }
 
-        return $result;
+            return $em->getRepository($class)->$repositoryMethod($criteria);
+        } catch (NoResultException $e) {
+            return;
+        }
     }
 
     private function findDataByMapMethodSignature($em, $class, $repositoryMethod, $criteria)
     {
+        $arguments = array();
         $repository = $em->getRepository($class);
-        $repositoryClass = get_class($repository);
-
-        $reflectionMethod = new \ReflectionMethod($repositoryClass, $repositoryMethod);
-        $parameters = array();
-        for ($i = 0; $i < count($criteria); $i++) {
-            $parameterName = new \ReflectionParameter(array($repositoryClass, $repositoryMethod), $i);
-            $parameterName = $parameterName->name;
-            if (!in_array($parameterName, array_keys($criteria))) {
-                throw new \InvalidArgumentException(sprintf('Parameter %s in %s::%s should be "%s"!', $i + 1, $repositoryClass, $repositoryMethod, $parameterName));
+        $ref = new \ReflectionMethod($repository, $repositoryMethod);
+        foreach ($ref->getParameters() as $parameter) {
+            if (array_key_exists($parameter->name, $criteria)) {
+                $arguments[] = $criteria[$parameter->name];
+            } elseif ($parameter->isDefaultValueAvailable()) {
+                $arguments[] = $parameter->getDefaultValue();
+            } else {
+                throw new \InvalidArgumentException(sprintf('Repository method "%s::%s" requires that you provide a value for the "$%s" argument.', get_class($repository), $repositoryMethod, $parameter->name));
             }
-
-            $parameters[$parameterName] = $criteria[$parameterName];
         }
 
-        return $reflectionMethod->invokeArgs($repository, $parameters);
+        return $ref->invokeArgs($repository, $arguments);
     }
 
     /**

@@ -183,7 +183,7 @@ methods.
 
 There are cases where you want to you use your own repository method and you
 want to map the criteria to the method signature. This is possible when you set
-the ``map_method_signature`` option to true. The default is false.
+the ``map_method_signature`` option to true. The default is false::
 
     /**
      * @Route("/user/{first_name}/{last_name}")
@@ -207,9 +207,8 @@ the ``map_method_signature`` option to true. The default is false.
 
 .. tip::
 
-   With de default implementation, the ``firstName`` and ``lastName``
-   parameters have to be Doctrine fields. When using ``map_method_signature``,
-   they don't have to be known by Doctrine.
+   When ``map_method_signature`` is ``true``, the ``firstName`` and
+   ``lastName`` parameters do not have to be Doctrine fields.
 
 DateTime Converter
 ~~~~~~~~~~~~~~~~~~
