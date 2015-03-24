@@ -90,10 +90,12 @@ class DoctrineParamConverter implements ParamConverterInterface
         }
 
         try {
-            return $this->getManager($options['entity_manager'], $class)->getRepository($class)->$method($id);
+            $result = $this->getManager($options['entity_manager'], $class)->getRepository($class)->$method($id);
         } catch (NoResultException $e) {
-            return;
+            $result = null;
         }
+
+        return $result;
     }
 
     protected function getIdentifier(Request $request, $options, $name)
@@ -147,8 +149,14 @@ class DoctrineParamConverter implements ParamConverterInterface
         $em = $this->getManager($options['entity_manager'], $class);
         $metadata = $em->getClassMetadata($class);
 
+        $mapMethodSignature = isset($options['repository_method'])
+            && isset($options['map_method_signature'])
+            && $options['map_method_signature'] === true;
+
         foreach ($options['mapping'] as $attribute => $field) {
-            if ($metadata->hasField($field) || ($metadata->hasAssociation($field) && $metadata->isSingleValuedAssociation($field))) {
+            if ($metadata->hasField($field)
+                || ($metadata->hasAssociation($field) && $metadata->isSingleValuedAssociation($field))
+                || $mapMethodSignature) {
                 $criteria[$field] = $request->attributes->get($attribute);
             }
         }
@@ -162,16 +170,42 @@ class DoctrineParamConverter implements ParamConverterInterface
         }
 
         if (isset($options['repository_method'])) {
-            $method = $options['repository_method'];
+            $repositoryMethod = $options['repository_method'];
         } else {
-            $method = 'findOneBy';
+            $repositoryMethod = 'findOneBy';
         }
 
         try {
-            return $em->getRepository($class)->$method($criteria);
+            if ($mapMethodSignature) {
+                $result = $this->findDataByMapMethodSignature($em, $class, $repositoryMethod, $criteria);
+            } else {
+                $result = $em->getRepository($class)->$repositoryMethod($criteria);
+            }
         } catch (NoResultException $e) {
-            return;
+            $result = null;
         }
+
+        return $result;
+    }
+
+    private function findDataByMapMethodSignature($em, $class, $repositoryMethod, $criteria)
+    {
+        $repository = $em->getRepository($class);
+        $repositoryClass = get_class($repository);
+
+        $reflectionMethod = new \ReflectionMethod($repositoryClass, $repositoryMethod);
+        $parameters = array();
+        for ($i = 0; $i < count($criteria); $i++) {
+            $parameterName = new \ReflectionParameter(array($repositoryClass, $repositoryMethod), $i);
+            $parameterName = $parameterName->name;
+            if (!in_array($parameterName, array_keys($criteria))) {
+                throw new \InvalidArgumentException(sprintf('Parameter %s in %s::%s should be "%s"!', $i + 1, $repositoryClass, $repositoryMethod, $parameterName));
+            }
+
+            $parameters[$parameterName] = $criteria[$parameterName];
+        }
+
+        return $reflectionMethod->invokeArgs($repository, $parameters);
     }
 
     /**
