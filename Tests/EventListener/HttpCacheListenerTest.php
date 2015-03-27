@@ -79,7 +79,8 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testResponseIsNeitherPrivateNorPublicIfConfigurationIsPublicNotSet()
     {
-        $request = $this->createRequest(new Cache());
+        $request = $this->createRequest(new Cache(array(
+        )));
 
         $this->listener->onKernelResponse($this->createEventMock($request, $this->response));
 
