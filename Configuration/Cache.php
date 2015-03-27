@@ -139,7 +139,17 @@ class Cache extends ConfigurationAnnotation
      */
     public function isPublic()
     {
-        return (bool) $this->public;
+        return $this->public === true;
+    }
+
+    /**
+     * Returns whether or not a response is private.
+     *
+     * @return bool
+     */
+    public function isPrivate()
+    {
+        return $this->public === false;
     }
 
     /**
