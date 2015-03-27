@@ -125,7 +125,9 @@ class HttpCacheListener implements EventSubscriberInterface
 
         if ($configuration->isPublic()) {
             $response->setPublic();
-        } else {
+        }
+
+        if ($configuration->isPrivate()) {
             $response->setPrivate();
         }
 

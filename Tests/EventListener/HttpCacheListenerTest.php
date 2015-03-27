@@ -77,6 +77,17 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->response->headers->hasCacheControlDirective('private'));
     }
 
+    public function testResponseIsNeitherPrivateNorPublicIfConfigurationIsPublicNotSet()
+    {
+        $request = $this->createRequest(new Cache(array(
+        )));
+
+        $this->listener->onKernelResponse($this->createEventMock($request, $this->response));
+
+        $this->assertFalse($this->response->headers->hasCacheControlDirective('public'));
+        $this->assertFalse($this->response->headers->hasCacheControlDirective('private'));
+    }
+
     public function testConfigurationAttributesAreSetOnResponse()
     {
         $this->assertInternalType('null', $this->response->getMaxAge());
