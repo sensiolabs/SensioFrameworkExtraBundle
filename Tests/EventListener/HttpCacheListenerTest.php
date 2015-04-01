@@ -77,6 +77,30 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->response->headers->hasCacheControlDirective('private'));
     }
 
+    public function testResponseVary()
+    {
+        $vary = array('foobar');
+        $request = $this->createRequest(new Cache(array('vary' => $vary)));
+
+        $this->listener->onKernelResponse($this->createEventMock($request, $this->response));
+        $this->assertTrue($this->response->hasVary());
+        $result = $this->response->getVary();
+        $this->assertEquals($vary, $result);
+    }
+
+    public function testResponseVaryWhenVaryNotSet()
+    {
+        $request = $this->createRequest(new Cache(array()));
+        $vary = array('foobar');
+        $this->response->setVary($vary);
+
+        $this->listener->onKernelResponse($this->createEventMock($request, $this->response));
+        $this->assertTrue($this->response->hasVary());
+        $result = $this->response->getVary();
+        $this->assertFalse(empty($result), 'Existing vary headers should not be removed');
+        $this->assertEquals($vary, $result, 'Vary header should not be changed');
+    }
+
     public function testConfigurationAttributesAreSetOnResponse()
     {
         $this->assertInternalType('null', $this->response->getMaxAge());
