@@ -54,7 +54,7 @@ class Cache extends ConfigurationAnnotation
      *
      * @var array
      */
-    protected $vary = array();
+    protected $vary;
 
     /**
      * An expression to compute the Last-Modified HTTP header.
