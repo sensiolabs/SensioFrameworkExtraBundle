@@ -30,7 +30,6 @@ use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
  */
 class SecurityListener implements EventSubscriberInterface
 {
-    private $securityContext;
     private $tokenStorage;
     private $authChecker;
     private $language;
@@ -39,7 +38,6 @@ class SecurityListener implements EventSubscriberInterface
 
     public function __construct(SecurityContextInterface $securityContext = null, ExpressionLanguage $language = null, AuthenticationTrustResolverInterface $trustResolver = null, RoleHierarchyInterface $roleHierarchy = null, TokenStorageInterface $tokenStorage = null, AuthorizationCheckerInterface $authChecker = null)
     {
-        $this->securityContext = $securityContext;
         $this->tokenStorage = $tokenStorage ?: $securityContext;
         $this->authChecker = $authChecker ?: $securityContext;
         $this->language = $language;
