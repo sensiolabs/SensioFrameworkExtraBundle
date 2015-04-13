@@ -92,7 +92,7 @@ class DoctrineParamConverter implements ParamConverterInterface
         try {
             return $this->getManager($options['entity_manager'], $class)->getRepository($class)->$method($id);
         } catch (NoResultException $e) {
-            return null;
+            return;
         }
     }
 
@@ -147,8 +147,14 @@ class DoctrineParamConverter implements ParamConverterInterface
         $em = $this->getManager($options['entity_manager'], $class);
         $metadata = $em->getClassMetadata($class);
 
+        $mapMethodSignature = isset($options['repository_method'])
+            && isset($options['map_method_signature'])
+            && $options['map_method_signature'] === true;
+
         foreach ($options['mapping'] as $attribute => $field) {
-            if ($metadata->hasField($field) || ($metadata->hasAssociation($field) && $metadata->isSingleValuedAssociation($field))) {
+            if ($metadata->hasField($field)
+                || ($metadata->hasAssociation($field) && $metadata->isSingleValuedAssociation($field))
+                || $mapMethodSignature) {
                 $criteria[$field] = $request->attributes->get($attribute);
             }
         }
@@ -162,16 +168,38 @@ class DoctrineParamConverter implements ParamConverterInterface
         }
 
         if (isset($options['repository_method'])) {
-            $method = $options['repository_method'];
+            $repositoryMethod = $options['repository_method'];
         } else {
-            $method = 'findOneBy';
+            $repositoryMethod = 'findOneBy';
         }
 
         try {
-            return $em->getRepository($class)->$method($criteria);
+            if ($mapMethodSignature) {
+                return $this->findDataByMapMethodSignature($em, $class, $repositoryMethod, $criteria);
+            }
+
+            return $em->getRepository($class)->$repositoryMethod($criteria);
         } catch (NoResultException $e) {
-            return null;
+            return;
         }
+    }
+
+    private function findDataByMapMethodSignature($em, $class, $repositoryMethod, $criteria)
+    {
+        $arguments = array();
+        $repository = $em->getRepository($class);
+        $ref = new \ReflectionMethod($repository, $repositoryMethod);
+        foreach ($ref->getParameters() as $parameter) {
+            if (array_key_exists($parameter->name, $criteria)) {
+                $arguments[] = $criteria[$parameter->name];
+            } elseif ($parameter->isDefaultValueAvailable()) {
+                $arguments[] = $parameter->getDefaultValue();
+            } else {
+                throw new \InvalidArgumentException(sprintf('Repository method "%s::%s" requires that you provide a value for the "$%s" argument.', get_class($repository), $repositoryMethod, $parameter->name));
+            }
+        }
+
+        return $ref->invokeArgs($repository, $arguments);
     }
 
     /**

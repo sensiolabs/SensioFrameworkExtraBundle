@@ -54,7 +54,7 @@ class Cache extends ConfigurationAnnotation
      *
      * @var array
      */
-    protected $vary = array();
+    protected $vary;
 
     /**
      * An expression to compute the Last-Modified HTTP header.
@@ -93,7 +93,7 @@ class Cache extends ConfigurationAnnotation
     /**
      * Sets the number of seconds for the max-age cache-control header field.
      *
-     * @param int     $maxage A number of seconds
+     * @param int $maxage A number of seconds
      */
     public function setMaxAge($maxage)
     {
@@ -114,7 +114,7 @@ class Cache extends ConfigurationAnnotation
     /**
      * Sets the number of seconds for the s-maxage cache-control header field.
      *
-     * @param int     $smaxage A number of seconds
+     * @param int $smaxage A number of seconds
      */
     public function setSMaxAge($smaxage)
     {
@@ -139,13 +139,23 @@ class Cache extends ConfigurationAnnotation
      */
     public function isPublic()
     {
-        return (bool) $this->public;
+        return $this->public === true;
+    }
+
+    /**
+     * Returns whether or not a response is private.
+     *
+     * @return bool
+     */
+    public function isPrivate()
+    {
+        return $this->public === false;
     }
 
     /**
      * Sets a response public.
      *
-     * @param bool    $public A boolean value
+     * @param bool $public A boolean value
      */
     public function setPublic($public)
     {
