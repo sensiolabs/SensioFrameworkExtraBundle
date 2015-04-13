@@ -59,7 +59,7 @@ class CurrentUserParamConverter implements ParamConverterInterface
     }
 
     /**
-     * Get a user from the Security Context
+     * Get a user from the Security Context.
      *
      * @return mixed
      */
