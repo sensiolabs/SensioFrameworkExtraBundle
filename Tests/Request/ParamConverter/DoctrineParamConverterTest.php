@@ -473,7 +473,7 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
 
         $ret = $this->converter->supports($config);
 
-        $this->assertTrue($ret, "Should be supported");
+        $this->assertTrue($ret, 'Should be supported');
     }
 
     public function testSupportsWithConfiguredEntityManager()
@@ -501,6 +501,6 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
 
         $ret = $this->converter->supports($config);
 
-        $this->assertTrue($ret, "Should be supported");
+        $this->assertTrue($ret, 'Should be supported');
     }
 }
