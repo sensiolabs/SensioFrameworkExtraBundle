@@ -63,7 +63,7 @@ class DoctrineParamConverter implements ParamConverterInterface
         }
 
         if (null === $object && false === $configuration->isOptional()) {
-            throw new NotFoundHttpException(sprintf('%s object not found.', $class));
+            throw new NotFoundHttpException($configuration->getMessage() ? $configuration->getMessage() : sprintf('%s object not found.', $class));
         }
 
         $request->attributes->set($name, $object);

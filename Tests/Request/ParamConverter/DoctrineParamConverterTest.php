@@ -37,9 +37,9 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
         $this->converter = new DoctrineParamConverter($this->registry);
     }
 
-    public function createConfiguration($class = null, array $options = null, $name = 'arg', $isOptional = false)
+    public function createConfiguration($class = null, array $options = null, $name = 'arg', $isOptional = false, $message = null)
     {
-        $methods = array('getClass', 'getAliasName', 'getOptions', 'getName', 'allowArray');
+        $methods = array('getClass', 'getAliasName', 'getOptions', 'getName', 'allowArray', 'getMessage');
         if (null !== $isOptional) {
             $methods[] = 'isOptional';
         }
@@ -65,6 +65,11 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
             $config->expects($this->any())
                    ->method('isOptional')
                    ->will($this->returnValue($isOptional));
+        }
+        if (null !== $message) {
+            $config->expects($this->any())
+                ->method('getMessage')
+                ->will($this->returnValue($message));
         }
 
         return $config;
@@ -410,6 +415,35 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
         $objectManager->expects($this->once())
             ->method('getClassMetadata')
             ->will($this->returnValue($metadata));
+
+        $this->converter->apply($request, $config);
+    }
+
+    /**
+     * @expectedException \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @expectedExceptionMessage Oops! Not found!
+     */
+    public function testApplyWithNoDataMessageConfigured()
+    {
+        $id = 1;
+        $request = new Request();
+        $request->attributes->set('id', $id);
+        $config = $this->createConfiguration('stdClass', array(), 'id', false, 'Oops! Not found!');
+
+        $manager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+        $this->registry->expects($this->once())
+            ->method('getManagerForClass')
+            ->with('stdClass')
+            ->will($this->returnValue($manager));
+        $manager->expects($this->once())
+            ->method('getRepository')
+            ->with('stdClass')
+            ->will($this->returnValue($repository));
+        $repository->expects($this->once())
+            ->method('find')
+            ->with($id)
+        ;
 
         $this->converter->apply($request, $config);
     }
