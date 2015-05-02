@@ -49,7 +49,7 @@ class SensioFrameworkExtraExtensionTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder();
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../../Resources/config'));
         $loader->load('security.xml');
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../../vendor/symfony/security-bundle/Symfony/Bundle/SecurityBundle/Resources/config'));
+        $loader = new XmlFileLoader($container, new FileLocator(file_exists(__DIR__.'/../../vendor/symfony/security-bundle/Symfony') ? __DIR__.'/../../vendor/symfony/security-bundle/Symfony/Bundle/SecurityBundle/Resources/config' : __DIR__.'/../../vendor/symfony/security-bundle/Resources/config'));
         $loader->load('security.xml');
         $this->registerLegacyPass($container);
         $container->compile();
