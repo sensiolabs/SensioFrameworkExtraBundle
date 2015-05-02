@@ -210,6 +210,17 @@ the ``map_method_signature`` option to true. The default is false::
    When ``map_method_signature`` is ``true``, the ``firstName`` and
    ``lastName`` parameters do not have to be Doctrine fields.
 
+
+If prefer to use customized message in 404 error, add ``message`` configuration::
+
+    /**
+     * @ParamConverter("post", message="Oops! Not found!")
+     */
+    public function showAction(Post $post)
+    {
+        // 404 error message will be "Oops! Not found!" if $post is not found.
+    }
+
 DateTime Converter
 ~~~~~~~~~~~~~~~~~~
 
