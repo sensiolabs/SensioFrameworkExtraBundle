@@ -57,6 +57,13 @@ class ParamConverter extends ConfigurationAnnotation
     protected $converter;
 
     /**
+     * To be used as 404 error message when object is not found
+     *
+     * @var string
+     */
+    protected $message;
+
+    /**
      * Returns the parameter name.
      *
      * @return string
@@ -164,6 +171,22 @@ class ParamConverter extends ConfigurationAnnotation
     public function setConverter($converter)
     {
         $this->converter = $converter;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMessage()
+    {
+        return $this->message;
+    }
+
+    /**
+     * @param string $message
+     */
+    public function setMessage($message)
+    {
+        $this->message = $message;
     }
 
     /**
