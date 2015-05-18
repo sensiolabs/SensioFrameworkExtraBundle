@@ -66,6 +66,9 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('expression_language')->defaultValue('sensio_framework_extra.security.expression_language.default')->end()
                     ->end()
                 ->end()
+                ->arrayNode('controller_filters')
+                    ->canBeEnabled()
+                ->end()
             ->end()
         ;
 

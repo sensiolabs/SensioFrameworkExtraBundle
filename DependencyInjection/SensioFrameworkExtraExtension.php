@@ -102,6 +102,15 @@ class SensioFrameworkExtraExtension extends Extension
                 $container->getDefinition('sensio_framework_extra.converter.listener')->replaceArgument(1, $config['request']['auto_convert']);
             }
         }
+
+        if ($config['controller_filters']['enabled']) {
+            $loader->load('controller_filters.xml');
+
+            $this->addClassesToCompile(array(
+                'Sensio\\Bundle\\FrameworkExtraBundle\\Controller\\PreExecuteInterface',
+                'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\PreExecuteListener',
+            ));
+        }
     }
 
     /**
