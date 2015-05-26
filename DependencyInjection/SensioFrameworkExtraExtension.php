@@ -102,6 +102,10 @@ class SensioFrameworkExtraExtension extends Extension
                 $container->getDefinition('sensio_framework_extra.converter.listener')->replaceArgument(1, $config['request']['auto_convert']);
             }
         }
+
+        if ($config['psr_message']['enabled']) {
+            $loader->load('psr7.xml');
+        }
     }
 
     /**
