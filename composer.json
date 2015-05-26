@@ -19,6 +19,7 @@
         "symfony/security-bundle": "~2.4"
     },
     "suggest": {
+        "symfony/psr-http-message-bridge": "To use the PSR-7 converters",
         "symfony/expression-language": "",
         "symfony/security-bundle": ""
     },
