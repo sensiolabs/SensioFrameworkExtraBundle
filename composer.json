@@ -23,9 +23,8 @@
         "symfony/security-bundle": ""
     },
     "autoload": {
-        "psr-0": { "Sensio\\Bundle\\FrameworkExtraBundle": "" }
+        "psr-4": { "Sensio\\Bundle\\FrameworkExtraBundle\\": "" }
     },
-    "target-dir": "Sensio/Bundle/FrameworkExtraBundle",
     "extra": {
         "branch-alias": {
             "dev-master": "3.0.x-dev"
