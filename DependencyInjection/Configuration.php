@@ -66,6 +66,12 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('expression_language')->defaultValue('sensio_framework_extra.security.expression_language.default')->end()
                     ->end()
                 ->end()
+                ->arrayNode('psr_message')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->booleanNode('enabled')->defaultValue(interface_exists('Symfony\Bridge\PsrHttpMessage\HttpFoundationFactoryInterface'))->end()
+                    ->end()
+                ->end()
             ->end()
         ;
 
