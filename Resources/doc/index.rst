@@ -57,11 +57,13 @@ The default configuration is as follow:
     .. code-block:: yaml
 
         sensio_framework_extra:
-            router:   { annotations: true }
-            request:  { converters: true, auto_convert: true }
-            view:     { annotations: true }
-            cache:    { annotations: true }
-            security: { annotations: true }
+            router:      { annotations: true }
+            request:     { converters: true, auto_convert: true }
+            view:        { annotations: true }
+            cache:       { annotations: true }
+            security:    { annotations: true }
+            psr_message: { enabled: false } # Defaults to true if the PSR-7 bridge is installed
+
 
     .. code-block:: xml
 
@@ -72,17 +74,19 @@ The default configuration is as follow:
             <view annotations="true" />
             <cache annotations="true" />
             <security annotations="true" />
+            <psr-message enabled="false" /> <!-- Defaults to true if the PSR-7 bridge is installed -->
         </sensio-framework-extra:config>
 
     .. code-block:: php
 
         // load the profiler
         $container->loadFromExtension('sensio_framework_extra', array(
-            'router'   => array('annotations' => true),
-            'request'  => array('converters' => true, 'auto_convert' => true),
-            'view'     => array('annotations' => true),
-            'cache'    => array('annotations' => true),
-            'security' => array('annotations' => true),
+            'router'      => array('annotations' => true),
+            'request'     => array('converters' => true, 'auto_convert' => true),
+            'view'        => array('annotations' => true),
+            'cache'       => array('annotations' => true),
+            'security'    => array('annotations' => true),
+            'psr_message' => array('enabled' => false), // Defaults to true if the PSR-7 bridge is installed
         ));
 
 You can disable some annotations and conventions by defining one or more
@@ -184,4 +188,45 @@ example:
 
 see :ref:`Annotated Routes Activation<frameworkextra-annotations-routing-activation>` for more details.
 
+PSR-7 support
+-------------
+
+SensioFrameworkExtraBundle provides support for HTTP messages interfaces defined
+in `PSR-7`_. It allows to inject instances of ``Psr\\Http\\Message\\ServerRequestInterface``
+and to return instances of ``Psr\\Http\\Message\\ResponseInterface`` in controllers.
+
+To enable this feature, `the HttpFoundation to PSR-7 bridge`_ and `Zend Diactoros`_ must be installed:
+
+.. code-block:: bash
+
+    $ composer require symfony/psr-http-message-bridge zendframework/zend-diactoros
+
+Then, PSR-7 messages can be used directly in controllers like in the following code
+snippet::
+
+    namespace AppBundle\Controller;
+
+    use Psr\Http\Message\ServerRequestInterface;
+    use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+    use Zend\Diactoros\Response;
+
+    class DefaultController extends Controller
+    {
+        public function indexAction(ServerRequestInterface $request)
+        {
+            // Interact with the PSR-7 request
+
+            $response = new Response();
+            // Interact with the PSR-7 response
+
+            return $response;
+        }
+    }
+
+Note that internally, Symfony always use :class:`Symfony\\Component\\HttpFoundation\\Request`
+and :class:`Symfony\\Component\\HttpFoundation\\Response` instances.
+
 .. _`SensioFrameworkExtraBundle`: https://github.com/sensiolabs/SensioFrameworkExtraBundle
+.. _`PSR-7`: http://www.php-fig.org/psr/psr-7/
+.. _`the HttpFoundation to PSR-7 bridge`: https://github.com/symfony/psr-http-message-bridge
+.. _`Zend Diactoros`: https://github.com/zendframework/zend-diactoros

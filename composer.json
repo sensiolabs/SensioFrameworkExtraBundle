@@ -10,12 +10,6 @@
             "email": "fabien@symfony.com"
         }
     ],
-    "repositories": [
-      {
-        "type": "vcs",
-        "url": "https://github.com/dunglas/psr-http-message-bridge"
-      }
-    ],
     "require": {
         "symfony/framework-bundle": "~2.3",
         "doctrine/common": "~2.2"

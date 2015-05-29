@@ -41,7 +41,7 @@ class PsrResponseListenerTest extends \PHPUnit_Framework_TestCase
         $this->listener->onKernelView($event);
     }
 
-    public function testDoesNtConvertControllerResult()
+    public function testDoesNotConvertControllerResult()
     {
         $event = $this->createEventMock(array());
         $event->expects($this->never())->method('setResponse');

@@ -5,8 +5,8 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="sensio_framework_extra.psr7.http_message_factory" class="Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory" />
-        <service id="sensio_framework_extra.psr7.http_foundation_factory" class="Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory" />
+        <service id="sensio_framework_extra.psr7.http_message_factory" class="Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory" public="false" />
+        <service id="sensio_framework_extra.psr7.http_foundation_factory" class="Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory" public="false" />
 
         <service id="sensio_framework_extra.psr7.converter.server_request" class="Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\PsrServerRequestParamConverter">
             <argument type="service" id="sensio_framework_extra.psr7.http_message_factory" />
