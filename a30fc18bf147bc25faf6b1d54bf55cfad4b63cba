@@ -1,0 +1,87 @@
+---------------------------------------------------------------------------
+
+by dunglas at 2015-05-26T22:13:29Z
+
+One choice to do:
+- make the PSR-7 bridge a hard dependency (user-friendly errors)
+- disable the PSR-7 support in the extension if the bridge is not installed
+
+---------------------------------------------------------------------------
+
+by iltar at 2015-05-27T04:53:49Z
+
+What about the first option but the ability to disable it in the configuration? Gives us the option to enable it if we want it.
+
+---------------------------------------------------------------------------
+
+by lsmith77 at 2015-05-27T06:12:53Z
+
+FOSRestBundle might also need some tweaks like this.
+
+---------------------------------------------------------------------------
+
+by dunglas at 2015-05-27T06:43:57Z
+
+Finally, adding a hard dependency is not an option because Zend Diactoros requires PHP 5.5.
+I've taken the approach of automatically enabling the listener and the converter if the PSR-7 Bridge is installed.
+
+---------------------------------------------------------------------------
+
+by dunglas at 2015-05-27T08:55:07Z
+
+Added support of `RequestInterface` and  `HttpMessageInterface` injection.
+
+---------------------------------------------------------------------------
+
+by jvasseur at 2015-05-27T09:00:25Z
+
+Injecting on request when type hinting for HttpMessageInterface feels strange since a message can also be a response.
+
+---------------------------------------------------------------------------
+
+by stof at 2015-05-27T09:02:00Z
+
+@jvasseur If the controller only cares about being able to use the HttpMessageInterface methods, passing the Request is perfectly valid. And it is not weird IMO. the input of a controller is always the Request, not the Response (what is weird is the fact to use this typehint though)
+
+---------------------------------------------------------------------------
+
+by dunglas at 2015-05-27T09:02:33Z
+
+Agree with @stof
+
+---------------------------------------------------------------------------
+
+by dunglas at 2015-05-27T20:15:49Z
+
+Added configuration.
+
+---------------------------------------------------------------------------
+
+by dunglas at 2015-05-28T10:35:24Z
+
+* [x] Use the DI component to inject factories.
+* [x] Minor fixes.
+
+---------------------------------------------------------------------------
+
+by dunglas at 2015-05-29T09:38:11Z
+
+Added some doc.
+
+---------------------------------------------------------------------------
+
+by dunglas at 2015-05-29T13:20:14Z
+
+Fixed issues raised by @xabbuh
+
+---------------------------------------------------------------------------
+
+by jakzal at 2015-05-29T14:29:09Z
+
+Great job :+1:
+
+---------------------------------------------------------------------------
+
+by dunglas at 2015-05-29T18:23:35Z
+
+@fabpot should be ok now
