@@ -192,7 +192,7 @@ PSR-7 support
 -------------
 
 SensioFrameworkExtraBundle provides support for HTTP messages interfaces defined
-in `PSR-7`_. It allows to inject instances of ``Psr\Http\\Message\ServerRequestInterface``
+in `PSR-7`_. It allows to inject instances of ``Psr\Http\Message\ServerRequestInterface``
 and to return instances of ``Psr\Http\Message\ResponseInterface`` in controllers.
 
 To enable this feature, `the HttpFoundation to PSR-7 bridge`_ and `Zend Diactoros`_ must be installed:
