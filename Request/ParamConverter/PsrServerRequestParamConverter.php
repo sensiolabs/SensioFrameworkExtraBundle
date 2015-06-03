@@ -28,7 +28,7 @@ class PsrServerRequestParamConverter implements ParamConverterInterface
     private static $supportedTypes = array(
         'Psr\Http\Message\ServerRequestInterface' => true,
         'Psr\Http\Message\RequestInterface' => true,
-        'Psr\Http\Message\HttpMessageInterface' => true,
+        'Psr\Http\Message\MessageInterface' => true,
     );
     /**
      * @var HttpMessageFactoryInterface
