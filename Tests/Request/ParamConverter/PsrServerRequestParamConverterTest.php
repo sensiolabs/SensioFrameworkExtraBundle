@@ -39,7 +39,7 @@ class PsrServerRequestParamConverterTest extends \PHPUnit_Framework_TestCase
         $config = $this->createConfiguration('Psr\Http\Message\RequestInterface');
         $this->assertTrue($this->converter->supports($config));
 
-        $config = $this->createConfiguration('Psr\Http\Message\HttpMessageInterface');
+        $config = $this->createConfiguration('Psr\Http\Message\MessageInterface');
         $this->assertTrue($this->converter->supports($config));
 
         $config = $this->createConfiguration(__CLASS__);
