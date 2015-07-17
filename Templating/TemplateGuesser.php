@@ -46,10 +46,11 @@ class TemplateGuesser
      * @param  array                     $controller An array storing the controller object and action method
      * @param  Request                   $request    A Request instance
      * @param  string                    $engine
+     * @param  boolean                   $lowercaseName
      * @return TemplateReference         template reference
      * @throws \InvalidArgumentException
      */
-    public function guessTemplateName($controller, Request $request, $engine = 'twig')
+    public function guessTemplateName($controller, Request $request, $engine = 'twig', $lowercaseName = false)
     {
         $className = class_exists('Doctrine\Common\Util\ClassUtils') ? ClassUtils::getClass($controller[0]) : get_class($controller[0]);
 
@@ -58,6 +59,10 @@ class TemplateGuesser
         }
         if (!preg_match('/^(.+)Action$/', $controller[1], $matchAction)) {
             throw new \InvalidArgumentException(sprintf('The "%s" method does not look like an action method (it does not end with Action)', $controller[1]));
+        }
+
+        if ($lowercaseName) {
+            $matchAction[1] = strtolower(preg_replace('!([a-z\d])([A-Z])!', '$1_$2', $matchAction[1]));
         }
 
         $bundle = $this->getBundleForClass($className);

@@ -103,6 +103,21 @@ class TemplateGuesserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(':OutOfBundle:index.html.twig', (string) $templateReference);
     }
 
+    public function testGuessTemplateNameLowercased()
+    {
+        $this->kernel
+            ->expects($this->never())
+            ->method('getBundle');
+
+        $templateGuesser = new TemplateGuesser($this->kernel);
+        $templateReference = $templateGuesser->guessTemplateName(array(
+            new Fixture\FooBundle\Controller\FooController(),
+            'fooBarAction',
+        ), new Request(), 'twig', true);
+
+        $this->assertEquals('FooBundle:Foo:foo_bar.html.twig', (string) $templateReference);
+    }
+
     protected function getBundle($name, $namespace, $parent = null)
     {
         $bundle = $this->getMock('Symfony\Component\HttpKernel\Bundle\BundleInterface');

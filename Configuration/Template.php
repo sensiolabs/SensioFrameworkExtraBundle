@@ -50,6 +50,13 @@ class Template extends ConfigurationAnnotation
     protected $streamable = false;
 
     /**
+     * Should the template name be lowercased,underscored?
+     *
+     * @var Boolean
+     */
+    protected $lowercaseName = false;
+
+    /**
      * Returns the array of templates variables.
      *
      * @return array
@@ -73,6 +80,22 @@ class Template extends ConfigurationAnnotation
     public function isStreamable()
     {
         return (bool) $this->streamable;
+    }
+
+    /**
+     * @param Boolean $lowercaseName
+     */
+    public function setLowercaseName($lowercaseName)
+    {
+        $this->lowercaseName = $lowercaseName;
+    }
+
+    /**
+     * @return Boolean
+     */
+    public function isLowercaseName()
+    {
+        return (Boolean) $this->lowercaseName;
     }
 
     /**
