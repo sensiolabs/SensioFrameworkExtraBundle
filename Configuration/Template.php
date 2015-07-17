@@ -50,6 +50,20 @@ class Template extends ConfigurationAnnotation
     protected $streamable = false;
 
     /**
+     * Should the template name resolved as namespace?
+     *
+     * @var bool
+     */
+    protected $namespaced = null;
+
+    /**
+     * Namespace for resolving template
+     *
+     * @var string
+     */
+    protected $namespace = false;
+
+    /**
      * Returns the array of templates variables.
      *
      * @return array
@@ -73,6 +87,38 @@ class Template extends ConfigurationAnnotation
     public function isStreamable()
     {
         return (bool) $this->streamable;
+    }
+
+    /**
+     * @param bool    $namespaced
+     */
+    public function setIsNamespaced($namespaced)
+    {
+        $this->namespaced = $namespaced;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isNamespaced()
+    {
+        return (bool) $this->namespaced;
+    }
+
+    /**
+     * @param string    $namespace
+     */
+    public function setNamespace($namespace)
+    {
+        $this->namespace = $namespace;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getNamespace()
+    {
+        return $this->namespace;
     }
 
     /**

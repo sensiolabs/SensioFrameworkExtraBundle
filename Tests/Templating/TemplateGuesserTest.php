@@ -52,6 +52,36 @@ class TemplateGuesserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('FooBundle:Foo:index.html.twig', (string) $templateReference);
     }
 
+    public function testGuessTemplateNamespaceName()
+    {
+        $this->kernel
+            ->expects($this->never())
+            ->method('getBundle');
+
+        $templateGuesser = new TemplateGuesser($this->kernel);
+        $templateReference = $templateGuesser->guessNamespaceTemplateName(array(
+            new Fixture\FooBundle\Controller\FooController(),
+            'indexAction',
+        ), new Request());
+
+        $this->assertEquals('@FooBundle/Foo/index.html.twig', (string) $templateReference);
+    }
+
+    public function testGuessTemplateNamespaceNameWithNamespace()
+    {
+        $this->kernel
+            ->expects($this->never())
+            ->method('getBundle');
+
+        $templateGuesser = new TemplateGuesser($this->kernel);
+        $templateReference = $templateGuesser->guessNamespaceTemplateName(array(
+            new Fixture\FooBundle\Controller\FooController(),
+            'indexAction',
+        ), new Request(), 'twig', 'fooNamespace');
+
+        $this->assertEquals('@fooNamespace/Foo/index.html.twig', (string) $templateReference);
+    }
+
     public function testGuessTemplateNameWithParentBundle()
     {
         $this->kernel
