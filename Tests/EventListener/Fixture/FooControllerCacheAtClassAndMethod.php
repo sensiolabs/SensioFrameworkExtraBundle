@@ -22,12 +22,4 @@ class FooControllerCacheAtClassAndMethod
     public function bar2Action()
     {
     }
-
-    /**
-     * @Cache(smaxage="15")
-     * @Cache(smaxage="25")
-     */
-    public function bar3Action()
-    {
-    }
 }

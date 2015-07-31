@@ -78,18 +78,6 @@ class ControllerListenerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(FooControllerCacheAtClassAndMethod::CLASS_SMAXAGE, $this->getReadedCache()->getSMaxAge());
     }
 
-    public function testMultipleAnnotationsOnMethod()
-    {
-        $controller = new FooControllerCacheAtClassAndMethod();
-        $this->event = $this->getFilterControllerEvent(array($controller, 'bar3Action'), $this->request);
-        $this->listener->onKernelController($this->event);
-
-        $annotation = $this->getReadedCache();
-        $this->assertNotNull($annotation);
-        $this->assertInstanceOf('Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache', $annotation);
-        $this->assertEquals(FooControllerCacheAtClassAndMethod::METHOD_SMAXAGE, $annotation->getSMaxAge());
-    }
-
     /**
      * @expectedException \LogicException
      * @expectedExceptionMessage Configure "cache" multiple is not allowed
