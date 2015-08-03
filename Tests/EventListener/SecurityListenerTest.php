@@ -33,7 +33,7 @@ class SecurityListenerTest extends \PHPUnit_Framework_TestCase
 
         $securityContext = $this->getMock('Symfony\Component\Security\Core\SecurityContextInterface');
         $securityContext->expects($this->once())->method('isGranted')->will($this->throwException(new AccessDeniedException()));
-        $securityContext->expects($this->once())->method('getToken')->will($this->returnValue($token));
+        $securityContext->expects($this->exactly(2))->method('getToken')->will($this->returnValue($token));
 
         $trustResolver = $this->getMock('Symfony\Component\Security\Core\Authentication\AuthenticationTrustResolverInterface');
 
@@ -60,7 +60,7 @@ class SecurityListenerTest extends \PHPUnit_Framework_TestCase
         $token->expects($this->once())->method('getRoles')->will($this->returnValue(array()));
 
         $tokenStorage = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface');
-        $tokenStorage->expects($this->once())->method('getToken')->will($this->returnValue($token));
+        $tokenStorage->expects($this->exactly(2))->method('getToken')->will($this->returnValue($token));
 
         $authChecker = $this->getMock('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface');
         $authChecker->expects($this->once())->method('isGranted')->will($this->throwException(new AccessDeniedException()));

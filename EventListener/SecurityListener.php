@@ -56,7 +56,7 @@ class SecurityListener implements EventSubscriberInterface
             throw new \LogicException('To use the @Security tag, you need to install the Symfony Security bundle.');
         }
 
-        if (null === $this->securityContext->getToken()) {
+        if (null === $this->tokenStorage->getToken()) {
             throw new \LogicException('To use the @Security tag, your controller needs to be behind a firewall.');
         }
 
