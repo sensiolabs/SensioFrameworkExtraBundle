@@ -80,7 +80,7 @@ class ControllerListenerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \LogicException
-     * @expectedExceptionMessage Configure "cache" multiple is not allowed
+     * @expectedExceptionMessage Multiple "cache" annotations are not allowed
      */
     public function testMultipleAnnotationsOnClassThrowsExceptionUnlessConfigurationAllowsArray()
     {
@@ -91,7 +91,7 @@ class ControllerListenerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \LogicException
-     * @expectedExceptionMessage Configure "cache" multiple is not allowed
+     * @expectedExceptionMessage Multiple "cache" annotations are not allowed
      */
     public function testMultipleAnnotationsOnMethodThrowsExceptionUnlessConfigurationAllowsArray()
     {
