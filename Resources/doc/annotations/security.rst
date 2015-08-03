@@ -45,11 +45,20 @@ passed to the controller::
     {
     }
 
+Here is another example, making use of multiple functions in the expression::
+
+    /**
+     * @Security("is_granted('POST_SHOW', post) and has_role('ROLE_ADMIN')")
+     */
+    public function showAction(Post $post)
+    {
+    }
+
 .. note::
 
     Defining a ``Security`` annotation has the same effect as defining an
     access control rule, but it is more efficient as the check is only done
-    when this specific route is accessed. To create new acccess control
+    when this specific route is accessed. To create new access control
     rules, please refer to `the Security Voters page`_.
 
 .. tip::
