@@ -93,8 +93,10 @@ class ControllerListener implements EventSubscriberInterface
             if ($configuration instanceof ConfigurationInterface) {
                 if ($configuration->allowArray()) {
                     $configurations['_'.$configuration->getAliasName()][] = $configuration;
-                } else {
+                } elseif (!isset($configurations['_'.$configuration->getAliasName()])) {
                     $configurations['_'.$configuration->getAliasName()] = $configuration;
+                } else {
+                    throw new \LogicException(sprintf('Configure "%s" multiple is not allowed', $configuration->getAliasName()));
                 }
             }
         }
