@@ -16,6 +16,8 @@ use Sensio\Bundle\FrameworkExtraBundle\EventListener\ControllerListener;
 use Sensio\Bundle\FrameworkExtraBundle\Tests\EventListener\Fixture\FooControllerCacheAtClass;
 use Sensio\Bundle\FrameworkExtraBundle\Tests\EventListener\Fixture\FooControllerCacheAtClassAndMethod;
 use Sensio\Bundle\FrameworkExtraBundle\Tests\EventListener\Fixture\FooControllerCacheAtMethod;
+use Sensio\Bundle\FrameworkExtraBundle\Tests\EventListener\Fixture\FooControllerMultipleCacheAtClass;
+use Sensio\Bundle\FrameworkExtraBundle\Tests\EventListener\Fixture\FooControllerMultipleCacheAtMethod;
 use Sensio\Bundle\FrameworkExtraBundle\Tests\EventListener\Fixture\FooControllerParamConverterAtClassAndMethod;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Symfony\Component\HttpFoundation\Request;
@@ -76,16 +78,26 @@ class ControllerListenerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(FooControllerCacheAtClassAndMethod::CLASS_SMAXAGE, $this->getReadedCache()->getSMaxAge());
     }
 
-    public function testMultipleAnnotationsOnMethod()
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Configure "cache" multiple is not allowed
+     */
+    public function testMultipleAnnotationsOnClassThrowsExceptionUnlessConfigurationAllowsArray()
     {
-        $controller = new FooControllerCacheAtClassAndMethod();
-        $this->event = $this->getFilterControllerEvent(array($controller, 'bar3Action'), $this->request);
+        $controller = new FooControllerMultipleCacheAtClass();
+        $this->event = $this->getFilterControllerEvent(array($controller, 'barAction'), $this->request);
         $this->listener->onKernelController($this->event);
+    }
 
-        $annotation = $this->getReadedCache();
-        $this->assertNotNull($annotation);
-        $this->assertInstanceOf('Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache', $annotation);
-        $this->assertEquals(FooControllerCacheAtClassAndMethod::METHOD_SMAXAGE, $annotation->getSMaxAge());
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Configure "cache" multiple is not allowed
+     */
+    public function testMultipleAnnotationsOnMethodThrowsExceptionUnlessConfigurationAllowsArray()
+    {
+        $controller = new FooControllerMultipleCacheAtMethod();
+        $this->event = $this->getFilterControllerEvent(array($controller, 'barAction'), $this->request);
+        $this->listener->onKernelController($this->event);
     }
 
     public function testMultipleParamConverterAnnotationsOnMethod()
