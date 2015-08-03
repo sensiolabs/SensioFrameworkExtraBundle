@@ -37,7 +37,7 @@ class DateTimeParamConverter implements ParamConverterInterface
         }
 
         $options = $configuration->getOptions();
-        $value   = $request->attributes->get($param);
+        $value = $request->attributes->get($param);
 
         if (!$value && $configuration->isOptional()) {
             return false;
@@ -71,6 +71,6 @@ class DateTimeParamConverter implements ParamConverterInterface
             return false;
         }
 
-        return "DateTime" === $configuration->getClass();
+        return 'DateTime' === $configuration->getClass();
     }
 }

@@ -29,7 +29,7 @@ class Template extends ConfigurationAnnotation
     protected $template;
 
     /**
-     * The template engine used when a specific template isn't specified
+     * The template engine used when a specific template isn't specified.
      *
      * @var string
      */
@@ -76,7 +76,7 @@ class Template extends ConfigurationAnnotation
     }
 
     /**
-     * Sets the template variables
+     * Sets the template variables.
      *
      * @param array $vars The template variables
      */
@@ -86,7 +86,7 @@ class Template extends ConfigurationAnnotation
     }
 
     /**
-     * Returns the engine used when guessing template names
+     * Returns the engine used when guessing template names.
      *
      * @return string
      */
@@ -96,7 +96,7 @@ class Template extends ConfigurationAnnotation
     }
 
     /**
-     * Sets the engine used when guessing template names
+     * Sets the engine used when guessing template names.
      *
      * @param string
      */
@@ -139,6 +139,7 @@ class Template extends ConfigurationAnnotation
      * Returns the annotation alias name.
      *
      * @return string
+     *
      * @see ConfigurationInterface
      */
     public function getAliasName()
@@ -147,9 +148,10 @@ class Template extends ConfigurationAnnotation
     }
 
     /**
-     * Only one template directive is allowed
+     * Only one template directive is allowed.
      *
      * @return bool
+     *
      * @see ConfigurationInterface
      */
     public function allowArray()

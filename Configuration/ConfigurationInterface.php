@@ -26,7 +26,7 @@ interface ConfigurationInterface
     public function getAliasName();
 
     /**
-     * Returns whether multiple annotations of this type are allowed
+     * Returns whether multiple annotations of this type are allowed.
      *
      * @return bool
      */

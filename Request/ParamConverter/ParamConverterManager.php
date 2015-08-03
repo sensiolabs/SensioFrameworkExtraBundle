@@ -58,7 +58,7 @@ class ParamConverterManager
      */
     protected function applyConverter(Request $request, ConfigurationInterface $configuration)
     {
-        $value     = $request->attributes->get($configuration->getName());
+        $value = $request->attributes->get($configuration->getName());
         $className = $configuration->getClass();
 
         // If the value is already an instance of the class we are trying to convert it into

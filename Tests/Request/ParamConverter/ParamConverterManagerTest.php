@@ -92,7 +92,7 @@ class ParamConverterManagerTest extends \PHPUnit_Framework_TestCase
         ));
 
         $manager = new ParamConverterManager();
-        $manager->add($converter, 0, "test");
+        $manager->add($converter, 0, 'test');
         $manager->apply($request, array($configuration));
     }
 
@@ -119,7 +119,7 @@ class ParamConverterManagerTest extends \PHPUnit_Framework_TestCase
         ));
 
         $manager = new ParamConverterManager();
-        $manager->add($converter, 0, "test");
+        $manager->add($converter, 0, 'test');
         $manager->apply($request, array($configuration));
     }
 

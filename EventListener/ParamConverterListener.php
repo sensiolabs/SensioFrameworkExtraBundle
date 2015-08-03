@@ -103,7 +103,7 @@ class ParamConverterListener implements EventSubscriberInterface
     }
 
     /**
-     * Get subscribed events
+     * Get subscribed events.
      *
      * @return array Subscribed events
      */

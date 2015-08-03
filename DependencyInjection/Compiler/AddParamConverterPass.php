@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 
 /**
- * Adds tagged request.param_converter services to converter.manager service
+ * Adds tagged request.param_converter services to converter.manager service.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
@@ -32,10 +32,10 @@ class AddParamConverterPass implements CompilerPassInterface
 
         foreach ($container->findTaggedServiceIds('request.param_converter') as $id => $converters) {
             foreach ($converters as $converter) {
-                $name     = isset($converter['converter']) ? $converter['converter'] : null;
+                $name = isset($converter['converter']) ? $converter['converter'] : null;
                 $priority = isset($converter['priority']) ? $converter['priority'] : 0;
 
-                if ($priority === "false") {
+                if ($priority === 'false') {
                     $priority = null;
                 }
 

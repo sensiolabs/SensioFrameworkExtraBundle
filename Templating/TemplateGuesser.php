@@ -18,7 +18,7 @@ use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference;
 use Doctrine\Common\Util\ClassUtils;
 
 /**
- * The TemplateGuesser class handles the guessing of template name based on controller
+ * The TemplateGuesser class handles the guessing of template name based on controller.
  *
  * @author     Fabien Potencier <fabien@symfony.com>
  */
@@ -43,10 +43,12 @@ class TemplateGuesser
      * Guesses and returns the template name to render based on the controller
      * and action names.
      *
-     * @param  array                     $controller An array storing the controller object and action method
-     * @param  Request                   $request    A Request instance
-     * @param  string                    $engine
-     * @return TemplateReference         template reference
+     * @param array   $controller An array storing the controller object and action method
+     * @param Request $request    A Request instance
+     * @param string  $engine
+     *
+     * @return TemplateReference template reference
+     *
      * @throws \InvalidArgumentException
      */
     public function guessTemplateName($controller, Request $request, $engine = 'twig')
@@ -83,7 +85,8 @@ class TemplateGuesser
     /**
      * Returns the Bundle instance in which the given class name is located.
      *
-     * @param  string      $class A fully qualified controller class name
+     * @param string $class A fully qualified controller class name
+     *
      * @return Bundle|null $bundle A Bundle instance
      */
     protected function getBundleForClass($class)

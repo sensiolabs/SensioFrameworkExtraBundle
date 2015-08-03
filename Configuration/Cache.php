@@ -50,7 +50,7 @@ class Cache extends ConfigurationAnnotation
     protected $public;
 
     /**
-     * Additional "Vary:"-headers
+     * Additional "Vary:"-headers.
      *
      * @var array
      */
@@ -163,7 +163,7 @@ class Cache extends ConfigurationAnnotation
     }
 
     /**
-     * Returns the custom "Vary"-headers
+     * Returns the custom "Vary"-headers.
      *
      * @return array
      */
@@ -173,7 +173,7 @@ class Cache extends ConfigurationAnnotation
     }
 
     /**
-     * Add additional "Vary:"-headers
+     * Add additional "Vary:"-headers.
      *
      * @param array $vary
      */
@@ -226,6 +226,7 @@ class Cache extends ConfigurationAnnotation
      * Returns the annotation alias name.
      *
      * @return string
+     *
      * @see ConfigurationInterface
      */
     public function getAliasName()
@@ -234,9 +235,10 @@ class Cache extends ConfigurationAnnotation
     }
 
     /**
-     * Only one cache directive is allowed
+     * Only one cache directive is allowed.
      *
      * @return bool
+     *
      * @see ConfigurationInterface
      */
     public function allowArray()

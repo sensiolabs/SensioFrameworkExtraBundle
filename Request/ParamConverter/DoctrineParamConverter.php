@@ -42,8 +42,8 @@ class DoctrineParamConverter implements ParamConverterInterface
      */
     public function apply(Request $request, ParamConverter $configuration)
     {
-        $name    = $configuration->getName();
-        $class   = $configuration->getClass();
+        $name = $configuration->getName();
+        $class = $configuration->getClass();
         $options = $this->getOptions($configuration);
 
         if (null === $request->attributes->get($name, false)) {
@@ -125,7 +125,7 @@ class DoctrineParamConverter implements ParamConverterInterface
     protected function findOneBy($class, Request $request, $options)
     {
         if (!$options['mapping']) {
-            $keys               = $request->attributes->keys();
+            $keys = $request->attributes->keys();
             $options['mapping'] = $keys ? array_combine($keys, $keys) : array();
         }
 
@@ -224,16 +224,16 @@ class DoctrineParamConverter implements ParamConverterInterface
             return false;
         }
 
-        return ! $em->getMetadataFactory()->isTransient($configuration->getClass());
+        return !$em->getMetadataFactory()->isTransient($configuration->getClass());
     }
 
     protected function getOptions(ParamConverter $configuration)
     {
         return array_replace(array(
             'entity_manager' => null,
-            'exclude'        => array(),
-            'mapping'        => array(),
-            'strip_null'     => false,
+            'exclude' => array(),
+            'mapping' => array(),
+            'strip_null' => false,
         ), $configuration->getOptions());
     }
 

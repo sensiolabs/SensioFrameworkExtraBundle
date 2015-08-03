@@ -75,7 +75,7 @@ class SensioFrameworkExtraExtensionTest extends \PHPUnit_Framework_TestCase
 
         $extension = new SensioFrameworkExtraExtension();
         $config = array(
-            'security'  => array(
+            'security' => array(
                 'expression_language' => 'acme.security.expression_language',
             ),
         );

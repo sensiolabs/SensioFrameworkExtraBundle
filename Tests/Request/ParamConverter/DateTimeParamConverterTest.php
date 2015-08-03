@@ -25,7 +25,7 @@ class DateTimeParamConverterTest extends \PHPUnit_Framework_TestCase
 
     public function testSupports()
     {
-        $config = $this->createConfiguration("DateTime");
+        $config = $this->createConfiguration('DateTime');
         $this->assertTrue($this->converter->supports($config));
 
         $config = $this->createConfiguration(__CLASS__);
@@ -38,18 +38,18 @@ class DateTimeParamConverterTest extends \PHPUnit_Framework_TestCase
     public function testApply()
     {
         $request = new Request(array(), array(), array('start' => '2012-07-21 00:00:00'));
-        $config = $this->createConfiguration("DateTime", "start");
+        $config = $this->createConfiguration('DateTime', 'start');
 
         $this->converter->apply($request, $config);
 
-        $this->assertInstanceOf("DateTime", $request->attributes->get('start'));
+        $this->assertInstanceOf('DateTime', $request->attributes->get('start'));
         $this->assertEquals('2012-07-21', $request->attributes->get('start')->format('Y-m-d'));
     }
 
     public function testApplyInvalidDate404Exception()
     {
         $request = new Request(array(), array(), array('start' => 'Invalid DateTime Format'));
-        $config = $this->createConfiguration("DateTime", "start");
+        $config = $this->createConfiguration('DateTime', 'start');
 
         $this->setExpectedException('Symfony\Component\HttpKernel\Exception\NotFoundHttpException', 'Invalid date given.');
         $this->converter->apply($request, $config);
@@ -58,7 +58,7 @@ class DateTimeParamConverterTest extends \PHPUnit_Framework_TestCase
     public function testApplyWithFormatInvalidDate404Exception()
     {
         $request = new Request(array(), array(), array('start' => '2012-07-21'));
-        $config = $this->createConfiguration("DateTime", "start");
+        $config = $this->createConfiguration('DateTime', 'start');
         $config->expects($this->any())->method('getOptions')->will($this->returnValue(array('format' => 'd.m.Y')));
 
         $this->setExpectedException('Symfony\Component\HttpKernel\Exception\NotFoundHttpException', 'Invalid date given.');
