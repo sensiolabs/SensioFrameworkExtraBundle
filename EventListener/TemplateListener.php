@@ -91,7 +91,6 @@ class TemplateListener implements EventSubscriberInterface
     {
         $request = $event->getRequest();
         $parameters = $event->getControllerResult();
-        $templating = $this->container->get('templating');
 
         if (null === $parameters) {
             if (!$vars = $request->attributes->get('_template_vars')) {
@@ -113,6 +112,8 @@ class TemplateListener implements EventSubscriberInterface
         if (!$template = $request->attributes->get('_template')) {
             return $parameters;
         }
+
+        $templating = $this->container->get('templating');
 
         if (!$request->attributes->get('_template_streamable')) {
             $event->setResponse($templating->renderResponse($template, $parameters));
