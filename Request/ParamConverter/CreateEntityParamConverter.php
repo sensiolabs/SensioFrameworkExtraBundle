@@ -1,17 +1,18 @@
-<?php 
+<?php
+
+
 namespace Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter;
 
 use Doctrine\ORM\EntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Validator\ValidatorInterface;
 
 class CreateEntityParamConverter implements ParamConverterInterface
 {
     /**
-     * @var EntityManager $registry Manager registry
+     * @var EntityManager Manager registry
      */
     private $em;
 
@@ -25,7 +26,7 @@ class CreateEntityParamConverter implements ParamConverterInterface
         $this->em = $em;
         $this->validator = $validator;
     }
- 
+
     /**
      * {@inheritdoc}
      *
@@ -38,14 +39,14 @@ class CreateEntityParamConverter implements ParamConverterInterface
         if (null === $configuration->getClass()) {
             return false;
         }
- 
+
         if(null === $this->em->getClassMetadata($configuration->getClass())->getName()){
             return false;   
         }
 
         return true;
     }
- 
+
     /**
      * {@inheritdoc}
      *
@@ -64,33 +65,35 @@ class CreateEntityParamConverter implements ParamConverterInterface
             $fields = $this->excludeFields($fields, $options);
             $fields = $this->mapFields($fields, $options); 
         }
-        $class          = new \ReflectionClass($this->em->getClassMetadata($configuration->getClass())->getName());
-        $instance       = $class->newInstanceWithoutConstructor();
-        $class_props    = $class->getProperties();
-        
+        $class = new \ReflectionClass($this->em->getClassMetadata($configuration->getClass())->getName());
+        $instance = $class->newInstanceWithoutConstructor();
+        $class_props = $class->getProperties();
+
         foreach ($class_props as $prop) {
             if(isset($fields[$prop->getName()])){
                 $prop->setAccessible(true);
                 $prop->setValue($instance, $fields[$prop->getName()]);    
             }
         }
-        
+
         $config_name = $configuration->getName();
         $request->attributes->set($config_name, $instance);
         $errors = $this->validator->validate($instance);
         if(count($errors) > 0){
-            $request->attributes->set("errors", $errors);
+            $request->attributes->set('errors', $errors);
+
             return false;
         }
 
         $this->persistObject($instance, $options);
+
         return true;
     }
 
     protected function excludeFields($fields, $options){
         $field_exclude = isset($options['exclude']) ? $options['exclude'] : array();
         $fields = array_diff_key($fields, array_flip($field_exclude));
-        
+
         return $fields; 
     }
 
