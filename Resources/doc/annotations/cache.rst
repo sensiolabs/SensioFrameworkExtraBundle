@@ -52,7 +52,7 @@ configuration, the latter overrides the former::
 HTTP Validation Strategies
 --------------------------
 
-The ``lastModified`` and ``ETag`` attributes manages the HTTP validation cache
+The ``lastModified`` and ``ETag`` attributes manage the HTTP validation cache
 headers. ``lastModified`` adds a ``Last-Modified`` header to Responses and
 ``ETag`` adds an ``ETag`` header.
 
