@@ -11,12 +11,12 @@
         }
     ],
     "require": {
-        "symfony/framework-bundle": "~2.3",
+        "symfony/framework-bundle": "~2.3|~3.0",
         "doctrine/common": "~2.2"
     },
     "require-dev": {
-        "symfony/expression-language": "~2.4",
-        "symfony/security-bundle": "~2.4"
+        "symfony/expression-language": "~2.4|~3.0",
+        "symfony/security-bundle": "~2.4|~3.0"
     },
     "suggest": {
         "symfony/psr-http-message-bridge": "To use the PSR-7 converters",
