@@ -125,6 +125,28 @@ class ParamConverter extends ConfigurationAnnotation
     }
 
     /**
+     * Get a option by name.
+     *
+     * @param string $name Name of option
+     * @return null
+     */
+    public function getOption($name)
+    {
+        return $this->hasOption($name) ? $this->options[$name] : null;
+    }
+
+    /**
+     * Check whether a options is exists.
+     *
+     * @param string $name Name of option
+     * @return bool
+     */
+    public function hasOption($name)
+    {
+        return isset($this->options[$name]) ?: false;
+    }
+
+    /**
      * Sets whether or not the parameter is optional.
      *
      * @param bool $optional Wether the parameter is optional
