@@ -128,7 +128,6 @@ class ParamConverter extends ConfigurationAnnotation
      * Get a option by name.
      *
      * @param string $name Name of option
-     * @return null
      */
     public function getOption($name)
     {
@@ -139,6 +138,7 @@ class ParamConverter extends ConfigurationAnnotation
      * Check whether a options is exists.
      *
      * @param string $name Name of option
+     *
      * @return bool
      */
     public function hasOption($name)
