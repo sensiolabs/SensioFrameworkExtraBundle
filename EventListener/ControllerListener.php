@@ -50,15 +50,16 @@ class ControllerListener implements EventSubscriberInterface
      */
     public function onKernelController(FilterControllerEvent $event)
     {
-        if (!is_array($controller = $event->getController())) {
+        if (!is_array($controller = $event->getController()) && !is_object($controller)) {
             return;
         }
 
-        $className = class_exists('Doctrine\Common\Util\ClassUtils') ? ClassUtils::getClass($controller[0]) : get_class($controller[0]);
-        $object = new \ReflectionClass($className);
-        $method = $object->getMethod($controller[1]);
+        list($object, $methodName) = is_array($controller) ? $controller : array($controller, '__invoke');
+        $className = class_exists('Doctrine\Common\Util\ClassUtils') ? ClassUtils::getClass($object) : get_class($object);
+        $class = new \ReflectionClass($className);
+        $method = $class->getMethod($methodName);
 
-        $classConfigurations = $this->getConfigurations($this->reader->getClassAnnotations($object));
+        $classConfigurations = $this->getConfigurations($this->reader->getClassAnnotations($class));
         $methodConfigurations = $this->getConfigurations($this->reader->getMethodAnnotations($method));
 
         $configurations = array();

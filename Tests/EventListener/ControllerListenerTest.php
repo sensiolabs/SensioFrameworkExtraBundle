@@ -15,6 +15,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use Sensio\Bundle\FrameworkExtraBundle\EventListener\ControllerListener;
 use Sensio\Bundle\FrameworkExtraBundle\Tests\EventListener\Fixture\FooControllerCacheAtClass;
 use Sensio\Bundle\FrameworkExtraBundle\Tests\EventListener\Fixture\FooControllerCacheAtClassAndMethod;
+use Sensio\Bundle\FrameworkExtraBundle\Tests\EventListener\Fixture\FooControllerCacheOnInvokableController;
 use Sensio\Bundle\FrameworkExtraBundle\Tests\EventListener\Fixture\FooControllerCacheAtMethod;
 use Sensio\Bundle\FrameworkExtraBundle\Tests\EventListener\Fixture\FooControllerMultipleCacheAtClass;
 use Sensio\Bundle\FrameworkExtraBundle\Tests\EventListener\Fixture\FooControllerMultipleCacheAtMethod;
@@ -50,6 +51,17 @@ class ControllerListenerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertNotNull($this->getReadedCache());
         $this->assertEquals(FooControllerCacheAtMethod::METHOD_SMAXAGE, $this->getReadedCache()->getSMaxAge());
+    }
+
+    public function testCacheAnnotationOnInvokableController()
+    {
+        $controller = new FooControllerCacheOnInvokableController();
+
+        $this->event = $this->getFilterControllerEvent($controller, $this->request);
+        $this->listener->onKernelController($this->event);
+
+        $this->assertNotNull($this->getReadedCache());
+        $this->assertEquals(FooControllerCacheOnInvokableController::INVOKE_SMAXAGE, $this->getReadedCache()->getSMaxAge());
     }
 
     public function testCacheAnnotationAtClass()
