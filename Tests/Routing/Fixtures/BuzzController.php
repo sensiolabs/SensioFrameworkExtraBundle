@@ -24,4 +24,13 @@ class BuzzController
     public function newAction()
     {
     }
+
+    /**
+     * @Route("/foo", name="foo")
+     * @Method("PUT|POST")
+     */
+    public function fooAction()
+    {
+    }
+
 }
