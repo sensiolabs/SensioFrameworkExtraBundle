@@ -50,7 +50,8 @@ class AnnotatedRouteControllerLoader extends AnnotationClassLoader
         // requirements (@Method)
         foreach ($this->reader->getMethodAnnotations($method) as $configuration) {
             if ($configuration instanceof Method) {
-                $route->setMethods(explode('|', implode('|', $configuration->getMethods())));
+                $methods = implode('|', $configuration->getMethods());
+                $route->setMethods(explode('|', $methods));
             } elseif ($configuration instanceof FrameworkExtraBundleRoute && $configuration->getService()) {
                 throw new \LogicException('The service option can only be specified at class level.');
             }

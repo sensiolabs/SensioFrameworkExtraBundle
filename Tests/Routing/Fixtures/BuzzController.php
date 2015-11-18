@@ -26,11 +26,18 @@ class BuzzController
     }
 
     /**
+     * @Route("/foo", name="bar")
+     * @Method({"POST", "DELETE"})
+     */
+    public function barAction()
+    {
+    }
+
+    /**
      * @Route("/foo", name="foo")
      * @Method("PUT|POST")
      */
     public function fooAction()
     {
     }
-
 }
