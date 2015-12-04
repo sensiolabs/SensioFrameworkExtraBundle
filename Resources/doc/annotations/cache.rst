@@ -62,7 +62,7 @@ response is not modified (in this case, the controller is **not** called)::
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 
     /**
-     * @Cache(lastModified="post.getUpdatedAt()", ETag="'Post' ~ post.getId() ~ post.getUpdatedAt()")
+     * @Cache(lastModified="post.getUpdatedAt()", ETag="'Post' ~ post.getId() ~ post.getUpdatedAt().getTimestamp()")
      */
     public function indexAction(Post $post)
     {
