@@ -62,7 +62,7 @@ response is not modified (in this case, the controller is **not** called)::
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 
     /**
-     * @Cache(lastModified="post.getUpdatedAt()", ETag="'Post' ~ post.getId() ~ post.getUpdatedAt()")
+     * @Cache(lastModified="post.getUpdatedAt()", ETag="'Post' ~ post.getId() ~ post.getUpdatedAt().getTimestamp()")
      */
     public function indexAction(Post $post)
     {
@@ -93,14 +93,14 @@ Attributes
 
 Here is a list of accepted attributes and their HTTP header equivalent:
 
-===================================================== ================================
-Annotation                                            Response Method
-===================================================== ================================
-``@Cache(expires="tomorrow")``                        ``$response->setExpires()``
-``@Cache(smaxage="15")``                              ``$response->setSharedMaxAge()``
-``@Cache(maxage="15")``                               ``$response->setMaxAge()``
-``@Cache(vary={"Cookie"})``                           ``$response->setVary()``
-``@Cache(public=true)``                               ``$response->setPublic()``
-``@Cache(lastModified="post.getUpdatedAt()")``        ``$response->setLastModified()``
-``@Cache(ETag="post.getId() ~ post.getUpdatedAt()")`` ``$response->setETag()``
-===================================================== ================================
+======================================================================= ================================
+Annotation                                                              Response Method
+======================================================================= ================================
+``@Cache(expires="tomorrow")``                                          ``$response->setExpires()``
+``@Cache(smaxage="15")``                                                ``$response->setSharedMaxAge()``
+``@Cache(maxage="15")``                                                 ``$response->setMaxAge()``
+``@Cache(vary={"Cookie"})``                                             ``$response->setVary()``
+``@Cache(public=true)``                                                 ``$response->setPublic()``
+``@Cache(lastModified="post.getUpdatedAt()")``                          ``$response->setLastModified()``
+``@Cache(ETag="post.getId() ~ post.getUpdatedAt().getTimestamp()")``    ``$response->setETag()``
+======================================================================= ================================
