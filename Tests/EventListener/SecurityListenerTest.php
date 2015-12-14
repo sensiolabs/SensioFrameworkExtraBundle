@@ -26,7 +26,9 @@ class SecurityListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function testLegacyAccessDenied()
     {
-        $this->iniSet('error_reporting', -1 & ~E_USER_DEPRECATED);
+        if (!interface_exists('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface')) {
+            $this->markTestSkipped();
+        }
 
         $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
         $token->expects($this->once())->method('getRoles')->will($this->returnValue(array()));
