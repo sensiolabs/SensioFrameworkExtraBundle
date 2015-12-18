@@ -1,0 +1,17 @@
+framework:
+    test: true
+    secret: test
+    templating:
+        engine: [twig, php]
+    router:
+        resource: %kernel.root_dir%/config/routing.yml
+
+services:
+    test.invokable.predefined:
+        class: Tests\Fixtures\FooBundle\Controller\InvokableController
+
+    test.invokable_class_level.predefined:
+        class: Tests\Fixtures\FooBundle\Controller\InvokableClassLevelController
+
+    test.simple.multiple:
+        class: Tests\Fixtures\FooBundle\Controller\SimpleController
