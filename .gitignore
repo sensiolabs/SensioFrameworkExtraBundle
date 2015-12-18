@@ -1,4 +1,5 @@
+/vendor
 coverage
+/Tests/Fixtures/cache
 phpunit.xml
-vendor
 composer.lock
