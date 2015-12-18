@@ -1,0 +1,17 @@
+---------------------------------------------------------------------------
+
+by iltar at 2015-12-18T07:15:21Z
+
+ping @fabpot is this ready to be merged? My tests are failing on symfony 3.0 because of this.
+
+---------------------------------------------------------------------------
+
+by xabbuh at 2015-12-18T07:32:47Z
+
+:+1:
+
+---------------------------------------------------------------------------
+
+by xabbuh at 2015-12-18T09:05:14Z
+
+Another approach would be would to add the `@group legacy` annotation so that one would be able to skip tests from that group.
