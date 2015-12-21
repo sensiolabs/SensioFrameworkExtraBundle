@@ -73,11 +73,10 @@ class TemplateListener implements EventSubscriberInterface
      * rendered template content.
      *
      * @param GetResponseForControllerResultEvent $event
-     * @return void
      */
     public function onKernelView(GetResponseForControllerResultEvent $event)
     {
-        /** @var Template $template */
+        /* @var Template $template */
         $request = $event->getRequest();
         $template = $request->attributes->get('_template');
 
@@ -132,6 +131,7 @@ class TemplateListener implements EventSubscriberInterface
      * @param Template $template
      * @param object   $controller
      * @param string   $action
+     *
      * @return array
      */
     private function resolveDefaultParameters(Request $request, Template $template, $controller, $action)

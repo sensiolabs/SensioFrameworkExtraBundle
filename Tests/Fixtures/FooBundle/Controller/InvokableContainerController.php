@@ -55,7 +55,7 @@ class InvokableContainerController extends Controller
     public function __invoke()
     {
         return array(
-            'foo' => 'bar'
+            'foo' => 'bar',
         );
     }
 }

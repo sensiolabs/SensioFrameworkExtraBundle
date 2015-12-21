@@ -26,7 +26,7 @@ class MultipleActionsClassLevelTemplateController extends Controller
     public function firstAction()
     {
         return array(
-            'foo' => 'bar'
+            'foo' => 'bar',
         );
     }
 
@@ -37,7 +37,7 @@ class MultipleActionsClassLevelTemplateController extends Controller
     public function secondAction()
     {
         return array(
-            'foo' => 'bar'
+            'foo' => 'bar',
         );
     }
 
@@ -48,7 +48,7 @@ class MultipleActionsClassLevelTemplateController extends Controller
     public function overwriteAction()
     {
         return array(
-            'foo' => 'foo bar baz'
+            'foo' => 'foo bar baz',
         );
     }
 }

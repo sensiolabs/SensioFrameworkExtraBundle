@@ -26,7 +26,7 @@ class InvokableController
     public function __invoke()
     {
         return array(
-            'foo' => 'bar'
+            'foo' => 'bar',
         );
     }
 }

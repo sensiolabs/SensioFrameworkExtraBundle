@@ -175,7 +175,7 @@ class Template extends ConfigurationAnnotation
     }
 
     /**
-     * The controller (+action) this annotation is attached to
+     * The controller (+action) this annotation is attached to.
      *
      * @return array
      */
