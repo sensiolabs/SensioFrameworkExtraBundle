@@ -84,7 +84,10 @@ class SecurityListenerTest extends \PHPUnit_Framework_TestCase
     private function createRequest(Security $security = null)
     {
         return new Request(array(), array(), array(
-            '_security' => $security,
+            '_security' => array(
+                $security,
+                $security,
+            ),
         ));
     }
 
