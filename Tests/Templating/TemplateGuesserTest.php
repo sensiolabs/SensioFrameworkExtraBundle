@@ -103,6 +103,87 @@ class TemplateGuesserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(':OutOfBundle:index.html.twig', (string) $templateReference);
     }
 
+    /**
+     * @dataProvider controllerProvider
+     */
+    public function testGuessTemplateWithInvokeMagicMethod($controller, $patterns)
+    {
+        $templateGuesser = new TemplateGuesser($this->kernel, $patterns);
+
+        $templateReference = $templateGuesser->guessTemplateName(array(
+            $controller,
+            '__invoke',
+        ), new Request());
+
+        $this->assertEquals('FooBundle::Foo.html.twig', (string) $templateReference);
+    }
+
+    /**
+     * @dataProvider controllerProvider
+     */
+    public function testGuessTemplateWithACustomPattern($controller, $patterns)
+    {
+        $templateGuesser = new TemplateGuesser($this->kernel, $patterns);
+
+        $templateReference = $templateGuesser->guessTemplateName(array(
+            $controller,
+            'indexAction',
+        ), new Request());
+
+        $this->assertEquals('FooBundle:Foo:index.html.twig', (string) $templateReference);
+    }
+
+    /**
+     * @dataProvider controllerProvider
+     */
+    public function testGuessTemplateWithNotStandardMethodName($controller, $patterns)
+    {
+        $templateGuesser = new TemplateGuesser($this->kernel, $patterns);
+
+        $templateReference = $templateGuesser->guessTemplateName(array(
+            $controller,
+            'fooBar',
+        ), new Request());
+
+        $this->assertEquals('FooBundle:Foo:fooBar.html.twig', (string) $templateReference);
+    }
+
+    public function controllerProvider()
+    {
+        return array(
+            array(new Fixture\FooBundle\Controller\FooController(), array()),
+            array(new Fixture\FooBundle\Action\FooAction(), array('/foobar/', '/FooBundle\\\Action\\\(.+)Action/')),
+        );
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage The "stdClass" class does not look like a controller class (its FQN must match one of the following regexps: "/foo/", "/bar/"
+     */
+    public function testGuessTemplateWhenControllerFQNDoesNotMatchAPattern()
+    {
+        $this->kernel->getBundles();
+        $templateGuesser = new TemplateGuesser($this->kernel, array('/foo/', '/bar/'));
+        $templateReference = $templateGuesser->guessTemplateName(array(
+            new \stdClass(),
+            'indexAction',
+        ), new Request());
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage must be an array callable or an object defining the magic method __invoke. "object" given.
+     */
+    public function testInvalidController()
+    {
+        $this->kernel->getBundles();
+        $templateGuesser = new TemplateGuesser($this->kernel);
+        $templateReference = $templateGuesser->guessTemplateName(
+            new Fixture\FooBundle\Controller\FooController(),
+            new Request()
+        );
+    }
+
     protected function getBundle($name, $namespace, $parent = null)
     {
         $bundle = $this->getMock('Symfony\Component\HttpKernel\Bundle\BundleInterface');
