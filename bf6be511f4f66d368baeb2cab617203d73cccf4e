@@ -1,0 +1,18 @@
+---------------------------------------------------------------------------
+
+by iltar at 2015-12-21T08:54:03Z
+
+Had some issues with the deps=low. It turns out that some of the dependencies were not configured but indirectly gotten from the framework bundle.
+ - crawler is 2.0 by default
+ - dependency injection 2.2
+ - twig bundle was missing altogether
+
+Minimal requirements are 2.3 for the first two and 1.11 for twig/twig.
+
+---------------------------------------------------------------------------
+
+by iltar at 2016-02-12T07:32:40Z
+
+ping @fabpot Is there anything missing in this PR to be merged?
+
+I hate to ping you directly but it seems like this repository isn't getting the same love as symfony does ._.
