@@ -1,0 +1,38 @@
+---------------------------------------------------------------------------
+
+by Ener-Getick at 2016-01-30T15:17:03Z
+
+I added a configuration section to define custom patterns to guess a template from a controller FQN.
+
+---------------------------------------------------------------------------
+
+by dunglas at 2016-01-30T16:52:32Z
+
+I was patching DunglasActionBundle to override the template guesser service of this bundle but your approach is more generic.
+
+:+1: for me
+
+---------------------------------------------------------------------------
+
+by bpolaszek at 2016-01-30T19:47:54Z
+
+Definitely +1 for this approach.
+
+---------------------------------------------------------------------------
+
+by dunglas at 2016-02-01T23:40:35Z
+
+Looks good to me
+
+---------------------------------------------------------------------------
+
+by Ener-Getick at 2016-02-04T16:26:41Z
+
+ping @fabpot
+
+---------------------------------------------------------------------------
+
+by Ener-Getick at 2016-03-09T12:24:38Z
+
+ping @fabpot is there anything else you want to change ?
+It would be great to have this in a stable release.
