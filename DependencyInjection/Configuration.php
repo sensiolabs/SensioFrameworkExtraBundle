@@ -72,6 +72,14 @@ class Configuration implements ConfigurationInterface
                         ->booleanNode('enabled')->defaultValue(interface_exists('Symfony\Bridge\PsrHttpMessage\HttpFoundationFactoryInterface'))->end()
                     ->end()
                 ->end()
+                ->arrayNode('templating')
+                    ->fixXmlConfig('controller_pattern')
+                    ->children()
+                        ->arrayNode('controller_patterns')
+                            ->prototype('scalar')
+                        ->end()
+                    ->end()
+                ->end()
             ->end()
         ;
 

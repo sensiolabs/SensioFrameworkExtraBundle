@@ -87,6 +87,22 @@ class SensioFrameworkExtraExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertAlias($container, 'acme.security.expression_language', 'sensio_framework_extra.security.expression_language');
     }
 
+    public function testTemplatingControllerPatterns()
+    {
+        $container = new ContainerBuilder();
+
+        $extension = new SensioFrameworkExtraExtension();
+        $config = array(
+            'templating' => array(
+                'controller_patterns' => $patterns = array('/foo/', '/bar/', '/foobar/'),
+            ),
+        );
+
+        $extension->load(array($config), $container);
+
+        $this->assertEquals($patterns, $container->getDefinition('sensio_framework_extra.view.guesser')->getArgument(1));
+    }
+
     private function assertAlias(ContainerBuilder $container, $value, $key)
     {
         $this->assertEquals($value, (string) $container->getAlias($key), sprintf('%s alias is correct', $key));
