@@ -55,6 +55,13 @@ class ParamConverter extends ConfigurationAnnotation
     protected $converter;
 
     /**
+     * Use explicit message for object not found response
+     *
+     * @var string
+     */
+    protected $message;
+
+    /**
      * Returns the parameter name.
      *
      * @return string
@@ -162,6 +169,26 @@ class ParamConverter extends ConfigurationAnnotation
     public function setConverter($converter)
     {
         $this->converter = $converter;
+    }
+
+    /**
+     * Get explicit not found message.
+     *
+     * @return string
+     */
+    public function getMessage()
+    {
+        return $this->message;
+    }
+
+    /**
+     * Set explicit not found message.
+     *
+     * @param string $message
+     */
+    public function setMessage($message)
+    {
+        $this->message = $message;
     }
 
     /**
