@@ -65,7 +65,13 @@ class TemplateListener implements EventSubscriberInterface
             throw new \InvalidArgumentException('Request attribute "_template" is reserved for @Template annotations.');
         }
 
-        $template->setOwner($event->getController());
+        $template->setOwner($controller = $event->getController());
+
+        // when no template has been given, try to resolve it based on the controller
+        if (null === $template->getTemplate()) {
+            $guesser = $this->container->get('sensio_framework_extra.view.guesser');
+            $template->setTemplate($guesser->guessTemplateName($controller, $request, $template->getEngine()));
+        }
     }
 
     /**
@@ -87,16 +93,6 @@ class TemplateListener implements EventSubscriberInterface
         $parameters = $event->getControllerResult();
         $owner = $template->getOwner();
         list($controller, $action) = $owner;
-
-        // when no template has been given, try to resolve it based on the controller
-        if (null === $template->getTemplate()) {
-            if ($action === '__invoke') {
-                throw new \InvalidArgumentException(sprintf('Cannot guess a template name for "%s::%s", please provide a template name.', get_class($controller), $action));
-            }
-
-            $guesser = $this->container->get('sensio_framework_extra.view.guesser');
-            $template->setTemplate($guesser->guessTemplateName($owner, $request, $template->getEngine()));
-        }
 
         // when the annotation declares no default vars and the action returns
         // null, all action method arguments are used as default vars
