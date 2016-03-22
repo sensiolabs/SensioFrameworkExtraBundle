@@ -69,7 +69,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('psr_message')
                     ->addDefaultsIfNotSet()
                     ->children()
-                        ->booleanNode('enabled')->defaultValue(interface_exists('Symfony\Bridge\PsrHttpMessage\HttpFoundationFactoryInterface'))->end()
+                        ->booleanNode('enabled')->defaultValue(interface_exists('Symfony\Bridge\PsrHttpMessage\HttpFoundationFactoryInterface') && class_exists('Zend\Diactoros\ServerRequestFactory'))->end()
                     ->end()
                 ->end()
                 ->arrayNode('templating')
