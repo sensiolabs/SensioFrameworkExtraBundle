@@ -1,0 +1,20 @@
+---------------------------------------------------------------------------
+
+by fabpot at 2016-03-22T13:37:49Z
+
+LGTM
+
+---------------------------------------------------------------------------
+
+by iltar at 2016-03-24T11:49:45Z
+
+It doesn't really matter in which of the 2 this logic is located for the common use-cases so this looks like a fair change to me.
+
+Now that I think of it (as I'm working on the controller metadata caching), it might be a nice extension point for people to hook into the annotation part of the caching. This information is already available during the cache warm-up and can therefore already calculate the value it should have for the template.
+
+---------------------------------------------------------------------------
+
+by Ener-Getick at 2016-03-25T16:44:51Z
+
+@iltar from what I see many things could be cached so you have my :+1:
+Thank you for all the optimizations you made BTW !
