@@ -55,6 +55,7 @@ class SensioFrameworkExtraExtension extends Extension
                 // cannot be added because it has some annotations
                 //'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\ParamConverter',
                 'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\ParamConverterListener',
+                'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\CurrentUserParamConverter',
                 'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\DateTimeParamConverter',
                 'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\DoctrineParamConverter',
                 'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\ParamConverterInterface',

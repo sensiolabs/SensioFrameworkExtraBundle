@@ -76,8 +76,8 @@ To detect which converter is run on a parameter the following process is run:
 Built-in Converters
 -------------------
 
-The bundle has two built-in converters, the Doctrine one and a DateTime
-converter.
+The bundle has three built-in converters, the Doctrine one, a DateTime
+converter and a CurrentUser converter.
 
 Doctrine Converter
 ~~~~~~~~~~~~~~~~~~
@@ -236,6 +236,43 @@ is accepted. You can be stricter with input given through the options::
     public function archiveAction(\DateTime $start, \DateTime $end)
     {
     }
+
+CurrentUser Converter
+~~~~~~~~~~~~~~~~~~~~~
+
+Converter Name: ``current_user``
+
+This converter injects the current user from the ``SecurityContext``, if available.
+
+This has several benefits:
+
+* Short syntax, reduce logic in controller
+* Alternative to ``getUser`` from base controller class, avoiding reliance on the
+  service container
+
+Its usage is simple. Provide the converter name and the parameter name you wish
+to be converted. These are both required in order to not conflict with the Doctrine
+ParamConverter.
+
+The example below illustrates applying this to one parameter, where the ``$recipient``
+could be handled by another ParamConverter.
+
+    /**
+     * @ParamConverter(converter="current_user", name="user")
+     */
+     public function sendMessageAction(User $currentUser, User $recipient)
+
+If you type-hint against the UserInterface, or an interface which extends UserInterface,
+you may omit this annotation entirely, like this:
+
+    use Symfony\Component\Security\Core\User\UserInterface;
+
+    // ...
+
+    public function myAccountAction(UserInterface $currentUser)
+
+
+If the SecurityBundle is not enabled, this converter will have no effect, and will be skipped.
 
 Creating a Converter
 --------------------
