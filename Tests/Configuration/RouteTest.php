@@ -44,4 +44,16 @@ class RouteTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('/test/', $route->getPath());
         $this->assertSame('app.test', $route->getService());
     }
+
+    public function testSetUuidRequirements()
+    {
+        $route = new Route(array('requirements' => ['foo'=>'\uuid4', 'bar'=>'uuid']));
+        $req = $route->getRequirements();
+        $this->assertEquals('uuid', $req['bar']);
+        $this->assertEquals('[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}', $req['foo']);
+
+        // Make sure we dont get weird behavior when requirements is not an array
+        $route = new Route(array('requirements' => 'foo'));
+        $this->assertEquals('foo', $route->getRequirements());
+    }
 }
