@@ -118,7 +118,7 @@ option::
 
     /**
      * @Route("/blog/{post_id}")
-     * @ParamConverter("post", class="SensioBlogBundle:Post", options={"id" = "post_id"})
+     * @ParamConverter("post", class="SensioBlogBundle:Post", options={"post_id" = "id"})
      */
     public function showAction(Post $post)
     {
@@ -133,7 +133,7 @@ This also allows you to have multiple converters in one action::
 
     /**
      * @Route("/blog/{id}/comments/{comment_id}")
-     * @ParamConverter("comment", class="SensioBlogBundle:Comment", options={"id" = "comment_id"})
+     * @ParamConverter("comment", class="SensioBlogBundle:Comment", options={"comment_id" = "id"})
      */
     public function showAction(Post $post, Comment $comment)
     {
