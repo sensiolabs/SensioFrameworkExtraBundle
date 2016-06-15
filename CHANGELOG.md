@@ -4,7 +4,7 @@ CHANGELOG
 3.0
 ---
 
- * fixed the Doctrine param converter that sent 500 when an entity was not found under some circumstancies
+ * fixed the Doctrine param converter that sent 500 when an entity was not found under some circumstances
  * ParamConverterInterface now uses ParamConverter as a type hint instead of ConfigurationInterface
  * added support for @Security
  * added support for HTTP validation cache in @Cache (ETag and LastModified)
