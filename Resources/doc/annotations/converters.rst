@@ -113,7 +113,7 @@ be configured with the ``entity_manager`` option::
     {
     }
 
-If the placeholder has not the same name as the primary key, pass the ``id``
+If the placeholder does not have the same name as the primary key, pass the ``id``
 option::
 
     /**
