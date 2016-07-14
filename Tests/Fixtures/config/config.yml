@@ -15,3 +15,6 @@ services:
 
     test.simple.multiple:
         class: Tests\Fixtures\FooBundle\Controller\SimpleController
+
+    test.templateandcache:
+        class: Tests\Fixtures\FooBundle\Controller\TemplateAndCacheController
