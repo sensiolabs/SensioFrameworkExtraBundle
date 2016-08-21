@@ -11,17 +11,20 @@
 
 namespace Sensio\Bundle\FrameworkExtraBundle\Config;
 
-class AnnotatedRoutingResource implements \Serializable
+use Symfony\Component\Config\Resource\ResourceInterface;
+use Doctrine\Common\Annotations\Reader;
+
+class AnnotatedRoutingResource implements ResourceInterface, \Serializable
 {
     private $class;
     private $filePath;
     private $annotationMetadata = array();
 
-    public function __construct($class, $path, array $annotationMetadata)
+    public function __construct(\ReflectionClass $reflectionClass, Reader $reader)
     {
-        $this->class = $class;
-        $this->filePath = $path;
-        $this->annotationMetadata = $annotationMetadata;
+        $this->class = $reflectionClass->name;
+        $this->filePath = $reflectionClass->getFileName();
+        $this->annotationMetadata = $this->calculateAnnotationsFingerprint($reflectionClass, $reader);
     }
 
     public function __toString()
@@ -47,5 +50,29 @@ class AnnotatedRoutingResource implements \Serializable
     public function getFilePath()
     {
         return $this->filePath;
+    }
+
+    private function calculateAnnotationsFingerprint(\ReflectionClass $class, Reader $reader)
+    {
+        $metadata = array(
+            'class' => array(),
+            'methods' => array()
+        );
+
+        $classAnnotations = $reader->getClassAnnotations($class);
+        foreach ($classAnnotations as $classAnnotation) {
+            // cast to an array, as a convenient way to get a "fingerprint"
+            // of all of the properties on the annotations objects
+            $metadata['class'][] = (array) $classAnnotation;
+        }
+
+        foreach ($class->getMethods() as $method) {
+            $metadata['methods'][$method->name] = [];
+            foreach ($reader->getMethodAnnotations($method) as $annot) {
+                $metadata['methods'][$method->name][] = (array) $annot;
+            }
+        }
+
+        return $metadata;
     }
 }

@@ -11,17 +11,17 @@
 
 namespace Sensio\Bundle\FrameworkExtraBundle\Config;
 
+use Doctrine\Common\Annotations\Reader;
 use Symfony\Component\Config\Resource\ResourceInterface;
 use Symfony\Component\Config\ResourceCheckerInterface;
-use Symfony\Component\Routing\Loader\AnnotationClassLoader;
 
 class AnnotatedRoutingResourceChecker implements ResourceCheckerInterface
 {
-    private $annotationClassLoader;
+    private $reader;
 
-    public function __construct(AnnotationClassLoader $annotationClassLoader)
+    public function __construct(Reader $reader)
     {
-        $this->annotationClassLoader = $annotationClassLoader;
+        $this->reader = $reader;
     }
 
     public function supports(ResourceInterface $metadata)
@@ -52,7 +52,9 @@ class AnnotatedRoutingResourceChecker implements ResourceCheckerInterface
             return false;
         }
 
-        return (array) $resource === (array) $this->annotationClassLoader->createResourceForClass($reflectionClass);
+        $newResource = new AnnotatedRoutingResource($reflectionClass, $this->reader);
+
+        return (array) $resource === (array) $newResource;
     }
 
 }

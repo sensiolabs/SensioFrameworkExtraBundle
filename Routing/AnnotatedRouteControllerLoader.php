@@ -105,24 +105,6 @@ class AnnotatedRouteControllerLoader extends AnnotationClassLoader
      */
     protected function createConfigResource(\ReflectionClass $class)
     {
-        $classAnnotations = $this->reader->getClassAnnotations($class);
-
-        $methodAnnotations = array();
-        foreach ($class->getMethods() as $method) {
-            $this->defaultRouteIndex = 0;
-            $methodAnnotations[$method->name] = [];
-            foreach ($this->reader->getMethodAnnotations($method) as $annot) {
-                $methodAnnotations[$method->name][] = $annot;
-            }
-        }
-
-        $metadata = array(
-            // cast to an array, as a convenient way to get a "fingerprint"
-            // of all of the properties on the annotations objects
-            'class_annotations' => (array) $classAnnotations,
-            'method_annotations' => (array) $methodAnnotations,
-        );
-
-        return new AnnotatedRoutingResource($class->name, $class->getFileName(), $metadata);
+        return new AnnotatedRoutingResource($class, $this->reader);
     }
 }
