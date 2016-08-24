@@ -4,7 +4,7 @@ framework:
     templating:
         engine: [twig, php]
     router:
-        resource: %kernel.root_dir%/config/routing.yml
+        resource: "%kernel.root_dir%/config/routing.yml"
 
 services:
     test.invokable.predefined:

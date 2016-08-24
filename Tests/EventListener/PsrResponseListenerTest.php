@@ -17,41 +17,30 @@ use Symfony\Bridge\PsrHttpMessage\Tests\Fixtures\Response;
 
 /**
  * @author Kévin Dunglas <dunglas@gmail.com>
+ * @requires PHP 5.4
  */
 class PsrResponseListenerTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var PsrResponseListener
-     */
-    private $listener;
-
-    public function setUp()
-    {
-        if (!class_exists('Symfony\Bridge\PsrHttpMessage\HttpFoundationFactoryInterface')) {
-            $this->markTestSkipped('The PSR-7 Bridge is not installed.');
-        }
-
-        $this->listener = new PsrResponseListener(new HttpFoundationFactory());
-    }
-
     public function testConvertsControllerResult()
     {
+        $listener = new PsrResponseListener(new HttpFoundationFactory());
         $event = $this->createEventMock(new Response());
         $event->expects($this->once())->method('setResponse')->with($this->isInstanceOf('Symfony\Component\HttpFoundation\Response'));
-        $this->listener->onKernelView($event);
+        $listener->onKernelView($event);
     }
 
     public function testDoesNotConvertControllerResult()
     {
+        $listener = new PsrResponseListener(new HttpFoundationFactory());
         $event = $this->createEventMock(array());
         $event->expects($this->never())->method('setResponse');
 
-        $this->listener->onKernelView($event);
+        $listener->onKernelView($event);
 
         $event = $this->createEventMock(null);
         $event->expects($this->never())->method('setResponse');
 
-        $this->listener->onKernelView($event);
+        $listener->onKernelView($event);
     }
 
     private function createEventMock($controllerResult)
