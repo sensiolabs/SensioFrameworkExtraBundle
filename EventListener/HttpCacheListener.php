@@ -65,6 +65,7 @@ class HttpCacheListener implements EventSubscriberInterface
             $event->setController(function () use ($response) {
                 return $response;
             });
+            $event->stopPropagation();
         } else {
             if ($etag) {
                 $this->etags[$request] = $etag;

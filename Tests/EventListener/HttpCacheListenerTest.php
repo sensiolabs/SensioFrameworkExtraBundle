@@ -101,7 +101,7 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($vary, $result, 'Vary header should not be changed');
     }
 
-    public function testResponseIsNeitherPrivateNorPublicIfConfigurationIsPublicNotSet()
+    public function testResponseIsPrivateIfConfigurationIsPublicNotSet()
     {
         $request = $this->createRequest(new Cache(array(
         )));
@@ -109,7 +109,7 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
         $this->listener->onKernelResponse($this->createEventMock($request, $this->response));
 
         $this->assertFalse($this->response->headers->hasCacheControlDirective('public'));
-        $this->assertFalse($this->response->headers->hasCacheControlDirective('private'));
+        $this->assertTrue($this->response->headers->hasCacheControlDirective('private'));
     }
 
     public function testConfigurationAttributesAreSetOnResponse()
