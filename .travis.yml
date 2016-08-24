@@ -3,31 +3,42 @@ language: php
 sudo: false
 
 cache:
-  directories:
-    - $HOME/.composer/cache
+    directories:
+        - $HOME/.composer/cache
+        - .phpunit
 
 php:
-  - 5.3
-  - 5.4
-  - 5.5
-  - 5.6
-  - 7.0
-  - hhvm
+    - 5.3
+    - 5.4
+    - 5.5
+    - 5.6
+    - 7.0
 
 matrix:
-  include:
-    - php: 5.3
-      env: deps=low
-  fast_finish: true
+    include:
+        - php: 7.0
+          env: deps=low
+        # Use the newer stack for HHVM as HHVM does not support Precise anymore since a long time and so Precise has an outdated version
+        - php: hhvm-3.12
+          sudo: required
+          dist: trusty
+          group: edge
+    fast_finish: true
 
 env:
-  global:
-    - deps=no
+    global:
+        - deps=no
 
 before_install:
-  - travis_retry composer self-update
+    - if [[ ! $TRAVIS_PHP_VERSION = hhvm* ]]; then INI_FILE=~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini; else INI_FILE=/etc/hhvm/php.ini; fi
+    - echo memory_limit = -1 >> $INI_FILE
+    - if [[ ! $TRAVIS_PHP_VERSION = hhvm* ]]; then phpenv config-rm xdebug.ini || echo "xdebug not available"; fi
+    - ./phpunit install
 
 install:
-  - if [[ "$TRAVIS_PHP_VERSION" != "5.3" ]] && [[ "$TRAVIS_PHP_VERSION" != "5.4" ]]; then composer require --no-update symfony/psr-http-message-bridge zendframework/zend-diactoros; fi;
-  - if [ "$deps" = "no" ]; then composer --prefer-source install; fi;
-  - if [ "$deps" = "low" ]; then composer --prefer-source --prefer-lowest --prefer-stable update; fi;
+    - if [[ "$TRAVIS_PHP_VERSION" == "5.3" ]]; then composer remove --dev --no-update symfony/psr-http-message-bridge zendframework/zend-diactoros; fi;
+    - if [ "$deps" = "no" ]; then composer install; fi;
+    - if [ "$deps" = "low" ]; then composer --prefer-lowest --prefer-stable update; fi;
+
+script:
+    - ./phpunit

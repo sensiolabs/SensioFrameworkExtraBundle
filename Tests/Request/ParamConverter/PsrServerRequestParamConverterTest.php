@@ -17,40 +17,32 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Kévin Dunglas <dunglas@gmail.com>
+ * @requires PHP 5.4
  */
 class PsrServerRequestParamConverterTest extends \PHPUnit_Framework_TestCase
 {
-    private $converter;
-
-    public function setUp()
-    {
-        if (!class_exists('Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory')) {
-            $this->markTestSkipped('The PSR-7 Bridge is not installed.');
-        }
-
-        $this->converter = new PsrServerRequestParamConverter(new DiactorosFactory());
-    }
-
     public function testSupports()
     {
+        $converter = new PsrServerRequestParamConverter(new DiactorosFactory());
         $config = $this->createConfiguration('Psr\Http\Message\ServerRequestInterface');
-        $this->assertTrue($this->converter->supports($config));
+        $this->assertTrue($converter->supports($config));
 
         $config = $this->createConfiguration('Psr\Http\Message\RequestInterface');
-        $this->assertTrue($this->converter->supports($config));
+        $this->assertTrue($converter->supports($config));
 
         $config = $this->createConfiguration('Psr\Http\Message\MessageInterface');
-        $this->assertTrue($this->converter->supports($config));
+        $this->assertTrue($converter->supports($config));
 
         $config = $this->createConfiguration(__CLASS__);
-        $this->assertFalse($this->converter->supports($config));
+        $this->assertFalse($converter->supports($config));
 
         $config = $this->createConfiguration();
-        $this->assertFalse($this->converter->supports($config));
+        $this->assertFalse($converter->supports($config));
     }
 
     public function testApply()
     {
+        $converter = new PsrServerRequestParamConverter(new DiactorosFactory());
         $request = new Request(
             array('foo' => 'bar'),
             array(),
@@ -61,7 +53,7 @@ class PsrServerRequestParamConverterTest extends \PHPUnit_Framework_TestCase
         );
         $config = $this->createConfiguration('Psr\Http\Message\ServerRequestInterface', 'request');
 
-        $this->converter->apply($request, $config);
+        $converter->apply($request, $config);
 
         $this->assertInstanceOf('Psr\Http\Message\ServerRequestInterface', $request->attributes->get('request'));
         $this->assertEquals('bar', $request->query->get('foo'));

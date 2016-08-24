@@ -29,10 +29,6 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        if (!interface_exists('Doctrine\Common\Persistence\ManagerRegistry')) {
-            $this->markTestSkipped();
-        }
-
         $this->registry = $this->getMock('Doctrine\Common\Persistence\ManagerRegistry');
         $this->converter = new DoctrineParamConverter($this->registry);
     }
