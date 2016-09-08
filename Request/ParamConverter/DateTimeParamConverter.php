@@ -43,8 +43,10 @@ class DateTimeParamConverter implements ParamConverterInterface
             return false;
         }
 
+        $class = $configuration->getClass();
+
         if (isset($options['format'])) {
-            $date = DateTime::createFromFormat($options['format'], $value);
+            $date = $class::createFromFormat($options['format'], $value);
 
             if (!$date) {
                 throw new NotFoundHttpException('Invalid date given.');
@@ -54,7 +56,7 @@ class DateTimeParamConverter implements ParamConverterInterface
                 throw new NotFoundHttpException('Invalid date given.');
             }
 
-            $date = new DateTime($value);
+            $date = new $class($value);
         }
 
         $request->attributes->set($param, $date);
@@ -71,6 +73,6 @@ class DateTimeParamConverter implements ParamConverterInterface
             return false;
         }
 
-        return 'DateTime' === $configuration->getClass();
+        return 'DateTime' === $configuration->getClass() || is_subclass_of($configuration->getClass(), PHP_VERSION_ID < 50500 ? 'DateTime' : 'DateTimeInterface');
     }
 }

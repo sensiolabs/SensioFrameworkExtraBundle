@@ -28,6 +28,9 @@ class DateTimeParamConverterTest extends \PHPUnit_Framework_TestCase
         $config = $this->createConfiguration('DateTime');
         $this->assertTrue($this->converter->supports($config));
 
+        $config = $this->createConfiguration('Tests\\Fixtures\\FooDateTime');
+        $this->assertTrue($this->converter->supports($config));
+
         $config = $this->createConfiguration(__CLASS__);
         $this->assertFalse($this->converter->supports($config));
 
@@ -75,6 +78,31 @@ class DateTimeParamConverterTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFalse($this->converter->apply($request, $config));
         $this->assertNull($request->attributes->get('start'));
+    }
+
+    public function testApplyCustomClass()
+    {
+        $request = new Request(array(), array(), array('start' => '2016-09-08 00:00:00'));
+        $config = $this->createConfiguration('Tests\\Fixtures\\FooDateTime', 'start');
+
+        $this->converter->apply($request, $config);
+
+        $this->assertInstanceOf('Tests\\Fixtures\\FooDateTime', $request->attributes->get('start'));
+        $this->assertEquals('2016-09-08', $request->attributes->get('start')->format('Y-m-d'));
+    }
+
+    /**
+     * @requires PHP 5.5
+     */
+    public function testApplyDateTimeImmutable()
+    {
+        $request = new Request(array(), array(), array('start' => '2016-09-08 00:00:00'));
+        $config = $this->createConfiguration('DateTimeImmutable', 'start');
+
+        $this->converter->apply($request, $config);
+
+        $this->assertInstanceOf('DateTimeImmutable', $request->attributes->get('start'));
+        $this->assertEquals('2016-09-08', $request->attributes->get('start')->format('Y-m-d'));
     }
 
     public function createConfiguration($class = null, $name = null)
