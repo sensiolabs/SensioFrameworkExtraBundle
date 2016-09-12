@@ -30,10 +30,10 @@ env:
         - deps=no
 
 before_install:
+    - export SYMFONY_PHPUNIT_DIR="$(pwd)/.phpunit"
     - if [[ ! $TRAVIS_PHP_VERSION = hhvm* ]]; then INI_FILE=~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini; else INI_FILE=/etc/hhvm/php.ini; fi
     - echo memory_limit = -1 >> $INI_FILE
     - if [[ ! $TRAVIS_PHP_VERSION = hhvm* ]]; then phpenv config-rm xdebug.ini || echo "xdebug not available"; fi
-    - ./phpunit install
 
 install:
     - if [[ "$TRAVIS_PHP_VERSION" == "5.3" ]]; then composer remove --dev --no-update symfony/psr-http-message-bridge zendframework/zend-diactoros; fi;
@@ -41,4 +41,4 @@ install:
     - if [ "$deps" = "low" ]; then composer --prefer-lowest --prefer-stable update; fi;
 
 script:
-    - ./phpunit
+    - ./vendor/bin/simple-phpunit
