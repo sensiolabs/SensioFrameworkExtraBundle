@@ -52,6 +52,7 @@ The default configuration is as follow:
             view:        { annotations: true }
             cache:       { annotations: true }
             security:    { annotations: true }
+            csrf:        { annotations: true }
             psr_message: { enabled: false } # Defaults to true if the PSR-7 bridge is installed
 
 
@@ -64,6 +65,7 @@ The default configuration is as follow:
             <view annotations="true" />
             <cache annotations="true" />
             <security annotations="true" />
+            <csrf annotations="true" />
             <psr-message enabled="false" /> <!-- Defaults to true if the PSR-7 bridge is installed -->
         </sensio-framework-extra:config>
 
@@ -76,6 +78,7 @@ The default configuration is as follow:
             'view'        => array('annotations' => true),
             'cache'       => array('annotations' => true),
             'security'    => array('annotations' => true),
+            'csrf'        => array('annotations' => true),
             'psr_message' => array('enabled' => false), // Defaults to true if the PSR-7 bridge is installed
         ));
 
@@ -112,6 +115,7 @@ The following annotations are defined by the bundle:
    annotations/view
    annotations/cache
    annotations/security
+   annotations/csrf
 
 This example shows all the available annotations in action::
 
@@ -121,6 +125,7 @@ This example shows all the available annotations in action::
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+    use Sensio\Bundle\FrameworkExtraBundle\Configuration\Csrf;
 
     /**
      * @Route("/blog")
@@ -148,6 +153,17 @@ This example shows all the available annotations in action::
          * @Security("has_role('ROLE_ADMIN') and is_granted('POST_SHOW', post)")
          */
         public function showAction(Post $post)
+        {
+        }
+
+        /**
+         * @Route("/{id}")
+         * @Method("DELETE")
+         * @ParamConverter("post", class="SensioBlogBundle:Post")
+         * @Security("has_role('ROLE_ADMIN') and is_granted('POST_DELETE', post)")
+         * @Csrf("post_delete")
+         */
+        public function deleteAction(Post $post)
         {
         }
     }

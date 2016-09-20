@@ -110,6 +110,16 @@ class SensioFrameworkExtraExtension extends Extension
             }
         }
 
+        if ($config['csrf']['annotations']) {
+            $annotationsToLoad[] = 'csrf.xml';
+
+            if (PHP_VERSION_ID < 70000) {
+                $this->addClassesToCompile(array(
+                    'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\CsrfListener',
+                ));
+            }
+        }
+
         if ($annotationsToLoad) {
             // must be first
             $loader->load('annotations.xml');
