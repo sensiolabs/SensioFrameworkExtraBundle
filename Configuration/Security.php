@@ -19,7 +19,29 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
  */
 class Security extends ConfigurationAnnotation
 {
+    /**
+     * The expression evaluated to allow or deny access.
+     *
+     * @var string
+     */
     protected $expression;
+
+    /**
+     * If set, will throw Symfony\Component\HttpKernel\Exception\HttpException
+     * with the given $statusCode.
+     * If null, Symfony\Component\Security\Core\Exception\AccessDeniedException.
+     * will be used.
+     *
+     * @var int
+     */
+    protected $statusCode;
+
+    /**
+     * The message of the exception.
+     *
+     * @var string
+     */
+    protected $message;
 
     public function getExpression()
     {
@@ -29,6 +51,26 @@ class Security extends ConfigurationAnnotation
     public function setExpression($expression)
     {
         $this->expression = $expression;
+    }
+
+    public function getStatusCode()
+    {
+        return $this->statusCode;
+    }
+
+    public function setStatusCode($statusCode)
+    {
+        $this->statusCode = $statusCode;
+    }
+
+    public function getMessage()
+    {
+        return $this->message;
+    }
+
+    public function setMessage($message)
+    {
+        $this->message = $message;
     }
 
     public function setValue($expression)

@@ -13,6 +13,7 @@ namespace Sensio\Bundle\FrameworkExtraBundle\EventListener;
 
 use Sensio\Bundle\FrameworkExtraBundle\Security\ExpressionLanguage;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -65,7 +66,12 @@ class SecurityListener implements EventSubscriberInterface
         }
 
         if (!$this->language->evaluate($configuration->getExpression(), $this->getVariables($request))) {
-            throw new AccessDeniedException(sprintf('Expression "%s" denied access.', $configuration->getExpression()));
+            if ($statusCode = $configuration->getStatusCode()) {
+                throw new HttpException($statusCode, $configuration->getMessage());
+            }
+
+            $message = $configuration->getMessage() ?: sprintf('Expression "%s" denied access.', $configuration->getExpression());
+            throw new AccessDeniedException($message);
         }
     }
 
