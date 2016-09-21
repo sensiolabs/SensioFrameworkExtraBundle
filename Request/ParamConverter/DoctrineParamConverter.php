@@ -12,6 +12,8 @@
 namespace Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
+use Symfony\Component\ExpressionLanguage\SyntaxError;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -29,9 +31,15 @@ class DoctrineParamConverter implements ParamConverterInterface
      */
     private $registry;
 
-    public function __construct(ManagerRegistry $registry = null)
+    /**
+     * @var ExpressionLanguage
+     */
+    private $language;
+
+    public function __construct(ManagerRegistry $registry = null, ExpressionLanguage $expressionLanguage = null)
     {
         $this->registry = $registry;
+        $this->language = $expressionLanguage;
     }
 
     /**
@@ -50,8 +58,16 @@ class DoctrineParamConverter implements ParamConverterInterface
             $configuration->setIsOptional(true);
         }
 
-        // find by identifier?
-        if (false === $object = $this->find($class, $request, $options, $name)) {
+        $errorMessage = null;
+        if ($expr = $options['expr']) {
+            $object = $this->findViaExpression($class, $request, $expr, $options);
+
+            if (null === $object) {
+                $errorMessage = sprintf('The expression "%s" returned null', $expr);
+            }
+
+            // find by identifier?
+        } elseif (false === $object = $this->find($class, $request, $options, $name)) {
             // find by criteria
             if (false === $object = $this->findOneBy($class, $request, $options)) {
                 if ($configuration->isOptional()) {
@@ -63,7 +79,11 @@ class DoctrineParamConverter implements ParamConverterInterface
         }
 
         if (null === $object && false === $configuration->isOptional()) {
-            throw new NotFoundHttpException(sprintf('%s object not found.', $class));
+            $message = sprintf('%s object not found.', $class);
+            if ($errorMessage) {
+                $message .= ' '.$errorMessage;
+            }
+            throw new NotFoundHttpException($message);
         }
 
         $request->attributes->set($name, $object);
@@ -202,6 +222,26 @@ class DoctrineParamConverter implements ParamConverterInterface
         return $ref->invokeArgs($repository, $arguments);
     }
 
+    private function findViaExpression($class, Request $request, $expression, $options)
+    {
+        if (null === $this->language) {
+            throw new \LogicException('To use the @ParamConverter tag with the "expr" option, you need install the ExpressionLanguage component.');
+        }
+
+        $repository = $this->getManager($options['entity_manager'], $class)->getRepository($class);
+        $variables = array_merge($request->attributes->all(), array('repository' => $repository));
+
+        try {
+            return $this->language->evaluate($expression, $variables);
+
+            // execute it here
+        } catch (NoResultException $e) {
+            return;
+        } catch (SyntaxError $e) {
+            throw new \LogicException(sprintf('Error parsing expression -- %s -- (%s)', $expression, $e->getMessage()), 0, $e);
+        }
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -234,6 +274,7 @@ class DoctrineParamConverter implements ParamConverterInterface
             'exclude' => array(),
             'mapping' => array(),
             'strip_null' => false,
+            'expr' => null,
         ), $configuration->getOptions());
     }
 
