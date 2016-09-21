@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+4.0
+---
+
+ * removed class parameters in container definitions
+
 3.0
 ---
 
