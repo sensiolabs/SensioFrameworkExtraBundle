@@ -44,6 +44,7 @@ class DoctrineParamConverter implements ParamConverterInterface
     {
         $name = $configuration->getName();
         $class = $configuration->getClass();
+        $message = $configuration->getMessage();
         $options = $this->getOptions($configuration);
 
         if (null === $request->attributes->get($name, false)) {
@@ -63,7 +64,11 @@ class DoctrineParamConverter implements ParamConverterInterface
         }
 
         if (null === $object && false === $configuration->isOptional()) {
-            throw new NotFoundHttpException(sprintf('%s object not found.', $class));
+            if (empty($message) === true) {
+                $message = sprintf('%s object not found.', $class);
+            }
+            
+            throw new NotFoundHttpException($message);
         }
 
         $request->attributes->set($name, $object);

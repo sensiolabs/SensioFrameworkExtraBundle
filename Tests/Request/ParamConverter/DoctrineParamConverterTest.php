@@ -33,9 +33,9 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
         $this->converter = new DoctrineParamConverter($this->registry);
     }
 
-    public function createConfiguration($class = null, array $options = null, $name = 'arg', $isOptional = false)
+    public function createConfiguration($class = null, array $options = null, $name = 'arg', $message = null, $isOptional = false)
     {
-        $methods = array('getClass', 'getAliasName', 'getOptions', 'getName', 'allowArray');
+        $methods = array('getClass', 'getAliasName', 'getOptions', 'getName', 'getMessage', 'allowArray');
         if (null !== $isOptional) {
             $methods[] = 'isOptional';
         }
@@ -53,6 +53,11 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
             $config->expects($this->any())
                    ->method('getClass')
                    ->will($this->returnValue($class));
+        }
+        if ($message !== null) {
+            $config->expects($this->any())
+                   ->method('getMessage')
+                   ->will($this->returnValue($message));
         }
         $config->expects($this->any())
                ->method('getName')
