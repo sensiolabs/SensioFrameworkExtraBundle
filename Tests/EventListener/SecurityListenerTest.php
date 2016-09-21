@@ -24,36 +24,6 @@ class SecurityListenerTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Symfony\Component\Security\Core\Exception\AccessDeniedException
      */
-    public function testLegacyAccessDenied()
-    {
-        if (!interface_exists('Symfony\Component\Security\Core\SecurityContextInterface')) {
-            $this->markTestSkipped();
-        }
-
-        $this->iniSet('error_reporting', -1 & ~E_USER_DEPRECATED);
-
-        $token = $this->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\TokenInterface')->getMock();
-        $token->expects($this->once())->method('getRoles')->will($this->returnValue(array()));
-
-        $securityContext = $this->getMockBuilder('Symfony\Component\Security\Core\SecurityContextInterface')->getMock();
-        $securityContext->expects($this->once())->method('isGranted')->will($this->throwException(new AccessDeniedException()));
-        $securityContext->expects($this->exactly(2))->method('getToken')->will($this->returnValue($token));
-
-        $trustResolver = $this->getMockBuilder('Symfony\Component\Security\Core\Authentication\AuthenticationTrustResolverInterface')->getMock();
-
-        $language = new ExpressionLanguage();
-
-        $listener = new SecurityListener($securityContext, $language, $trustResolver);
-        $request = $this->createRequest(new Security(array('expression' => 'has_role("ROLE_ADMIN") or is_granted("FOO")')));
-
-        $event = new FilterControllerEvent($this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock(), function () { return new Response(); }, $request, null);
-
-        $listener->onKernelController($event);
-    }
-
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AccessDeniedException
-     */
     public function testAccessDenied()
     {
         if (!interface_exists('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface')) {
@@ -73,7 +43,7 @@ class SecurityListenerTest extends \PHPUnit_Framework_TestCase
 
         $language = new ExpressionLanguage();
 
-        $listener = new SecurityListener(null, $language, $trustResolver, null, $tokenStorage, $authChecker);
+        $listener = new SecurityListener($language, $trustResolver, null, $tokenStorage, $authChecker);
         $request = $this->createRequest(new Security(array('expression' => 'has_role("ROLE_ADMIN") or is_granted("FOO")')));
 
         $event = new FilterControllerEvent($this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock(), function () { return new Response(); }, $request, null);

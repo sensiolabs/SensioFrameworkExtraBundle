@@ -19,7 +19,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Authentication\AuthenticationTrustResolverInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 
@@ -36,10 +35,10 @@ class SecurityListener implements EventSubscriberInterface
     private $trustResolver;
     private $roleHierarchy;
 
-    public function __construct(SecurityContextInterface $securityContext = null, ExpressionLanguage $language = null, AuthenticationTrustResolverInterface $trustResolver = null, RoleHierarchyInterface $roleHierarchy = null, TokenStorageInterface $tokenStorage = null, AuthorizationCheckerInterface $authChecker = null)
+    public function __construct(ExpressionLanguage $language = null, AuthenticationTrustResolverInterface $trustResolver = null, RoleHierarchyInterface $roleHierarchy = null, TokenStorageInterface $tokenStorage = null, AuthorizationCheckerInterface $authChecker = null)
     {
-        $this->tokenStorage = $tokenStorage ?: $securityContext;
-        $this->authChecker = $authChecker ?: $securityContext;
+        $this->tokenStorage = $tokenStorage;
+        $this->authChecker = $authChecker;
         $this->language = $language;
         $this->trustResolver = $trustResolver;
         $this->roleHierarchy = $roleHierarchy;
