@@ -14,7 +14,6 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Templating;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference;
 use Doctrine\Common\Util\ClassUtils;
 
 /**
@@ -50,13 +49,12 @@ class TemplateGuesser
      * and action names.
      *
      * @param callable $controller An array storing the controller object and action method
-     * @param string   $engine
      *
-     * @return TemplateReference template reference
+     * @return string The template name
      *
      * @throws \InvalidArgumentException
      */
-    public function guessTemplateName($controller, Request $request, $engine = 'twig')
+    public function guessTemplateName($controller, Request $request)
     {
         if (is_object($controller) && method_exists($controller, '__invoke')) {
             $controller = array($controller, '__invoke');
@@ -84,9 +82,8 @@ class TemplateGuesser
             $matchAction = array(null, $controller[1]);
         }
 
-        $bundle = $this->getBundleForClass($className);
-
-        if ($bundle) {
+        $bundleName = null;
+        if ($bundle = $this->getBundleForClass($className)) {
             while ($bundleName = $bundle->getName()) {
                 if (null === $parentBundleName = $bundle->getParent()) {
                     $bundleName = $bundle->getName();
@@ -97,11 +94,11 @@ class TemplateGuesser
                 $bundles = $this->kernel->getBundle($parentBundleName, false);
                 $bundle = array_pop($bundles);
             }
-        } else {
-            $bundleName = null;
+
+            $bundleName = preg_replace('/Bundle$/', '', $bundleName);
         }
 
-        return new TemplateReference($bundleName, $matchController[1], $matchAction[1], $request->getRequestFormat(), $engine);
+        return sprintf(($bundleName ? '@'.$bundleName.'/' : '').$matchController[1].($matchController[1] ? '/' : '').$matchAction[1].'.'.$request->getRequestFormat().'.twig');
     }
 
     /**

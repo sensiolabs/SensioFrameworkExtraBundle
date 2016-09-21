@@ -49,7 +49,7 @@ class TemplateGuesserTest extends \PHPUnit_Framework_TestCase
             'indexAction',
         ), new Request());
 
-        $this->assertEquals('FooBundle:Foo:index.html.twig', (string) $templateReference);
+        $this->assertEquals('@Foo/Foo/index.html.twig', (string) $templateReference);
     }
 
     public function testGuessTemplateNameWithParentBundle()
@@ -66,7 +66,7 @@ class TemplateGuesserTest extends \PHPUnit_Framework_TestCase
             'indexAction',
         ), new Request());
 
-        $this->assertEquals('FooBundle:Bar:index.html.twig', (string) $templateReference);
+        $this->assertEquals('@Foo/Bar/index.html.twig', (string) $templateReference);
     }
 
     public function testGuessTemplateNameWithCascadingParentBundle()
@@ -89,7 +89,7 @@ class TemplateGuesserTest extends \PHPUnit_Framework_TestCase
             'indexAction',
         ), new Request());
 
-        $this->assertEquals('FooBundle:FooBar:index.html.twig', (string) $templateReference);
+        $this->assertEquals('@Foo/FooBar/index.html.twig', (string) $templateReference);
     }
 
     public function testGuessTemplateWithoutBundle()
@@ -100,7 +100,7 @@ class TemplateGuesserTest extends \PHPUnit_Framework_TestCase
             'indexAction',
         ), new Request());
 
-        $this->assertEquals(':OutOfBundle:index.html.twig', (string) $templateReference);
+        $this->assertEquals('OutOfBundle/index.html.twig', (string) $templateReference);
     }
 
     /**
@@ -115,7 +115,7 @@ class TemplateGuesserTest extends \PHPUnit_Framework_TestCase
             '__invoke',
         ), new Request());
 
-        $this->assertEquals('FooBundle::Foo.html.twig', (string) $templateReference);
+        $this->assertEquals('@Foo/Foo.html.twig', (string) $templateReference);
     }
 
     /**
@@ -130,7 +130,7 @@ class TemplateGuesserTest extends \PHPUnit_Framework_TestCase
             'indexAction',
         ), new Request());
 
-        $this->assertEquals('FooBundle:Foo:index.html.twig', (string) $templateReference);
+        $this->assertEquals('@Foo/Foo/index.html.twig', (string) $templateReference);
     }
 
     /**
@@ -145,7 +145,7 @@ class TemplateGuesserTest extends \PHPUnit_Framework_TestCase
             'fooBar',
         ), new Request());
 
-        $this->assertEquals('FooBundle:Foo:fooBar.html.twig', (string) $templateReference);
+        $this->assertEquals('@Foo/Foo/fooBar.html.twig', (string) $templateReference);
     }
 
     public function controllerProvider()
