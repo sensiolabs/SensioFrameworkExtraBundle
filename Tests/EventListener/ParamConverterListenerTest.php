@@ -78,7 +78,7 @@ class ParamConverterListenerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    protected function getParamConverterManager(Request $request, $configurations)
+    private function getParamConverterManager(Request $request, $configurations)
     {
         $manager = $this->getMockBuilder('Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager')->getMock();
         $manager

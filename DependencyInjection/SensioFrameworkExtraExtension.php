@@ -18,8 +18,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 
 /**
- * SensioFrameworkExtraExtension.
- *
  * @author Fabien Potencier <fabien@symfony.com>
  */
 class SensioFrameworkExtraExtension extends Extension

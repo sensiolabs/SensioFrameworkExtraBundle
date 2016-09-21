@@ -30,10 +30,7 @@ class AnnotatedRouteControllerLoader extends AnnotationClassLoader
      * Configures the _controller default parameter and eventually the HTTP method
      * requirement of a given Route instance.
      *
-     * @param Route             $route  A route instance
-     * @param \ReflectionClass  $class  A ReflectionClass instance
-     * @param \ReflectionMethod $method A ReflectionClass method
-     * @param mixed             $annot  The annotation class instance
+     * @param mixed $annot The annotation class instance
      *
      * @throws \LogicException When the service option is specified on a method
      */
@@ -72,9 +69,6 @@ class AnnotatedRouteControllerLoader extends AnnotationClassLoader
 
     /**
      * Makes the default route name more sane by removing common keywords.
-     *
-     * @param \ReflectionClass  $class  A ReflectionClass instance
-     * @param \ReflectionMethod $method A ReflectionMethod instance
      *
      * @return string The default route name
      */

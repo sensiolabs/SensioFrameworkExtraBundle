@@ -168,7 +168,7 @@ class ParamConverterManagerTest extends \PHPUnit_Framework_TestCase
         $manager->apply($request, array($configuration));
     }
 
-    protected function createParamConverterMock()
+    private function createParamConverterMock()
     {
         return $this->getMockBuilder('Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface')->getMock();
     }

@@ -24,35 +24,35 @@ class ParamConverter extends ConfigurationAnnotation
      *
      * @var string
      */
-    protected $name;
+    private $name;
 
     /**
      * The parameter class.
      *
      * @var string
      */
-    protected $class;
+    private $class;
 
     /**
      * An array of options.
      *
      * @var array
      */
-    protected $options = array();
+    private $options = array();
 
     /**
      * Whether or not the parameter is optional.
      *
      * @var bool
      */
-    protected $optional = false;
+    private $optional = false;
 
     /**
      * Use explicitly named converter instead of iterating by priorities.
      *
      * @var string
      */
-    protected $converter;
+    private $converter;
 
     /**
      * Returns the parameter name.

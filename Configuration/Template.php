@@ -33,21 +33,21 @@ class Template extends ConfigurationAnnotation
      *
      * @var string
      */
-    protected $engine = 'twig';
+    private $engine = 'twig';
 
     /**
      * The associative array of template variables.
      *
      * @var array
      */
-    protected $vars = array();
+    private $vars = array();
 
     /**
      * Should the template be streamed?
      *
      * @var bool
      */
-    protected $streamable = false;
+    private $streamable = false;
 
     /**
      * The controller (+action) this annotation is set to.

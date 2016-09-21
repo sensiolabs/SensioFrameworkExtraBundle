@@ -29,16 +29,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
  */
 class TemplateListener implements EventSubscriberInterface
 {
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
+    private $container;
 
-    /**
-     * Constructor.
-     *
-     * @param ContainerInterface $container The service container instance
-     */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -47,8 +39,6 @@ class TemplateListener implements EventSubscriberInterface
     /**
      * Guesses the template name to render and its variables and adds them to
      * the request object.
-     *
-     * @param FilterControllerEvent $event A FilterControllerEvent instance
      */
     public function onKernelController(FilterControllerEvent $event)
     {
@@ -77,8 +67,6 @@ class TemplateListener implements EventSubscriberInterface
     /**
      * Renders the template and initializes a new response object with the
      * rendered template content.
-     *
-     * @param GetResponseForControllerResultEvent $event
      */
     public function onKernelView(GetResponseForControllerResultEvent $event)
     {
@@ -117,6 +105,9 @@ class TemplateListener implements EventSubscriberInterface
         $event->setResponse($templating->renderResponse($template->getTemplate(), $parameters));
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public static function getSubscribedEvents()
     {
         return array(
@@ -125,14 +116,6 @@ class TemplateListener implements EventSubscriberInterface
         );
     }
 
-    /**
-     * @param Request  $request
-     * @param Template $template
-     * @param object   $controller
-     * @param string   $action
-     *
-     * @return array
-     */
     private function resolveDefaultParameters(Request $request, Template $template, $controller, $action)
     {
         $parameters = array();

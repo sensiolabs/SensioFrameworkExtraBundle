@@ -37,8 +37,6 @@ class PsrResponseListener implements EventSubscriberInterface
 
     /**
      * Do the conversion if applicable and update the response of the event.
-     *
-     * @param GetResponseForControllerResultEvent $event
      */
     public function onKernelView(GetResponseForControllerResultEvent $event)
     {

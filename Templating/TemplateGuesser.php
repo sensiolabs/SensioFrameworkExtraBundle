@@ -20,14 +20,14 @@ use Doctrine\Common\Util\ClassUtils;
 /**
  * The TemplateGuesser class handles the guessing of template name based on controller.
  *
- * @author     Fabien Potencier <fabien@symfony.com>
+ * @author Fabien Potencier <fabien@symfony.com>
  */
 class TemplateGuesser
 {
     /**
      * @var KernelInterface
      */
-    protected $kernel;
+    private $kernel;
 
     /**
      * @var string[]
@@ -35,10 +35,7 @@ class TemplateGuesser
     private $controllerPatterns;
 
     /**
-     * Constructor.
-     *
-     * @param KernelInterface $kernel             A KernelInterface instance
-     * @param string[]        $controllerPatterns Regexps extracting the controller name from its FQN.
+     * @param string[] $controllerPatterns Regexps extracting the controller name from its FQN
      */
     public function __construct(KernelInterface $kernel, array $controllerPatterns = array())
     {
@@ -53,7 +50,6 @@ class TemplateGuesser
      * and action names.
      *
      * @param callable $controller An array storing the controller object and action method
-     * @param Request  $request    A Request instance
      * @param string   $engine
      *
      * @return TemplateReference template reference
@@ -115,7 +111,7 @@ class TemplateGuesser
      *
      * @return Bundle|null $bundle A Bundle instance
      */
-    protected function getBundleForClass($class)
+    private function getBundleForClass($class)
     {
         $reflectionClass = new \ReflectionClass($class);
         $bundles = $this->kernel->getBundles();

@@ -120,21 +120,21 @@ class ControllerListenerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(2, count($annotations));
     }
 
-    protected function createRequest(Cache $cache = null)
+    private function createRequest(Cache $cache = null)
     {
         return new Request(array(), array(), array(
             '_cache' => $cache,
         ));
     }
 
-    protected function getFilterControllerEvent($controller, Request $request)
+    private function getFilterControllerEvent($controller, Request $request)
     {
         $mockKernel = $this->getMockForAbstractClass('Symfony\Component\HttpKernel\Kernel', array('', ''));
 
         return new FilterControllerEvent($mockKernel, $controller, $request, HttpKernelInterface::MASTER_REQUEST);
     }
 
-    protected function getReadedCache()
+    private function getReadedCache()
     {
         return $this->request->attributes->get('_cache');
     }

@@ -25,18 +25,17 @@ class ParamConverterManager
     /**
      * @var array
      */
-    protected $converters = array();
+    private $converters = array();
 
     /**
      * @var array
      */
-    protected $namedConverters = array();
+    private $namedConverters = array();
 
     /**
      * Applies all converters to the passed configurations and stops when a
      * converter is applied it will move on to the next configuration and so on.
      *
-     * @param Request      $request
      * @param array|object $configurations
      */
     public function apply(Request $request, $configurations)
@@ -51,12 +50,9 @@ class ParamConverterManager
     }
 
     /**
-     * Apply converter on request based on the given configuration.
-     *
-     * @param Request                $request
-     * @param ConfigurationInterface $configuration
+     * Applies converter on request based on the given configuration.
      */
-    protected function applyConverter(Request $request, ConfigurationInterface $configuration)
+    private function applyConverter(Request $request, ConfigurationInterface $configuration)
     {
         $value = $request->attributes->get($configuration->getName());
         $className = $configuration->getClass();
@@ -106,9 +102,8 @@ class ParamConverterManager
      * added converter will not be part of the iteration chain and can only
      * be invoked explicitly.
      *
-     * @param ParamConverterInterface $converter A ParamConverterInterface instance
-     * @param int                     $priority  The priority (between -10 and 10).
-     * @param string                  $name      Name of the converter.
+     * @param int    $priority The priority (between -10 and 10).
+     * @param string $name     Name of the converter.
      */
     public function add(ParamConverterInterface $converter, $priority = 0, $name = null)
     {

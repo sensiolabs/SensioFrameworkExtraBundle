@@ -4,6 +4,7 @@ CHANGELOG
 4.0
 ---
 
+ * removed unneeded phpdocs, converted protected to private properties
  * bumped Symfony minimum version to 3.0
  * bumped PHP minimum version to 5.5.9
  * removed class parameters in container definitions

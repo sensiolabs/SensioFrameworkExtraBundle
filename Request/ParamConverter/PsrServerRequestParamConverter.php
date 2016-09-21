@@ -30,6 +30,7 @@ class PsrServerRequestParamConverter implements ParamConverterInterface
         'Psr\Http\Message\RequestInterface' => true,
         'Psr\Http\Message\MessageInterface' => true,
     );
+
     /**
      * @var HttpMessageFactoryInterface
      */

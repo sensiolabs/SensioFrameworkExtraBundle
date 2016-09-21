@@ -19,7 +19,7 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
  */
 class Security extends ConfigurationAnnotation
 {
-    protected $expression;
+    private $expression;
 
     public function getExpression()
     {

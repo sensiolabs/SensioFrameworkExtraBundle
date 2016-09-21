@@ -94,6 +94,9 @@ class SecurityListener implements EventSubscriberInterface
         return array_merge($request->attributes->all(), $variables);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public static function getSubscribedEvents()
     {
         return array(KernelEvents::CONTROLLER => 'onKernelController');

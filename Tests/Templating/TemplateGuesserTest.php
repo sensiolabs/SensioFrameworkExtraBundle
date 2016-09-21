@@ -184,7 +184,7 @@ class TemplateGuesserTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    protected function getBundle($name, $namespace, $parent = null)
+    private function getBundle($name, $namespace, $parent = null)
     {
         $bundle = $this->getMockBuilder('Symfony\Component\HttpKernel\Bundle\BundleInterface')->getMock();
         $bundle

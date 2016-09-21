@@ -28,15 +28,12 @@ class ParamConverterListener implements EventSubscriberInterface
     /**
      * @var ParamConverterManager
      */
-    protected $manager;
+    private $manager;
 
-    protected $autoConvert;
+    private $autoConvert;
 
     /**
-     * Constructor.
-     *
-     * @param ParamConverterManager $manager     A ParamConverterManager instance
-     * @param bool                  $autoConvert Auto convert non-configured objects
+     * @param bool $autoConvert Auto convert non-configured objects
      */
     public function __construct(ParamConverterManager $manager, $autoConvert = true)
     {
@@ -46,8 +43,6 @@ class ParamConverterListener implements EventSubscriberInterface
 
     /**
      * Modifies the ParamConverterManager instance.
-     *
-     * @param FilterControllerEvent $event A FilterControllerEvent instance
      */
     public function onKernelController(FilterControllerEvent $event)
     {
@@ -103,9 +98,7 @@ class ParamConverterListener implements EventSubscriberInterface
     }
 
     /**
-     * Get subscribed events.
-     *
-     * @return array Subscribed events
+     * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {
