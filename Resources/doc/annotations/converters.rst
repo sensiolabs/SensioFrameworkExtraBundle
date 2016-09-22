@@ -85,33 +85,21 @@ Doctrine Converter
 Converter Name: ``doctrine.orm``
 
 The Doctrine Converter attempts to convert request attributes to Doctrine
-entities fetched from the database. Two different approaches are possible:
+entities fetched from the database. Three different approaches are possible:
 
+- Fetch via an expression.
 - Fetch object by primary key.
 - Fetch object by one or several fields which contain unique values in the
   database.
 
 The following algorithm determines which operation will be performed.
 
+- If your annotation has an ``expr`` option, this is always - and only - used.
 - If an ``{id}`` parameter is present in the route, find object by primary key.
 - If an option ``'id'`` is configured and matches route parameters, find object by primary key.
 - If the previous rules do not apply, attempt to find one entity by matching
   route parameters to entity fields. You can control this process by
   configuring ``exclude`` parameters or a attribute to field name ``mapping``.
-
-By default, the Doctrine converter uses the *default* entity manager. This can
-be configured with the ``entity_manager`` option::
-
-    use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-    use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-
-    /**
-     * @Route("/blog/{id}")
-     * @ParamConverter("post", class="SensioBlogBundle:Post", options={"entity_manager" = "foo"})
-     */
-    public function showAction(Post $post)
-    {
-    }
 
 If the placeholder does not have the same name as the primary key, pass the ``id``
 option::
@@ -209,6 +197,20 @@ the ``map_method_signature`` option to true. The default is false::
 
    When ``map_method_signature`` is ``true``, the ``firstName`` and
    ``lastName`` parameters do not have to be Doctrine fields.
+
+By default, the Doctrine converter uses the *default* entity manager. This can
+be configured with the ``entity_manager`` option::
+
+    use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+    use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+
+    /**
+     * @Route("/blog/{id}")
+     * @ParamConverter("post", class="SensioBlogBundle:Post", options={"entity_manager" = "foo"})
+     */
+    public function showAction(Post $post)
+    {
+    }
 
 DateTime Converter
 ~~~~~~~~~~~~~~~~~~
