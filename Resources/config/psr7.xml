@@ -8,10 +8,10 @@
         <service id="sensio_framework_extra.psr7.http_message_factory" class="Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory" public="false" />
         <service id="sensio_framework_extra.psr7.http_foundation_factory" class="Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory" public="false" />
 
-        <service id="sensio_framework_extra.psr7.converter.server_request" class="Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\PsrServerRequestParamConverter">
+        <service id="sensio_framework_extra.psr7.argument_value_resolver.server_request" class="Sensio\Bundle\FrameworkExtraBundle\Request\ArgumentValueResolver\Psr7ServerRequestResolver">
             <argument type="service" id="sensio_framework_extra.psr7.http_message_factory" />
 
-            <tag name="request.param_converter" converter="psr.server_request" />
+            <tag name="controller.argument_value_resolver" />
         </service>
 
         <service id="sensio_framework_extra.psr7.listener.response" class="Sensio\Bundle\FrameworkExtraBundle\EventListener\PsrResponseListener">
