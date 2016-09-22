@@ -18,8 +18,9 @@
             <argument type="service" id="doctrine" on-invalid="ignore" />
         </service>
 
-        <service id="sensio_framework_extra.converter.datetime" class="Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DateTimeParamConverter">
-            <tag name="request.param_converter" converter="datetime" />
+        <service id="sensio_framework_extra.argument_value_resolver.datetime" class="Sensio\Bundle\FrameworkExtraBundle\Request\ArgumentValueResolver\DateTimeResolver">
+            <tag name="controller.argument_value_resolver" priority="200" />
+            <tag name="controller.argument_value_options" />
         </service>
     </services>
 </container>
