@@ -1,0 +1,41 @@
+---------------------------------------------------------------------------
+
+by Koc at 2016-09-21T19:19:19Z
+
+@fabpot oh, no! Can you merge #430 into 3.x first, please?
+
+---------------------------------------------------------------------------
+
+by iltar at 2016-09-21T20:13:15Z
+
+LGTM, BC wise there's nothing I foresee any issues with but I can't say I've extended the annotations. As soon as this is merged, I will hook it up in one of our applications to see if anything breaks (doubt it).
+
+---------------------------------------------------------------------------
+
+by iltar at 2016-09-21T20:22:33Z
+
+If the minimum requirement for the http-kernel can be bumped to 3.1, the `PsrServerRequestParamConverter` could be turned into an `ArgumentValueResolver`: https://github.com/sensiolabs/SensioFrameworkExtraBundle/blob/master/Request/ParamConverter/PsrServerRequestParamConverter.php
+
+---------------------------------------------------------------------------
+
+by fabpot at 2016-09-21T20:24:08Z
+
+3.0 is not supported anymore anyway, so totally possible. Can you work on a patch?
+
+---------------------------------------------------------------------------
+
+by iltar at 2016-09-21T20:26:18Z
+
+I'll see if I have an hour to spare tomorrow
+
+---------------------------------------------------------------------------
+
+by weaverryan at 2016-09-21T22:33:08Z
+
+👍 I just tested this with The Symfony Demo, which uses many of these features and had no issue (tests pass too).
+
+---------------------------------------------------------------------------
+
+by iltar at 2016-09-22T07:32:58Z
+
+@fabpot see #433
