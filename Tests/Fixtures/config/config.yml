@@ -13,3 +13,6 @@ services:
 
     test.simple.multiple:
         class: Tests\Fixtures\FooBundle\Controller\SimpleController
+
+    test.action_arguments:
+        class: Tests\Fixtures\ActionArgumentsBundle\Controller\ActionArgumentsController
