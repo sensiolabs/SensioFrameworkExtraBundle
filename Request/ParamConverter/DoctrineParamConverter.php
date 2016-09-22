@@ -79,7 +79,7 @@ class DoctrineParamConverter implements ParamConverterInterface
         }
 
         if (null === $object && false === $configuration->isOptional()) {
-            $message = sprintf('%s object not found.', $class);
+            $message = sprintf('%s object not found by the @ParamConverter annotation.', $class);
             if ($errorMessage) {
                 $message .= ' '.$errorMessage;
             }
