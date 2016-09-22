@@ -30,7 +30,7 @@ class SimpleController
 
     /**
      * @Route("/simple/multiple/{a}/{b}/")
-     * @Template("FooBundle:Simple:some.html.twig")
+     * @Template("@Foo/Simple/some.html.twig")
      */
     public function someMoreAction($a, $b, $c = 'c')
     {

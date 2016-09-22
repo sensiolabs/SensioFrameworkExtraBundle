@@ -4,28 +4,21 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <parameters>
-        <parameter key="sensio_framework_extra.converter.listener.class">Sensio\Bundle\FrameworkExtraBundle\EventListener\ParamConverterListener</parameter>
-        <parameter key="sensio_framework_extra.converter.manager.class">Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager</parameter>
-        <parameter key="sensio_framework_extra.converter.doctrine.class">Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter</parameter>
-        <parameter key="sensio_framework_extra.converter.datetime.class">Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DateTimeParamConverter</parameter>
-    </parameters>
-
     <services>
-        <service id="sensio_framework_extra.converter.listener" class="%sensio_framework_extra.converter.listener.class%">
+        <service id="sensio_framework_extra.converter.listener" class="Sensio\Bundle\FrameworkExtraBundle\EventListener\ParamConverterListener">
             <tag name="kernel.event_subscriber" />
             <argument type="service" id="sensio_framework_extra.converter.manager" />
             <argument>true</argument>
         </service>
 
-        <service id="sensio_framework_extra.converter.manager" class="%sensio_framework_extra.converter.manager.class%" />
+        <service id="sensio_framework_extra.converter.manager" class="Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager" />
 
-        <service id="sensio_framework_extra.converter.doctrine.orm" class="%sensio_framework_extra.converter.doctrine.class%">
+        <service id="sensio_framework_extra.converter.doctrine.orm" class="Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter">
             <tag name="request.param_converter" converter="doctrine.orm" />
             <argument type="service" id="doctrine" on-invalid="ignore" />
         </service>
 
-        <service id="sensio_framework_extra.converter.datetime" class="%sensio_framework_extra.converter.datetime.class%">
+        <service id="sensio_framework_extra.converter.datetime" class="Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DateTimeParamConverter">
             <tag name="request.param_converter" converter="datetime" />
         </service>
     </services>

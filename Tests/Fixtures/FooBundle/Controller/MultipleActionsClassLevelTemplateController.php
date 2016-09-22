@@ -16,7 +16,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
- * @Template("FooBundle:Invokable:predefined.html.twig")
+ * @Template("@Foo/Invokable/predefined.html.twig")
  */
 class MultipleActionsClassLevelTemplateController extends Controller
 {
@@ -43,7 +43,7 @@ class MultipleActionsClassLevelTemplateController extends Controller
 
     /**
      * @Route("/multi/one-template/4/")
-     * @Template("FooBundle::overwritten.html.twig")
+     * @Template("@Foo/overwritten.html.twig")
      */
     public function overwriteAction()
     {

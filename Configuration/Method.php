@@ -24,7 +24,7 @@ class Method extends ConfigurationAnnotation
      *
      * @var array
      */
-    protected $methods = array();
+    private $methods = array();
 
     /**
      * Returns the array of HTTP methods.

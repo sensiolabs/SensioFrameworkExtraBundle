@@ -1,18 +1,19 @@
 <?php
 
 /*
- * This file is part of the Symfony framework.
+ * This file is part of the Symfony package.
  *
  * (c) Fabien Potencier <fabien@symfony.com>
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 namespace Sensio\Bundle\FrameworkExtraBundle\EventListener;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -29,16 +30,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
  */
 class TemplateListener implements EventSubscriberInterface
 {
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
+    private $container;
 
-    /**
-     * Constructor.
-     *
-     * @param ContainerInterface $container The service container instance
-     */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -47,8 +40,6 @@ class TemplateListener implements EventSubscriberInterface
     /**
      * Guesses the template name to render and its variables and adds them to
      * the request object.
-     *
-     * @param FilterControllerEvent $event A FilterControllerEvent instance
      */
     public function onKernelController(FilterControllerEvent $event)
     {
@@ -70,15 +61,13 @@ class TemplateListener implements EventSubscriberInterface
         // when no template has been given, try to resolve it based on the controller
         if (null === $template->getTemplate()) {
             $guesser = $this->container->get('sensio_framework_extra.view.guesser');
-            $template->setTemplate($guesser->guessTemplateName($controller, $request, $template->getEngine()));
+            $template->setTemplate($guesser->guessTemplateName($controller, $request));
         }
     }
 
     /**
      * Renders the template and initializes a new response object with the
      * rendered template content.
-     *
-     * @param GetResponseForControllerResultEvent $event
      */
     public function onKernelView(GetResponseForControllerResultEvent $event)
     {
@@ -88,6 +77,10 @@ class TemplateListener implements EventSubscriberInterface
 
         if (null === $template) {
             return;
+        }
+
+        if (!$this->container->has('twig')) {
+            throw new \LogicException('You can not use the "@Template" annotation if the Twig Bundle is not available.');
         }
 
         $parameters = $event->getControllerResult();
@@ -101,11 +94,11 @@ class TemplateListener implements EventSubscriberInterface
         }
 
         // attempt to render the actual response
-        $templating = $this->container->get('templating');
+        $twig = $this->container->get('twig');
 
         if ($template->isStreamable()) {
-            $callback = function () use ($templating, $template, $parameters) {
-                return $templating->stream($template->getTemplate(), $parameters);
+            $callback = function () use ($twig, $template, $parameters) {
+                $twig->display($template->getTemplate(), $parameters);
             };
 
             $event->setResponse(new StreamedResponse($callback));
@@ -114,9 +107,12 @@ class TemplateListener implements EventSubscriberInterface
         // make sure the owner (controller+dependencies) is not cached or stored elsewhere
         $template->setOwner(array());
 
-        $event->setResponse($templating->renderResponse($template->getTemplate(), $parameters));
+        $event->setResponse(new Response($twig->render($template->getTemplate(), $parameters)));
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public static function getSubscribedEvents()
     {
         return array(
@@ -125,14 +121,6 @@ class TemplateListener implements EventSubscriberInterface
         );
     }
 
-    /**
-     * @param Request  $request
-     * @param Template $template
-     * @param object   $controller
-     * @param string   $action
-     *
-     * @return array
-     */
     private function resolveDefaultParameters(Request $request, Template $template, $controller, $action)
     {
         $parameters = array();

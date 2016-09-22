@@ -27,7 +27,7 @@ class DoctrineParamConverter implements ParamConverterInterface
     /**
      * @var ManagerRegistry
      */
-    protected $registry;
+    private $registry;
 
     public function __construct(ManagerRegistry $registry = null)
     {
@@ -71,7 +71,7 @@ class DoctrineParamConverter implements ParamConverterInterface
         return true;
     }
 
-    protected function find($class, Request $request, $options, $name)
+    private function find($class, Request $request, $options, $name)
     {
         if ($options['mapping'] || $options['exclude']) {
             return false;
@@ -96,7 +96,7 @@ class DoctrineParamConverter implements ParamConverterInterface
         }
     }
 
-    protected function getIdentifier(Request $request, $options, $name)
+    private function getIdentifier(Request $request, $options, $name)
     {
         if (isset($options['id'])) {
             if (!is_array($options['id'])) {
@@ -122,7 +122,7 @@ class DoctrineParamConverter implements ParamConverterInterface
         return false;
     }
 
-    protected function findOneBy($class, Request $request, $options)
+    private function findOneBy($class, Request $request, $options)
     {
         if (!$options['mapping']) {
             $keys = $request->attributes->keys();
@@ -227,7 +227,7 @@ class DoctrineParamConverter implements ParamConverterInterface
         return !$em->getMetadataFactory()->isTransient($configuration->getClass());
     }
 
-    protected function getOptions(ParamConverter $configuration)
+    private function getOptions(ParamConverter $configuration)
     {
         return array_replace(array(
             'entity_manager' => null,

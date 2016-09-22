@@ -30,7 +30,7 @@ class TemplateGuesserTest extends \PHPUnit_Framework_TestCase
         $this->bundles['BarBundle'] = $this->getBundle('BarBundle', 'Sensio\Bundle\FrameworkExtraBundle\Tests\Templating\Fixture\BarBundle', 'FooBundle');
         $this->bundles['FooBarBundle'] = $this->getBundle('FooBarBundle', 'Sensio\Bundle\FrameworkExtraBundle\Tests\Templating\Fixture\FooBarBundle', 'BarBundle');
 
-        $this->kernel = $this->getMock('Symfony\Component\HttpKernel\KernelInterface');
+        $this->kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\KernelInterface')->getMock();
         $this->kernel
             ->expects($this->once())
             ->method('getBundles')
@@ -49,7 +49,7 @@ class TemplateGuesserTest extends \PHPUnit_Framework_TestCase
             'indexAction',
         ), new Request());
 
-        $this->assertEquals('FooBundle:Foo:index.html.twig', (string) $templateReference);
+        $this->assertEquals('@Foo/Foo/index.html.twig', (string) $templateReference);
     }
 
     public function testGuessTemplateNameWithParentBundle()
@@ -66,7 +66,7 @@ class TemplateGuesserTest extends \PHPUnit_Framework_TestCase
             'indexAction',
         ), new Request());
 
-        $this->assertEquals('FooBundle:Bar:index.html.twig', (string) $templateReference);
+        $this->assertEquals('@Foo/Bar/index.html.twig', (string) $templateReference);
     }
 
     public function testGuessTemplateNameWithCascadingParentBundle()
@@ -89,7 +89,7 @@ class TemplateGuesserTest extends \PHPUnit_Framework_TestCase
             'indexAction',
         ), new Request());
 
-        $this->assertEquals('FooBundle:FooBar:index.html.twig', (string) $templateReference);
+        $this->assertEquals('@Foo/FooBar/index.html.twig', (string) $templateReference);
     }
 
     public function testGuessTemplateWithoutBundle()
@@ -100,7 +100,7 @@ class TemplateGuesserTest extends \PHPUnit_Framework_TestCase
             'indexAction',
         ), new Request());
 
-        $this->assertEquals(':OutOfBundle:index.html.twig', (string) $templateReference);
+        $this->assertEquals('OutOfBundle/index.html.twig', (string) $templateReference);
     }
 
     /**
@@ -115,7 +115,7 @@ class TemplateGuesserTest extends \PHPUnit_Framework_TestCase
             '__invoke',
         ), new Request());
 
-        $this->assertEquals('FooBundle::Foo.html.twig', (string) $templateReference);
+        $this->assertEquals('@Foo/Foo.html.twig', (string) $templateReference);
     }
 
     /**
@@ -130,7 +130,7 @@ class TemplateGuesserTest extends \PHPUnit_Framework_TestCase
             'indexAction',
         ), new Request());
 
-        $this->assertEquals('FooBundle:Foo:index.html.twig', (string) $templateReference);
+        $this->assertEquals('@Foo/Foo/index.html.twig', (string) $templateReference);
     }
 
     /**
@@ -145,7 +145,7 @@ class TemplateGuesserTest extends \PHPUnit_Framework_TestCase
             'fooBar',
         ), new Request());
 
-        $this->assertEquals('FooBundle:Foo:fooBar.html.twig', (string) $templateReference);
+        $this->assertEquals('@Foo/Foo/fooBar.html.twig', (string) $templateReference);
     }
 
     public function controllerProvider()
@@ -184,9 +184,9 @@ class TemplateGuesserTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    protected function getBundle($name, $namespace, $parent = null)
+    private function getBundle($name, $namespace, $parent = null)
     {
-        $bundle = $this->getMock('Symfony\Component\HttpKernel\Bundle\BundleInterface');
+        $bundle = $this->getMockBuilder('Symfony\Component\HttpKernel\Bundle\BundleInterface')->getMock();
         $bundle
             ->expects($this->any())
             ->method('getName')

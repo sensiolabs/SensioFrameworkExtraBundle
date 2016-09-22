@@ -24,7 +24,7 @@ class Cache extends ConfigurationAnnotation
      *
      * @var string
      */
-    protected $expires;
+    private $expires;
 
     /**
      * The number of seconds that the response is considered fresh by a private
@@ -32,7 +32,7 @@ class Cache extends ConfigurationAnnotation
      *
      * @var int
      */
-    protected $maxage;
+    private $maxage;
 
     /**
      * The number of seconds that the response is considered fresh by a public
@@ -40,35 +40,35 @@ class Cache extends ConfigurationAnnotation
      *
      * @var int
      */
-    protected $smaxage;
+    private $smaxage;
 
     /**
      * Whether the response is public or not.
      *
      * @var bool
      */
-    protected $public;
+    private $public;
 
     /**
      * Additional "Vary:"-headers.
      *
      * @var array
      */
-    protected $vary;
+    private $vary;
 
     /**
      * An expression to compute the Last-Modified HTTP header.
      *
      * @var string
      */
-    protected $lastModified;
+    private $lastModified;
 
     /**
      * An expression to compute the ETag HTTP header.
      *
      * @var string
      */
-    protected $etag;
+    private $etag;
 
     /**
      * Returns the expiration date for the Expires header field.

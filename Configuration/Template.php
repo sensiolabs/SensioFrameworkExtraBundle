@@ -11,8 +11,6 @@
 
 namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
 
-use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference;
-
 /**
  * The Template class handles the Template annotation parts.
  *
@@ -22,32 +20,25 @@ use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference;
 class Template extends ConfigurationAnnotation
 {
     /**
-     * The template reference.
-     *
-     * @var TemplateReference|string
-     */
-    protected $template;
-
-    /**
-     * The template engine used when a specific template isn't specified.
+     * The template.
      *
      * @var string
      */
-    protected $engine = 'twig';
+    protected $template;
 
     /**
      * The associative array of template variables.
      *
      * @var array
      */
-    protected $vars = array();
+    private $vars = array();
 
     /**
      * Should the template be streamed?
      *
      * @var bool
      */
-    protected $streamable = false;
+    private $streamable = false;
 
     /**
      * The controller (+action) this annotation is set to.
@@ -93,26 +84,6 @@ class Template extends ConfigurationAnnotation
     }
 
     /**
-     * Returns the engine used when guessing template names.
-     *
-     * @return string
-     */
-    public function getEngine()
-    {
-        return $this->engine;
-    }
-
-    /**
-     * Sets the engine used when guessing template names.
-     *
-     * @param string
-     */
-    public function setEngine($engine)
-    {
-        $this->engine = $engine;
-    }
-
-    /**
      * Sets the template logic name.
      *
      * @param string $template The template logic name
@@ -123,9 +94,9 @@ class Template extends ConfigurationAnnotation
     }
 
     /**
-     * Returns the template reference.
+     * Returns the template.
      *
-     * @return TemplateReference
+     * @return string
      */
     public function getTemplate()
     {
@@ -133,9 +104,9 @@ class Template extends ConfigurationAnnotation
     }
 
     /**
-     * Sets the template reference.
+     * Sets the template.
      *
-     * @param TemplateReference|string $template The template reference
+     * @param string $template The template
      */
     public function setTemplate($template)
     {
