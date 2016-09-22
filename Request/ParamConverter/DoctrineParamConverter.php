@@ -233,8 +233,6 @@ class DoctrineParamConverter implements ParamConverterInterface
 
         try {
             return $this->language->evaluate($expression, $variables);
-
-            // execute it here
         } catch (NoResultException $e) {
             return;
         } catch (SyntaxError $e) {
