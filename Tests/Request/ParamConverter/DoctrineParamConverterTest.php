@@ -559,7 +559,7 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
             ->method('evaluate')
             ->with('repository.findOneByCustomMethod(id)', array(
                 'repository' => $objectRepository,
-                'id' => 5
+                'id' => 5,
             ))
             ->will($this->returnValue('new_mapped_value'));
 
