@@ -19,8 +19,9 @@
             <argument type="service" id="sensio_framework_extra.converter.doctrine.orm.expression_language" on-invalid="null" />
         </service>
 
-        <service id="sensio_framework_extra.converter.datetime" class="Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DateTimeParamConverter">
-            <tag name="request.param_converter" converter="datetime" />
+        <service id="sensio_framework_extra.argument_value_resolver.datetime" class="Sensio\Bundle\FrameworkExtraBundle\Request\ArgumentValueResolver\DateTimeResolver">
+            <tag name="controller.argument_value_resolver" priority="200" />
+            <tag name="controller.argument_value_options" />
         </service>
 
         <service id="sensio_framework_extra.converter.doctrine.orm.expression_language.default" class="Symfony\Component\ExpressionLanguage\ExpressionLanguage" public="false" />

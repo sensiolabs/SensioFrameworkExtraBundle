@@ -12,11 +12,11 @@
 namespace Sensio\Bundle\FrameworkExtraBundle\EventListener;
 
 use Doctrine\Common\Annotations\Reader;
+use Doctrine\Common\Util\ClassUtils;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
-use Doctrine\Common\Util\ClassUtils;
 
 /**
  * The ControllerListener class parses annotation blocks located in
