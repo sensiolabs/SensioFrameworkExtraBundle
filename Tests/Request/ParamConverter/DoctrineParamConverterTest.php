@@ -620,11 +620,11 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidOptionThrowsException()
     {
-        $configuration = new ParamConverter([
-            'options' => [
-                'fake_option' => []
-            ]
-        ]);
+        $configuration = new ParamConverter(array(
+            'options' => array(
+                'fake_option' => array(),
+            ),
+        ));
 
         $this->converter->apply(new Request(), $configuration);
     }
