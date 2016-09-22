@@ -41,12 +41,6 @@ class SensioFrameworkExtraExtension extends Extension
         if ($config['router']['annotations']) {
             $annotationsToLoad[] = 'routing.xml';
 
-            if (class_exists('Symfony\Component\ExpressionLanguage\ExpressionLanguage') && class_exists('Symfony\Component\Security\Core\Authorization\ExpressionLanguage')) {
-                $container->setAlias('sensio_framework_extra.converter.doctrine.orm.expression_language', new Alias('sensio_framework_extra.converter.doctrine.orm.expression_language.default', false));
-            } else {
-                $container->removeDefinition('sensio_framework_extra.converter.doctrine.orm.expression_language.default');
-            }
-
             $this->addClassesToCompile(array(
                 'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\ControllerListener',
             ));
@@ -54,6 +48,12 @@ class SensioFrameworkExtraExtension extends Extension
 
         if ($config['request']['converters']) {
             $annotationsToLoad[] = 'converters.xml';
+
+            if (class_exists('Symfony\Component\ExpressionLanguage\ExpressionLanguage')) {
+                $container->setAlias('sensio_framework_extra.converter.doctrine.orm.expression_language', new Alias('sensio_framework_extra.converter.doctrine.orm.expression_language.default', false));
+            } else {
+                $container->removeDefinition('sensio_framework_extra.converter.doctrine.orm.expression_language.default');
+            }
 
             $this->addClassesToCompile(array(
                 // cannot be added because it has some annotations
