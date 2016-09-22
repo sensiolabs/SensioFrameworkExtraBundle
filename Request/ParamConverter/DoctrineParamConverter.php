@@ -60,7 +60,7 @@ class DoctrineParamConverter implements ParamConverterInterface
 
         $errorMessage = null;
         if ($expr = $options['expr']) {
-            $object = $this->findViaExpression($class, $request, $expr, $options);
+            $object = $this->findViaExpression($class, $request, $expr, $options, $configuration);
 
             if (null === $object) {
                 $errorMessage = sprintf('The expression "%s" returned null', $expr);
@@ -79,7 +79,7 @@ class DoctrineParamConverter implements ParamConverterInterface
         }
 
         if (null === $object && false === $configuration->isOptional()) {
-            $message = sprintf('%s object not found by the @ParamConverter annotation.', $class);
+            $message = sprintf('%s object not found by the @%s annotation.', $class, $this->getAnnotationName($configuration));
             if ($errorMessage) {
                 $message .= ' '.$errorMessage;
             }
@@ -222,10 +222,10 @@ class DoctrineParamConverter implements ParamConverterInterface
         return $ref->invokeArgs($repository, $arguments);
     }
 
-    private function findViaExpression($class, Request $request, $expression, $options)
+    private function findViaExpression($class, Request $request, $expression, $options, ParamConverter $configuration)
     {
         if (null === $this->language) {
-            throw new \LogicException('To use the @ParamConverter tag with the "expr" option, you need install the ExpressionLanguage component.');
+            throw new \LogicException(sprintf('To use the @%s tag with the "expr" option, you need install the ExpressionLanguage component.', $this->getAnnotationName($configuration)));
         }
 
         $repository = $this->getManager($options['entity_manager'], $class)->getRepository($class);
@@ -290,7 +290,7 @@ class DoctrineParamConverter implements ParamConverterInterface
 
         $extraKeys = array_diff(array_keys($passedOptions), array_keys($defaultValues));
         if ($extraKeys) {
-            throw new \InvalidArgumentException(sprintf('Invalid option(s) passed to @ParamConverter: %s', implode(', ', $extraKeys)));
+            throw new \InvalidArgumentException(sprintf('Invalid option(s) passed to @%s: %s', $this->getAnnotationName($configuration), implode(', ', $extraKeys)));
         }
 
         return array_replace($defaultValues, $passedOptions);
@@ -303,5 +303,12 @@ class DoctrineParamConverter implements ParamConverterInterface
         }
 
         return $this->registry->getManager($name);
+    }
+
+    private function getAnnotationName(ParamConverter $configuration)
+    {
+        $r = new \ReflectionClass($configuration);
+
+        return $r->getShortName();
     }
 }
