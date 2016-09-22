@@ -1,0 +1,11 @@
+---------------------------------------------------------------------------
+
+by HeahDude at 2016-09-22T07:40:24Z
+
+Looks good, thanks :) Tests will fail until #431 is merged.
+
+---------------------------------------------------------------------------
+
+by iltar at 2016-09-22T07:46:13Z
+
+@HeahDude yeah, there's some dependency issues that I can't solve until then as well (see php7 failure)
