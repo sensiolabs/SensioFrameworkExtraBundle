@@ -30,6 +30,8 @@ Then, like for any other bundle, include it in your Kernel class::
 If you plan to use or create annotations for controllers, make sure to update
 your ``autoload.php`` by adding the following line::
 
+    $loader = require '/path/to/vendor/autoload.php';
+
     Doctrine\Common\Annotations\AnnotationRegistry::registerLoader(array($loader, 'loadClass'));
 
 Configuration
@@ -195,10 +197,9 @@ snippet::
     namespace AppBundle\Controller;
 
     use Psr\Http\Message\ServerRequestInterface;
-    use Symfony\Bundle\FrameworkBundle\Controller\Controller;
     use Zend\Diactoros\Response;
 
-    class DefaultController extends Controller
+    class DefaultController
     {
         public function indexAction(ServerRequestInterface $request)
         {
