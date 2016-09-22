@@ -262,6 +262,9 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($object, $request->attributes->get('arg'));
     }
 
+    /**
+     * @group legacy
+     */
     public function testApplyWithRepositoryMethod()
     {
         $request = new Request();
@@ -293,6 +296,9 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($className, $request->attributes->get('arg'));
     }
 
+    /**
+     * @group legacy
+     */
     public function testApplyWithRepositoryMethodAndMapping()
     {
         $request = new Request();
@@ -340,6 +346,9 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($className, $request->attributes->get('arg'));
     }
 
+    /**
+     * @group legacy
+     */
     public function testApplyWithRepositoryMethodAndMapMethodSignature()
     {
         $request = new Request();
@@ -382,6 +391,7 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException InvalidArgumentException
      * @expectedExceptionMessage Repository method "Sensio\Bundle\FrameworkExtraBundle\Tests\Request\ParamConverter\TestUserRepository::findByFullName" requires that you provide a value for the "$lastName" argument.
+     * @group legacy
      */
     public function testApplyWithRepositoryMethodAndMapMethodSignatureException()
     {
