@@ -11,6 +11,7 @@
 
 namespace Sensio\Bundle\FrameworkExtraBundle\Tests\Request\ParamConverter;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\ExpressionLanguage\SyntaxError;
 use Symfony\Component\HttpFoundation\Request;
@@ -602,5 +603,19 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
             ->will($this->throwException(new SyntaxError('syntax error message', 10)));
 
         $this->converter->apply($request, $config);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testInvalidOptionThrowsException()
+    {
+        $configuration = new ParamConverter([
+            'options' => [
+                'fake_option' => []
+            ]
+        ]);
+
+        $this->converter->apply(new Request(), $configuration);
     }
 }

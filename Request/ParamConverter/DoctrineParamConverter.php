@@ -103,7 +103,7 @@ class DoctrineParamConverter implements ParamConverterInterface
             return false;
         }
 
-        if (isset($options['repository_method'])) {
+        if ($options['repository_method']) {
             $method = $options['repository_method'];
         } else {
             $method = 'find';
@@ -118,7 +118,7 @@ class DoctrineParamConverter implements ParamConverterInterface
 
     private function getIdentifier(Request $request, $options, $name)
     {
-        if (isset($options['id'])) {
+        if (null !== $options['id']) {
             if (!is_array($options['id'])) {
                 $name = $options['id'];
             } elseif (is_array($options['id'])) {
@@ -135,7 +135,7 @@ class DoctrineParamConverter implements ParamConverterInterface
             return $request->attributes->get($name);
         }
 
-        if ($request->attributes->has('id') && !isset($options['id'])) {
+        if ($request->attributes->has('id') && !$options['id']) {
             return $request->attributes->get('id');
         }
 
@@ -159,7 +159,7 @@ class DoctrineParamConverter implements ParamConverterInterface
 
         // if a specific id has been defined in the options and there is no corresponding attribute
         // return false in order to avoid a fallback to the id which might be of another object
-        if (isset($options['id']) && null === $request->attributes->get($options['id'])) {
+        if ($options['id'] && null === $request->attributes->get($options['id'])) {
             return false;
         }
 
@@ -167,8 +167,8 @@ class DoctrineParamConverter implements ParamConverterInterface
         $em = $this->getManager($options['entity_manager'], $class);
         $metadata = $em->getClassMetadata($class);
 
-        $mapMethodSignature = isset($options['repository_method'])
-            && isset($options['map_method_signature'])
+        $mapMethodSignature = $options['repository_method']
+            && $options['map_method_signature']
             && $options['map_method_signature'] === true;
 
         foreach ($options['mapping'] as $attribute => $field) {
@@ -187,7 +187,7 @@ class DoctrineParamConverter implements ParamConverterInterface
             return false;
         }
 
-        if (isset($options['repository_method'])) {
+        if ($options['repository_method']) {
             $repositoryMethod = $options['repository_method'];
         } else {
             $repositoryMethod = 'findOneBy';
@@ -269,13 +269,24 @@ class DoctrineParamConverter implements ParamConverterInterface
 
     private function getOptions(ParamConverter $configuration)
     {
-        return array_replace(array(
+        $defaultValues = array(
             'entity_manager' => null,
             'exclude' => array(),
             'mapping' => array(),
             'strip_null' => false,
             'expr' => null,
-        ), $configuration->getOptions());
+            'id' => null,
+            'repository_method' => null,
+            'map_method_signature' => false,
+        );
+
+        $passedOptions = $configuration->getOptions();
+        $extraKeys = array_diff(array_keys($passedOptions), array_keys($defaultValues));
+        if ($extraKeys) {
+            throw new \InvalidArgumentException(sprintf('Invalid option(s) passed to @ParamConverter: %s', implode(', ', $extraKeys)));
+        }
+
+        return array_replace($defaultValues, $passedOptions);
     }
 
     private function getManager($name, $class)
