@@ -507,7 +507,7 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
         );
 
         $objectManager = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')->getMock();
-        $objectRepository = $this->getMockBuilder('Doctrine\Common\Persistence')->getMock();
+        $objectRepository = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectRepository')->getMock();
 
         $objectManager->expects($this->once())
             ->method('getRepository')
@@ -541,7 +541,7 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
         );
 
         $objectManager = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')->getMock();
-        $objectRepository = $this->getMockBuilder('Doctrine\Common\Persistence')->getMock();
+        $objectRepository = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectRepository')->getMock();
 
         $objectManager->expects($this->once())
             ->method('getRepository')
@@ -583,7 +583,7 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
         );
 
         $objectManager = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')->getMock();
-        $objectRepository = $this->getMockBuilder('Doctrine\Common\Persistence')->getMock();
+        $objectRepository = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectRepository')->getMock();
 
         $objectManager->expects($this->once())
             ->method('getRepository')
