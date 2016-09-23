@@ -1,0 +1,39 @@
+---------------------------------------------------------------------------
+
+by fabpot at 2016-09-22T00:25:27Z
+
+By the way, if you want to run the tests locally, you must use `./vendor/bin/simple-phpunit`, not your local phpunit executable.
+
+---------------------------------------------------------------------------
+
+by fabpot at 2016-09-22T00:27:17Z
+
+I haven't had a close looks, but adding expr should probably mean that we can deprecate some other options that are covered by the new ones, right? Or even remove them altogether if we merge this one after the bump to 4.0.
+
+---------------------------------------------------------------------------
+
+by weaverryan at 2016-09-22T00:52:23Z
+
+Thanks for the tip! Tests should be happier now :).
+
+And yes, I think there are a few good options we can deprecate or remove. I've already got work done to remove them locally - I'll try to get to that tomorrow. Then we can decide if we'd rather deprecate.
+
+---------------------------------------------------------------------------
+
+by fabpot at 2016-09-22T00:57:48Z
+
+I would just remove them, and merge after my 4.0 PR.
+
+---------------------------------------------------------------------------
+
+by iltar at 2016-09-22T10:08:43Z
+
+Maybe a bit off-topic, but are there docs on how to add custom implementations of the ConfigurationAnnotation (+interface)? There's a listener that reads all the annotations and I can swear there were docs of, but I can't find them back...
+
+In theory the above could be combined with your solution here, instead of having to use `options` for everything, create a protected/public API of the `@ParamConverter` to write your own versions. `@DateTime("someParam")` would be an option as well.
+
+---------------------------------------------------------------------------
+
+by weaverryan at 2016-09-22T23:38:59Z
+
+@iltar I didn't even know that was possible, but yes, now I see it :). Adding (re-adding?) some docs for that would be *awesome* :).
