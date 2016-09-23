@@ -11,6 +11,9 @@
 
 namespace Sensio\Bundle\FrameworkExtraBundle\Tests\Request\ParamConverter;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
+use Symfony\Component\ExpressionLanguage\SyntaxError;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -23,6 +26,11 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
     private $registry;
 
     /**
+     * @var ExpressionLanguage
+     */
+    private $language;
+
+    /**
      * @var DoctrineParamConverter
      */
     private $converter;
@@ -30,7 +38,8 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->registry = $this->getMockBuilder('Doctrine\Common\Persistence\ManagerRegistry')->getMock();
-        $this->converter = new DoctrineParamConverter($this->registry);
+        $this->language = $this->getMockBuilder('Symfony\Component\ExpressionLanguage\ExpressionLanguage')->getMock();
+        $this->converter = new DoctrineParamConverter($this->registry, $this->language);
     }
 
     public function createConfiguration($class = null, array $options = null, $name = 'arg', $isOptional = false)
@@ -253,6 +262,9 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($object, $request->attributes->get('arg'));
     }
 
+    /**
+     * @group legacy
+     */
     public function testApplyWithRepositoryMethod()
     {
         $request = new Request();
@@ -284,6 +296,9 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($className, $request->attributes->get('arg'));
     }
 
+    /**
+     * @group legacy
+     */
     public function testApplyWithRepositoryMethodAndMapping()
     {
         $request = new Request();
@@ -331,6 +346,9 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($className, $request->attributes->get('arg'));
     }
 
+    /**
+     * @group legacy
+     */
     public function testApplyWithRepositoryMethodAndMapMethodSignature()
     {
         $request = new Request();
@@ -373,6 +391,7 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException InvalidArgumentException
      * @expectedExceptionMessage Repository method "Sensio\Bundle\FrameworkExtraBundle\Tests\Request\ParamConverter\TestUserRepository::findByFullName" requires that you provide a value for the "$lastName" argument.
+     * @group legacy
      */
     public function testApplyWithRepositoryMethodAndMapMethodSignatureException()
     {
@@ -464,5 +483,149 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
         $ret = $this->converter->supports($config);
 
         $this->assertTrue($ret, 'Should be supported');
+    }
+
+    /**
+     * @expectedException \LogicException
+     */
+    public function testExceptionWithExpressionIfNoLanguageAvailable()
+    {
+        $request = new Request();
+        $config = $this->createConfiguration(
+            'stdClass',
+            array(
+                'expr' => 'repository.find(id)',
+            ),
+            'arg1'
+        );
+
+        $converter = new DoctrineParamConverter($this->registry);
+        $converter->apply($request, $config);
+    }
+
+    /**
+     * @expectedException \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
+    public function testExpressionFailureReturns404()
+    {
+        $request = new Request();
+        $config = $this->createConfiguration(
+            'stdClass',
+            array(
+                'expr' => 'repository.someMethod()',
+            ),
+            'arg1'
+        );
+
+        $objectManager = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')->getMock();
+        $objectRepository = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectRepository')->getMock();
+
+        $objectManager->expects($this->once())
+            ->method('getRepository')
+            ->will($this->returnValue($objectRepository));
+
+        // find should not be attempted on this repository as a fallback
+        $objectRepository->expects($this->never())
+            ->method('find');
+
+        $this->registry->expects($this->once())
+            ->method('getManagerForClass')
+            ->will($this->returnValue($objectManager));
+
+        $this->language->expects($this->once())
+            ->method('evaluate')
+            ->will($this->returnValue(null));
+
+        $this->converter->apply($request, $config);
+    }
+
+    public function testExpressionMapsToArgument()
+    {
+        $request = new Request();
+        $request->attributes->set('id', 5);
+        $config = $this->createConfiguration(
+            'stdClass',
+            array(
+                'expr' => 'repository.findOneByCustomMethod(id)',
+            ),
+            'arg1'
+        );
+
+        $objectManager = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')->getMock();
+        $objectRepository = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectRepository')->getMock();
+
+        $objectManager->expects($this->once())
+            ->method('getRepository')
+            ->will($this->returnValue($objectRepository));
+
+        // find should not be attempted on this repository as a fallback
+        $objectRepository->expects($this->never())
+            ->method('find');
+
+        $this->registry->expects($this->once())
+            ->method('getManagerForClass')
+            ->will($this->returnValue($objectManager));
+
+        $this->language->expects($this->once())
+            ->method('evaluate')
+            ->with('repository.findOneByCustomMethod(id)', array(
+                'repository' => $objectRepository,
+                'id' => 5,
+            ))
+            ->will($this->returnValue('new_mapped_value'));
+
+        $this->converter->apply($request, $config);
+        $this->assertEquals('new_mapped_value', $request->attributes->get('arg1'));
+    }
+
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage syntax error message around position 10
+     */
+    public function testExpressionSyntaxErrorThrowsException()
+    {
+        $request = new Request();
+        $config = $this->createConfiguration(
+            'stdClass',
+            array(
+                'expr' => 'repository.findOneByCustomMethod(id)',
+            ),
+            'arg1'
+        );
+
+        $objectManager = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')->getMock();
+        $objectRepository = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectRepository')->getMock();
+
+        $objectManager->expects($this->once())
+            ->method('getRepository')
+            ->will($this->returnValue($objectRepository));
+
+        // find should not be attempted on this repository as a fallback
+        $objectRepository->expects($this->never())
+            ->method('find');
+
+        $this->registry->expects($this->once())
+            ->method('getManagerForClass')
+            ->will($this->returnValue($objectManager));
+
+        $this->language->expects($this->once())
+            ->method('evaluate')
+            ->will($this->throwException(new SyntaxError('syntax error message', 10)));
+
+        $this->converter->apply($request, $config);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testInvalidOptionThrowsException()
+    {
+        $configuration = new ParamConverter(array(
+            'options' => array(
+                'fake_option' => array(),
+            ),
+        ));
+
+        $this->converter->apply(new Request(), $configuration);
     }
 }
