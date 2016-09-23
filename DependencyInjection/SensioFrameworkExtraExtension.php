@@ -46,23 +46,8 @@ class SensioFrameworkExtraExtension extends Extension
             ));
         }
 
-        if ($config['request']['converters']) {
-            $annotationsToLoad[] = 'converters.xml';
-
-            if (class_exists('Symfony\Component\ExpressionLanguage\ExpressionLanguage')) {
-                $container->setAlias('sensio_framework_extra.converter.doctrine.orm.expression_language', new Alias('sensio_framework_extra.converter.doctrine.orm.expression_language.default', false));
-            } else {
-                $container->removeDefinition('sensio_framework_extra.converter.doctrine.orm.expression_language.default');
-            }
-
-            $this->addClassesToCompile(array(
-                // cannot be added because it has some annotations
-                //'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\ParamConverter',
-                'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\ParamConverterListener',
-                'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\DoctrineParamConverter',
-                'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\ParamConverterInterface',
-                'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\ParamConverterManager',
-            ));
+        if ($config['request']['resolvers']) {
+            $annotationsToLoad[] = 'resolvers.xml';
         }
 
         if ($config['view']['annotations']) {
@@ -106,10 +91,6 @@ class SensioFrameworkExtraExtension extends Extension
             $this->addClassesToCompile(array(
                 'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\ConfigurationAnnotation',
             ));
-
-            if ($config['request']['converters']) {
-                $container->getDefinition('sensio_framework_extra.converter.listener')->replaceArgument(1, $config['request']['auto_convert']);
-            }
         }
 
         if ($config['psr_message']['enabled']) {
