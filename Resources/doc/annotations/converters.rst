@@ -85,66 +85,115 @@ Doctrine Converter
 Converter Name: ``doctrine.orm``
 
 The Doctrine Converter attempts to convert request attributes to Doctrine
-entities fetched from the database. Three different approaches are possible:
+entities fetched from the database. Several different approaches are possible:
 
-- Fetch via an expression.
-- Fetch object by primary key.
-- Fetch object by one or several fields which contain unique values in the
-  database.
+1) Fetch Automatically
+......................
 
-The following algorithm determines which operation will be performed.
-
-- If your annotation has an ``expr`` option, this is always - and only - used.
-- If an ``{id}`` parameter is present in the route, find object by primary key.
-- If an option ``'id'`` is configured and matches route parameters, find object by primary key.
-- If the previous rules do not apply, attempt to find one entity by matching
-  route parameters to entity fields. You can control this process by
-  configuring ``exclude`` parameters or a attribute to field name ``mapping``.
-
-If the placeholder does not have the same name as the primary key, pass the ``id``
-option::
+If your route wildcards match properties on your entity, then
+the converter will automatically fetch them::
 
     /**
-     * @Route("/blog/{post_id}")
-     * @ParamConverter("post", class="SensioBlogBundle:Post", options={"id" = "post_id"})
+     * Fetch via primary key because {id} is in the route.
+     *
+     * @Route("/blog/{id}")
+     */
+    public function showByPkAction(Post $post)
+    {
+    }
+
+    /**
+     * Perform a findOneBy() where the slug property matches {slug}.
+     *
+     * @Route("/blog/{slug}")
      */
     public function showAction(Post $post)
     {
     }
 
+Automatic fetching works in these situations:
+
+* If ``{id}`` is in your route, then this is used to fetch by
+  primary key via the ``find()`` method.
+
+* The converter will attempt to do a ``findOneBy()`` fetch by using
+  *all* of the wildcards in your route that are actually properties
+  on your entity (non-properties are ignored).
+
+You can control this behavior by actually *adding* the ``@ParamConverter``
+annotation and using the `@ParamConverter options`_.
+
+2) Fetch via an Expression
+..........................
+
+If automatic fetching doesn't work, another great option is to use
+an expression::
+
+    /**
+     * @Route("/blog/{post_id}")
+     * @Entity("post", expr="repository.find(post_id)")
+     */
+    public function showAction(Post $post)
+    {
+    }
+
+Use the special ``@Entity`` annotation with an ``expr`` option to
+fetch the object by calling a method on your repository. The
+``repository`` method will be your entity's Repository class and
+any route wildcards - like ``{post_id}`` are available as variables.
+
 .. tip::
 
-   The ``id`` option specifies which placeholder from the route gets passed to the repository
-   method used. If no repository method is specified, ``find()`` is used by default.
+    The ``@Entity`` annotation is a shortcut for using ``expr``
+    and has all the same options as ``@ParamConverter``.
 
-This also allows you to have multiple converters in one action::
+This can also be used to help resolve multiple arguments::
 
     /**
      * @Route("/blog/{id}/comments/{comment_id}")
-     * @ParamConverter("comment", class="SensioBlogBundle:Comment", options={"id" = "comment_id"})
+     * @Entity("comment", expr="repository.find(comment_id)")
      */
     public function showAction(Post $post, Comment $comment)
     {
     }
 
-In the example above, the ``$post`` parameter is handled automatically, but ``$comment`` is
-configured with the annotation since they can not both follow the default convention.
+In the example above, the ``$post`` parameter is handled automatically, but ``$comment``
+is configured with the annotation since they cannot both follow the default convention.
 
-If you want to match an entity using multiple fields use the ``mapping`` hash
-option: the key is route placeholder name and the value is the Doctrine
-field name::
+.. _`@ParamConverter options`:
+
+DoctrineConverter Options
+.........................
+
+A number of ``options`` are available on the ``@ParamConverter`` or
+(``@Entity``) annotation to control behavior:
+
+* ``id``: If an ``id`` option is configured and matches a route parameter, then the
+  converter will find by the primary key::
+
+    /**
+     * @Route("/blog/{post_id}")
+     * @ParamConverter("post", options={"id" = "post_id"})
+     */
+    public function showPostAction(Post $post)
+    {
+    }
+
+* ``mapping``: Configures the properties and values to use with the ``findOneBy()``
+  method: the key is the route placeholder name and the value is the Doctrine property
+  name::
 
     /**
      * @Route("/blog/{date}/{slug}/comments/{comment_slug}")
      * @ParamConverter("post", options={"mapping": {"date": "date", "slug": "slug"}})
      * @ParamConverter("comment", options={"mapping": {"comment_slug": "slug"}})
      */
-    public function showAction(Post $post, Comment $comment)
+    public function showCommentAction(Post $post, Comment $comment)
     {
     }
 
-If you are matching an entity using several fields, but you want to exclude a
-route parameter from being part of the criteria::
+* ``exclude`` Configures the properties that should be used in the ``findOneBy()``
+  method by *excluding* one or more properties so that not *all* are used::
 
     /**
      * @Route("/blog/{date}/{slug}")
@@ -154,59 +203,15 @@ route parameter from being part of the criteria::
     {
     }
 
-If you want to specify the repository method to use to find the entity (for example,
-to add joins to the query), you can add the ``repository_method`` option::
+* ``strip_null`` If true, then when ``findOneBy()`` is used, any values that are
+  ``null`` will not be used for the query.
+
+* ``entity_manager`` By default, the Doctrine converter uses the *default* entity
+  manager, but you can configure this::
 
     /**
      * @Route("/blog/{id}")
-     * @ParamConverter("post", class="SensioBlogBundle:Post", options={"repository_method" = "findWithJoins"})
-     */
-    public function showAction(Post $post)
-    {
-    }
-
-The specified repository method will be called with the criteria in an ``array``
-as parameter. This is a good fit with Doctrine's ``findBy`` and ``findOneBy``
-methods.
-
-There are cases where you want to you use your own repository method and you
-want to map the criteria to the method signature. This is possible when you set
-the ``map_method_signature`` option to true. The default is false::
-
-    /**
-     * @Route("/user/{first_name}/{last_name}")
-     * @ParamConverter("user", class="AcmeBlogBundle:User", options={
-     *    "repository_method" = "findByFullName",
-     *    "mapping": {"first_name": "firstName", "last_name": "lastName"},
-     *    "map_method_signature" = true
-     * })
-     */
-    public function showAction(User $user)
-    {
-    }
-
-    class UserRepository
-    {
-        public function findByFullName($firstName, $lastName)
-        {
-            ...
-        }
-    }
-
-.. tip::
-
-   When ``map_method_signature`` is ``true``, the ``firstName`` and
-   ``lastName`` parameters do not have to be Doctrine fields.
-
-By default, the Doctrine converter uses the *default* entity manager. This can
-be configured with the ``entity_manager`` option::
-
-    use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-    use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-
-    /**
-     * @Route("/blog/{id}")
-     * @ParamConverter("post", class="SensioBlogBundle:Post", options={"entity_manager" = "foo"})
+     * @ParamConverter("post", options={"entity_manager" = "foo"})
      */
     public function showAction(Post $post)
     {
