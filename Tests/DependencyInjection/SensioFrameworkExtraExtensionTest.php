@@ -12,10 +12,8 @@
 namespace Sensio\Bundle\FrameworkExtraBundle\Tests\DependencyInjection;
 
 use Sensio\Bundle\FrameworkExtraBundle\DependencyInjection\SensioFrameworkExtraExtension;
-use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
 class SensioFrameworkExtraExtensionTest extends \PHPUnit_Framework_TestCase
 {

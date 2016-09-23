@@ -12,6 +12,5 @@ class FooControllerMultipleCacheAtClass
 {
     public function barAction()
     {
-
     }
 }
