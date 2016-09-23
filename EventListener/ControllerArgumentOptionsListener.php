@@ -13,10 +13,14 @@ namespace Sensio\Bundle\FrameworkExtraBundle\EventListener;
 
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Util\ClassUtils;
+use phpDocumentor\Reflection\DocBlockFactory;
+use phpDocumentor\Reflection\Types\Array_;
+use phpDocumentor\Reflection\Types\Object_;
 use Sensio\Bundle\FrameworkExtraBundle\Annotation\Arg;
 use Sensio\Bundle\FrameworkExtraBundle\Exception\LogicException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
+use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadataFactory;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -34,11 +38,14 @@ class ControllerArgumentOptionsListener implements EventSubscriberInterface
      * @var Reader
      */
     private $reader;
+    private $metadataFactory;
     private $argumentOptions;
+    private $docBlockFactory;
 
-    public function __construct(Reader $reader, array $argumentOptions)
+    public function __construct(Reader $reader, ArgumentMetadataFactory $metadataFactory = null, array $argumentOptions)
     {
         $this->reader = $reader;
+        $this->metadataFactory = $metadataFactory;
         $this->argumentOptions = $argumentOptions;
     }
 
@@ -58,52 +65,55 @@ class ControllerArgumentOptionsListener implements EventSubscriberInterface
         $method = new \ReflectionMethod($className, $controller[1]);
         $annotations = $this->reader->getMethodAnnotations($method);
         $context = $className.'::'.$controller[1].'()';
+        $argumentMetadata = $this->metadataFactory->createArgumentMetadata($controller);
 
-        // FIXME: what about a default configuration on class?
-        // should be a different annotation
-        // @ArgClass("DateTime", format="Y:m")
-        // vs
-        // @Arg("start", format="Y:m")
+        $parameters = array();
+        foreach ($method->getParameters() as $parameter) {
+            $parameters[$parameter->getName()] = true;
 
-        $parameters = $method->getParameters();
+            $options = array();
+            foreach ($annotations as $annotation) {
+                if (!$annotation instanceof Arg) {
+                    continue;
+                }
+
+                if ($annotation->getArg() !== $parameter->getName()) {
+                    continue;
+                }
+
+                if (null === $argumentMetadata[$parameter->getName()]->getType()) {
+                    throw new LogicException(sprintf('Class type hint on argument "$%s" is required when defining an @Arg annotation.', $parameter->getName()));
+                }
+
+                $options = $annotation->getOptions();
+            }
+
+            if (null === $argumentMetadata[$parameter->getName()]->getType()) {
+                continue;
+            }
+
+            try {
+                $options = $this->resolveOptions($event->getRequest(), $parameter->getName(), $argumentMetadata[$parameter->getName()], $options);
+            } catch (OptionsResolverExceptionInterface $e) {
+                throw new LogicException(sprintf('Wrong @Arg configuration for argument "%s" on "%s".', $name, $context), 0, $e);
+            }
+
+            $event->getRequest()->attributes->set($parameter->getName().'_options', $options);
+        }
+
         foreach ($annotations as $annotation) {
             if (!$annotation instanceof Arg) {
                 continue;
             }
 
-            $name = $annotation->getArg();
-            $options = $annotation->getOptions();
-            $parameter = null;
-
-            foreach ($parameters as $param) {
-                if ($name === $param->getName()) {
-                    $parameter = $param;
-
-                    break;
-                }
+            if (!isset($parameters[$annotation->getArg()])) {
+                throw new LogicException(sprintf('Unknown @Arg argument "%s" on "%s".', $annotation->getArg(), $context));
             }
-
-            if (null === $parameter) {
-                throw new LogicException(sprintf('Unknown @Arg argument "%s" on "%s".', $name, $context));
-            }
-
-            try {
-                $options = $this->resolveOptions($event->getRequest(), $parameter, $options);
-            } catch (OptionsResolverExceptionInterface $e) {
-                throw new LogicException(sprintf('Wrong @Arg configuration for argument "%s" on "%s".', $name, $context), 0, $e);
-            }
-
-            $event->getRequest()->attributes->set($name.'_options', $options);
         }
     }
 
-    private function resolveOptions(Request $request, \ReflectionParameter $parameter, array $options)
+    private function resolveOptions(Request $request, $name, ArgumentMetadata $argumentMetadata, array $options)
     {
-        if (null === $class = $this->getParamClass($parameter)) {
-            throw new LogicException(sprintf('Missing class type hint on argument "$%s"', $parameter->getName()));
-        }
-
-        $argumentMetadata = new ArgumentMetadata($parameter->getName(), $class, false, false, null);
         foreach ($this->argumentOptions as $argumentOption) {
             if ($argumentOption->supports($request, $argumentMetadata)) {
                 $resolver = new OptionsResolver();
@@ -114,24 +124,6 @@ class ControllerArgumentOptionsListener implements EventSubscriberInterface
         }
 
         return $options;
-    }
-
-    private function getParamClass(\ReflectionParameter $parameter)
-    {
-        if (method_exists('ReflectionParameter', 'getType')) {
-            if ($parameter->hasType() && !$parameter->getType()->isBuiltin()) {
-                return (string) $parameter->getType();
-            }
-        } else {
-            try {
-                $refClass = $parameter->getClass();
-            } catch (\ReflectionException $e) {
-                // mandatory; extract it from the exception message
-                return str_replace(array('Class ', ' does not exist'), '', $e->getMessage());
-            }
-
-            return $refClass ? $refClass->getName() : null;
-        }
     }
 
     /**

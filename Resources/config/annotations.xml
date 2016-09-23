@@ -13,6 +13,7 @@
         <service id="sensio_framework_extra.argument_options.listener" class="Sensio\Bundle\FrameworkExtraBundle\EventListener\ControllerArgumentOptionsListener">
             <tag name="kernel.event_subscriber" />
             <argument type="service" id="annotation_reader" />
+            <argument type="service" id="argument_metadata_factory" on-invalid="null" />
             <argument type="collection" />
         </service>
     </services>

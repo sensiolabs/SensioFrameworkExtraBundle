@@ -35,6 +35,6 @@ class AddArgumentValueOptionsPass implements CompilerPassInterface
             }
         }
 
-        $container->getDefinition('sensio_framework_extra.argument_options.listener')->replaceArgument(1, $all);
+        $container->getDefinition('sensio_framework_extra.argument_options.listener')->replaceArgument(2, $all);
     }
 }
