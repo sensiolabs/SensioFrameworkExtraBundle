@@ -60,14 +60,7 @@ class AnnotatedRouteControllerLoaderTest extends \PHPUnit_Framework_TestCase
 
         $r = new \ReflectionMethod($loader, 'configureRoute');
         $r->setAccessible(true);
-
-        $r->invoke(
-            $loader,
-            $route,
-            new \ReflectionClass($this),
-            new \ReflectionMethod($this, 'testServiceOptionIsAllowedOnClass'),
-            null
-        );
+        $r->invoke($loader, $route, new \ReflectionClass($this), new \ReflectionMethod($this, 'testServiceOptionIsAllowedOnClass'), null);
     }
 
     /**
@@ -109,14 +102,7 @@ class AnnotatedRouteControllerLoaderTest extends \PHPUnit_Framework_TestCase
 
         $r = new \ReflectionMethod($loader, 'configureRoute');
         $r->setAccessible(true);
-
-        $r->invoke(
-            $loader,
-            $route,
-            new \ReflectionClass($this),
-            new \ReflectionMethod($this, 'testServiceOptionIsNotAllowedOnMethod'),
-            null
-        );
+        $r->invoke($loader, $route, new \ReflectionClass($this), new \ReflectionMethod($this, 'testServiceOptionIsNotAllowedOnMethod'), null);
     }
 
     public function testLoad()
