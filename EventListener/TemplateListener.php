@@ -95,11 +95,9 @@ class TemplateListener implements EventSubscriberInterface
         }
 
         // attempt to render the actual response
-        $twig = $this->twig;
-
         if ($template->isStreamable()) {
-            $callback = function () use ($twig, $template, $parameters) {
-                $twig->display($template->getTemplate(), $parameters);
+            $callback = function () use ($template, $parameters) {
+                $this->twig->display($template->getTemplate(), $parameters);
             };
 
             $event->setResponse(new StreamedResponse($callback));
@@ -108,7 +106,7 @@ class TemplateListener implements EventSubscriberInterface
         // make sure the owner (controller+dependencies) is not cached or stored elsewhere
         $template->setOwner(array());
 
-        $event->setResponse(new Response($twig->render($template->getTemplate(), $parameters)));
+        $event->setResponse(new Response($this->twig->render($template->getTemplate(), $parameters)));
     }
 
     /**
