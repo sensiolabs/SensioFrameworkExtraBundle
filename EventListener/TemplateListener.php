@@ -11,7 +11,6 @@
 
 namespace Sensio\Bundle\FrameworkExtraBundle\EventListener;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
@@ -20,6 +19,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Templating\TemplateGuesser;
 
 /**
  * Handles the Template annotation for actions.
@@ -30,11 +30,13 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
  */
 class TemplateListener implements EventSubscriberInterface
 {
-    private $container;
+    private $templateGuesser;
+    private $twig;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(TemplateGuesser $templateGuesser, \Twig_Environment $twig = null)
     {
-        $this->container = $container;
+        $this->templateGuesser = $templateGuesser;
+        $this->twig = $twig;
     }
 
     /**
@@ -60,8 +62,7 @@ class TemplateListener implements EventSubscriberInterface
 
         // when no template has been given, try to resolve it based on the controller
         if (null === $template->getTemplate()) {
-            $guesser = $this->container->get('sensio_framework_extra.view.guesser');
-            $template->setTemplate($guesser->guessTemplateName($controller, $request));
+            $template->setTemplate($this->templateGuesser->guessTemplateName($controller, $request));
         }
     }
 
@@ -79,7 +80,7 @@ class TemplateListener implements EventSubscriberInterface
             return;
         }
 
-        if (!$this->container->has('twig')) {
+        if (null === $this->twig) {
             throw new \LogicException('You can not use the "@Template" annotation if the Twig Bundle is not available.');
         }
 
@@ -94,11 +95,9 @@ class TemplateListener implements EventSubscriberInterface
         }
 
         // attempt to render the actual response
-        $twig = $this->container->get('twig');
-
         if ($template->isStreamable()) {
-            $callback = function () use ($twig, $template, $parameters) {
-                $twig->display($template->getTemplate(), $parameters);
+            $callback = function () use ($template, $parameters) {
+                $this->twig->display($template->getTemplate(), $parameters);
             };
 
             $event->setResponse(new StreamedResponse($callback));
@@ -107,7 +106,7 @@ class TemplateListener implements EventSubscriberInterface
         // make sure the owner (controller+dependencies) is not cached or stored elsewhere
         $template->setOwner(array());
 
-        $event->setResponse(new Response($twig->render($template->getTemplate(), $parameters)));
+        $event->setResponse(new Response($this->twig->render($template->getTemplate(), $parameters)));
     }
 
     /**
