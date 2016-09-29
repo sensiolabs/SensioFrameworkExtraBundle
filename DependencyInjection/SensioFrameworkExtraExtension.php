@@ -28,13 +28,6 @@ class SensioFrameworkExtraExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('services.xml');
-
-        if (!empty($config['templating']['controller_patterns'])) {
-            $container
-                ->getDefinition('sensio_framework_extra.view.guesser')
-                ->addArgument($config['templating']['controller_patterns']);
-        }
 
         $annotationsToLoad = array();
 
@@ -111,6 +104,12 @@ class SensioFrameworkExtraExtension extends Extension
             if ($config['request']['converters']) {
                 $container->getDefinition('sensio_framework_extra.converter.listener')->replaceArgument(1, $config['request']['auto_convert']);
             }
+        }
+
+        if (!empty($config['templating']['controller_patterns'])) {
+            $container
+                ->getDefinition('sensio_framework_extra.view.guesser')
+                ->addArgument($config['templating']['controller_patterns']);
         }
 
         if ($config['psr_message']['enabled']) {
