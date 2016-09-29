@@ -11,7 +11,8 @@
 
         <service id="sensio_framework_extra.view.listener" class="Sensio\Bundle\FrameworkExtraBundle\EventListener\TemplateListener">
             <tag name="kernel.event_subscriber" />
-            <argument type="service" id="service_container" />
+            <argument type="service" id="sensio_framework_extra.view.guesser" />
+            <argument type="service" id="twig" on-invalid="null" />
         </service>
     </services>
 </container>
