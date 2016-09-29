@@ -116,6 +116,10 @@ class SensioFrameworkExtraExtension extends Extension
         if ($config['psr_message']['enabled']) {
             $loader->load('psr7.xml');
         }
+
+        if (!$container->hasDefinition('security.token_storage')) {
+            $container->removeDefinition('sensio_framework_extra.security.listener');
+        }
     }
 
     /**
