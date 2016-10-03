@@ -1,0 +1,23 @@
+---------------------------------------------------------------------------
+
+by javiereguiluz at 2016-10-02T07:31:46Z
+
+👍
+
+I have some questions about other listeners that we could remove:
+
+* `HttpCacheListener` could be disabled when the `sensio_framework_extra.cache.annotations` option is `false`
+* `ParamConverterListener` could be disabled when the `sensio_framework_extra.request. converters` option is `false`
+* We could do the same in HttpKernel for the TranslatorListener when `framework.translator` is null
+
+---------------------------------------------------------------------------
+
+by fabpot at 2016-10-02T17:10:45Z
+
+@javiereguiluz
+
+ * `HttpCacheListener`: That's already the case. https://github.com/sensiolabs/SensioFrameworkExtraBundle/blob/master/DependencyInjection/SensioFrameworkExtraExtension.php#L70
+
+ * `ParamConverterListener`: Even when `sensio_framework_extra.converter.listener` is `false`, the listener does more things
+
+Am I missing something here?
