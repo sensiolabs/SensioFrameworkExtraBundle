@@ -11,6 +11,7 @@
         }
     ],
     "require": {
+        "symfony/config": "^3.2",
         "symfony/framework-bundle": "^3.1",
         "symfony/dependency-injection": "~3.0",
         "symfony/http-kernel": "^3.1",
