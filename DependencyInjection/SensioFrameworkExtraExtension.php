@@ -82,9 +82,15 @@ class SensioFrameworkExtraExtension extends Extension
         if ($config['security']['annotations']) {
             $annotationsToLoad[] = 'security.xml';
 
-            $container->addResource(new ClassExistenceResource(SecurityExpressionLanguage::class));
-            if (class_exists(ExpressionLanguage::class) && class_exists(SecurityExpressionLanguage::class)) {
-                $container->setAlias('sensio_framework_extra.security.expression_language', new Alias($config['security']['expression_language'], false));
+            $container->addResource(new ClassExistenceResource(ExpressionLanguage::class));
+            if (class_exists(ExpressionLanguage::class)) {
+                // this resource can only be added if ExpressionLanguage exists (to avoid a fatal error)
+                $container->addResource(new ClassExistenceResource(SecurityExpressionLanguage::class));
+                if (class_exists(SecurityExpressionLanguage::class)) {
+                    $container->setAlias('sensio_framework_extra.security.expression_language', new Alias($config['security']['expression_language'], false));
+                } else {
+                    $container->removeDefinition('sensio_framework_extra.security.expression_language.default');
+                }
             } else {
                 $container->removeDefinition('sensio_framework_extra.security.expression_language.default');
             }
