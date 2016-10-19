@@ -4,6 +4,7 @@ CHANGELOG
 4.0
 ---
 
+ * allowed using multiple @Security annotations (class and method)
  * removed support for the Templating component (only plain Twig is supported)
  * removed unneeded phpdocs, converted protected to private properties
  * bumped Symfony minimum version to 3.0
