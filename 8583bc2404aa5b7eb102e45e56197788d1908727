@@ -1,0 +1,75 @@
+---------------------------------------------------------------------------
+
+by nicolas-grekas at 2016-01-14T14:11:13Z
+
+:+1:
+
+---------------------------------------------------------------------------
+
+by tucksaun at 2016-01-14T14:33:47Z
+
+:+1:
+
+---------------------------------------------------------------------------
+
+by fabpot at 2016-01-14T14:34:47Z
+
+This is a BC break as people might have relied on the fact that a `@Security` annotation on an action overrides one on the class.
+
+---------------------------------------------------------------------------
+
+by hhamon at 2016-01-14T15:57:57Z
+
+Maybe the new behavior should be explicitly and globally configured by the developer under the `sensio_framework_extra` config key.
+
+---------------------------------------------------------------------------
+
+by fabpot at 2016-01-14T16:00:01Z
+
+Please, no global configuration, that never works; what about one bundle needing one value for the global configuration and another one needing another one.
+
+---------------------------------------------------------------------------
+
+by hhamon at 2016-01-14T16:03:32Z
+
+That's a fair point!
+
+---------------------------------------------------------------------------
+
+by iltar at 2016-02-12T07:29:12Z
+
+:+1: from me, but I agree on the BC break, maybe this should cause a major bump.
+
+---------------------------------------------------------------------------
+
+by jvasseur at 2016-02-12T10:21:27Z
+
+A major bump would cause the same problem that a global configuration. Some bundles would need the old version and some the new one.
+
+Maybe create a new Annotation that have the new behavior ?
+
+---------------------------------------------------------------------------
+
+by ghostal at 2016-06-23T18:25:56Z
+
+@iltar directed me to this PR, as I was assuming the `@Security` annotation was "stackable" i.e. could be used on a class, and then applied again on a specific action for further additional restrictions.
+
+I like @jvasseur's suggestion of a new annotation... maybe `@StackableSecurity`?
+
+---------------------------------------------------------------------------
+
+by fabpot at 2016-09-21T19:06:19Z
+
+Can be merged into master after #431 lands.
+
+---------------------------------------------------------------------------
+
+by xabbuh at 2016-10-11T18:52:45Z
+
+#431 was merged.
+
+---------------------------------------------------------------------------
+
+by markyboryslav at 2016-10-13T12:47:53Z
+
+👍
