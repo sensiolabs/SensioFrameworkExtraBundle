@@ -47,7 +47,7 @@ class SecurityListener implements EventSubscriberInterface
     public function onKernelController(FilterControllerEvent $event)
     {
         $request = $event->getRequest();
-        if (!$configuration = $request->attributes->get('_security')) {
+        if (!$configurations = $request->attributes->get('_security')) {
             return;
         }
 
@@ -63,8 +63,10 @@ class SecurityListener implements EventSubscriberInterface
             throw new \LogicException('To use the @Security tag, you need to use the Security component 2.4 or newer and install the ExpressionLanguage component.');
         }
 
-        if (!$this->language->evaluate($configuration->getExpression(), $this->getVariables($request))) {
-            throw new AccessDeniedException(sprintf('Expression "%s" denied access.', $configuration->getExpression()));
+        foreach ($configurations as $configuration) {
+            if (!$this->language->evaluate($configuration->getExpression(), $this->getVariables($request))) {
+                throw new AccessDeniedException(sprintf('Expression "%s" denied access.', $configuration->getExpression()));
+            }
         }
     }
 
