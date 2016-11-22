@@ -63,6 +63,30 @@ be configured with the ``entity_manager`` option::
     {
     }
 
+Provider Converter
+~~~~~~~~~~~~~~~~~~
+
+A provider converter can be used with a provider or factory service to convert
+a parameter to an object::
+
+    use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+    use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+
+    /**
+     * @Route("/blog/{id}")
+     * @ParamConverter("post", class="Full\Name\For\Class\Post")
+     */
+    public function showAction(Post $post)
+    {
+    }
+
+To register a provider with the converter::
+
+    <service id="post.provider" ...>
+        <tag name="request.param_converter.provider" class="Full\Name\For\Class\Post" method="getPost"/>
+    </service>
+
+
 Creating a Converter
 --------------------
 
