@@ -33,12 +33,18 @@ class ParamConverterListener implements EventSubscriberInterface
     private $autoConvert;
 
     /**
+     * @var bool
+     */
+    private $isParameterTypeSupported;
+
+    /**
      * @param bool $autoConvert Auto convert non-configured objects
      */
     public function __construct(ParamConverterManager $manager, $autoConvert = true)
     {
         $this->manager = $manager;
         $this->autoConvert = $autoConvert;
+        $this->isParameterTypeSupported = method_exists('ReflectionParameter', 'getType');
     }
 
     /**
@@ -91,7 +97,7 @@ class ParamConverterListener implements EventSubscriberInterface
                 $configurations[$name]->setClass($param->getClass()->getName());
             }
 
-            $configurations[$name]->setIsOptional($param->isOptional());
+            $configurations[$name]->setIsOptional($param->isOptional() || $this->isParameterTypeSupported && $param->hasType() && $param->getType()->allowsNull());
         }
 
         return $configurations;
