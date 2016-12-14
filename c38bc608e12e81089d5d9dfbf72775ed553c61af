@@ -1,0 +1,55 @@
+---------------------------------------------------------------------------
+
+by kubawerlos at 2016-12-08T21:14:48Z
+
+@fabpot any chance for merge?
+
+---------------------------------------------------------------------------
+
+by xabbuh at 2016-12-09T09:04:30Z
+
+@kubawerlos The change looks valid to me, but you should add a test for this if possible.
+
+---------------------------------------------------------------------------
+
+by iltar at 2016-12-12T10:21:01Z
+
+It would be nice if you could add a few test cases to the functional tests as well, to verify that it integrates nicely in Symfony: https://github.com/sensiolabs/SensioFrameworkExtraBundle/tree/master/Tests/Functional
+
+---------------------------------------------------------------------------
+
+by kubawerlos at 2016-12-12T13:16:34Z
+
+@iltar I'm getting `Symfony\Component\DependencyInjection\Exception\LogicException: Asset support cannot be enabled as the Asset component is not installed.` for every functional test with normal dependencies. With `--prefer-lowest` I'm getting `Class __PHP_Incomplete_Class has no unserializer`.
+
+It suppose to be quick fix for a new functionality, with all these problem I'm giving it up.
+
+---------------------------------------------------------------------------
+
+by iltar at 2016-12-12T13:53:48Z
+
+Hm I don't see why this should be closed this fast. Those issues are probably not even related to your tests
+
+---------------------------------------------------------------------------
+
+by kubawerlos at 2016-12-12T15:24:36Z
+
+Well, I can leave it open until someone will handle Travis tests.
+
+---------------------------------------------------------------------------
+
+by fabpot at 2016-12-14T07:35:14Z
+
+@kubawerlos I've fixed deps in 0c88c0b. If you rebase, I think everything will be ok now.
+
+---------------------------------------------------------------------------
+
+by kubawerlos at 2016-12-14T08:03:16Z
+
+Thanks @fabpot - you have fixed it in master, I have applied these changes to branch 3.0 and it solved CI builds. Nice to see fabbot.io also works properly with nullable types.
+
+---------------------------------------------------------------------------
+
+by fabpot at 2016-12-14T08:10:37Z
+
+Actually, I fixed that in 3.0, not sure why Github thinks that this is on master only. Can you rebase on current 3.0?
