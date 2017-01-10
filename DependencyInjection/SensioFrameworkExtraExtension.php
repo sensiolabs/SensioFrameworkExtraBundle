@@ -43,39 +43,47 @@ class SensioFrameworkExtraExtension extends Extension
         if ($config['router']['annotations']) {
             $annotationsToLoad[] = 'routing.xml';
 
-            $this->addClassesToCompile(array(
-                'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\ControllerListener',
-            ));
+            if (PHP_VERSION_ID < 70000) {
+                $this->addClassesToCompile(array(
+                    'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\ControllerListener',
+                ));
+            }
         }
 
         if ($config['request']['converters']) {
             $annotationsToLoad[] = 'converters.xml';
 
-            $this->addClassesToCompile(array(
-                // cannot be added because it has some annotations
-                //'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\ParamConverter',
-                'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\ParamConverterListener',
-                'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\DateTimeParamConverter',
-                'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\DoctrineParamConverter',
-                'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\ParamConverterInterface',
-                'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\ParamConverterManager',
-            ));
+            if (PHP_VERSION_ID < 70000) {
+                $this->addClassesToCompile(array(
+                    // cannot be added because it has some annotations
+                    //'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\ParamConverter',
+                    'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\ParamConverterListener',
+                    'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\DateTimeParamConverter',
+                    'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\DoctrineParamConverter',
+                    'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\ParamConverterInterface',
+                    'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\ParamConverterManager',
+                ));
+            }
         }
 
         if ($config['view']['annotations']) {
             $annotationsToLoad[] = 'view.xml';
 
-            $this->addClassesToCompile(array(
-                'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\TemplateListener',
-            ));
+            if (PHP_VERSION_ID < 70000) {
+                $this->addClassesToCompile(array(
+                    'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\TemplateListener',
+                ));
+            }
         }
 
         if ($config['cache']['annotations']) {
             $annotationsToLoad[] = 'cache.xml';
 
-            $this->addClassesToCompile(array(
-                'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\HttpCacheListener',
-            ));
+            if (PHP_VERSION_ID < 70000) {
+                $this->addClassesToCompile(array(
+                    'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\HttpCacheListener',
+                ));
+            }
         }
 
         if ($config['security']['annotations']) {
@@ -87,9 +95,11 @@ class SensioFrameworkExtraExtension extends Extension
                 $container->removeDefinition('sensio_framework_extra.security.expression_language.default');
             }
 
-            $this->addClassesToCompile(array(
-                'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\SecurityListener',
-            ));
+            if (PHP_VERSION_ID < 70000) {
+                $this->addClassesToCompile(array(
+                    'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\SecurityListener',
+                ));
+            }
         }
 
         if ($annotationsToLoad) {
@@ -100,9 +110,11 @@ class SensioFrameworkExtraExtension extends Extension
                 $loader->load($configFile);
             }
 
-            $this->addClassesToCompile(array(
-                'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\ConfigurationAnnotation',
-            ));
+            if (PHP_VERSION_ID < 70000) {
+                $this->addClassesToCompile(array(
+                    'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\ConfigurationAnnotation',
+                ));
+            }
 
             if ($config['request']['converters']) {
                 $container->getDefinition('sensio_framework_extra.converter.listener')->replaceArgument(1, $config['request']['auto_convert']);
