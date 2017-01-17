@@ -124,4 +124,26 @@ class AnnotatedRouteControllerLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Symfony\Component\Routing\Route', $rc->get('new'));
         $this->assertEquals(array('POST'), $rc->get('new')->getMethods());
     }
+
+    public function testLoadMethod()
+    {
+        $loader = new AnnotatedRouteControllerLoader(new AnnotationReader());
+        AnnotationRegistry::registerLoader('class_exists');
+
+        $rc = $loader->load('Sensio\Bundle\FrameworkExtraBundle\Tests\Routing\Fixtures\BuzzController');
+
+        $this->assertInstanceOf('Symfony\Component\Routing\RouteCollection', $rc);
+        $this->assertCount(4, $rc);
+
+        $this->assertInstanceOf('Symfony\Component\Routing\Route', $rc->get('index'));
+        // depending on the Symfony version, it can return GET or an empty array (on 2.3)
+        // which has the same behavior anyway
+        $methods = $rc->get('index')->getMethods();
+        $this->assertTrue(empty($methods) || array('GET') == $methods);
+
+        $this->assertInstanceOf('Symfony\Component\Routing\Route', $rc->get('new'));
+        $this->assertEquals(array('GET', 'POST'), $rc->get('new')->getMethods());
+        $this->assertEquals(array('POST', 'DELETE'), $rc->get('bar')->getMethods());
+        $this->assertEquals(array('PUT', 'POST'), $rc->get('foo')->getMethods());
+    }
 }
