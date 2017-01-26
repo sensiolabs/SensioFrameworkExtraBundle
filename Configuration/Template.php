@@ -47,6 +47,8 @@ class Template extends ConfigurationAnnotation
      */
     private $owner;
 
+    private $inApp;
+
     /**
      * Returns the array of templates variables.
      *
@@ -153,5 +155,15 @@ class Template extends ConfigurationAnnotation
     public function getOwner()
     {
         return $this->owner;
+    }
+
+    public function getInApp()
+    {
+        return $this->inApp;
+    }
+
+    public function setInApp($inApp)
+    {
+        $this->inApp = $inApp;
     }
 }

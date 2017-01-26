@@ -54,7 +54,7 @@ class TemplateGuesser
      *
      * @throws \InvalidArgumentException
      */
-    public function guessTemplateName($controller, Request $request)
+    public function guessTemplateName($controller, Request $request, $inApp = false)
     {
         if (is_object($controller) && method_exists($controller, '__invoke')) {
             $controller = array($controller, '__invoke');
@@ -83,7 +83,8 @@ class TemplateGuesser
         }
 
         $bundleName = null;
-        if ($bundle = $this->getBundleForClass($className)) {
+
+        if (!$inApp && $bundle = $this->getBundleForClass($className)) {
             while ($bundleName = $bundle->getName()) {
                 if (null === $parentBundleName = $bundle->getParent()) {
                     $bundleName = $bundle->getName();
