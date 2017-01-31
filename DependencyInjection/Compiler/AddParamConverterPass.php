@@ -35,7 +35,7 @@ class AddParamConverterPass implements CompilerPassInterface
                 $name = isset($converter['converter']) ? $converter['converter'] : null;
                 $priority = isset($converter['priority']) ? $converter['priority'] : 0;
 
-                if ($priority === 'false') {
+                if ($priority === 'false' || $priority === false) {
                     $priority = null;
                 }
 
