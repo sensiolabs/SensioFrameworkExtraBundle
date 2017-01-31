@@ -51,7 +51,7 @@ class DateTimeParamConverterTest extends \PHPUnit_Framework_TestCase
         $request = new Request(array(), array(), array('start' => 'Invalid DateTime Format'));
         $config = $this->createConfiguration('DateTime', 'start');
 
-        $this->setExpectedException('Symfony\Component\HttpKernel\Exception\NotFoundHttpException', 'Invalid date given.');
+        $this->setExpectedException('Symfony\Component\HttpKernel\Exception\NotFoundHttpException', "Invalid date given for parameter 'start'.");
         $this->converter->apply($request, $config);
     }
 
@@ -61,7 +61,7 @@ class DateTimeParamConverterTest extends \PHPUnit_Framework_TestCase
         $config = $this->createConfiguration('DateTime', 'start');
         $config->expects($this->any())->method('getOptions')->will($this->returnValue(array('format' => 'd.m.Y')));
 
-        $this->setExpectedException('Symfony\Component\HttpKernel\Exception\NotFoundHttpException', 'Invalid date given.');
+        $this->setExpectedException('Symfony\Component\HttpKernel\Exception\NotFoundHttpException', "Invalid date given for parameter 'start'.");
         $this->converter->apply($request, $config);
     }
 
