@@ -30,7 +30,7 @@ class TemplateGuesserTest extends \PHPUnit_Framework_TestCase
         $this->bundles['BarBundle'] = $this->getBundle('BarBundle', 'Sensio\Bundle\FrameworkExtraBundle\Tests\Templating\Fixture\BarBundle', 'FooBundle');
         $this->bundles['FooBarBundle'] = $this->getBundle('FooBarBundle', 'Sensio\Bundle\FrameworkExtraBundle\Tests\Templating\Fixture\FooBarBundle', 'BarBundle');
 
-        $this->kernel = $this->getMock('Symfony\Component\HttpKernel\KernelInterface');
+        $this->kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\KernelInterface')->getMock();
         $this->kernel
             ->expects($this->once())
             ->method('getBundles')
@@ -186,7 +186,7 @@ class TemplateGuesserTest extends \PHPUnit_Framework_TestCase
 
     protected function getBundle($name, $namespace, $parent = null)
     {
-        $bundle = $this->getMock('Symfony\Component\HttpKernel\Bundle\BundleInterface');
+        $bundle = $this->getMockBuilder('Symfony\Component\HttpKernel\Bundle\BundleInterface')->getMock();
         $bundle
             ->expects($this->any())
             ->method('getName')

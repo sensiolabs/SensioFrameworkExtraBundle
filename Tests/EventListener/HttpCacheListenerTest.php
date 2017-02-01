@@ -221,7 +221,10 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
 
     private function createEventMock(Request $request, Response $response)
     {
-        $event = $this->getMock('Symfony\Component\HttpKernel\Event\FilterResponseEvent', array(), array(), '', null);
+        $event = $this
+            ->getMockBuilder('Symfony\Component\HttpKernel\Event\FilterResponseEvent')
+            ->disableOriginalConstructor()
+            ->getMock();
         $event
             ->expects($this->any())
             ->method('getRequest')
@@ -239,7 +242,7 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
 
     private function getKernel()
     {
-        return $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
+        return $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
     }
 }
 
