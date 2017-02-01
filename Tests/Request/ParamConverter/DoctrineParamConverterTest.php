@@ -29,7 +29,7 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->registry = $this->getMock('Doctrine\Common\Persistence\ManagerRegistry');
+        $this->registry = $this->getMockBuilder('Doctrine\Common\Persistence\ManagerRegistry')->getMock();
         $this->converter = new DoctrineParamConverter($this->registry);
     }
 
@@ -70,7 +70,7 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
     {
         $request = new Request();
         $config = $this->createConfiguration(null, array());
-        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')->getMock();
 
         $this->setExpectedException('LogicException');
         $this->converter->apply($request, $config);
@@ -80,7 +80,7 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
     {
         $request = new Request();
         $config = $this->createConfiguration(null, array(), 'arg', true);
-        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')->getMock();
 
         $ret = $this->converter->apply($request, $config);
 
@@ -94,8 +94,8 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
         $request->attributes->set('arg', null);
         $config = $this->createConfiguration('stdClass', array('mapping' => array('arg' => 'arg'), 'strip_null' => true), 'arg', true);
 
-        $classMetadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
-        $manager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $classMetadata = $this->getMockBuilder('Doctrine\Common\Persistence\Mapping\ClassMetadata')->getMock();
+        $manager = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')->getMock();
         $manager->expects($this->once())
             ->method('getClassMetadata')
             ->with('stdClass')
@@ -129,8 +129,8 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
 
         $config = $this->createConfiguration('stdClass', array('id' => 'id'), 'arg');
 
-        $manager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
-        $objectRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+        $manager = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')->getMock();
+        $objectRepository = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectRepository')->getMock();
         $this->registry->expects($this->once())
               ->method('getManagerForClass')
               ->with('stdClass')
@@ -183,14 +183,14 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
 
         $config = $this->createConfiguration('stdClass', array(), 'arg', null);
 
-        $classMetadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
-        $manager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $classMetadata = $this->getMockBuilder('Doctrine\Common\Persistence\Mapping\ClassMetadata')->getMock();
+        $manager = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')->getMock();
         $manager->expects($this->once())
             ->method('getClassMetadata')
             ->with('stdClass')
             ->will($this->returnValue($classMetadata));
 
-        $objectRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+        $objectRepository = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectRepository')->getMock();
         $this->registry->expects($this->once())
               ->method('getManagerForClass')
               ->with('stdClass')
@@ -219,9 +219,9 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
             'arg'
         );
 
-        $manager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
-        $metadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
-        $repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+        $manager = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')->getMock();
+        $metadata = $this->getMockBuilder('Doctrine\Common\Persistence\Mapping\ClassMetadata')->getMock();
+        $repository = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectRepository')->getMock();
 
         $this->registry->expects($this->once())
                 ->method('getManagerForClass')
@@ -264,8 +264,8 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
             'arg'
         );
 
-        $objectRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
-        $manager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectRepository = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectRepository')->getMock();
+        $manager = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')->getMock();
         $manager->expects($this->once())
             ->method('getRepository')
             ->with('stdClass')
@@ -295,9 +295,9 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
             'arg'
         );
 
-        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
-        $objectRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
-        $metadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+        $objectManager = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')->getMock();
+        $objectRepository = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectRepository')->getMock();
+        $metadata = $this->getMockBuilder('Doctrine\Common\Persistence\Mapping\ClassMetadata')->getMock();
 
         $objectManager->expects($this->once())
             ->method('getRepository')
@@ -347,9 +347,9 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
             'arg'
         );
 
-        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')->getMock();
         $objectRepository = new TestUserRepository();
-        $metadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+        $metadata = $this->getMockBuilder('Doctrine\Common\Persistence\Mapping\ClassMetadata')->getMock();
 
         $objectManager->expects($this->once())
             ->method('getRepository')
@@ -371,7 +371,7 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Repository method "Sensio\Bundle\FrameworkExtraBundle\Tests\Request\ParamConverter\TestUserRepository::findByFullName" requires that you provide a value for the "$lastName" argument.
      */
     public function testApplyWithRepositoryMethodAndMapMethodSignatureException()
@@ -390,9 +390,9 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
             'arg'
         );
 
-        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')->getMock();
         $objectRepository = new TestUserRepository();
-        $metadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
+        $metadata = $this->getMockBuilder('Doctrine\Common\Persistence\Mapping\ClassMetadata')->getMock();
 
         $objectManager->expects($this->once())
             ->method('getRepository')
@@ -413,13 +413,13 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
     public function testSupports()
     {
         $config = $this->createConfiguration('stdClass', array());
-        $metadataFactory = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadataFactory');
+        $metadataFactory = $this->getMockBuilder('Doctrine\Common\Persistence\Mapping\ClassMetadataFactory')->getMock();
         $metadataFactory->expects($this->once())
                         ->method('isTransient')
                         ->with($this->equalTo('stdClass'))
                         ->will($this->returnValue(false));
 
-        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')->getMock();
         $objectManager->expects($this->once())
                       ->method('getMetadataFactory')
                       ->will($this->returnValue($metadataFactory));
@@ -441,13 +441,13 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
     public function testSupportsWithConfiguredEntityManager()
     {
         $config = $this->createConfiguration('stdClass', array('entity_manager' => 'foo'));
-        $metadataFactory = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadataFactory');
+        $metadataFactory = $this->getMockBuilder('Doctrine\Common\Persistence\Mapping\ClassMetadataFactory')->getMock();
         $metadataFactory->expects($this->once())
                         ->method('isTransient')
                         ->with($this->equalTo('stdClass'))
                         ->will($this->returnValue(false));
 
-        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $objectManager = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')->getMock();
         $objectManager->expects($this->once())
                       ->method('getMetadataFactory')
                       ->will($this->returnValue($metadataFactory));

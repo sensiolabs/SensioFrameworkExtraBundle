@@ -24,7 +24,7 @@ class ParamConverterListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function testRequestIsSkipped($controllerCallable)
     {
-        $kernel = $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
+        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
         $request = new Request();
 
         $listener = new ParamConverterListener($this->getParamConverterManager($request, array()));
@@ -46,7 +46,7 @@ class ParamConverterListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function testAutoConvert($controllerCallable)
     {
-        $kernel = $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
+        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
         $request = new Request(array(), array(), array('date' => '2014-03-14 09:00:00'));
 
         $converter = new ParamConverter(array('name' => 'date', 'class' => 'DateTime'));
@@ -63,7 +63,7 @@ class ParamConverterListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function testSettingOptionalParam($function, $isOptional)
     {
-        $kernel = $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
+        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
         $request = new Request();
 
         $converter = new ParamConverter(array('name' => 'param', 'class' => 'DateTime'));
@@ -97,7 +97,7 @@ class ParamConverterListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function testNoAutoConvert($controllerCallable)
     {
-        $kernel = $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
+        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
         $request = new Request(array(), array(), array('date' => '2014-03-14 09:00:00'));
 
         $listener = new ParamConverterListener($this->getParamConverterManager($request, array()), false);
@@ -116,7 +116,7 @@ class ParamConverterListenerTest extends \PHPUnit_Framework_TestCase
 
     protected function getParamConverterManager(Request $request, $configurations)
     {
-        $manager = $this->getMock('Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager');
+        $manager = $this->getMockBuilder('Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager')->getMock();
         $manager
             ->expects($this->once())
             ->method('apply')
