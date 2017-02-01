@@ -136,7 +136,7 @@ This example shows all the available annotations in action::
      * @Route("/blog")
      * @Cache(expires="tomorrow")
      */
-    class AnnotController extends Controller
+    class AnnotController
     {
         /**
          * @Route("/")
@@ -207,10 +207,9 @@ snippet::
     namespace AppBundle\Controller;
 
     use Psr\Http\Message\ServerRequestInterface;
-    use Symfony\Bundle\FrameworkBundle\Controller\Controller;
     use Zend\Diactoros\Response;
 
-    class DefaultController extends Controller
+    class DefaultController
     {
         public function indexAction(ServerRequestInterface $request)
         {
