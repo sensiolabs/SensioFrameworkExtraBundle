@@ -389,7 +389,7 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Repository method "Sensio\Bundle\FrameworkExtraBundle\Tests\Request\ParamConverter\TestUserRepository::findByFullName" requires that you provide a value for the "$lastName" argument.
      * @group legacy
      */

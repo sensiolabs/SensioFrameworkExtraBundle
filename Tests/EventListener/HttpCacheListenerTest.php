@@ -221,7 +221,10 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
 
     private function createEventMock(Request $request, Response $response)
     {
-        $event = $this->getMockBuilder('Symfony\Component\HttpKernel\Event\FilterResponseEvent')->disableOriginalConstructor()->getMock();
+        $event = $this
+            ->getMockBuilder('Symfony\Component\HttpKernel\Event\FilterResponseEvent')
+            ->disableOriginalConstructor()
+            ->getMock();
         $event
             ->expects($this->any())
             ->method('getRequest')

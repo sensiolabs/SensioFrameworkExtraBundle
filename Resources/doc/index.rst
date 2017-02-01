@@ -126,7 +126,7 @@ This example shows all the available annotations in action::
      * @Route("/blog")
      * @Cache(expires="tomorrow")
      */
-    class AnnotController extends Controller
+    class AnnotController
     {
         /**
          * @Route("/")

@@ -63,7 +63,7 @@ class ParamConverterListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function testSettingOptionalParam($function, $isOptional)
     {
-        $kernel = $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
+        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
         $request = new Request();
 
         $converter = new ParamConverter(array('name' => 'param', 'class' => 'DateTime'));
