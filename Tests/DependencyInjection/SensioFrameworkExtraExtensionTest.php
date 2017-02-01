@@ -20,6 +20,9 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
 class SensioFrameworkExtraExtensionTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @group legacy
+     */
     public function testLegacySecurityListener()
     {
         if (interface_exists('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface')) {

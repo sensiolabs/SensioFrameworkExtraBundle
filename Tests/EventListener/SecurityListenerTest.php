@@ -23,6 +23,7 @@ class SecurityListenerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @expectedException \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     * @group legacy
      */
     public function testLegacyAccessDenied()
     {
