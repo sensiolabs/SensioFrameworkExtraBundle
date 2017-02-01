@@ -157,7 +157,7 @@ class TemplateGuesserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The "stdClass" class does not look like a controller class (its FQN must match one of the following regexps: "/foo/", "/bar/"
      */
     public function testGuessTemplateWhenControllerFQNDoesNotMatchAPattern()
@@ -171,7 +171,7 @@ class TemplateGuesserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage must be an array callable or an object defining the magic method __invoke. "object" given.
      */
     public function testInvalidController()
