@@ -54,7 +54,7 @@ class DoctrineParamConverter implements ParamConverterInterface
         $class = $configuration->getClass();
         $options = $this->getOptions($configuration);
 
-        if (null === $request->attributes->get($name)) {
+        if (null === $request->attributes->get($name, false)) {
             $configuration->setIsOptional(true);
         }
 
