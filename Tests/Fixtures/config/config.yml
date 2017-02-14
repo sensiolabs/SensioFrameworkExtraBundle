@@ -5,6 +5,13 @@ framework:
         engine: [twig, php]
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
+doctrine:
+    dbal:
+        driver:   pdo_sqlite
+        path:     "%kernel.root_dir%/data/db.sqlite"
+
+    orm:
+        auto_mapping: true
 
 services:
     test.invokable.predefined:
