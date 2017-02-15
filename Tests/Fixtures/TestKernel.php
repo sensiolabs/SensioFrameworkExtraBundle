@@ -22,6 +22,7 @@ class TestKernel extends Kernel
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new Symfony\Bundle\TwigBundle\TwigBundle(),
+            new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Tests\Fixtures\FooBundle\FooBundle(),
         );
     }
