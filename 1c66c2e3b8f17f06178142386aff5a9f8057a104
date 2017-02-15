@@ -1,0 +1,25 @@
+---------------------------------------------------------------------------
+
+by fabpot at 2017-02-14T18:38:50Z
+
+Can you add some tests?
+
+---------------------------------------------------------------------------
+
+by chalasr at 2017-02-14T21:39:12Z
+
+I did, but it required to add doctrine as dev dependency for being relevant and that seems to reveal an issue in doctrine-bundle's twig requirement...
+
+> Error: Class 'Twig_SimpleFilter' not found
+/home/travis/build/sensiolabs/SensioFrameworkExtraBundle/vendor/doctrine/doctrine-bundle/Twig/DoctrineExtension.php:40
+
+See travis build with low deps.
+
+I can't figure it out right now, maybe you have an idea since you made the change that makes use of `Twig_SimpleFilter` in doctrine-bundle?
+
+---------------------------------------------------------------------------
+
+by chalasr at 2017-02-14T22:32:01Z
+
+Changing the twig requirement from `1.11` to `1.12` made it green.
+Opened https://github.com/doctrine/DoctrineBundle/pull/614 to fix it on doctrine too.
