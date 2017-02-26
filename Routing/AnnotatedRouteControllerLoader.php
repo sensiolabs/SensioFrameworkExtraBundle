@@ -40,6 +40,8 @@ class AnnotatedRouteControllerLoader extends AnnotationClassLoader
         $classAnnot = $this->reader->getClassAnnotation($class, $this->routeAnnotationClass);
         if ($classAnnot instanceof FrameworkExtraBundleRoute && $service = $classAnnot->getService()) {
             $route->setDefault('_controller', $service.':'.$method->getName());
+        } else if ('__invoke' === $method->getName()) {
+            $route->setDefault('_controller', $class->getName());
         } else {
             $route->setDefault('_controller', $class->getName().'::'.$method->getName());
         }
