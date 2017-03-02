@@ -1,0 +1,11 @@
+---------------------------------------------------------------------------
+
+by chalasr at 2017-02-23T17:36:36Z
+
+Travis failure is unrelated, it should be broken upstream too (PHPUnit class not found due to the recents changes for phpunit FC) for builds on PHP >=5.3, <=5.5.
+
+---------------------------------------------------------------------------
+
+by chalasr at 2017-03-01T21:44:43Z
+
+Ok I think the failure is due to that phpunit-bridge hasn't been released yet. Once done, this actually fixes the bundle test suite.
