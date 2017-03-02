@@ -91,21 +91,24 @@ class ParamConverterListener implements EventSubscriberInterface
             }
 
             $name = $param->getName();
+            $class = $param->getClass();
+            $hasType = $this->isParameterTypeSupported && $param->hasType();
 
-            if ($param->getClass()) {
+            if ($class || $hasType) {
                 if (!isset($configurations[$name])) {
                     $configuration = new ParamConverter(array());
                     $configuration->setName($name);
-                    $configuration->setClass($param->getClass()->getName());
 
                     $configurations[$name] = $configuration;
-                } elseif (null === $configurations[$name]->getClass()) {
-                    $configurations[$name]->setClass($param->getClass()->getName());
+                }
+
+                if ($class && null === $configurations[$name]->getClass()) {
+                    $configurations[$name]->setClass($class->getName());
                 }
             }
 
             if (isset($configurations[$name])) {
-                $configurations[$name]->setIsOptional($param->isOptional() || $param->isDefaultValueAvailable() || $this->isParameterTypeSupported && $param->hasType() && $param->getType()->allowsNull());
+                $configurations[$name]->setIsOptional($param->isOptional() || $param->isDefaultValueAvailable() || $hasType && $param->getType()->allowsNull());
             }
         }
 

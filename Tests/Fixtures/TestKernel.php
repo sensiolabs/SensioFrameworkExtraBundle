@@ -24,12 +24,17 @@ class TestKernel extends Kernel
             new Symfony\Bundle\TwigBundle\TwigBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Tests\Fixtures\FooBundle\FooBundle(),
+            new Tests\Fixtures\ActionArgumentsBundle\ActionArgumentsBundle(),
         );
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
         $loader->load(__DIR__.'/config/config.yml');
+
+        if (PHP_VERSION_ID >= 70100) {
+            $loader->load(__DIR__.'/config/nullable_type/config.yml');
+        }
     }
 
     public function getCacheDir()
