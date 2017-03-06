@@ -21,5 +21,10 @@
             <tag name="routing.loader" />
             <argument type="service" id="annotation_reader" />
         </service>
+
+        <service id="sensio_framework_extra.config.annot_routing_resource_checker" class="Sensio\Bundle\FrameworkExtraBundle\Config\AnnotatedRoutingResourceChecker" public="false">
+            <tag name="config_cache.resource_checker" priority="-900" />
+            <argument type="service" id="annotation_reader" />
+        </service>
     </services>
 </container>

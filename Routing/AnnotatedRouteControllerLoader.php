@@ -11,6 +11,7 @@
 
 namespace Sensio\Bundle\FrameworkExtraBundle\Routing;
 
+use Sensio\Bundle\FrameworkExtraBundle\Config\AnnotatedRoutingResource;
 use Symfony\Component\Routing\Loader\AnnotationClassLoader;
 use Symfony\Component\Routing\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route as FrameworkExtraBundleRoute;
@@ -83,5 +84,19 @@ class AnnotatedRouteControllerLoader extends AnnotationClassLoader
             array('_', '\\1', '_'),
             $routeName
         );
+    }
+
+    /**
+     * Creates a config cache resource.
+     *
+     * This is serialized and rebuilt later to determine if
+     * this class changed in a meaningful way.
+     *
+     * @param \ReflectionClass $class
+     * @return AnnotatedRoutingResource
+     */
+    protected function createConfigResource(\ReflectionClass $class)
+    {
+        return new AnnotatedRoutingResource($class, $this->reader);
     }
 }
