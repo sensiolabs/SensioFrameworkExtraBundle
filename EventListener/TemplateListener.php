@@ -55,12 +55,6 @@ class TemplateListener implements EventSubscriberInterface
         $request = $event->getRequest();
         $template = $request->attributes->get('_template');
 
-        // no @Template present
-        if (null === $template) {
-            return;
-        }
-
-        // we need the @Template annotation object or we cannot continue
         if (!$template instanceof Template) {
             return;
         }
@@ -86,7 +80,7 @@ class TemplateListener implements EventSubscriberInterface
         $request = $event->getRequest();
         $template = $request->attributes->get('_template');
 
-        if (null === $template) {
+        if (!$template instanceof Template) {
             return;
         }
 
