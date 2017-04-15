@@ -76,6 +76,10 @@ class SensioFrameworkExtraExtension extends Extension
                 ));
             }
         }
+        
+        if ($config['json']['annotations']) {
+            $annotationsToLoad[] = 'json.xml';
+        }
 
         if ($config['cache']['annotations']) {
             $annotationsToLoad[] = 'cache.xml';
