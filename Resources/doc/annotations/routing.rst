@@ -28,6 +28,31 @@ URL. This is equivalent to the following YAML configuration:
         path:     /
         defaults: { _controller: SensioBlogBundle:Post:index }
 
+.. code-block:: xml
+
+    <?xml version="1.0" encoding="UTF-8" ?>
+    <routes xmlns="http://symfony.com/schema/routing"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://symfony.com/schema/routing
+        http://symfony.com/schema/routing/routing-1.0.xsd">
+
+        <route id="blog_home" path="/">
+            <default key="_controller">SensioBlogBundle:Post:index</default>
+        </route>
+    </routes>
+
+.. code-block:: php
+
+    use Symfony\Component\Routing\RouteCollection;
+    use Symfony\Component\Routing\Route;
+
+    $collection = new RouteCollection();
+    $collection->add('blog_home', new Route('/', array(
+        '_controller' => 'SensioBlogBundle:Post:index',
+    )));
+
+    return $collection;
+
 Like any route pattern, you can define placeholders, requirements, and default
 values::
 
@@ -76,6 +101,19 @@ The routes need to be imported to be active as any other routing resources
         resource: "@SensioBlogBundle/Controller/PostController.php"
         type:     annotation
 
+.. code-block:: xml
+
+    <?xml version="1.0" encoding="UTF-8" ?>
+    <routes xmlns="http://symfony.com/schema/routing"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://symfony.com/schema/routing
+            http://symfony.com/schema/routing/routing-1.0.xsd">
+
+        <import
+            resource="@SensioBlogBundle/Controller/PostController.php"
+            type="annotation" />
+    </routes>
+
 You can also import a whole directory:
 
 .. code-block:: yaml
@@ -85,6 +123,19 @@ You can also import a whole directory:
         resource: "@SensioBlogBundle/Controller"
         type:     annotation
 
+.. code-block:: xml
+
+    <?xml version="1.0" encoding="UTF-8" ?>
+    <routes xmlns="http://symfony.com/schema/routing"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://symfony.com/schema/routing
+            http://symfony.com/schema/routing/routing-1.0.xsd">
+
+        <import
+            resource="@SensioBlogBundle/Controller"
+            type="annotation" />
+    </routes>
+
 As for any other resource, you can "mount" the routes under a given prefix:
 
 .. code-block:: yaml
@@ -93,6 +144,20 @@ As for any other resource, you can "mount" the routes under a given prefix:
         resource: "@SensioBlogBundle/Controller/PostController.php"
         prefix:   /blog
         type:     annotation
+
+.. code-block:: xml
+
+    <?xml version="1.0" encoding="UTF-8" ?>
+    <routes xmlns="http://symfony.com/schema/routing"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://symfony.com/schema/routing
+            http://symfony.com/schema/routing/routing-1.0.xsd">
+
+        <import
+            resource="@SensioBlogBundle/Controller/PostController.php"
+            prefix="/blog"
+            type="annotation" />
+    </routes>
 
 Route Name
 ----------
