@@ -97,7 +97,7 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
         $this->listener->onKernelResponse($this->createEventMock($request, $this->response));
         $this->assertTrue($this->response->hasVary());
         $result = $this->response->getVary();
-        $this->assertFalse(empty($result), 'Existing vary headers should not be removed');
+        $this->assertNotEmpty($result, 'Existing vary headers should not be removed');
         $this->assertEquals($vary, $result, 'Vary header should not be changed');
     }
 
@@ -210,6 +210,37 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertTrue($response->headers->has('ETag'));
         $this->assertContains(hash('sha256', $entity->getId()), $response->headers->get('ETag'));
+    }
+
+    public function testConfigurationDoesNotOverrideAlreadySetResponseHeaders()
+    {
+        $request = $this->createRequest(new Cache(array(
+            'ETag' => '"12345"',
+            'lastModified' => new \DateTime('Fri, 23 Aug 2013 00:00:00 GMT'),
+            'expires' => new \DateTime('Fri, 24 Aug 2013 00:00:00 GMT'),
+            'smaxage' => '15',
+            'maxage' => '15',
+            'vary' => array('foobar'),
+        )));
+
+        $response = new Response();
+        $response->setEtag('"54321"');
+        $response->setLastModified(new \DateTime('Fri, 23 Aug 2014 00:00:00 GMT'));
+        $response->setExpires(new \DateTime('Fri, 24 Aug 2014 00:00:00 GMT'));
+        $response->setSharedMaxAge(30);
+        $response->setMaxAge(30);
+        $response->setVary(array('foobaz'));
+
+        $listener = new HttpCacheListener();
+        $responseEvent = new FilterResponseEvent($this->getKernel(), $request, null, $response);
+        $listener->onKernelResponse($responseEvent);
+
+        $this->assertEquals('"54321"', $response->getEtag());
+        $this->assertEquals(new \DateTime('Fri, 23 Aug 2014 00:00:00 GMT'), $response->getLastModified());
+        $this->assertEquals(new \DateTime('Fri, 24 Aug 2014 00:00:00 GMT'), $response->getExpires());
+        $this->assertEquals(30, $response->headers->getCacheControlDirective('s-maxage'));
+        $this->assertEquals(30, $response->getMaxAge());
+        $this->assertEquals(array('foobaz'), $response->getVary());
     }
 
     private function createRequest(Cache $cache = null)
