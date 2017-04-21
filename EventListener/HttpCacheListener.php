@@ -142,8 +142,6 @@ class HttpCacheListener implements EventSubscriberInterface
 
             unset($this->etags[$request]);
         }
-
-        $event->setResponse($response);
     }
 
     public static function getSubscribedEvents()
