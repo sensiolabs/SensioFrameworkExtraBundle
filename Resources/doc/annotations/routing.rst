@@ -177,3 +177,8 @@ PostController()`` itself::
     {
         // ...
     }
+
+.. tip::
+
+    You can also omit the ``service`` option if your service ID is your controller 
+    fully-qualified class name (FQCN).
