@@ -59,7 +59,10 @@ class TemplateListener implements EventSubscriberInterface
             return;
         }
 
-        $template->setOwner($controller = $event->getController());
+        $controller = $event->getController();
+        if (is_array($controller)) {
+            $template->setOwner($controller);
+        }
 
         // when no template has been given, try to resolve it based on the controller
         if (null === $template->getTemplate()) {
