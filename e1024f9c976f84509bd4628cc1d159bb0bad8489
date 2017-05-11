@@ -1,0 +1,65 @@
+---------------------------------------------------------------------------
+
+by dmaicher at 2017-02-11T20:29:41Z
+
+ping @fabpot
+
+---------------------------------------------------------------------------
+
+by magnetik at 2017-03-16T08:05:51Z
+
+I came across this through this SO question: https://stackoverflow.com/questions/33185264/how-to-register-a-expression-language-in-symfony/33185668
+
+---------------------------------------------------------------------------
+
+by dmaicher at 2017-05-04T14:28:36Z
+
+ping @fabpot
+
+---------------------------------------------------------------------------
+
+by fabpot at 2017-05-09T20:46:03Z
+
+@dmaicher  Apparently, tests do not pass.
+
+---------------------------------------------------------------------------
+
+by dmaicher at 2017-05-09T20:47:33Z
+
+@fabpot looks unrelated to me though? I can push again to see if it passes then.
+
+---------------------------------------------------------------------------
+
+by dmaicher at 2017-05-09T21:00:47Z
+
+```
+Testing SensioFrameworkExtraBundle
+
+......................................SSS.....SSSPHP Parse error:  syntax error, unexpected '?', expecting '&' or variable (T_VARIABLE) in /home/travis/build/sensiolabs/SensioFrameworkExtraBundle/Tests/Fixtures/ActionArgumentsBundle/Controller/NullableArgumentsController.php on line 43
+```
+
+Seems unrelated to me :cry:
+
+---------------------------------------------------------------------------
+
+by fabpot at 2017-05-09T21:03:37Z
+
+ah, you are on the master branch, so no releases yet. ok.
+
+---------------------------------------------------------------------------
+
+by dmaicher at 2017-05-09T21:04:19Z
+
+Should I change the base to a different branch?
+
+---------------------------------------------------------------------------
+
+by fabpot at 2017-05-09T21:10:33Z
+
+3.0 would be the best branch I think.
+
+---------------------------------------------------------------------------
+
+by dmaicher at 2017-05-09T21:21:28Z
+
+@fabpot done :wink:
