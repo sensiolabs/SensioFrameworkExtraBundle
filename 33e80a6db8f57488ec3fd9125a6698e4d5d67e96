@@ -1,0 +1,11 @@
+---------------------------------------------------------------------------
+
+by yceruto at 2017-05-08T14:54:54Z
+
+I've tagged wrong the branch, https://github.com/sensiolabs/SensioFrameworkExtraBundle/blob/master/Routing/AnnotatedRouteControllerLoader.php#L43, and I forgot to mention the `__invoke()` method too, but likely you are right and for 3.3 it is useless.
+
+---------------------------------------------------------------------------
+
+by dunglas at 2017-05-11T08:30:59Z
+
+@iltar, yes it works with both.
