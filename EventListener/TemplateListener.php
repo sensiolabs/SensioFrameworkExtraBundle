@@ -152,7 +152,8 @@ class TemplateListener implements EventSubscriberInterface
         // and assign them to the designated template
         foreach ($arguments as $argument) {
             if ($argument instanceof \ReflectionParameter) {
-                $parameters[$name = $argument->getName()] = !$request->attributes->has($name) && $argument->isDefaultValueAvailable() ? $argument->getDefaultValue() : $request->attributes->get($name);
+                $name = $argument->getName();
+                $parameters[$name] = !$request->attributes->has($name) && $argument->isDefaultValueAvailable() ? $argument->getDefaultValue() : $request->attributes->get($name);
             } else {
                 $parameters[$argument] = $request->attributes->get($argument);
             }
