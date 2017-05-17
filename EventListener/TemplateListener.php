@@ -95,7 +95,7 @@ class TemplateListener implements EventSubscriberInterface
             $owner = $template->getOwner();
             $controller = null;
             $action = null;
-            if ($owner && count($owner) >= 2) {
+            if (is_array($owner) && is_callable($owner)) {
                 list($controller, $action) = $owner;
             }
             $parameters = $this->resolveDefaultParameters($request, $template, $controller, $action);
