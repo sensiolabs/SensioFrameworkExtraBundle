@@ -66,6 +66,7 @@ class TemplateListenerTest extends \PHPUnit_Framework_TestCase
         $template = new Template(array());
         $request = new Request();
         $request->attributes->set('_template', $template);
+
         return $request;
     }
 }
