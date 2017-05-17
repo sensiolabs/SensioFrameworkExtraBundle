@@ -88,12 +88,16 @@ class TemplateListener implements EventSubscriberInterface
         }
 
         $parameters = $event->getControllerResult();
-        $owner = $template->getOwner();
-        list($controller, $action) = $owner;
 
         // when the annotation declares no default vars and the action returns
         // null, all action method arguments are used as default vars
         if (null === $parameters) {
+            $owner = $template->getOwner();
+            $controller = null;
+            $action = null;
+            if ($owner && count($owner) >= 2) {
+                list($controller, $action) = $owner;
+            }
             $parameters = $this->resolveDefaultParameters($request, $template, $controller, $action);
         }
 
@@ -135,7 +139,7 @@ class TemplateListener implements EventSubscriberInterface
         $parameters = array();
         $arguments = $template->getVars();
 
-        if (0 === count($arguments)) {
+        if (0 === count($arguments) && $controller && $action) {
             $r = new \ReflectionObject($controller);
 
             $arguments = array();
