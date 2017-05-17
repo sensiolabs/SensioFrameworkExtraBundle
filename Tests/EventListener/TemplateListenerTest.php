@@ -39,7 +39,7 @@ class TemplateListenerTest extends \PHPUnit_Framework_TestCase
                   ->with('sensio_framework_extra.view.guesser')
                   ->willReturn($guesser);
         $listener = new TemplateListener($container);
-        $controller = function (){};
+        $controller = function () {};
         $request = $this->getRequestWithTemplate();
         $event = new FilterControllerEvent($this->getKernelMock(), $controller, $request, HttpKernelInterface::MASTER_REQUEST);
         $listener->onKernelController($event);
