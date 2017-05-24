@@ -68,6 +68,26 @@ class DateTimeParamConverterTest extends \PHPUnit_Framework_TestCase
         $this->converter->apply($request, $config);
     }
 
+    public function testApplyWithYmdFormatAndNonStrict()
+    {
+        $request = new Request(array(), array(), array('start' => '2012-21-07'));
+        $config = $this->createConfiguration('DateTime', 'start');
+        $config->expects($this->any())->method('getOptions')->will($this->returnValue(array('format' => 'Y-m-d', 'strict' => true)));
+
+        $this->setExpectedException('Symfony\Component\HttpKernel\Exception\NotFoundHttpException', 'Invalid date given for parameter "start".');
+        $this->converter->apply($request, $config);
+    }
+
+    public function testApplyWithYmdFormatAndStrictInvalidDate404Exception()
+    {
+        $request = new Request(array(), array(), array('start' => '2012-21-07'));
+        $config = $this->createConfiguration('DateTime', 'start');
+        $config->expects($this->any())->method('getOptions')->will($this->returnValue(array('format' => 'Y-m-d', 'strict' => true)));
+
+        $this->setExpectedException('Symfony\Component\HttpKernel\Exception\NotFoundHttpException', 'Invalid date given for parameter "start".');
+        $this->converter->apply($request, $config);
+    }
+
     public function testApplyOptionalWithEmptyAttribute()
     {
         $request = new Request(array(), array(), array('start' => null));
