@@ -244,6 +244,8 @@ is accepted. You can be stricter with input given through the options::
     {
     }
 
+A date in a wrong format like ``2017-21-22`` will throw Exception.
+
 Creating a Converter
 --------------------
 
