@@ -40,8 +40,17 @@ class TemplateAnnotationTest extends WebTestCase
             array('/invokable/variable/container/the-var/', 'the-var'),
             array('/invokable/another-variable/container/another-var/', 'another-var'),
             array('/invokable/variable/container/the-var/another-var/', 'the-var,another-var'),
-            array('/no-listener/', 'I did not get rendered via twig'),
-            array('/streamed/', 'foo, bar'),
+            array('/no-listener/', 'I did not get rendered via twig')
         );
+    }
+
+    public function testStreamedControllerResponse()
+    {
+        ob_start();
+        $client = self::createClient();
+        $client->request('GET', '/streamed/');
+        $content = ob_get_clean();
+
+        $this->assertContains('foo, bar', $content);
     }
 }
