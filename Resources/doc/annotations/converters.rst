@@ -244,6 +244,18 @@ is accepted. You can be stricter with input given through the options::
     {
     }
 
+When using ``format`` option, you can use the ``strict`` option in order to
+validate strictly the input. Without this option activated, ``2017-21-22`` will
+be converted to ``2018-09-22``::
+
+    /**
+     * @Route("/blog/archive/{date}")
+     * @ParamConverter("date", options={"format": "Y-m-d", "strict": true})
+     */
+    public function archiveAction(\DateTime $date)
+    {
+    }
+
 Creating a Converter
 --------------------
 
