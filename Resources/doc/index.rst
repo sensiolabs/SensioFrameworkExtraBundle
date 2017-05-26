@@ -125,6 +125,7 @@ The following annotations are defined by the bundle:
 
 This example shows all the available annotations in action::
 
+    use Symfony\Bundle\FrameworkBundle\Controller\Controller;
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
