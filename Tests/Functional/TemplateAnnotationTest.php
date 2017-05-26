@@ -10,6 +10,7 @@
  */
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\DomCrawler\Crawler;
 
 class TemplateAnnotationTest extends WebTestCase
 {
@@ -46,11 +47,15 @@ class TemplateAnnotationTest extends WebTestCase
 
     public function testStreamedControllerResponse()
     {
+        $uri = '/streamed/';
+
         ob_start();
         $client = self::createClient();
-        $client->request('GET', '/streamed/');
-        $content = ob_get_clean();
+        $client->request('GET', $uri);
 
-        $this->assertContains('foo, bar', $content);
+        $crawler = new Crawler(null, $uri);
+        $crawler->addContent(ob_get_clean());
+
+        $this->assertEquals('foo, bar', $crawler->filterXPath('//body')->html());
     }
 }
