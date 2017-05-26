@@ -40,7 +40,7 @@ class TemplateAnnotationTest extends WebTestCase
             array('/invokable/variable/container/the-var/', 'the-var'),
             array('/invokable/another-variable/container/another-var/', 'another-var'),
             array('/invokable/variable/container/the-var/another-var/', 'the-var,another-var'),
-            array('/no-listener/', 'I did not get rendered via twig')
+            array('/no-listener/', 'I did not get rendered via twig'),
         );
     }
 

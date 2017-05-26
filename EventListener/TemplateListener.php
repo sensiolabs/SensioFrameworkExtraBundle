@@ -103,8 +103,7 @@ class TemplateListener implements EventSubscriberInterface
             };
 
             $event->setResponse(new StreamedResponse($callback));
-        }
-        else {
+        } else {
             $event->setResponse($templating->renderResponse($template->getTemplate(), $parameters));
         }
 
