@@ -11,7 +11,7 @@
 
 namespace Sensio\Bundle\FrameworkExtraBundle\EventListener;
 
-use Sensio\Bundle\FrameworkExtraBundle\Security\ExpressionLanguage;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpFoundation\Request;
