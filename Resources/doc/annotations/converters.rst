@@ -107,7 +107,7 @@ be configured with the ``entity_manager`` option::
 
     /**
      * @Route("/blog/{id}")
-     * @ParamConverter("post", class="SensioBlogBundle:Post", options={"entity_manager" = "foo"})
+     * @ParamConverter("post", class="SensioBlogBundle:Post", options={"entity_manager": "foo"})
      */
     public function showAction(Post $post)
     {
@@ -118,7 +118,7 @@ option::
 
     /**
      * @Route("/blog/{post_id}")
-     * @ParamConverter("post", class="SensioBlogBundle:Post", options={"id" = "post_id"})
+     * @ParamConverter("post", class="SensioBlogBundle:Post", options={"id": "post_id"})
      */
     public function showAction(Post $post)
     {
@@ -133,7 +133,7 @@ This also allows you to have multiple converters in one action::
 
     /**
      * @Route("/blog/{id}/comments/{comment_id}")
-     * @ParamConverter("comment", class="SensioBlogBundle:Comment", options={"id" = "comment_id"})
+     * @ParamConverter("comment", class="SensioBlogBundle:Comment", options={"id": "comment_id"})
      */
     public function showAction(Post $post, Comment $comment)
     {
@@ -171,7 +171,7 @@ to add joins to the query), you can add the ``repository_method`` option::
 
     /**
      * @Route("/blog/{id}")
-     * @ParamConverter("post", class="SensioBlogBundle:Post", options={"repository_method" = "findWithJoins"})
+     * @ParamConverter("post", class="SensioBlogBundle:Post", options={"repository_method": "findWithJoins"})
      */
     public function showAction(Post $post)
     {
@@ -188,9 +188,9 @@ the ``map_method_signature`` option to true. The default is false::
     /**
      * @Route("/user/{first_name}/{last_name}")
      * @ParamConverter("user", class="AcmeBlogBundle:User", options={
-     *    "repository_method" = "findByFullName",
+     *    "repository_method": "findByFullName",
      *    "mapping": {"first_name": "firstName", "last_name": "lastName"},
-     *    "map_method_signature" = true
+     *    "map_method_signature": true
      * })
      */
     public function showAction(User $user)
