@@ -24,11 +24,11 @@ class AddParamConverterPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        if (false === $container->hasDefinition('sensio_framework_extra.converter.manager')) {
+        if (false === $container->hasDefinition('Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager')) {
             return;
         }
 
-        $definition = $container->getDefinition('sensio_framework_extra.converter.manager');
+        $definition = $container->getDefinition('Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager');
 
         foreach ($container->findTaggedServiceIds('request.param_converter') as $id => $converters) {
             foreach ($converters as $converter) {

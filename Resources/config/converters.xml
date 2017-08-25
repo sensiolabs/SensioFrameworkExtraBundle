@@ -5,15 +5,15 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="sensio_framework_extra.converter.listener" class="Sensio\Bundle\FrameworkExtraBundle\EventListener\ParamConverterListener">
+        <service id="Sensio\Bundle\FrameworkExtraBundle\EventListener\ParamConverterListener" class="Sensio\Bundle\FrameworkExtraBundle\EventListener\ParamConverterListener">
             <tag name="kernel.event_subscriber" />
-            <argument type="service" id="sensio_framework_extra.converter.manager" />
+            <argument type="service" id="Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager" />
             <argument>true</argument>
         </service>
 
-        <service id="sensio_framework_extra.converter.manager" class="Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager" />
+        <service id="Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager" class="Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager" />
 
-        <service id="sensio_framework_extra.converter.doctrine.orm" class="Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter">
+        <service id="Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter" class="Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter">
             <tag name="request.param_converter" converter="doctrine.orm" />
             <argument type="service" id="doctrine" on-invalid="ignore" />
             <argument type="service" id="sensio_framework_extra.converter.doctrine.orm.expression_language" on-invalid="null" />
@@ -23,6 +23,6 @@
             <tag name="request.param_converter" converter="datetime" />
         </service>
 
-        <service id="sensio_framework_extra.converter.doctrine.orm.expression_language.default" class="Symfony\Component\ExpressionLanguage\ExpressionLanguage" public="false" />
+        <service id="Symfony\Component\ExpressionLanguage\ExpressionLanguage" class="Symfony\Component\ExpressionLanguage\ExpressionLanguage" public="false" />
     </services>
 </container>

@@ -49,9 +49,9 @@ class SensioFrameworkExtraExtension extends Extension
 
             $container->addResource(new ClassExistenceResource(ExpressionLanguage::class));
             if (class_exists(ExpressionLanguage::class)) {
-                $container->setAlias('sensio_framework_extra.converter.doctrine.orm.expression_language', new Alias('sensio_framework_extra.converter.doctrine.orm.expression_language.default', false));
+                $container->setAlias('sensio_framework_extra.converter.doctrine.orm.expression_language', new Alias('Symfony\Component\ExpressionLanguage\ExpressionLanguage', false));
             } else {
-                $container->removeDefinition('sensio_framework_extra.converter.doctrine.orm.expression_language.default');
+                $container->removeDefinition('Symfony\Component\ExpressionLanguage\ExpressionLanguage');
             }
 
             if (PHP_VERSION_ID < 70000) {
@@ -97,10 +97,10 @@ class SensioFrameworkExtraExtension extends Extension
                 if (class_exists(SecurityExpressionLanguage::class)) {
                     $container->setAlias('sensio_framework_extra.security.expression_language', new Alias($config['security']['expression_language'], false));
                 } else {
-                    $container->removeDefinition('sensio_framework_extra.security.expression_language.default');
+                    $container->removeDefinition('Sensio\Bundle\FrameworkExtraBundle\Security\ExpressionLanguage');
                 }
             } else {
-                $container->removeDefinition('sensio_framework_extra.security.expression_language.default');
+                $container->removeDefinition('Sensio\Bundle\FrameworkExtraBundle\Security\ExpressionLanguage');
             }
 
             if (PHP_VERSION_ID < 70000) {
@@ -125,13 +125,13 @@ class SensioFrameworkExtraExtension extends Extension
             }
 
             if ($config['request']['converters']) {
-                $container->getDefinition('sensio_framework_extra.converter.listener')->replaceArgument(1, $config['request']['auto_convert']);
+                $container->getDefinition('Sensio\Bundle\FrameworkExtraBundle\EventListener\ParamConverterListener')->replaceArgument(1, $config['request']['auto_convert']);
             }
         }
 
         if (!empty($config['templating']['controller_patterns'])) {
             $container
-                ->getDefinition('sensio_framework_extra.view.guesser')
+                ->getDefinition('Sensio\Bundle\FrameworkExtraBundle\Templating\TemplateGuesser')
                 ->addArgument($config['templating']['controller_patterns']);
         }
 

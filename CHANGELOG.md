@@ -4,6 +4,7 @@ CHANGELOG
 4.0
 ---
 
+ * renamed services to use their FQCN
  * allowed using multiple @Security annotations (class and method)
  * removed support for the Templating component (only plain Twig is supported)
  * removed unneeded phpdocs, converted protected to private properties
