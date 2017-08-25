@@ -12,7 +12,7 @@
     ],
     "require": {
         "symfony/framework-bundle": "~2.3|~3.0|~4.0",
-        "symfony/dependency-injection": "~2.3|~3.0|~4.0",
+        "symfony/dependency-injection": "~2.3|~3.0",
         "doctrine/common": "~2.2"
     },
     "require-dev": {

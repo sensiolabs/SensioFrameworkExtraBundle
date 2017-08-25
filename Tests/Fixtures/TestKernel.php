@@ -8,6 +8,9 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+
+namespace Tests\Fixtures;
+
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\HttpKernel\Kernel;
 
@@ -19,12 +22,12 @@ class TestKernel extends Kernel
     public function registerBundles()
     {
         return array(
-            new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
-            new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-            new Symfony\Bundle\TwigBundle\TwigBundle(),
-            new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
-            new Tests\Fixtures\FooBundle\FooBundle(),
-            new Tests\Fixtures\ActionArgumentsBundle\ActionArgumentsBundle(),
+            new \Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
+            new \Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
+            new \Symfony\Bundle\TwigBundle\TwigBundle(),
+            new \Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
+            new \Tests\Fixtures\FooBundle\FooBundle(),
+            new \Tests\Fixtures\ActionArgumentsBundle\ActionArgumentsBundle(),
         );
     }
 
@@ -42,3 +45,5 @@ class TestKernel extends Kernel
         return $this->rootDir.'/cache/'.$this->environment;
     }
 }
+
+class_alias('Tests\Fixtures\TestKernel', 'TestKernel');
