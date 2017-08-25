@@ -18,8 +18,6 @@ use Sensio\Bundle\FrameworkExtraBundle\DependencyInjection\Compiler\AddParamConv
 use Sensio\Bundle\FrameworkExtraBundle\DependencyInjection\Compiler\OptimizerPass;
 
 /**
- * SensioFrameworkExtraBundle.
- *
  * @author Fabien Potencier <fabien@symfony.com>
  */
 class SensioFrameworkExtraBundle extends Bundle

@@ -95,6 +95,8 @@ class TemplateListener implements EventSubscriberInterface
             };
 
             $event->setResponse(new StreamedResponse($callback));
+        } else {
+            $event->setResponse($templating->renderResponse($template->getTemplate(), $parameters));
         }
 
         // make sure the owner (controller+dependencies) is not cached or stored elsewhere

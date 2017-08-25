@@ -10,6 +10,7 @@
  */
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\DomCrawler\Crawler;
 
 class TemplateAnnotationTest extends WebTestCase
 {
@@ -41,7 +42,20 @@ class TemplateAnnotationTest extends WebTestCase
             array('/invokable/another-variable/container/another-var/', 'another-var'),
             array('/invokable/variable/container/the-var/another-var/', 'the-var,another-var'),
             array('/no-listener/', 'I did not get rendered via twig'),
-            array('/streamed/', 'foo, bar'),
         );
+    }
+
+    public function testStreamedControllerResponse()
+    {
+        $uri = '/streamed/';
+
+        ob_start();
+        $client = self::createClient();
+        $client->request('GET', $uri);
+
+        $crawler = new Crawler(null, $uri);
+        $crawler->addContent(ob_get_clean());
+
+        $this->assertEquals('foo, bar', $crawler->filterXPath('//body')->html());
     }
 }

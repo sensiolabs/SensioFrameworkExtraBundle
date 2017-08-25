@@ -7,7 +7,8 @@
         </testsuite>
     </testsuites>
     <php>
-        <server name="KERNEL_DIR" value="Tests/Fixtures/"/>
+        <server name="KERNEL_CLASS" value="Tests\Fixtures\TestKernel" />
+        <server name="KERNEL_DIR" value="Tests/Fixtures/" />
     </php>
     <filter>
         <whitelist>
