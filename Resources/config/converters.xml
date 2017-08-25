@@ -5,7 +5,7 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="Sensio\Bundle\FrameworkExtraBundle\EventListener\ParamConverterListener" class="Sensio\Bundle\FrameworkExtraBundle\EventListener\ParamConverterListener">
+        <service id="Sensio\Bundle\FrameworkExtraBundle\EventListener\ParamConverterListener" class="Sensio\Bundle\FrameworkExtraBundle\EventListener\ParamConverterListener" public="false">
             <tag name="kernel.event_subscriber" />
             <argument type="service" id="Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager" />
             <argument>true</argument>
@@ -13,13 +13,13 @@
 
         <service id="Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager" class="Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager" />
 
-        <service id="Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter" class="Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter">
+        <service id="Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter" class="Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter" public="false">
             <tag name="request.param_converter" converter="doctrine.orm" />
             <argument type="service" id="doctrine" on-invalid="ignore" />
             <argument type="service" id="sensio_framework_extra.converter.doctrine.orm.expression_language" on-invalid="null" />
         </service>
 
-        <service id="sensio_framework_extra.converter.datetime" class="Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DateTimeParamConverter">
+        <service id="sensio_framework_extra.converter.datetime" class="Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DateTimeParamConverter" public="false">
             <tag name="request.param_converter" converter="datetime" />
         </service>
 
