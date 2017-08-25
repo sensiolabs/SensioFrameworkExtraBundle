@@ -45,3 +45,5 @@ class TestKernel extends Kernel
         return $this->rootDir.'/cache/'.$this->environment;
     }
 }
+
+class_alias('Tests\Fixtures\TestKernel', 'TestKernel');
