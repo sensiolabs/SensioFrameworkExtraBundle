@@ -116,6 +116,9 @@ class TemplateGuesser
         do {
             $namespace = $reflectionClass->getNamespaceName();
             foreach ($bundles as $bundle) {
+                if ('Symfony\Bundle\FrameworkBundle' === $bundle->getNamespace()) {
+                    continue;
+                }
                 if (0 === strpos($namespace, $bundle->getNamespace())) {
                     return $bundle;
                 }
