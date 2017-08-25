@@ -59,7 +59,10 @@ class TemplateListener implements EventSubscriberInterface
             return;
         }
 
-        $template->setOwner($controller = $event->getController());
+        $controller = $event->getController();
+        if (is_array($controller)) {
+            $template->setOwner($controller);
+        }
 
         // when no template has been given, try to resolve it based on the controller
         if (null === $template->getTemplate()) {
@@ -85,12 +88,16 @@ class TemplateListener implements EventSubscriberInterface
         }
 
         $parameters = $event->getControllerResult();
-        $owner = $template->getOwner();
-        list($controller, $action) = $owner;
 
         // when the annotation declares no default vars and the action returns
         // null, all action method arguments are used as default vars
         if (null === $parameters) {
+            $owner = $template->getOwner();
+            $controller = null;
+            $action = null;
+            if (is_array($owner) && is_callable($owner)) {
+                list($controller, $action) = $owner;
+            }
             $parameters = $this->resolveDefaultParameters($request, $template, $controller, $action);
         }
 
@@ -132,7 +139,7 @@ class TemplateListener implements EventSubscriberInterface
         $parameters = array();
         $arguments = $template->getVars();
 
-        if (0 === count($arguments)) {
+        if (0 === count($arguments) && $controller && $action) {
             $r = new \ReflectionObject($controller);
 
             $arguments = array();
@@ -145,7 +152,8 @@ class TemplateListener implements EventSubscriberInterface
         // and assign them to the designated template
         foreach ($arguments as $argument) {
             if ($argument instanceof \ReflectionParameter) {
-                $parameters[$name = $argument->getName()] = !$request->attributes->has($name) && $argument->isDefaultValueAvailable() ? $argument->getDefaultValue() : $request->attributes->get($name);
+                $name = $argument->getName();
+                $parameters[$name] = !$request->attributes->has($name) && $argument->isDefaultValueAvailable() ? $argument->getDefaultValue() : $request->attributes->get($name);
             } else {
                 $parameters[$argument] = $request->attributes->get($argument);
             }
