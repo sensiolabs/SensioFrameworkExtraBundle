@@ -4,6 +4,7 @@ CHANGELOG
 4.0
 ---
 
+ * removed HHVM support
  * moved most services as private
  * renamed services to use their FQCN
  * allowed using multiple @Security annotations (class and method)
