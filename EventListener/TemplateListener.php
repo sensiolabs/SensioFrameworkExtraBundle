@@ -101,8 +101,6 @@ class TemplateListener implements EventSubscriberInterface
 
         // make sure the owner (controller+dependencies) is not cached or stored elsewhere
         $template->setOwner(array());
-
-        $event->setResponse(new Response($this->twig->render($template->getTemplate(), $parameters)));
     }
 
     /**
