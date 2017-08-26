@@ -115,17 +115,20 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('null', $this->response->getMaxAge());
         $this->assertInternalType('null', $this->response->getExpires());
         $this->assertFalse($this->response->headers->hasCacheControlDirective('s-maxage'));
+        $this->assertFalse($this->response->headers->hasCacheControlDirective('max-stale'));
 
         $this->request->attributes->set('_cache', new Cache(array(
             'expires' => 'tomorrow',
             'smaxage' => '15',
             'maxage' => '15',
+            'maxstale' => '5',
         )));
 
         $this->listener->onKernelResponse($this->event);
 
         $this->assertEquals('15', $this->response->getMaxAge());
         $this->assertEquals('15', $this->response->headers->getCacheControlDirective('s-maxage'));
+        $this->assertEquals('5', $this->response->headers->getCacheControlDirective('max-stale'));
         $this->assertInstanceOf('DateTime', $this->response->getExpires());
     }
 
@@ -134,12 +137,14 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
         $this->request->attributes->set('_cache', new Cache(array(
             'smaxage' => '1 day',
             'maxage' => '1 day',
+            'maxstale' => '1 day',
         )));
 
         $this->listener->onKernelResponse($this->event);
 
         $this->assertEquals(60 * 60 * 24, $this->response->headers->getCacheControlDirective('s-maxage'));
         $this->assertEquals(60 * 60 * 24, $this->response->getMaxAge());
+        $this->assertEquals(60 * 60 * 24, $this->response->headers->getCacheControlDirective('max-stale'));
     }
 
     public function testLastModifiedNotModifiedResponse()
