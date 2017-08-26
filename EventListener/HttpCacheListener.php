@@ -104,6 +104,10 @@ class HttpCacheListener implements EventSubscriberInterface
             $response->setSharedMaxAge($age);
         }
 
+        if ($configuration->mustRevalidate()) {
+            $response->headers->addCacheControlDirective('must-revalidate');
+        }
+
         if (!$response->headers->hasCacheControlDirective('max-age') && null !== $age = $configuration->getMaxAge()) {
             if (!is_numeric($age)) {
                 $now = microtime(true);

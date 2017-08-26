@@ -93,9 +93,9 @@ Attributes
 
 Here is a list of accepted attributes and their HTTP header equivalent:
 
-======================================================================= ================================
+======================================================================= ===================================================================
 Annotation                                                              Response Method
-======================================================================= ================================
+======================================================================= ===================================================================
 ``@Cache(expires="tomorrow")``                                          ``$response->setExpires()``
 ``@Cache(smaxage="15")``                                                ``$response->setSharedMaxAge()``
 ``@Cache(maxage="15")``                                                 ``$response->setMaxAge()``
@@ -103,4 +103,5 @@ Annotation                                                              Response
 ``@Cache(public=true)``                                                 ``$response->setPublic()``
 ``@Cache(lastModified="post.getUpdatedAt()")``                          ``$response->setLastModified()``
 ``@Cache(ETag="post.getId() ~ post.getUpdatedAt().getTimestamp()")``    ``$response->setETag()``
-======================================================================= ================================
+``@Cache(mustRevalidate=true)``                                         ``$response->headers->addCacheControlDirective('must-revalidate')``
+======================================================================= ===================================================================

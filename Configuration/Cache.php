@@ -50,6 +50,13 @@ class Cache extends ConfigurationAnnotation
     private $public;
 
     /**
+     * Whether or not the response must be revalidated.
+     *
+     * @var bool
+     */
+    private $mustRevalidate;
+
+    /**
      * Additional "Vary:"-headers.
      *
      * @var array
@@ -140,6 +147,24 @@ class Cache extends ConfigurationAnnotation
     public function isPublic()
     {
         return $this->public === true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function mustRevalidate()
+    {
+        return $this->mustRevalidate === true;
+    }
+
+    /**
+     * Forces a response to be revalidated.
+     *
+     * @param bool $mustRevalidate
+     */
+    public function setMustRevalidate($mustRevalidate)
+    {
+        $this->mustRevalidate = (bool) $mustRevalidate;
     }
 
     /**
