@@ -118,6 +118,16 @@ class HttpCacheListener implements EventSubscriberInterface
             $response->setMaxAge($age);
         }
 
+        if (!$response->headers->hasCacheControlDirective('max-stale') && null !== $stale = $configuration->getMaxStale()) {
+            if (!is_numeric($stale)) {
+                $now = microtime(true);
+
+                $stale = ceil(strtotime($configuration->getMaxStale(), $now) - $now);
+            }
+
+            $response->headers->addCacheControlDirective('max-stale', $stale);
+        }
+
         if (!$response->headers->has('Expires') && null !== $configuration->getExpires()) {
             $date = \DateTime::createFromFormat('U', strtotime($configuration->getExpires()), new \DateTimeZone('UTC'));
             $response->setExpires($date);

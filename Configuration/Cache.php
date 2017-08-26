@@ -78,6 +78,11 @@ class Cache extends ConfigurationAnnotation
     private $etag;
 
     /**
+     * @var int
+     */
+    private $maxStale;
+
+    /**
      * Returns the expiration date for the Expires header field.
      *
      * @return string
@@ -245,6 +250,24 @@ class Cache extends ConfigurationAnnotation
     public function getEtag()
     {
         return $this->etag;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaxStale()
+    {
+        return $this->maxStale;
+    }
+
+    /**
+     * Sets the number of seconds for the max-stale cache-control header field.
+     *
+     * @param int $maxStale A number of seconds
+     */
+    public function setMaxStale($maxStale)
+    {
+        $this->maxStale = $maxStale;
     }
 
     /**
