@@ -107,6 +107,12 @@ class DoctrineParamConverter implements ParamConverterInterface
             $method = $options['repository_method'];
         } else {
             $method = 'find';
+            $em = $this->getManager($options['entity_manager'], $class);
+            $metadata = $em->getClassMetadata($class);
+
+            if (count($metadata->getIdentifier()) > 1 || !$metadata->isIdentifier($name)) {
+                return false;
+            }
         }
 
         try {
@@ -180,7 +186,7 @@ class DoctrineParamConverter implements ParamConverterInterface
         }
 
         if ($options['strip_null']) {
-            $criteria = array_filter($criteria, function ($value) { return !is_null($value); });
+            $criteria = array_filter($criteria, function ($value) { return null !== $value; });
         }
 
         if (!$criteria) {

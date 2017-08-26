@@ -138,9 +138,24 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
 
         $config = $this->createConfiguration('stdClass', array('id' => 'id'), 'arg');
 
+        $classMetadata = $this->getMockBuilder('Doctrine\Common\Persistence\Mapping\ClassMetadata')->getMock();
         $manager = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')->getMock();
         $objectRepository = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectRepository')->getMock();
-        $this->registry->expects($this->once())
+
+        $classMetadata->expects($this->once())
+            ->method('getIdentifier')
+            ->will($this->returnValue(array('id')));
+        $classMetadata->expects($this->once())
+            ->method('isIdentifier')
+            ->with('arg')
+            ->will($this->returnValue(true));
+
+        $manager->expects($this->once())
+            ->method('getClassMetadata')
+            ->with('stdClass')
+            ->will($this->returnValue($classMetadata));
+
+        $this->registry->expects($this->exactly(2))
               ->method('getManagerForClass')
               ->with('stdClass')
               ->will($this->returnValue($manager));
@@ -159,6 +174,78 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($ret);
         $this->assertSame($object, $request->attributes->get('arg'));
+    }
+
+    public function testApplyDoesntCallFindIfArgumentIsNotAnId()
+    {
+        $request = new Request();
+        $request->attributes->set('email', 'foo@bar.baz');
+
+        $config = $this->createConfiguration('stdClass', array('id' => 'email'), 'arg', true);
+
+        $classMetadata = $this->getMockBuilder('Doctrine\Common\Persistence\Mapping\ClassMetadata')->getMock();
+        $manager = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')->getMock();
+        $objectRepository = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectRepository')->getMock();
+
+        $classMetadata->expects($this->once())
+            ->method('getIdentifier')
+            ->will($this->returnValue(array('id')));
+        $classMetadata->expects($this->once())
+            ->method('isIdentifier')
+            ->with('arg')
+            ->will($this->returnValue(false));
+
+        $manager->expects($this->exactly(2))
+            ->method('getClassMetadata')
+            ->with('stdClass')
+            ->will($this->returnValue($classMetadata));
+
+        $this->registry->expects($this->exactly(2))
+              ->method('getManagerForClass')
+              ->with('stdClass')
+              ->will($this->returnValue($manager));
+
+        $objectRepository->expects($this->never())
+            ->method('find');
+
+        $ret = $this->converter->apply($request, $config);
+
+        $this->assertTrue($ret);
+    }
+
+    public function testApplyWithCompositeId()
+    {
+        $request = new Request();
+        $request->attributes->set('email', 'foo@bar.baz');
+
+        $config = $this->createConfiguration('stdClass', array('id' => 'email'), 'arg', true);
+
+        $classMetadata = $this->getMockBuilder('Doctrine\Common\Persistence\Mapping\ClassMetadata')->getMock();
+        $manager = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')->getMock();
+        $objectRepository = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectRepository')->getMock();
+
+        $classMetadata->expects($this->once())
+            ->method('getIdentifier')
+            ->will($this->returnValue(array('id', 'email')));
+        $classMetadata->expects($this->never())
+            ->method('isIdentifier');
+
+        $manager->expects($this->exactly(2))
+            ->method('getClassMetadata')
+            ->with('stdClass')
+            ->will($this->returnValue($classMetadata));
+
+        $this->registry->expects($this->exactly(2))
+            ->method('getManagerForClass')
+            ->with('stdClass')
+            ->will($this->returnValue($manager));
+
+        $objectRepository->expects($this->never())
+            ->method('find');
+
+        $ret = $this->converter->apply($request, $config);
+
+        $this->assertTrue($ret);
     }
 
     public function testUsedProperIdentifier()
