@@ -207,7 +207,7 @@ class Cache extends ConfigurationAnnotation
      *
      * @param string $expression
      */
-    public function setETag($expression)
+    public function setEtag($expression)
     {
         $this->etag = $expression;
     }
@@ -217,7 +217,7 @@ class Cache extends ConfigurationAnnotation
      *
      * @return string
      */
-    public function getETag()
+    public function getEtag()
     {
         return $this->etag;
     }

@@ -177,7 +177,7 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Fri, 23 Aug 2013 00:00:00 GMT', $response->headers->get('Last-Modified'));
     }
 
-    public function testETagNotModifiedResponse()
+    public function testEtagNotModifiedResponse()
     {
         $request = $this->createRequest(new Cache(array('etag' => 'test.getId()')));
         $request->attributes->set('test', $entity = new TestEntity());
@@ -192,7 +192,7 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(304, $response->getStatusCode());
     }
 
-    public function testETagHeader()
+    public function testEtagHeader()
     {
         $request = $this->createRequest(new Cache(array('ETag' => 'test.getId()')));
         $request->attributes->set('test', $entity = new TestEntity());
