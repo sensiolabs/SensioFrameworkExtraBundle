@@ -45,7 +45,7 @@ class ParamConverter extends ConfigurationAnnotation
      *
      * @var bool
      */
-    private $optional = false;
+    private $isOptional = false;
 
     /**
      * Use explicitly named converter instead of iterating by priorities.
@@ -131,7 +131,7 @@ class ParamConverter extends ConfigurationAnnotation
      */
     public function setIsOptional($optional)
     {
-        $this->optional = (bool) $optional;
+        $this->isOptional = (bool) $optional;
     }
 
     /**
@@ -141,7 +141,7 @@ class ParamConverter extends ConfigurationAnnotation
      */
     public function isOptional()
     {
-        return $this->optional;
+        return $this->isOptional;
     }
 
     /**
