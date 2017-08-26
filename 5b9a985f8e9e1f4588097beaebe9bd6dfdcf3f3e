@@ -1,0 +1,19 @@
+---------------------------------------------------------------------------
+
+by iltar at 2017-04-20T11:44:51Z
+
+I think something is wrong with your PR, there are way too many changes in there unrelated to what you're trying to fix. Make sure you pick the same branch to based your changes off as to what you used in git.
+
+---------------------------------------------------------------------------
+
+by chs2 at 2017-04-20T11:57:19Z
+
+Right.
+I first made it from master to master, then tried to move from 3.0 to 3.0 (don't mind the branch name on my fork).
+By the way, which target branch is recommended ?
+
+---------------------------------------------------------------------------
+
+by iltar at 2017-04-20T12:08:57Z
+
+I think the best target is the master, so you should probably base your feature/topic branch on the master as well.
