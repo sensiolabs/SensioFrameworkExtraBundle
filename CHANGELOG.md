@@ -4,6 +4,7 @@ CHANGELOG
 4.0
 ---
 
+ * Response cache headers set in controllers now take precedence over the ones defined with the @Cache annotation
  * removed HHVM support
  * moved most services as private
  * renamed services to use their FQCN
