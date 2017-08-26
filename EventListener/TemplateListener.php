@@ -60,7 +60,7 @@ class TemplateListener implements EventSubscriberInterface
 
         // when no template has been given, try to resolve it based on the controller
         if (null === $template->getTemplate()) {
-            $template->setTemplate($this->templateGuesser->guessTemplateName($controller, $request));
+            $template->setTemplate($this->templateGuesser->guessTemplateName($controller, $request, $template->getInApp()));
         }
     }
 
