@@ -94,7 +94,8 @@ class HttpCacheListener implements EventSubscriberInterface
             return;
         }
 
-        if (null !== $age = $configuration->getSMaxAge()) {
+        if (!$response->headers->hasCacheControlDirective('s-maxage')
+            && null !== $age = $configuration->getSMaxAge()) {
             if (!is_numeric($age)) {
                 $now = microtime(true);
 
@@ -104,7 +105,8 @@ class HttpCacheListener implements EventSubscriberInterface
             $response->setSharedMaxAge($age);
         }
 
-        if (null !== $age = $configuration->getMaxAge()) {
+        if (!$response->headers->hasCacheControlDirective('max-age')
+            && null !== $age = $configuration->getMaxAge()) {
             if (!is_numeric($age)) {
                 $now = microtime(true);
 
@@ -114,12 +116,14 @@ class HttpCacheListener implements EventSubscriberInterface
             $response->setMaxAge($age);
         }
 
-        if (null !== $configuration->getExpires()) {
+        if (!$response->headers->has('Expires')
+            && null !== $configuration->getExpires()) {
             $date = \DateTime::createFromFormat('U', strtotime($configuration->getExpires()), new \DateTimeZone('UTC'));
             $response->setExpires($date);
         }
 
-        if (null !== $configuration->getVary()) {
+        if (!$response->headers->has('Vary')
+            && null !== $configuration->getVary()) {
             $response->setVary($configuration->getVary());
         }
 
@@ -131,13 +135,15 @@ class HttpCacheListener implements EventSubscriberInterface
             $response->setPrivate();
         }
 
-        if (isset($this->lastModifiedDates[$request])) {
+        if (!$response->headers->has('Last-Modified')
+            && isset($this->lastModifiedDates[$request])) {
             $response->setLastModified($this->lastModifiedDates[$request]);
 
             unset($this->lastModifiedDates[$request]);
         }
 
-        if (isset($this->etags[$request])) {
+        if (!$response->headers->has('Etag')
+            && isset($this->etags[$request])) {
             $response->setETag($this->etags[$request]);
 
             unset($this->etags[$request]);
