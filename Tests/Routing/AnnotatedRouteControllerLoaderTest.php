@@ -127,7 +127,7 @@ class AnnotatedRouteControllerLoaderTest extends \PHPUnit_Framework_TestCase
         $rc = $loader->load('Sensio\Bundle\FrameworkExtraBundle\Tests\Routing\Fixtures\FoobarController');
 
         $this->assertInstanceOf('Symfony\Component\Routing\RouteCollection', $rc);
-        $this->assertCount(2, $rc);
+        $this->assertCount(3, $rc);
 
         $this->assertInstanceOf('Symfony\Component\Routing\Route', $rc->get('index'));
         // depending on the Symfony version, it can return GET or an empty array (on 2.3)
@@ -137,5 +137,10 @@ class AnnotatedRouteControllerLoaderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('Symfony\Component\Routing\Route', $rc->get('new'));
         $this->assertEquals(array('POST'), $rc->get('new')->getMethods());
+
+        $noNameRoute = $rc->get('sensio_framework_extra_tests_routing_fixtures_foobar_no_name');
+        $this->assertInstanceOf('Symfony\Component\Routing\Route', $noNameRoute);
+        $methods = $noNameRoute->getMethods();
+        $this->assertTrue(empty($methods) || array('GET') == $methods);
     }
 }
