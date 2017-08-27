@@ -168,6 +168,29 @@ class ParamConverterManagerTest extends \PHPUnit_Framework_TestCase
         $manager->apply($request, array($configuration));
     }
 
+    public function testApplyNotCalledIfTheConfigurationIsNotForAParamConverter()
+    {
+        $converter = $this->createParamConverterMock();
+        $converter
+            ->expects($this->never())
+            ->method('supports')
+        ;
+
+        $converter
+            ->expects($this->never())
+            ->method('apply')
+        ;
+
+        $request = new Request();
+        $request->attributes->set('converted', new \stdClass());
+
+        $configuration = new Configuration\Template(array());
+
+        $manager = new ParamConverterManager();
+        $manager->add($converter);
+        $manager->apply($request, array($configuration));
+    }
+
     private function createParamConverterMock()
     {
         return $this->getMockBuilder('Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface')->getMock();

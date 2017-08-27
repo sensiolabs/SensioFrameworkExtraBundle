@@ -13,6 +13,7 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter;
 
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 /**
  * Managers converters.
@@ -54,12 +55,7 @@ class ParamConverterManager
      */
     private function applyConverter(Request $request, ConfigurationInterface $configuration)
     {
-        $value = $request->attributes->get($configuration->getName());
-        $className = $configuration->getClass();
-
-        // If the value is already an instance of the class we are trying to convert it into
-        // we should continue as no conversion is required
-        if (is_object($value) && $value instanceof $className) {
+        if ($this->requestCannotBeConverted($request, $configuration)) {
             return;
         }
 
@@ -95,6 +91,31 @@ class ParamConverterManager
     }
 
     /**
+     * True if the configuration is not for a ParamConverter
+     * or if the value has already been transformed.
+     *
+     * @param Request                $request
+     * @param ConfigurationInterface $configuration
+     *
+     * @return bool
+     */
+    private function requestCannotBeConverted(Request $request, ConfigurationInterface $configuration)
+    {
+        if (false === $configuration instanceof ParamConverter) {
+            return true;
+        }
+
+        $value = $request->attributes->get($configuration->getName());
+        $className = $configuration->getClass();
+
+        if (is_object($value) && $value instanceof $className) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Adds a parameter converter.
      *
      * Converters match either explicitly via $name or by iteration over all
@@ -102,8 +123,8 @@ class ParamConverterManager
      * added converter will not be part of the iteration chain and can only
      * be invoked explicitly.
      *
-     * @param int    $priority The priority (between -10 and 10).
-     * @param string $name     Name of the converter.
+     * @param int    $priority the priority (between -10 and 10)
+     * @param string $name     name of the converter
      */
     public function add(ParamConverterInterface $converter, $priority = 0, $name = null)
     {
@@ -120,20 +141,20 @@ class ParamConverterManager
         }
     }
 
-   /**
-    * Returns all registered param converters.
-    *
-    * @return array An array of param converters
-    */
-   public function all()
-   {
-       krsort($this->converters);
+    /**
+     * Returns all registered param converters.
+     *
+     * @return array An array of param converters
+     */
+    public function all()
+    {
+        krsort($this->converters);
 
-       $converters = array();
-       foreach ($this->converters as $all) {
-           $converters = array_merge($converters, $all);
-       }
+        $converters = array();
+        foreach ($this->converters as $all) {
+            $converters = array_merge($converters, $all);
+        }
 
-       return $converters;
-   }
+        return $converters;
+    }
 }
