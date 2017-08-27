@@ -134,9 +134,10 @@ class AnnotatedRouteControllerLoader extends AnnotationClassLoader
         if ($classAnnot instanceof FrameworkExtraBundleRoute) {
             $routeNamePrefix = $classAnnot->getName();
             if ($routeNamePrefix) {
-                $name = $routeNamePrefix . '_' . str_replace($defaultControllerNamePrefix, '', $name);
+                $name = $routeNamePrefix.'_'.str_replace($defaultControllerNamePrefix, '', $name);
             }
         }
+
         return $name;
     }
 }
