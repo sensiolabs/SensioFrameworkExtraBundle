@@ -140,4 +140,17 @@ class AnnotatedRouteControllerLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Symfony\Component\Routing\Route', $route);
         $this->assertSame(array('_controller' => 'Sensio\Bundle\FrameworkExtraBundle\Tests\Routing\Fixtures\InvokableController'), $route->getDefaults());
     }
+
+    public function testLoadPrefixNamedController()
+    {
+        $loader = new AnnotatedRouteControllerLoader(new AnnotationReader());
+        AnnotationRegistry::registerLoader('class_exists');
+
+        $rc = $loader->load('Sensio\Bundle\FrameworkExtraBundle\Tests\Routing\Fixtures\PrefixNamedController');
+
+        $this->assertInstanceOf('Symfony\Component\Routing\RouteCollection', $rc);
+        $this->assertCount(2, $rc);
+        $this->assertInstanceOf('Symfony\Component\Routing\Route', $rc->get('routenameprefix_index'));
+        $this->assertInstanceOf('Symfony\Component\Routing\Route', $rc->get('routenameprefix_new'));
+    }
 }

@@ -111,6 +111,30 @@ The ``name`` attribute can be used to override this default route name::
         // ...
     }
 
+A route name prefix can also be defined in the class ``@Route`` annotation.
+
+As in the following example, routes will be named ``blog_home`` and ``blog_view``::
+
+    /**
+     * @Route(name="blog")
+     */
+    class PostController extends Controller
+    {
+         /**
+          * @Route("/", name="home")
+          */
+         public function indexAction()
+         {
+         }
+
+         /**
+          * @Route("/view")
+          */
+         public function viewAction()
+         {
+         }
+    }
+
 Route Prefix
 ------------
 
