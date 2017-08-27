@@ -56,9 +56,9 @@ class HttpCacheListener implements EventSubscriberInterface
         }
 
         $etag = '';
-        if ($configuration->getETag()) {
-            $etag = hash('sha256', $this->getExpressionLanguage()->evaluate($configuration->getETag(), $request->attributes->all()));
-            $response->setETag($etag);
+        if ($configuration->getEtag()) {
+            $etag = hash('sha256', $this->getExpressionLanguage()->evaluate($configuration->getEtag(), $request->attributes->all()));
+            $response->setEtag($etag);
         }
 
         if ($response->isNotModified($request)) {
@@ -142,7 +142,7 @@ class HttpCacheListener implements EventSubscriberInterface
         }
 
         if (!$response->headers->has('Etag') && isset($this->etags[$request])) {
-            $response->setETag($this->etags[$request]);
+            $response->setEtag($this->etags[$request]);
 
             unset($this->etags[$request]);
         }
