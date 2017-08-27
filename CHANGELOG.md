@@ -4,6 +4,7 @@ CHANGELOG
 4.0
 ---
 
+ * added must-revalidate support for @Cache annotation
  * Response cache headers set in controllers now take precedence over the ones defined with the @Cache annotation
  * removed HHVM support
  * moved most services as private
