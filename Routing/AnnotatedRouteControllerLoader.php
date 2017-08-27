@@ -15,6 +15,7 @@ use Symfony\Component\Routing\Loader\AnnotationClassLoader;
 use Symfony\Component\Routing\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route as FrameworkExtraBundleRoute;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Routing\RouteCollection;
 
 /**
  * AnnotatedRouteControllerLoader is an implementation of AnnotationClassLoader
@@ -83,5 +84,59 @@ class AnnotatedRouteControllerLoader extends AnnotationClassLoader
             array('_', '\\1', '_'),
             $routeName
         );
+    }
+
+    protected function addRoute(RouteCollection $collection, $annot, $globals, \ReflectionClass $class, \ReflectionMethod $method)
+    {
+        $name = $this->getRouteName($annot, $class, $method);
+
+        $defaults = array_replace($globals['defaults'], $annot->getDefaults());
+        foreach ($method->getParameters() as $param) {
+            if (false !== strpos($globals['path'].$annot->getPath(), sprintf('{%s}', $param->getName())) && !isset($defaults[$param->getName()]) && $param->isDefaultValueAvailable()) {
+                $defaults[$param->getName()] = $param->getDefaultValue();
+            }
+        }
+        $requirements = array_replace($globals['requirements'], $annot->getRequirements());
+        $options = array_replace($globals['options'], $annot->getOptions());
+        $schemes = array_merge($globals['schemes'], $annot->getSchemes());
+        $methods = array_merge($globals['methods'], $annot->getMethods());
+
+        $host = $annot->getHost();
+        if (null === $host) {
+            $host = $globals['host'];
+        }
+
+        $condition = $annot->getCondition();
+        if (null === $condition) {
+            $condition = $globals['condition'];
+        }
+
+        $route = $this->createRoute($globals['path'].$annot->getPath(), $defaults, $requirements, $options, $host, $schemes, $methods, $condition);
+
+        $this->configureRoute($route, $class, $method, $annot);
+
+        $collection->add($name, $route);
+    }
+
+    protected function getRouteName($annot, \ReflectionClass $class, \ReflectionMethod $method)
+    {
+        $name = $annot->getName();
+        $defaultControllerNamePrefix = '';
+        if (null === $name) {
+            $name = $this->getDefaultRouteName($class, $method);
+            $defaultControllerNamePrefix = preg_replace(
+                array('/(bundle|controller)/', '/_+/'),
+                array('_', '_'),
+                strtolower(str_replace('\\', '_', $class->name))
+            );
+        }
+        $classAnnot = $this->reader->getClassAnnotation($class, $this->routeAnnotationClass);
+        if ($classAnnot instanceof FrameworkExtraBundleRoute) {
+            $routeNamePrefix = $classAnnot->getName();
+            if ($routeNamePrefix) {
+                $name = $routeNamePrefix . '_' . str_replace($defaultControllerNamePrefix, '', $name);
+            }
+        }
+        return $name;
     }
 }
