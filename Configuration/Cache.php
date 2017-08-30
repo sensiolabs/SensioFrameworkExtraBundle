@@ -78,7 +78,9 @@ class Cache extends ConfigurationAnnotation
     private $etag;
 
     /**
-     * @var int
+     * max-stale Cache-Control header
+     * It can be expressed in seconds or with a relative time format (1 day, 2 weeks, ...)
+     * @var int|string
      */
     private $maxStale;
 

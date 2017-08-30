@@ -122,7 +122,7 @@ class HttpCacheListener implements EventSubscriberInterface
             if (!is_numeric($stale)) {
                 $now = microtime(true);
 
-                $stale = ceil(strtotime($configuration->getMaxStale(), $now) - $now);
+                $stale = ceil(strtotime($stale, $now) - $now);
             }
 
             $response->headers->addCacheControlDirective('max-stale', $stale);
