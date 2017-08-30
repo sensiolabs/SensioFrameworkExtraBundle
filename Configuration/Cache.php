@@ -255,7 +255,7 @@ class Cache extends ConfigurationAnnotation
     }
 
     /**
-     * @return int
+     * @return int|string
      */
     public function getMaxStale()
     {
@@ -265,7 +265,7 @@ class Cache extends ConfigurationAnnotation
     /**
      * Sets the number of seconds for the max-stale cache-control header field.
      *
-     * @param int $maxStale A number of seconds
+     * @param int|string $maxStale A number of seconds
      */
     public function setMaxStale($maxStale)
     {
