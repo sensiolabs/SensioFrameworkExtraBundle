@@ -106,3 +106,7 @@ Annotation                                                              Response
 ``@Cache(Etag="post.getId() ~ post.getUpdatedAt().getTimestamp()")``    ``$response->setEtag()``
 ``@Cache(mustRevalidate=true)``                                         ``$response->headers->addCacheControlDirective('must-revalidate')``
 ======================================================================= ===================================================================
+
+.. note::
+
+    smaxage, maxage and maxstale attributes can also get a string with relative time format (1 day, 2 weeks, ...).
