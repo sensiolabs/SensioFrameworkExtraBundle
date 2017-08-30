@@ -102,8 +102,8 @@ class ParamConverterManager
      * added converter will not be part of the iteration chain and can only
      * be invoked explicitly.
      *
-     * @param int    $priority The priority (between -10 and 10).
-     * @param string $name     Name of the converter.
+     * @param int    $priority the priority (between -10 and 10)
+     * @param string $name     name of the converter
      */
     public function add(ParamConverterInterface $converter, $priority = 0, $name = null)
     {
@@ -120,20 +120,20 @@ class ParamConverterManager
         }
     }
 
-   /**
-    * Returns all registered param converters.
-    *
-    * @return array An array of param converters
-    */
-   public function all()
-   {
-       krsort($this->converters);
+    /**
+     * Returns all registered param converters.
+     *
+     * @return array An array of param converters
+     */
+    public function all()
+    {
+        krsort($this->converters);
 
-       $converters = array();
-       foreach ($this->converters as $all) {
-           $converters = array_merge($converters, $all);
-       }
+        $converters = array();
+        foreach ($this->converters as $all) {
+            $converters = array_merge($converters, $all);
+        }
 
-       return $converters;
-   }
+        return $converters;
+    }
 }
