@@ -95,11 +95,7 @@ class HttpCacheListener implements EventSubscriberInterface
         }
 
         if (!$response->headers->hasCacheControlDirective('s-maxage') && null !== $age = $configuration->getSMaxAge()) {
-            if (!is_numeric($age)) {
-                $now = microtime(true);
-
-                $age = ceil(strtotime($configuration->getSMaxAge(), $now) - $now);
-            }
+            $age = $this->convertToSecondsIfNeeded($age);
 
             $response->setSharedMaxAge($age);
         }
@@ -109,21 +105,13 @@ class HttpCacheListener implements EventSubscriberInterface
         }
 
         if (!$response->headers->hasCacheControlDirective('max-age') && null !== $age = $configuration->getMaxAge()) {
-            if (!is_numeric($age)) {
-                $now = microtime(true);
-
-                $age = ceil(strtotime($configuration->getMaxAge(), $now) - $now);
-            }
+            $age = $this->convertToSecondsIfNeeded($age);
 
             $response->setMaxAge($age);
         }
 
         if (!$response->headers->hasCacheControlDirective('max-stale') && null !== $stale = $configuration->getMaxStale()) {
-            if (!is_numeric($stale)) {
-                $now = microtime(true);
-
-                $stale = ceil(strtotime($stale, $now) - $now);
-            }
+            $stale = $this->convertToSecondsIfNeeded($stale);
 
             $response->headers->addCacheControlDirective('max-stale', $stale);
         }
@@ -176,5 +164,19 @@ class HttpCacheListener implements EventSubscriberInterface
         }
 
         return $this->expressionLanguage;
+    }
+
+    /**
+     * @param int|string $time Time that can be either expressed in seconds or with relative time format (1 day, 2 weeks, ...)
+     * @return int
+     */
+    private function convertToSecondsIfNeeded($time)
+    {
+        if (!is_numeric($time)) {
+            $now = microtime(true);
+
+            $time = ceil(strtotime($time, $now) - $now);
+        }
+        return $time;
     }
 }
