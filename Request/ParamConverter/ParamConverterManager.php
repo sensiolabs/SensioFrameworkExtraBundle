@@ -11,8 +11,8 @@
 
 namespace Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
 
 /**
  * Managers converters.
@@ -52,7 +52,7 @@ class ParamConverterManager
     /**
      * Applies converter on request based on the given configuration.
      */
-    private function applyConverter(Request $request, ConfigurationInterface $configuration)
+    private function applyConverter(Request $request, ParamConverter $configuration)
     {
         $value = $request->attributes->get($configuration->getName());
         $className = $configuration->getClass();
