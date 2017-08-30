@@ -168,6 +168,7 @@ class HttpCacheListener implements EventSubscriberInterface
 
     /**
      * @param int|string $time Time that can be either expressed in seconds or with relative time format (1 day, 2 weeks, ...)
+     *
      * @return int
      */
     private function convertToSecondsIfNeeded($time)
@@ -177,6 +178,7 @@ class HttpCacheListener implements EventSubscriberInterface
 
             $time = ceil(strtotime($time, $now) - $now);
         }
+
         return $time;
     }
 }
