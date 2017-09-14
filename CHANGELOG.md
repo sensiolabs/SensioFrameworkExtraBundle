@@ -4,6 +4,7 @@ CHANGELOG
 4.0
 ---
 
+ * added cache-control max-stale support
  * renamed setETag to setEtag for consistency with Symfony core (use Etag in @Cache now instead of ETag)
  * added must-revalidate support for @Cache annotation
  * Response cache headers set in controllers now take precedence over the ones defined with the @Cache annotation
