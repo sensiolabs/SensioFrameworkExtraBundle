@@ -25,4 +25,11 @@ class FoobarController
     public function newAction()
     {
     }
+
+    /**
+     * @Route("/no-name")
+     */
+    public function noNameAction()
+    {
+    }
 }
