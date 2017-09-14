@@ -80,11 +80,12 @@ class AnnotatedRouteControllerLoader extends AnnotationClassLoader
      */
     protected function getDefaultRouteName(\ReflectionClass $class, \ReflectionMethod $method)
     {
-        $routeName = parent::getDefaultRouteName($class, $method);
+        $classMethodParsed = preg_replace('/([a-z])([A-Z])/', '$1_$2', $class->name.'_'.$method->name);
+        $routeName = strtolower(str_replace('\\', '_', $classMethodParsed));
 
         return preg_replace(array(
             '/(bundle|controller)_/',
-            '/action(_\d+)?$/',
+            '/_action(_\d+)?$/',
             '/__/',
         ), array(
             '_',
