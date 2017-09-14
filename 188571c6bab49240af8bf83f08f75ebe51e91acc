@@ -1,0 +1,12 @@
+---------------------------------------------------------------------------
+
+by fabpot at 2017-08-30T15:03:37Z
+
+Can you rebase to get rid of the merge commit?
+
+---------------------------------------------------------------------------
+
+by laurent35240 at 2017-08-30T20:25:13Z
+
+Note added in the doc to indicate that we can use string for max, smaxage and maxstale.
+I also did some code refactoring on the conversion from string to seconds for these 3 parameters
