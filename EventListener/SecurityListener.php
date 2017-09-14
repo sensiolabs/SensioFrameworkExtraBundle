@@ -84,6 +84,7 @@ class SecurityListener implements EventSubscriberInterface
             'token' => $token,
             'user' => $token->getUser(),
             'object' => $request,
+            'subject' => $request,
             'request' => $request,
             'roles' => array_map(function ($role) { return $role->getRole(); }, $roles),
             'trust_resolver' => $this->trustResolver,
