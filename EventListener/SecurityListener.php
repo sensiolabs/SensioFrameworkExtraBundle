@@ -92,6 +92,11 @@ class SecurityListener implements EventSubscriberInterface
             'auth_checker' => $this->authChecker,
         );
 
+        if ($diff = array_intersect(array_keys($variables), array_keys($request->attributes->all()))) {
+            $singular = 1 === count($diff);
+            throw new \RuntimeException(sprintf('Request attribute%s "%s" cannot be defined as %s collide%s with built-in security expression variables.', $singular ? '' : 's', implode('", "', $diff), $singular ? 'it' : 'they', $singular ? 's' : ''));
+        }
+
         // controller variables should also be accessible
         return array_merge($request->attributes->all(), $variables);
     }

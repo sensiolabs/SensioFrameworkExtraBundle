@@ -22,14 +22,37 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 class SecurityListenerTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @expectedException        \RuntimeException
+     * @expectedExceptionMessage Request attribute "user" cannot be defined as it collides with built-in security expression variables.
+     */
+    public function testReservedVariable()
+    {
+        $token = $this->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\TokenInterface')->getMock();
+        $token->expects($this->once())->method('getRoles')->will($this->returnValue(array()));
+
+        $tokenStorage = $this->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface')->getMock();
+        $tokenStorage->expects($this->exactly(2))->method('getToken')->will($this->returnValue($token));
+
+        $authChecker = $this->getMockBuilder('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface')->getMock();
+
+        $trustResolver = $this->getMockBuilder('Symfony\Component\Security\Core\Authentication\AuthenticationTrustResolverInterface')->getMock();
+
+        $language = new ExpressionLanguage();
+
+        $listener = new SecurityListener($language, $trustResolver, null, $tokenStorage, $authChecker);
+        $request = $this->createRequest(new Security(array('expression' => 'has_role("ROLE_ADMIN") or is_granted("FOO")')));
+        $request->attributes->set('user', 'myuser');
+
+        $event = new FilterControllerEvent($this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock(), function () { return new Response(); }, $request, null);
+
+        $listener->onKernelController($event);
+    }
+
+    /**
      * @expectedException \Symfony\Component\Security\Core\Exception\AccessDeniedException
      */
     public function testAccessDenied()
     {
-        if (!interface_exists('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface')) {
-            $this->markTestSkipped();
-        }
-
         $token = $this->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\TokenInterface')->getMock();
         $token->expects($this->once())->method('getRoles')->will($this->returnValue(array()));
 

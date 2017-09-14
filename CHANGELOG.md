@@ -4,6 +4,7 @@ CHANGELOG
 4.0
 ---
 
+ * a RuntimeException is now thrown when a reserved variable is used in a security expression
  * added cache-control max-stale support
  * renamed setETag to setEtag for consistency with Symfony core (use Etag in @Cache now instead of ETag)
  * added must-revalidate support for @Cache annotation
