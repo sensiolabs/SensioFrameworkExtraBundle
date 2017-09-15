@@ -4,6 +4,7 @@ CHANGELOG
 4.0
 ---
 
+ * allowed to customize the @security message and status code
  * changed template name generation from camelCase to under_score
  * removed support for bundle inheritance
  * a RuntimeException is now thrown when a reserved variable is used in a security expression
