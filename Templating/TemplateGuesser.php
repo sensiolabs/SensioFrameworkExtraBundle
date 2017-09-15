@@ -75,38 +75,24 @@ class TemplateGuesser
             throw new \InvalidArgumentException(sprintf('The "%s" class does not look like a controller class (its FQN must match one of the following regexps: "%s")', get_class($controller[0]), implode('", "', $this->controllerPatterns)));
         }
 
-        if ($controller[1] === '__invoke') {
+        if ('__invoke' === $controller[1]) {
             $matchAction = $matchController;
             $matchController = null;
         } elseif (!preg_match('/^(.+)Action$/', $controller[1], $matchAction)) {
             $matchAction = array(null, $controller[1]);
         }
 
-        $bundleName = null;
-        if ($bundle = $this->getBundleForClass($className)) {
-            while ($bundleName = $bundle->getName()) {
-                if (null === $parentBundleName = $bundle->getParent()) {
-                    $bundleName = $bundle->getName();
-
-                    break;
-                }
-
-                $bundles = $this->kernel->getBundle($parentBundleName, false);
-                $bundle = array_pop($bundles);
-            }
-
-            $bundleName = preg_replace('/Bundle$/', '', $bundleName);
-        }
+        $bundleName = $this->getBundleForClass($className);
 
         return sprintf(($bundleName ? '@'.$bundleName.'/' : '').$matchController[1].($matchController[1] ? '/' : '').$matchAction[1].'.'.$request->getRequestFormat().'.twig');
     }
 
     /**
-     * Returns the Bundle instance in which the given class name is located.
+     * Returns the bundle name in which the given class name is located.
      *
      * @param string $class A fully qualified controller class name
      *
-     * @return Bundle|null $bundle A Bundle instance
+     * @return string|null $bundle A bundle name
      */
     private function getBundleForClass($class)
     {
@@ -120,7 +106,7 @@ class TemplateGuesser
                     continue;
                 }
                 if (0 === strpos($namespace, $bundle->getNamespace())) {
-                    return $bundle;
+                    return preg_replace('/Bundle$/', '', $bundle->getName());
                 }
             }
             $reflectionClass = $reflectionClass->getParentClass();

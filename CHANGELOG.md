@@ -4,6 +4,7 @@ CHANGELOG
 4.0
 ---
 
+ * removed support for bundle inheritance
  * added cache-control max-stale support
  * renamed setETag to setEtag for consistency with Symfony core (use Etag in @Cache now instead of ETag)
  * added must-revalidate support for @Cache annotation
