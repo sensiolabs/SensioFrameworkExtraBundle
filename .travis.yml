@@ -30,7 +30,6 @@ before_install:
     - phpenv config-rm xdebug.ini
 
 install:
-    - if [[ "$TRAVIS_PHP_VERSION" == "5.3" ]]; then composer remove --dev --no-update symfony/psr-http-message-bridge zendframework/zend-diactoros; fi;
     - if [ "$deps" = "no" ]; then composer install; fi;
     - if [ "$deps" = "low" ]; then composer --prefer-lowest --prefer-stable update; fi;
 
