@@ -54,6 +54,15 @@ Here is another example, making use of multiple functions in the expression::
     {
     }
 
+The message parameter allows you to customize the text shown to the user at the exception or error pages::
+
+    /**
+     * @Security("is_granted('POST_SHOW', post)", message="You have no rights to view this post.")
+     */
+    public function showAction(Post $post)
+    {
+    }
+
 .. note::
 
     Defining a ``Security`` annotation has the same effect as defining an

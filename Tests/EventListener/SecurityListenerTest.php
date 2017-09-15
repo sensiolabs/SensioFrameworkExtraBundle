@@ -11,13 +11,13 @@
 
 namespace Sensio\Bundle\FrameworkExtraBundle\Tests\EventListener;
 
-use Sensio\Bundle\FrameworkExtraBundle\Security\ExpressionLanguage;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\EventListener\SecurityListener;
+use Sensio\Bundle\FrameworkExtraBundle\Security\ExpressionLanguage;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class SecurityListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -31,23 +31,10 @@ class SecurityListenerTest extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped();
         }
 
-        $this->iniSet('error_reporting', -1 & ~E_USER_DEPRECATED);
-
-        $token = $this->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\TokenInterface')->getMock();
-        $token->expects($this->once())->method('getRoles')->will($this->returnValue(array()));
-
-        $securityContext = $this->getMockBuilder('Symfony\Component\Security\Core\SecurityContextInterface')->getMock();
-        $securityContext->expects($this->once())->method('isGranted')->will($this->throwException(new AccessDeniedException()));
-        $securityContext->expects($this->exactly(2))->method('getToken')->will($this->returnValue($token));
-
-        $trustResolver = $this->getMockBuilder('Symfony\Component\Security\Core\Authentication\AuthenticationTrustResolverInterface')->getMock();
-
-        $language = new ExpressionLanguage();
-
-        $listener = new SecurityListener($securityContext, $language, $trustResolver);
+        $listener = $this->createListenerWithLegacySecurityContext();
         $request = $this->createRequest(new Security(array('expression' => 'has_role("ROLE_ADMIN") or is_granted("FOO")')));
 
-        $event = new FilterControllerEvent($this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock(), function () { return new Response(); }, $request, null);
+        $event = new FilterControllerEvent($this->getKernel(), function () { return new Response(); }, $request, null);
 
         $listener->onKernelController($event);
     }
@@ -61,6 +48,74 @@ class SecurityListenerTest extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped();
         }
 
+        $listener = $this->createSecurityListener();
+        $request = $this->createRequest(new Security(array('expression' => 'has_role("ROLE_ADMIN") or is_granted("FOO")')));
+
+        $event = new FilterControllerEvent($this->getKernel(), function () { return new Response(); }, $request, null);
+
+        $listener->onKernelController($event);
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     * @expectedExceptionMessage Test Access Denied Message
+     * @group legacy
+     */
+    public function testLegacyExceptionMessage()
+    {
+        if (!interface_exists('Symfony\Component\Security\Core\SecurityContextInterface')) {
+            $this->markTestSkipped();
+        }
+
+        $listener = $this->createListenerWithLegacySecurityContext();
+        $request = $this->createRequest(new Security(array('expression' => 'has_role("ROLE_ADMIN") or is_granted("FOO")', 'message' => 'Test Access Denied Message')));
+
+        $event = new FilterControllerEvent($this->getKernel(), function () { return new Response(); }, $request, null);
+
+        $listener->onKernelController($event);
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     * @expectedExceptionMessage Test Access Denied Message
+     */
+    public function testExceptionMessage()
+    {
+        if (!interface_exists('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface')) {
+            $this->markTestSkipped();
+        }
+
+        $listener = $this->createSecurityListener();
+        $request = $this->createRequest(new Security(array('expression' => 'has_role("ROLE_ADMIN") or is_granted("FOO")', 'message' => 'Test Access Denied Message')));
+
+        $event = new FilterControllerEvent($this->getKernel(), function () { return new Response(); }, $request, null);
+
+        $listener->onKernelController($event);
+    }
+
+    /**
+     * @param Security|null $security
+     *
+     * @return Request
+     */
+    private function createRequest(Security $security = null)
+    {
+        return new Request(array(), array(), array('_security' => $security));
+    }
+
+    /**
+     * @return HttpKernelInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getKernel()
+    {
+        return $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+    }
+
+    /**
+     * @return SecurityListener
+     */
+    private function createSecurityListener()
+    {
         $token = $this->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\TokenInterface')->getMock();
         $token->expects($this->once())->method('getRoles')->will($this->returnValue(array()));
 
@@ -68,29 +123,33 @@ class SecurityListenerTest extends \PHPUnit_Framework_TestCase
         $tokenStorage->expects($this->exactly(2))->method('getToken')->will($this->returnValue($token));
 
         $authChecker = $this->getMockBuilder('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface')->getMock();
-        $authChecker->expects($this->once())->method('isGranted')->will($this->throwException(new AccessDeniedException()));
+        $authChecker->expects($this->once())->method('isGranted')->willReturn(false);
 
         $trustResolver = $this->getMockBuilder('Symfony\Component\Security\Core\Authentication\AuthenticationTrustResolverInterface')->getMock();
 
         $language = new ExpressionLanguage();
 
-        $listener = new SecurityListener(null, $language, $trustResolver, null, $tokenStorage, $authChecker);
-        $request = $this->createRequest(new Security(array('expression' => 'has_role("ROLE_ADMIN") or is_granted("FOO")')));
-
-        $event = new FilterControllerEvent($this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock(), function () { return new Response(); }, $request, null);
-
-        $listener->onKernelController($event);
+        return new SecurityListener(null, $language, $trustResolver, null, $tokenStorage, $authChecker);
     }
 
-    private function createRequest(Security $security = null)
+    /**
+     * @return SecurityListener
+     */
+    private function createListenerWithLegacySecurityContext()
     {
-        return new Request(array(), array(), array(
-            '_security' => $security,
-        ));
-    }
+        $this->iniSet('error_reporting', -1 & ~E_USER_DEPRECATED);
 
-    private function getKernel()
-    {
-        return $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $token = $this->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\TokenInterface')->getMock();
+        $token->expects($this->once())->method('getRoles')->will($this->returnValue(array()));
+
+        $securityContext = $this->getMockBuilder('Symfony\Component\Security\Core\SecurityContextInterface')->getMock();
+        $securityContext->expects($this->once())->method('isGranted')->willReturn(false);
+        $securityContext->expects($this->exactly(2))->method('getToken')->will($this->returnValue($token));
+
+        $trustResolver = $this->getMockBuilder('Symfony\Component\Security\Core\Authentication\AuthenticationTrustResolverInterface')->getMock();
+
+        $language = new ExpressionLanguage();
+
+        return new SecurityListener($securityContext, $language, $trustResolver);
     }
 }
