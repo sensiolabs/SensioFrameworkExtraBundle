@@ -27,13 +27,6 @@ Then, like for any other bundle, include it in your Kernel class::
         // ...
     }
 
-If you plan to use or create annotations for controllers, make sure to update
-your ``autoload.php`` by adding the following line::
-
-    $loader = require '/path/to/vendor/autoload.php';
-
-    Doctrine\Common\Annotations\AnnotationRegistry::registerLoader(array($loader, 'loadClass'));
-
 Configuration
 -------------
 
