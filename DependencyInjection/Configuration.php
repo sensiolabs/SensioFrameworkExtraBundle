@@ -45,6 +45,7 @@ class Configuration implements ConfigurationInterface
                     ->children()
                         ->booleanNode('converters')->defaultTrue()->end()
                         ->booleanNode('auto_convert')->defaultTrue()->end()
+                        ->arrayNode('disable')->prototype('scalar')->end()->end()
                     ->end()
                 ->end()
                 ->arrayNode('view')

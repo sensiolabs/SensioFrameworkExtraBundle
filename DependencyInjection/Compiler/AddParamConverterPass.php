@@ -29,13 +29,20 @@ class AddParamConverterPass implements CompilerPassInterface
         }
 
         $definition = $container->getDefinition('Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager');
+        $disabled = $container->getParameter('sensio_framework_extra.disabled_converters');
+        $container->getParameterBag()->remove('sensio_framework_extra.disabled_converters');
 
         foreach ($container->findTaggedServiceIds('request.param_converter') as $id => $converters) {
             foreach ($converters as $converter) {
                 $name = isset($converter['converter']) ? $converter['converter'] : null;
+
+                if (null !== $name && in_array($name, $disabled)) {
+                    continue;
+                }
+
                 $priority = isset($converter['priority']) ? $converter['priority'] : 0;
 
-                if ($priority === 'false' || $priority === false) {
+                if ('false' === $priority || false === $priority) {
                     $priority = null;
                 }
 

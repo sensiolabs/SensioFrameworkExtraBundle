@@ -41,26 +41,42 @@ If you use type hinting as in the example above, you can even omit the
     {
     }
 
-.. tip::
+You can disable the auto-conversion of type-hinted method arguments feature
+by setting the ``auto_convert`` flag to ``false``:
 
-    You can disable the auto-conversion of type-hinted method arguments feature
-    by setting the ``auto_convert`` flag to ``false``:
+.. configuration-block::
 
-    .. configuration-block::
+    .. code-block:: yaml
 
-        .. code-block:: yaml
+        # app/config/config.yml
+        sensio_framework_extra:
+            request:
+                converters: true
+                auto_convert: false
 
-            # app/config/config.yml
-            sensio_framework_extra:
-                request:
-                    converters: true
-                    auto_convert: false
+    .. code-block:: xml
 
-        .. code-block:: xml
+        <sensio-framework-extra:config>
+            <request converters="true" auto-convert="true" />
+        </sensio-framework-extra:config>
 
-            <sensio-framework-extra:config>
-                <request converters="true" auto-convert="true" />
-            </sensio-framework-extra:config>
+You can also explicitly disable some converters by name::
+
+.. configuration-block::
+
+    .. code-block:: yaml
+
+        # app/config/config.yml
+        sensio_framework_extra:
+            request:
+                converters: true
+                disable: ['doctrine.orm', 'datetime']
+
+    .. code-block:: xml
+
+        <sensio-framework-extra:config>
+            <request converters="true" disable="doctrine.orm,datetime" />
+        </sensio-framework-extra:config>
 
 To detect which converter is run on a parameter the following process is run:
 

@@ -47,6 +47,8 @@ class SensioFrameworkExtraExtension extends Extension
         if ($config['request']['converters']) {
             $annotationsToLoad[] = 'converters.xml';
 
+            $container->setParameter('sensio_framework_extra.disabled_converters', is_string($config['request']['disable']) ? implode(',', $config['request']['disable']) : $config['request']['disable']);
+
             $container->addResource(new ClassExistenceResource(ExpressionLanguage::class));
             if (class_exists(ExpressionLanguage::class)) {
                 $container->setAlias('sensio_framework_extra.converter.doctrine.orm.expression_language', new Alias('Symfony\Component\ExpressionLanguage\ExpressionLanguage', false));
