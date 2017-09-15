@@ -27,7 +27,7 @@ class InvokableContainerController extends Controller
 
     /**
      * @Route("/invokable/another-variable/container/{variable}/")
-     * @Template("@Foo/InvokableContainer/variable.html.twig")
+     * @Template("@Foo/invokable_container/variable.html.twig")
      */
     public function anotherVariableAction($variable)
     {
@@ -38,7 +38,7 @@ class InvokableContainerController extends Controller
 
     /**
      * @Route("/invokable/variable/container/{variable}/{another_variable}/")
-     * @Template("@Foo/InvokableContainer/another_variable.html.twig")
+     * @Template("@Foo/invokable_container/another_variable.html.twig")
      */
     public function doubleVariableAction($variable, $another_variable)
     {
@@ -50,7 +50,7 @@ class InvokableContainerController extends Controller
 
     /**
      * @Route("/invokable/predefined/container/")
-     * @Template("@Foo/Invokable/predefined.html.twig")
+     * @Template("@Foo/invokable/predefined.html.twig")
      */
     public function __invoke()
     {

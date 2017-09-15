@@ -16,7 +16,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 /**
  * @Route(service="test.invokable_class_level.predefined")
- * @Template("@Foo/Invokable/predefined.html.twig")
+ * @Template("@Foo/invokable/predefined.html.twig")
  */
 class InvokableClassLevelController
 {

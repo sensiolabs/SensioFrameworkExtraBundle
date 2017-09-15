@@ -67,7 +67,7 @@ class TemplateGuesser
         $matchController = null;
         foreach ($this->controllerPatterns as $pattern) {
             if (preg_match($pattern, $className, $tempMatch)) {
-                $matchController = $tempMatch;
+                $matchController = str_replace('\\', '/', strtolower(preg_replace('/([a-z\d])([A-Z])/', '\\1_\\2', $tempMatch[1])));
                 break;
             }
         }
@@ -78,14 +78,14 @@ class TemplateGuesser
         if ('__invoke' === $controller[1]) {
             $matchAction = $matchController;
             $matchController = null;
-        } elseif (!preg_match('/^(.+)Action$/', $controller[1], $matchAction)) {
-            $matchAction = array(null, $controller[1]);
+        } else {
+            $matchAction = preg_replace('/Action$/', '', $controller[1]);
         }
 
-        $matchAction[1] = strtolower(preg_replace('/([a-z\d])([A-Z])/', '\\1_\\2', $matchAction[1]));
+        $matchAction = strtolower(preg_replace('/([a-z\d])([A-Z])/', '\\1_\\2', $matchAction));
         $bundleName = $this->getBundleForClass($className);
 
-        return sprintf(($bundleName ? '@'.$bundleName.'/' : '').$matchController[1].($matchController[1] ? '/' : '').$matchAction[1].'.'.$request->getRequestFormat().'.twig');
+        return sprintf(($bundleName ? '@'.$bundleName.'/' : '').$matchController.($matchController ? '/' : '').$matchAction.'.'.$request->getRequestFormat().'.twig');
     }
 
     /**

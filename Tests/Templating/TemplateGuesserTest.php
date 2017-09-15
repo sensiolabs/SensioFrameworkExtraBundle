@@ -47,18 +47,29 @@ class TemplateGuesserTest extends \PHPUnit_Framework_TestCase
             'indexAction',
         ), new Request());
 
-        $this->assertEquals('@Foo/Foo/index.html.twig', (string) $templateReference);
+        $this->assertEquals('@Foo/foo/index.html.twig', (string) $templateReference);
     }
 
     public function testGuessTemplateWithoutBundle()
     {
         $templateGuesser = new TemplateGuesser($this->kernel);
         $templateReference = $templateGuesser->guessTemplateName(array(
-            new Fixture\Controller\OutOfBundleController(),
+            new Fixture\Controller\MyAdmin\OutOfBundleController(),
             'indexAction',
         ), new Request());
 
-        $this->assertEquals('OutOfBundle/index.html.twig', (string) $templateReference);
+        $this->assertEquals('my_admin/out_of_bundle/index.html.twig', (string) $templateReference);
+    }
+
+    public function testGuessTemplateWithSubNamespace()
+    {
+        $templateGuesser = new TemplateGuesser($this->kernel);
+        $templateReference = $templateGuesser->guessTemplateName(array(
+            new Fixture\FooBundle\Controller\SubController\FooBarController(),
+            'fooBaz',
+        ), new Request());
+
+        $this->assertEquals('@Foo/sub_controller/foo_bar/foo_baz.html.twig', (string) $templateReference);
     }
 
     /**
@@ -88,7 +99,7 @@ class TemplateGuesserTest extends \PHPUnit_Framework_TestCase
             'indexAction',
         ), new Request());
 
-        $this->assertEquals('@Foo/Foo/index.html.twig', (string) $templateReference);
+        $this->assertEquals('@Foo/foo/index.html.twig', (string) $templateReference);
     }
 
     /**
@@ -103,7 +114,7 @@ class TemplateGuesserTest extends \PHPUnit_Framework_TestCase
             'fooBar',
         ), new Request());
 
-        $this->assertEquals('@Foo/Foo/foo_bar.html.twig', (string) $templateReference);
+        $this->assertEquals('@Foo/foo/foo_bar.html.twig', (string) $templateReference);
     }
 
     public function controllerProvider()
