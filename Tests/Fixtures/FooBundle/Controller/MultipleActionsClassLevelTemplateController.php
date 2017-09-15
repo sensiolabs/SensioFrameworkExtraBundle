@@ -16,7 +16,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
- * @Template("@Foo/Invokable/predefined.html.twig")
+ * @Template("@Foo/invokable/predefined.html.twig")
  */
 class MultipleActionsClassLevelTemplateController extends Controller
 {

@@ -21,7 +21,7 @@ class InvokableController
 {
     /**
      * @Route("/invokable/predefined/service/")
-     * @Template("@Foo/Invokable/predefined.html.twig")
+     * @Template("@Foo/invokable/predefined.html.twig")
      */
     public function __invoke()
     {
