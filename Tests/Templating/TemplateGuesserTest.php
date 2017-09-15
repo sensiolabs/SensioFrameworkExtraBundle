@@ -73,7 +73,7 @@ class TemplateGuesserTest extends \PHPUnit_Framework_TestCase
             '__invoke',
         ), new Request());
 
-        $this->assertEquals('@Foo/Foo.html.twig', (string) $templateReference);
+        $this->assertEquals('@Foo/foo.html.twig', (string) $templateReference);
     }
 
     /**
@@ -103,7 +103,7 @@ class TemplateGuesserTest extends \PHPUnit_Framework_TestCase
             'fooBar',
         ), new Request());
 
-        $this->assertEquals('@Foo/Foo/fooBar.html.twig', (string) $templateReference);
+        $this->assertEquals('@Foo/Foo/foo_bar.html.twig', (string) $templateReference);
     }
 
     public function controllerProvider()
