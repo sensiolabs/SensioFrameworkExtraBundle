@@ -19,7 +19,7 @@
             <argument type="service" id="sensio_framework_extra.converter.doctrine.orm.expression_language" on-invalid="null" />
         </service>
 
-        <service id="sensio_framework_extra.converter.datetime" class="Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DateTimeParamConverter" public="false">
+        <service id="Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DateTimeParamConverter" class="Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DateTimeParamConverter" public="false">
             <tag name="request.param_converter" converter="datetime" />
         </service>
 

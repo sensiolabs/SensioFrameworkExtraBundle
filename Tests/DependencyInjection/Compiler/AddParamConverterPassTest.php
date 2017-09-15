@@ -39,6 +39,7 @@ class AddParamConverterPassTest extends \PHPUnit_Framework_TestCase
         $this->container = new ContainerBuilder();
         $this->managerDefinition = new Definition();
         $this->container->setDefinition('Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager', $this->managerDefinition);
+        $this->container->setParameter('sensio_framework_extra.disabled_converters', array());
     }
 
     public function testProcessNoOpNoManager()
@@ -93,5 +94,49 @@ class AddParamConverterPassTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array('add', array(new Reference('param_converter_one'), 0, null)), $methodCalls[0]);
         $this->assertEquals(array('add', array(new Reference('param_converter_two'), 0, 'foo')), $methodCalls[1]);
         $this->assertEquals(array('add', array(new Reference('param_converter_three'), 5, null)), $methodCalls[2]);
+    }
+
+    public function testProcessExplicitAddsTaggedServices()
+    {
+        $paramConverter1 = new Definition();
+        $paramConverter1->setTags(array(
+            'request.param_converter' => array(
+                array(
+                    'priority' => 'false',
+                    'converter' => 'bar',
+                ),
+            ),
+        ));
+
+        $paramConverter2 = new Definition();
+        $paramConverter2->setTags(array(
+            'request.param_converter' => array(
+                array(
+                    'converter' => 'foo',
+                ),
+            ),
+        ));
+
+        $paramConverter3 = new Definition();
+        $paramConverter3->setTags(array(
+            'request.param_converter' => array(
+                array(
+                    'priority' => 5,
+                    'converter' => 'baz',
+                ),
+            ),
+        ));
+
+        $this->container->setDefinition('param_converter_one', $paramConverter1);
+        $this->container->setDefinition('param_converter_two', $paramConverter2);
+        $this->container->setDefinition('param_converter_three', $paramConverter3);
+
+        $this->container->setParameter('sensio_framework_extra.disabled_converters', array('bar', 'baz'));
+
+        $this->pass->process($this->container);
+
+        $methodCalls = $this->managerDefinition->getMethodCalls();
+        $this->assertCount(1, $methodCalls);
+        $this->assertEquals(array('add', array(new Reference('param_converter_two'), 0, 'foo')), $methodCalls[0]);
     }
 }
