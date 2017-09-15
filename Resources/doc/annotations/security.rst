@@ -54,9 +54,10 @@ Here is another example, making use of multiple functions in the expression::
     {
     }
 
-You can throw an exception ``Symfony\Component\HttpKernel\Exception\HttpException``
-instead of ``Symfony\Component\Security\Core\Exception\AccessDeniedException``
-using the ``statusCode`` option::
+You can throw an ``Symfony\Component\HttpKernel\Exception\HttpException``
+exception instead of
+``Symfony\Component\Security\Core\Exception\AccessDeniedException`` using the
+``statusCode`` option::
 
     /**
      * @Security("is_granted('POST_SHOW', post)", statusCode=404)
@@ -65,7 +66,7 @@ using the ``statusCode`` option::
     {
     }
 
-Option ``message`` will allow you to specify the message of the exception::
+The ``message`` option allows to customize the exception message::
 
     /**
      * @Security("is_granted('POST_SHOW', post)", statusCode=404, message="Resource not found.")

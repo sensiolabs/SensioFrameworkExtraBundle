@@ -32,7 +32,7 @@ class Security extends ConfigurationAnnotation
      * If null, Symfony\Component\Security\Core\Exception\AccessDeniedException.
      * will be used.
      *
-     * @var int
+     * @var int|null
      */
     protected $statusCode;
 
@@ -41,7 +41,7 @@ class Security extends ConfigurationAnnotation
      *
      * @var string
      */
-    protected $message;
+    protected $message = 'Access denied.';
 
     public function getExpression()
     {

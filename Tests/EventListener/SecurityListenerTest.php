@@ -17,7 +17,6 @@ use Sensio\Bundle\FrameworkExtraBundle\EventListener\SecurityListener;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class SecurityListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -54,22 +53,19 @@ class SecurityListenerTest extends \PHPUnit_Framework_TestCase
     public function testAccessDenied()
     {
         $request = $this->createRequest(new Security(array('expression' => 'has_role("ROLE_ADMIN") or is_granted("FOO")')));
-        $event = new FilterControllerEvent($this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface'), function () { return new Response(); }, $request, null);
+        $event = new FilterControllerEvent($this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock(), function () { return new Response(); }, $request, null);
 
         $this->getListener()->onKernelController($event);
     }
 
     /**
-     * @expectedException \Symfony\Component\HttpKernel\Exception\HttpException
+     * @expectedException        \Symfony\Component\HttpKernel\Exception\HttpException
+     * @expectedExceptionMessage Not found
      */
     public function testNotFoundHttpException()
     {
-        if (!interface_exists('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface')) {
-            $this->markTestSkipped();
-        }
-
         $request = $this->createRequest(new Security(array('expression' => 'has_role("ROLE_ADMIN") or is_granted("FOO")', 'statusCode' => 404, 'message' => 'Not found')));
-        $event = new FilterControllerEvent($this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface'), function () { return new Response(); }, $request, null);
+        $event = new FilterControllerEvent($this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock(), function () { return new Response(); }, $request, null);
 
         $this->getListener()->onKernelController($event);
     }
@@ -89,7 +85,7 @@ class SecurityListenerTest extends \PHPUnit_Framework_TestCase
 
         $language = new ExpressionLanguage();
 
-        return new SecurityListener(null, $language, $trustResolver, null, $tokenStorage, $authChecker);
+        return new SecurityListener($language, $trustResolver, null, $tokenStorage, $authChecker);
     }
 
     private function createRequest(Security $security = null)
