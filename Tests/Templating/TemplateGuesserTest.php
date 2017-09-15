@@ -27,8 +27,6 @@ class TemplateGuesserTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->bundles['FooBundle'] = $this->getBundle('FooBundle', 'Sensio\Bundle\FrameworkExtraBundle\Tests\Templating\Fixture\FooBundle');
-        $this->bundles['BarBundle'] = $this->getBundle('BarBundle', 'Sensio\Bundle\FrameworkExtraBundle\Tests\Templating\Fixture\BarBundle', 'FooBundle');
-        $this->bundles['FooBarBundle'] = $this->getBundle('FooBarBundle', 'Sensio\Bundle\FrameworkExtraBundle\Tests\Templating\Fixture\FooBarBundle', 'BarBundle');
 
         $this->kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\KernelInterface')->getMock();
         $this->kernel
@@ -50,46 +48,6 @@ class TemplateGuesserTest extends \PHPUnit_Framework_TestCase
         ), new Request());
 
         $this->assertEquals('@Foo/Foo/index.html.twig', (string) $templateReference);
-    }
-
-    public function testGuessTemplateNameWithParentBundle()
-    {
-        $this->kernel
-            ->expects($this->once())
-            ->method('getBundle')
-            ->with($this->equalTo('FooBundle'), false)
-            ->will($this->returnValue(array($this->bundles['BarBundle'], $this->bundles['FooBundle'])));
-
-        $templateGuesser = new TemplateGuesser($this->kernel);
-        $templateReference = $templateGuesser->guessTemplateName(array(
-            new Fixture\BarBundle\Controller\BarController(),
-            'indexAction',
-        ), new Request());
-
-        $this->assertEquals('@Foo/Bar/index.html.twig', (string) $templateReference);
-    }
-
-    public function testGuessTemplateNameWithCascadingParentBundle()
-    {
-        $this->kernel
-            ->expects($this->at(1))
-            ->method('getBundle')
-            ->with($this->equalTo('BarBundle'), false)
-            ->will($this->returnValue(array($this->bundles['FooBarBundle'], $this->bundles['BarBundle'])));
-
-        $this->kernel
-            ->expects($this->at(2))
-            ->method('getBundle')
-            ->with($this->equalTo('FooBundle'), false)
-            ->will($this->returnValue(array($this->bundles['FooBarBundle'], $this->bundles['BarBundle'], $this->bundles['FooBundle'])));
-
-        $templateGuesser = new TemplateGuesser($this->kernel);
-        $templateReference = $templateGuesser->guessTemplateName(array(
-            new Fixture\FooBarBundle\Controller\FooBarController(),
-            'indexAction',
-        ), new Request());
-
-        $this->assertEquals('@Foo/FooBar/index.html.twig', (string) $templateReference);
     }
 
     public function testGuessTemplateWithoutBundle()
@@ -184,7 +142,7 @@ class TemplateGuesserTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    private function getBundle($name, $namespace, $parent = null)
+    private function getBundle($name, $namespace)
     {
         $bundle = $this->getMockBuilder('Symfony\Component\HttpKernel\Bundle\BundleInterface')->getMock();
         $bundle
@@ -196,11 +154,6 @@ class TemplateGuesserTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getNamespace')
             ->will($this->returnValue($namespace));
-
-        $bundle
-            ->expects($this->any())
-            ->method('getParent')
-            ->will($this->returnValue($parent));
 
         return $bundle;
     }
