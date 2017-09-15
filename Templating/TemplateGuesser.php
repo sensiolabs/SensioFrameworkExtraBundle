@@ -82,6 +82,7 @@ class TemplateGuesser
             $matchAction = array(null, $controller[1]);
         }
 
+        $matchAction[1] = strtolower(preg_replace('/([a-z\d])([A-Z])/', '\\1_\\2', $matchAction[1]));
         $bundleName = $this->getBundleForClass($className);
 
         return sprintf(($bundleName ? '@'.$bundleName.'/' : '').$matchController[1].($matchController[1] ? '/' : '').$matchAction[1].'.'.$request->getRequestFormat().'.twig');
