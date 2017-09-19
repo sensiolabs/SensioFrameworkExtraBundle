@@ -13,7 +13,7 @@
     "require": {
         "symfony/config": "^3.3|^4.0",
         "symfony/framework-bundle": "^3.3|^4.0",
-        "symfony/dependency-injection": "^3.3",
+        "symfony/dependency-injection": "^3.3|^4.0",
         "symfony/http-kernel": "^3.3|^4.0",
         "doctrine/common": "^2.2"
     },
