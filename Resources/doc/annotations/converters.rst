@@ -145,6 +145,8 @@ annotation and using the `@ParamConverter options`_.
 If automatic fetching doesn't work, another great option is to use
 an expression::
 
+    use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
+    
     /**
      * @Route("/blog/{post_id}")
      * @Entity("post", expr="repository.find(post_id)")
