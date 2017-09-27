@@ -22,6 +22,7 @@ CHANGELOG
  * bumped Symfony minimum version to 3.0
  * bumped PHP minimum version to 5.5.9
  * removed class parameters in container definitions
+ * [BC break] DateTimeParamConverter strictly validates the input date when using with 'format' option
 
 3.0
 ---
