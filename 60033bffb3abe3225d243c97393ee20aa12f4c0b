@@ -1,0 +1,5 @@
+---------------------------------------------------------------------------
+
+by fabpot at 2017-08-26T13:31:58Z
+
+Looks good to me. As this will be merged in master, I would remove the `strict` configuration and make it fail all the time. I don't see how keeping the current behavior would be desirable. You should also add a note in the CHANGELOG to warn users about this change.
