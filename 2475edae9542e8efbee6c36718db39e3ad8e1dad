@@ -1,0 +1,177 @@
+---------------------------------------------------------------------------
+
+by hhamon at 2016-09-24T08:29:43Z
+
+I like this!
+
+However I would just simplify the annotation name to `@Granted` only. What do you think?
+
+---------------------------------------------------------------------------
+
+by iltar at 2016-09-24T08:52:22Z
+
+I think `@IsGranted` is fine, it's the method being executed so it's clear what's being done.
+
+---------------------------------------------------------------------------
+
+by javiereguiluz at 2016-09-24T13:36:37Z
+
+For reference, let's see what other comparable projects do:
+
+### Java
+
+Three annotations cover most cases: `@DenyAll`, `@AllowAll`, `@RolesAllowed`
+
+``` java
+import javax.annotation.security.*;
+
+@RolesAllowed("RestrictedUsers")
+public class Calculator
+{
+    @RolesAllowed("Administrator")
+    public void setNewRate(int rate) {
+        //...
+    }
+
+    @PermitAll
+    public long convertCurrency(long amount) {
+        //...
+    }
+}
+```
+
+[Source](http://docs.oracle.com/javaee/7/api/javax/annotation/security/package-summary.html)
+
+### .NET
+
+They just define one annotation (or "attribute", as they call it): `[Authorize]`
+
+``` c#
+[Authorize]
+public class ValuesController : ApiController
+{
+    [AllowAnonymous]
+    public HttpResponseMessage Get() { ... }
+
+    public HttpResponseMessage Post() { ... }
+}
+
+[Authorize(Users="Alice,Bob")]
+public class ValuesController : ApiController
+{
+    // ...
+}
+
+[Authorize(Roles="Administrators")]
+public class ValuesController : ApiController
+{
+    // ...
+}
+```
+
+[Source](http://www.asp.net/web-api/overview/security/authentication-and-authorization-in-aspnet-web-api)
+
+---
+
+I'd maintain the `@Security()` annotation and make its behavior be like this one:
+- If you only provide 1 argument, is the required role
+- If you provide 2 arguments, first one is the role and second one is the subject
+- If you want to use an expression, use the named `expr` parameter
+
+``` php
+/**
+ * @Security("ROLE_ADMIN")
+ * @Security(roles = "ROLE_ADMIN")  <-- using named arguments
+ */
+public function showAction(Post $post)
+
+/**
+ * @Security("EDIT", "post")
+ * @Security(roles = "EDIT", subject = "post")  <-- using named arguments
+ */
+public function showAction(Post $post)
+
+/**
+ * @Security(expr = "is_granted('ROLE_ADMIN') and ...")
+ */
+public function showAction(Post $post)
+```
+
+---------------------------------------------------------------------------
+
+by iltar at 2016-09-24T13:46:55Z
+
+Just please don't call them roles 😄
+
+---------------------------------------------------------------------------
+
+by javiereguiluz at 2016-09-28T09:20:23Z
+
+@iltar you are right, they are not roles. However, I find "attributes" a not so good alternative (I always have problems explaining this concept in Symfony trainings). Would `permission` be a better alternative?
+
+---------------------------------------------------------------------------
+
+by iltar at 2016-09-28T09:28:51Z
+
+@javiereguiluz I never really understood what attributes is supposed to mean so I can understand it's hard to explain, this would be something that should be corrected in Symfony all-together:
+- access_control
+- voters
+- authorization checker
+- access decision manager
+- etc.
+
+Are there cases where you pass along multiple attributes (or what ever the naming will be)? I never really got why it's an array of attributes. I think permission(s) describes what  you are putting in here and would clear up quite a bit in the aforementioned list.
+
+---------------------------------------------------------------------------
+
+by Koc at 2017-08-26T14:22:10Z
+
+@javiereguiluz your proposal is the best. But how can we make it BC? for not if we pass single argument it considered as expression.
+
+---------------------------------------------------------------------------
+
+by fabpot at 2017-08-26T14:39:05Z
+
+4.0 breaks BC anyway. So, documenting the BC break is enough for a PR to be merged in master/4.0.
+
+---------------------------------------------------------------------------
+
+by weaverryan at 2017-09-14T22:25:17Z
+
+I like Javier's ideas too. But, is it possible to pass 2 unnamed args to an annotation?
+
+---------------------------------------------------------------------------
+
+by fabpot at 2017-09-14T22:40:54Z
+
+No, it's not possible.
+
+---------------------------------------------------------------------------
+
+by fabpot at 2017-09-27T21:58:14Z
+
+@weaverryan Do you still want to move forward with this PR? I'm about to release version 4.0.
+
+---------------------------------------------------------------------------
+
+by fabpot at 2017-09-27T22:02:51Z
+
+For the record, I like this PR as is (not necessarily the implementation, but the user facing feature).
+
+---------------------------------------------------------------------------
+
+by weaverryan at 2017-09-28T20:01:32Z
+
+Definitely still interested :). I'm almost done with the "proper" coding of it - I just need to finish the test. I've pushed what I have so far (need to leave right now). But, I'll finish shortly. Thanks for the ping!
+
+---------------------------------------------------------------------------
+
+by weaverryan at 2017-09-29T12:16:57Z
+
+Done! Test failures are some unrelated deprecations.
+
+---------------------------------------------------------------------------
+
+by weaverryan at 2017-09-29T14:06:38Z
+
+use statements re-ordered
