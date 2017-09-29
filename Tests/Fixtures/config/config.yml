@@ -13,13 +13,17 @@ doctrine:
 
 services:
     test.invokable.predefined:
-        class: Tests\Fixtures\FooBundle\Controller\InvokableController
+        class:  Tests\Fixtures\FooBundle\Controller\InvokableController
+        public: true
 
     test.invokable_class_level.predefined:
-        class: Tests\Fixtures\FooBundle\Controller\InvokableClassLevelController
+        class:  Tests\Fixtures\FooBundle\Controller\InvokableClassLevelController
+        public: true
 
     test.simple.multiple:
-        class: Tests\Fixtures\FooBundle\Controller\SimpleController
+        class:  Tests\Fixtures\FooBundle\Controller\SimpleController
+        public: true
 
     test.action_arguments:
-        class: Tests\Fixtures\ActionArgumentsBundle\Controller\ActionArgumentsController
+        class:  Tests\Fixtures\ActionArgumentsBundle\Controller\ActionArgumentsController
+        public: true
