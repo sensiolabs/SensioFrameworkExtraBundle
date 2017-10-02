@@ -296,7 +296,9 @@ on the request attributes, it should set an attribute named
 ``$configuration->getName()``, which stores an object of class
 ``$configuration->getClass()``.
 
-To register your converter service, you must add a tag to your service:
+If you're using service `auto-registration and autoconfiguration`_,
+you're done! Your converter will automatically be used.
+If not, you must add a tag to your service:
 
 .. configuration-block::
 
@@ -330,3 +332,5 @@ definition.
 .. tip::
 
    Use the ``DoctrineParamConverter`` class as a template for your own converters.
+
+.. _auto-registration and autoconfiguration: http://symfony.com/doc/current/service_container/3.3-di-changes.html
