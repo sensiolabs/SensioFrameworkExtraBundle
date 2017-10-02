@@ -13,7 +13,8 @@ namespace Sensio\Bundle\FrameworkExtraBundle\EventListener;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
+use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadataFactoryInterface;
+use Symfony\Component\HttpKernel\Event\FilterControllerArgumentsEvent;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -26,14 +27,16 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  */
 class IsGrantedListener implements EventSubscriberInterface
 {
+    private $argumentMetadataFactory;
     private $authChecker;
 
-    public function __construct(AuthorizationCheckerInterface $authChecker = null)
+    public function __construct(ArgumentMetadataFactoryInterface $argumentMetadataFactory, AuthorizationCheckerInterface $authChecker = null)
     {
+        $this->argumentMetadataFactory = $argumentMetadataFactory;
         $this->authChecker = $authChecker;
     }
 
-    public function onKernelController(FilterControllerEvent $event)
+    public function onKernelControllerArguments(FilterControllerArgumentsEvent $event)
     {
         $request = $event->getRequest();
         /** @var $configurations IsGranted[] */
@@ -42,20 +45,19 @@ class IsGrantedListener implements EventSubscriberInterface
         }
 
         if (null === $this->authChecker) {
-            throw new \LogicException('To use the @IsGranted tag, you need to install symfony/security-bundle.');
+            throw new \LogicException('To use the @IsGranted tag, you need to install symfony/security-bundle and configure your security system.');
         }
+
+        $arguments = $this->getArguments($event);
 
         foreach ($configurations as $configuration) {
             $subject = null;
             if ($configuration->getSubject()) {
-                if (!$request->attributes->has($configuration->getSubject())) {
-                    $allAttributes = $request->attributes->all();
-                    // remove one attribute we know is noise in the error message
-                    unset($allAttributes['_is_granted']);
-                    throw new \RuntimeException(sprintf('Could not find the subject "%s" for the @IsGranted annotation. Available attributes are: %s', $configuration->getSubject(), implode(', ', array_keys($allAttributes))));
+                if (!isset($arguments[$configuration->getSubject()])) {
+                    throw new \RuntimeException(sprintf('Could not find the subject "%s" for the @IsGranted annotation. Try adding a "$%s" argument to your controller method.', $configuration->getSubject(), $configuration->getSubject()));
                 }
 
-                $subject = $request->attributes->get($configuration->getSubject());
+                $subject = $arguments[$configuration->getSubject()];
             }
 
             if (!$this->authChecker->isGranted($configuration->getAttributes(), $subject)) {
@@ -70,6 +72,23 @@ class IsGrantedListener implements EventSubscriberInterface
                 throw new AccessDeniedException($message);
             }
         }
+    }
+
+    private function getArguments(FilterControllerArgumentsEvent $event)
+    {
+        $namedArguments = $event->getRequest()->attributes->all();
+        $argumentMetadatas = $this->argumentMetadataFactory->createArgumentMetadata($event->getController());
+
+        // loop over each argument value and its name from the metadata
+        foreach ($event->getArguments() as $index => $argument) {
+            if (!isset($argumentMetadatas[$index])) {
+                throw new \LogicException(sprintf('Could not find any argument metadata for argument %d of the controller.', $index));
+            }
+
+            $namedArguments[$argumentMetadatas[$index]->getName()] = $argument;
+        }
+
+        return $namedArguments;
     }
 
     private function getIsGrantedString(IsGranted $isGranted)
@@ -95,6 +114,6 @@ class IsGrantedListener implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return array(KernelEvents::CONTROLLER => 'onKernelController');
+        return array(KernelEvents::CONTROLLER_ARGUMENTS => 'onKernelControllerArguments');
     }
 }

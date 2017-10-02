@@ -17,6 +17,7 @@
         <service id="Sensio\Bundle\FrameworkExtraBundle\Security\ExpressionLanguage" class="Sensio\Bundle\FrameworkExtraBundle\Security\ExpressionLanguage" public="false" />
 
         <service id="Sensio\Bundle\FrameworkExtraBundle\EventListener\IsGrantedListener" class="Sensio\Bundle\FrameworkExtraBundle\EventListener\IsGrantedListener" public="false">
+            <argument type="service" id="argument_metadata_factory" />
             <argument type="service" id="security.authorization_checker" on-invalid="null" />
             <tag name="kernel.event_subscriber" />
         </service>
