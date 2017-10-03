@@ -23,7 +23,7 @@
             <tag name="kernel.event_subscriber" />
         </service>
 
-        <service id="Sensio\Bundle\FrameworkExtraBundle\Request\ArgumentNameConverter" class="Sensio\Bundle\FrameworkExtraBundle\Request\ArgumentNameConverter" public="false">
+        <service id="Sensio\Bundle\FrameworkExtraBundle\Request\ArgumentNameConverter" public="false">
             <argument type="service" id="argument_metadata_factory" />
         </service>
     </services>

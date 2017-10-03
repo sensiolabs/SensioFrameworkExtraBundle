@@ -60,5 +60,8 @@ class ArgumentNameConverterTest extends \PHPUnit_Framework_TestCase
         $arg1Metadata = new ArgumentMetadata('arg1Name', 'string', false, false, null);
         $arg2VariadicMetadata = new ArgumentMetadata('arg2Name', 'string', true, false, null);
         yield array(array('arg1Value', 'arg2Value', 'arg3Value'), array($arg1Metadata, $arg2VariadicMetadata), array(), array('arg1Name' => 'arg1Value', 'arg2Name' => array('arg2Value', 'arg3Value')));
+
+        // variadic argument receives no arguments, so becomes an empty array
+        yield array(array('arg1Value'), array($arg1Metadata, $arg2VariadicMetadata), array(), array('arg1Name' => 'arg1Value', 'arg2Name' => array()));
     }
 }

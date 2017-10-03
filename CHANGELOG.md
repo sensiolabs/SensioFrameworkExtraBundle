@@ -4,7 +4,10 @@ CHANGELOG
 5.0
 ---
  * Changed the `@Security` annotation to use arguments from argument
-   converters as expression variables.
+   resolvers as expression variables.
+
+ * The `@IsGranted` annotation now also supports using arguments from the
+   argument resolvers as the subject.
 
 4.0
 ---
