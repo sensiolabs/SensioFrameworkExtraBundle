@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+5.0
+---
+ * Changed the `@Security` annotation to use arguments from argument
+   converters as expression variables.
+
 4.0
 ---
 

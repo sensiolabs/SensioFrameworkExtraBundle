@@ -13,6 +13,7 @@ namespace Tests\Fixtures\FooBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -21,6 +22,7 @@ class IsGrantedController
     /**
      * @Route("/is_granted/anonymous")
      * @IsGranted("IS_AUTHENTICATED_ANONYMOUSLY")
+     * @Security("is_granted('IS_AUTHENTICATED_ANONYMOUSLY')")
      */
     public function someAction()
     {
@@ -30,6 +32,7 @@ class IsGrantedController
     /**
      * @Route("/is_granted/request/attribute/args/{a}")
      * @IsGranted("ISGRANTED_VOTER", subject="a")
+     * @Security("is_granted('ISGRANTED_VOTER', a)")
      */
     public function some2Action($a)
     {
@@ -39,9 +42,20 @@ class IsGrantedController
     /**
      * @Route("/is_granted/resolved/args")
      * @IsGranted("ISGRANTED_VOTER", subject="foo")
+     * @Security("is_granted('ISGRANTED_VOTER', foo)")
      */
     public function some3Action(Request $foo)
     {
         return new Response('yay3');
+    }
+
+    /**
+     * @Route("/is_granted/variadic/args", defaults={"params"={"foo", "bar"}})
+     * @Security("is_granted('ISGRANTED_VOTER', params)")
+     * @IsGranted("ISGRANTED_VOTER", subject="params")
+     */
+    public function some4Action(Request $foo, ...$params)
+    {
+        return new Response('yay4');
     }
 }

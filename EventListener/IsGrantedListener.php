@@ -12,8 +12,8 @@
 namespace Sensio\Bundle\FrameworkExtraBundle\EventListener;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Request\ArgumentNameConverter;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadataFactoryInterface;
 use Symfony\Component\HttpKernel\Event\FilterControllerArgumentsEvent;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -27,12 +27,12 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  */
 class IsGrantedListener implements EventSubscriberInterface
 {
-    private $argumentMetadataFactory;
+    private $argumentNameConverter;
     private $authChecker;
 
-    public function __construct(ArgumentMetadataFactoryInterface $argumentMetadataFactory, AuthorizationCheckerInterface $authChecker = null)
+    public function __construct(ArgumentNameConverter $argumentNameConverter, AuthorizationCheckerInterface $authChecker = null)
     {
-        $this->argumentMetadataFactory = $argumentMetadataFactory;
+        $this->argumentNameConverter = $argumentNameConverter;
         $this->authChecker = $authChecker;
     }
 
@@ -48,7 +48,7 @@ class IsGrantedListener implements EventSubscriberInterface
             throw new \LogicException('To use the @IsGranted tag, you need to install symfony/security-bundle and configure your security system.');
         }
 
-        $arguments = $this->getArguments($event);
+        $arguments = $this->argumentNameConverter->getControllerArguments($event);
 
         foreach ($configurations as $configuration) {
             $subject = null;
@@ -72,23 +72,6 @@ class IsGrantedListener implements EventSubscriberInterface
                 throw new AccessDeniedException($message);
             }
         }
-    }
-
-    private function getArguments(FilterControllerArgumentsEvent $event)
-    {
-        $namedArguments = $event->getRequest()->attributes->all();
-        $argumentMetadatas = $this->argumentMetadataFactory->createArgumentMetadata($event->getController());
-
-        // loop over each argument value and its name from the metadata
-        foreach ($event->getArguments() as $index => $argument) {
-            if (!isset($argumentMetadatas[$index])) {
-                throw new \LogicException(sprintf('Could not find any argument metadata for argument %d of the controller.', $index));
-            }
-
-            $namedArguments[$argumentMetadatas[$index]->getName()] = $argument;
-        }
-
-        return $namedArguments;
     }
 
     private function getIsGrantedString(IsGranted $isGranted)

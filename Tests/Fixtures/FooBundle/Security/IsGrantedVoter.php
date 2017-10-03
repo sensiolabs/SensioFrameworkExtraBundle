@@ -36,6 +36,10 @@ class IsGrantedVoter extends Voter
             return true;
         }
 
+        if (array('foo', 'bar') === $subject) {
+            return true;
+        }
+
         return false;
     }
 }

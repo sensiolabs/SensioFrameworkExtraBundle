@@ -11,12 +11,13 @@
 
 namespace Sensio\Bundle\FrameworkExtraBundle\Tests\EventListener;
 
+use Sensio\Bundle\FrameworkExtraBundle\Request\ArgumentNameConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Security\ExpressionLanguage;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\EventListener\SecurityListener;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
+use Symfony\Component\HttpKernel\Event\FilterControllerArgumentsEvent;
 
 class SecurityListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -38,13 +39,14 @@ class SecurityListenerTest extends \PHPUnit_Framework_TestCase
 
         $language = new ExpressionLanguage();
 
-        $listener = new SecurityListener($language, $trustResolver, null, $tokenStorage, $authChecker);
+        $argNameConverter = $this->createArgumentNameConverter(array('user' => 'myuser'));
+
+        $listener = new SecurityListener($argNameConverter, $language, $trustResolver, null, $tokenStorage, $authChecker);
         $request = $this->createRequest(new Security(array('expression' => 'has_role("ROLE_ADMIN") or is_granted("FOO")')));
-        $request->attributes->set('user', 'myuser');
 
-        $event = new FilterControllerEvent($this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock(), function () { return new Response(); }, $request, null);
+        $event = new FilterControllerArgumentsEvent($this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock(), function () { return new Response(); }, array(), $request, null);
 
-        $listener->onKernelController($event);
+        $listener->onKernelControllerArguments($event);
     }
 
     /**
@@ -53,9 +55,9 @@ class SecurityListenerTest extends \PHPUnit_Framework_TestCase
     public function testAccessDenied()
     {
         $request = $this->createRequest(new Security(array('expression' => 'has_role("ROLE_ADMIN") or is_granted("FOO")')));
-        $event = new FilterControllerEvent($this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock(), function () { return new Response(); }, $request, null);
+        $event = new FilterControllerArgumentsEvent($this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock(), function () { return new Response(); }, array(), $request, null);
 
-        $this->getListener()->onKernelController($event);
+        $this->getListener()->onKernelControllerArguments($event);
     }
 
     /**
@@ -65,9 +67,9 @@ class SecurityListenerTest extends \PHPUnit_Framework_TestCase
     public function testNotFoundHttpException()
     {
         $request = $this->createRequest(new Security(array('expression' => 'has_role("ROLE_ADMIN") or is_granted("FOO")', 'statusCode' => 404, 'message' => 'Not found')));
-        $event = new FilterControllerEvent($this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock(), function () { return new Response(); }, $request, null);
+        $event = new FilterControllerArgumentsEvent($this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock(), function () { return new Response(); }, array(), $request, null);
 
-        $this->getListener()->onKernelController($event);
+        $this->getListener()->onKernelControllerArguments($event);
     }
 
     private function getListener()
@@ -83,9 +85,11 @@ class SecurityListenerTest extends \PHPUnit_Framework_TestCase
 
         $trustResolver = $this->getMockBuilder('Symfony\Component\Security\Core\Authentication\AuthenticationTrustResolverInterface')->getMock();
 
+        $argNameConverter = $this->createArgumentNameConverter(array());
+
         $language = new ExpressionLanguage();
 
-        return new SecurityListener($language, $trustResolver, null, $tokenStorage, $authChecker);
+        return new SecurityListener($argNameConverter, $language, $trustResolver, null, $tokenStorage, $authChecker);
     }
 
     private function createRequest(Security $security = null)
@@ -98,8 +102,14 @@ class SecurityListenerTest extends \PHPUnit_Framework_TestCase
         ));
     }
 
-    private function getKernel()
+    private function createArgumentNameConverter(array $arguments)
     {
-        return $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $nameConverter = $this->getMockBuilder(ArgumentNameConverter::class)->disableOriginalConstructor()->getMock();
+
+        $nameConverter->expects($this->any())
+            ->method('getControllerArguments')
+            ->will($this->returnValue($arguments));
+
+        return $nameConverter;
     }
 }

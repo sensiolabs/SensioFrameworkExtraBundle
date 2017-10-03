@@ -33,7 +33,7 @@ class IsGrantedTest extends WebTestCase
     public function testIsGrantedSubjectFromArguments()
     {
         $client = self::createClient();
-        $client->request('GET', '/is_granted/resolved/args');
+        $client->request('GET', '/is_granted/variadic/args');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
     }

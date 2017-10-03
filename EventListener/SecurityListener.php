@@ -11,11 +11,11 @@
 
 namespace Sensio\Bundle\FrameworkExtraBundle\EventListener;
 
+use Sensio\Bundle\FrameworkExtraBundle\Request\ArgumentNameConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Security\ExpressionLanguage;
-use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
+use Symfony\Component\HttpKernel\Event\FilterControllerArgumentsEvent;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Authentication\AuthenticationTrustResolverInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -30,14 +30,16 @@ use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
  */
 class SecurityListener implements EventSubscriberInterface
 {
+    private $argumentNameConverter;
     private $tokenStorage;
     private $authChecker;
     private $language;
     private $trustResolver;
     private $roleHierarchy;
 
-    public function __construct(ExpressionLanguage $language = null, AuthenticationTrustResolverInterface $trustResolver = null, RoleHierarchyInterface $roleHierarchy = null, TokenStorageInterface $tokenStorage = null, AuthorizationCheckerInterface $authChecker = null)
+    public function __construct(ArgumentNameConverter $argumentNameConverter, ExpressionLanguage $language = null, AuthenticationTrustResolverInterface $trustResolver = null, RoleHierarchyInterface $roleHierarchy = null, TokenStorageInterface $tokenStorage = null, AuthorizationCheckerInterface $authChecker = null)
     {
+        $this->argumentNameConverter = $argumentNameConverter;
         $this->tokenStorage = $tokenStorage;
         $this->authChecker = $authChecker;
         $this->language = $language;
@@ -45,7 +47,7 @@ class SecurityListener implements EventSubscriberInterface
         $this->roleHierarchy = $roleHierarchy;
     }
 
-    public function onKernelController(FilterControllerEvent $event)
+    public function onKernelControllerArguments(FilterControllerArgumentsEvent $event)
     {
         $request = $event->getRequest();
         if (!$configurations = $request->attributes->get('_security')) {
@@ -65,7 +67,7 @@ class SecurityListener implements EventSubscriberInterface
         }
 
         foreach ($configurations as $configuration) {
-            if (!$this->language->evaluate($configuration->getExpression(), $this->getVariables($request))) {
+            if (!$this->language->evaluate($configuration->getExpression(), $this->getVariables($event))) {
                 if ($statusCode = $configuration->getStatusCode()) {
                     throw new HttpException($statusCode, $configuration->getMessage());
                 }
@@ -76,8 +78,9 @@ class SecurityListener implements EventSubscriberInterface
     }
 
     // code should be sync with Symfony\Component\Security\Core\Authorization\Voter\ExpressionVoter
-    private function getVariables(Request $request)
+    private function getVariables(FilterControllerArgumentsEvent $event)
     {
+        $request = $event->getArguments();
         $token = $this->tokenStorage->getToken();
 
         if (null !== $this->roleHierarchy) {
@@ -98,13 +101,15 @@ class SecurityListener implements EventSubscriberInterface
             'auth_checker' => $this->authChecker,
         );
 
-        if ($diff = array_intersect(array_keys($variables), array_keys($request->attributes->all()))) {
+        $controllerArguments = $this->argumentNameConverter->getControllerArguments($event);
+
+        if ($diff = array_intersect(array_keys($variables), array_keys($controllerArguments))) {
             $singular = 1 === count($diff);
             throw new \RuntimeException(sprintf('Request attribute%s "%s" cannot be defined as %s collide%s with built-in security expression variables.', $singular ? '' : 's', implode('", "', $diff), $singular ? 'it' : 'they', $singular ? 's' : ''));
         }
 
         // controller variables should also be accessible
-        return array_merge($request->attributes->all(), $variables);
+        return array_merge($controllerArguments, $variables);
     }
 
     /**
@@ -112,6 +117,6 @@ class SecurityListener implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return array(KernelEvents::CONTROLLER => 'onKernelController');
+        return array(KernelEvents::CONTROLLER_ARGUMENTS => 'onKernelControllerArguments');
     }
 }
