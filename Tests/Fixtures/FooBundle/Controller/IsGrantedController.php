@@ -48,14 +48,4 @@ class IsGrantedController
     {
         return new Response('yay3');
     }
-
-    /**
-     * @Route("/is_granted/variadic/args", defaults={"params"={"foo", "bar"}})
-     * @Security("is_granted('ISGRANTED_VOTER', params)")
-     * @IsGranted("ISGRANTED_VOTER", subject="params")
-     */
-    public function some4Action(Request $foo, ...$params)
-    {
-        return new Response('yay4');
-    }
 }

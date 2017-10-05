@@ -110,10 +110,13 @@ class IsGrantedListenerTest extends \PHPUnit_Framework_TestCase
         $isGranted = new IsGranted(array('attributes' => $attributes, 'subject' => $subject));
         $request = $this->createRequest($isGranted);
 
-        $this->expectException(AccessDeniedException::class);
-        $this->expectExceptionMessage($expectedMessage);
-
-        $listener->onKernelControllerArguments($this->createFilterControllerEvent($request));
+        try {
+            $listener->onKernelControllerArguments($this->createFilterControllerEvent($request));
+            $this->fail();
+        } catch (\Exception $e) {
+            $this->assertEquals(AccessDeniedException::class, get_class($e));
+            $this->assertEquals($expectedMessage, $e->getMessage());
+        }
     }
 
     public function getAccessDeniedMessageTests()

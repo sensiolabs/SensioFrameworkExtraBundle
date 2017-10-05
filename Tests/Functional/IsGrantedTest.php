@@ -30,6 +30,9 @@ class IsGrantedTest extends WebTestCase
         $this->assertSame(302, $client->getResponse()->getStatusCode());
     }
 
+    /**
+     * @requires PHP 5.6
+     */
     public function testIsGrantedSubjectFromArguments()
     {
         $client = self::createClient();

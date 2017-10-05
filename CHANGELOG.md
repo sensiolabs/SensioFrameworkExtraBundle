@@ -3,6 +3,7 @@ CHANGELOG
 
 5.0
 ---
+
  * Changed the `@Security` annotation to use arguments from argument
    resolvers as expression variables.
 
