@@ -1,0 +1,120 @@
+---------------------------------------------------------------------------
+
+by stof at 2017-10-03T11:03:01Z
+
+this looks good to me
+
+---------------------------------------------------------------------------
+
+by weaverryan at 2017-10-03T12:58:50Z
+
+Ok, this is ready then!
+
+But what about `@Security`? It is still "un-fixed". We could deprecate `@Security` entirely, fix it (BC break) or just doc it.
+
+---------------------------------------------------------------------------
+
+by xabbuh at 2017-10-03T13:02:06Z
+
+@weaverryan You mean fixing, for example, #514?
+
+---------------------------------------------------------------------------
+
+by weaverryan at 2017-10-03T13:13:42Z
+
+@xabbuh #514 is not exactly what I meant... but actually... yea, it's included. The *real* issue I was talking about is that `@Security` does not take into account the arguments provided by the argument resolver system. So, for example, you cannot use `request` as a variable in `@Security`, because the `Request $request` thing is done with an arg resolver (i.e. there is no `request` in `$request->attributes`. But, about #514, `@Security` also does other things (like always pass a `user` variable that is the currently-authenticated user). So #514 is kind of *another* minor issue with `@Security`. If they used `@IsGranted` instead, then `user` would be the `$user` argument... and never the currently-authenticated user. So, it's at least consistent (it always uses controller args as available subject values).
+
+---------------------------------------------------------------------------
+
+by HeahDude at 2017-10-03T13:18:52Z
+
+So what about https://github.com/sensiolabs/SensioFrameworkExtraBundle/pull/436? Shouldn't this be fixed globally?
+
+---------------------------------------------------------------------------
+
+by weaverryan at 2017-10-03T13:23:02Z
+
+@HeahDude What do you mean fixed globally? Are you thinking of a way to fix `@Security` (i.e. moving it to `CONTROLLER_ARGUMENTS`) without a big BC break?
+
+---------------------------------------------------------------------------
+
+by HeahDude at 2017-10-03T13:25:38Z
+
+Sorry my question is confusing. I'm wondering if that kind of refactoring (#436) would impact what you're trying to solve and if it's not better to consider it before, to make 4.x version of this bundle more consistent?
+
+---------------------------------------------------------------------------
+
+by weaverryan at 2017-10-03T13:38:27Z
+
+Hmm... I think #436 won't change anything. The problem is pretty simple: if we change `@Security` from the `kernel.controller` event to `kernel.controller_arguments`, then it's a weird BC break, as suddenly variables in the expression might change (since arguments made available by argument resolvers are suddenly taken into account). But this *is* the proper behavior. It's a bug fix, that breaks BC in a hard-to-detect kind of way.
+
+#436 changes `@ParamConverter` stuff so that it's done via argument resolvers. If we did that AND changed `@Security` to use the `kernel.controller_arguments` event, it's still the same problem: variables in the expression might change.
+
+So the question is this: if we change the variables in `@Security` to take into account variables/transformations done by argument resolvers, do we consider that a BC break? The new/changed variables would be things like `request`, `session`, `user` (if there is a `UserInterface` type-hinted argument) and anything custom the user added.
+
+---------------------------------------------------------------------------
+
+by stof at 2017-10-03T13:40:04Z
+
+@weaverryan actually, you can access the request with `@security`, because it injects a `request` variable in the expression. But this would not be true for other argument resolvers.
+
+Refactoring the `@Security` annotation would require to keep passing the custom predefined variables (not overwriting them with provided arguments) when a conflict happens. But this is already the case currently in case of conflicts between predefined variables and request attributes.
+
+The main BC break about moving `@Security` to run on the `CONTROLLER_ARGUMENTS` event is that it would make it run later in the process, which can have an impact if you have other event listeners doing another logic on `CONTROLLER` which were set on a lower priority than the SecurityListener and were expecting the Security check to be performed already. But anyway, making IsGranted running on `CONTROLLER_ARGUMENTS` suffers from the same issue (as people switching to the new annotation would delay the security check).
+And I'm not sure we have to provide BC there in a major version (we could document it in the UPGRADE file for the few ones relying on this priority). If we consider we have to, we cannot move `IsGranted` to the new event either.
+
+---------------------------------------------------------------------------
+
+by fabpot at 2017-10-03T13:40:35Z
+
+I think it makes sense to fix the issue on @Security as well. We can release a 5.0 even if 4.0 was released a few days ago if that makes everyone less nervous about the changes.
+
+---------------------------------------------------------------------------
+
+by stof at 2017-10-03T13:41:08Z
+
+@weaverryan `request` and `user` would not change in the expression if you keep the merging between predefined variables and argument-based ones in the same order than today.
+
+---------------------------------------------------------------------------
+
+by stof at 2017-10-03T14:01:20Z
+
+@weaverryan AFAICT, there would not be much BC break for the change (as long as we keep the merging order) for people not using custom argument resolvers:
+
+- variables defined in https://github.com/sensiolabs/SensioFrameworkExtraBundle/blob/74f1f17e1e5c32ca43de92611e9097a8d0e0acf2/EventListener/SecurityListener.php#L89-L98 would keep being the same
+- any request attribute would keep the same by default (as argument resolvers would have read them, and so using this value instead of the request attribute would be the same)
+
+When using custom argument resolvers, there is 2 possible use cases:
+
+- the custom resolver runs at lower priority than the RequestAttributeValueResolver (which runs at priority `100`): no BC break possible, as the custom resolver will only be able to provide arguments which don't exist as request attributes (and so are not available as a variable in the expression in SFEB 3.x or 4.0)
+- the custom resolver runs at a high priority (which does not happen in the core): the result of the argument resolver would be used for the expression. I would argue that this would remove a WTF for the user if they were expecting the argument to vote. And this is what would allow us to turn ParamConverter into an ArgumentArgumentResolver in a BC way (as the ParamConverter would stop replacing the request attribute itself, but we want the resolved value to be used in the security check).
+
+---------------------------------------------------------------------------
+
+by weaverryan at 2017-10-03T15:16:05Z
+
+Ok, done!
+
+* This fixes `@Security` so that it also uses argument resolver arguments as variables. But it did not change any merging logic (if a controller argument conflicts with a built-in variable, we still throw an exception)
+
+* I fixed the variadic argument problem with my original PR. The logic is extracted to its own class and tested
+
+* I added a functional test for `@IsGranted` and `@Security`
+
+---------------------------------------------------------------------------
+
+by weaverryan at 2017-10-03T18:00:59Z
+
+Tweaks done! Thanks Stof :)
+
+---------------------------------------------------------------------------
+
+by fabpot at 2017-10-05T12:33:57Z
+
+@stof Can you give your feedback?
+
+---------------------------------------------------------------------------
+
+by fabpot at 2017-10-06T00:46:26Z
+
+I've fixed the tests. Didn't realize it would take me so much time :(
