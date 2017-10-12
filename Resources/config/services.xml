@@ -9,7 +9,7 @@
     </parameters>
 
     <services>
-        <service id="sensio_framework_extra.view.guesser" class="%sensio_framework_extra.view.guesser.class%">
+        <service id="sensio_framework_extra.view.guesser" class="%sensio_framework_extra.view.guesser.class%" public="true">
             <argument type="service" id="kernel" />
         </service>
     </services>
