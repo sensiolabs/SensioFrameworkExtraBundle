@@ -1,0 +1,11 @@
+---------------------------------------------------------------------------
+
+by iltar at 2017-10-09T07:24:44Z
+
+For the next version of this bundle, it should probably be made private again and inject the services into the listener
+
+---------------------------------------------------------------------------
+
+by derrabus at 2017-10-09T09:02:38Z
+
+@iltar This is the case in master already. Nevertheless, the 3.0 branch indicates compatibility with Symfony 4, so I thought this issue should be fixed there. :-)
