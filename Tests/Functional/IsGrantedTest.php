@@ -30,6 +30,22 @@ class IsGrantedTest extends WebTestCase
         $this->assertSame(302, $client->getResponse()->getStatusCode());
     }
 
+    public function testIsGrantedResolvesRequestArgument()
+    {
+        $client = self::createClient();
+        $client->request('GET', '/is_granted/resolved/args');
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+    }
+
+    public function testRequestArgumentDoesNotConflict()
+    {
+        $client = self::createClient();
+        $client->request('GET', '/is_granted/resolved/conflict');
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+    }
+
     /**
      * @requires PHP 5.6
      */

@@ -11,6 +11,7 @@
 
 namespace Sensio\Bundle\FrameworkExtraBundle\EventListener;
 
+use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ArgumentNameConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Security\ExpressionLanguage;
 use Symfony\Component\HttpKernel\Event\FilterControllerArgumentsEvent;
@@ -36,8 +37,9 @@ class SecurityListener implements EventSubscriberInterface
     private $language;
     private $trustResolver;
     private $roleHierarchy;
+    private $logger;
 
-    public function __construct(ArgumentNameConverter $argumentNameConverter, ExpressionLanguage $language = null, AuthenticationTrustResolverInterface $trustResolver = null, RoleHierarchyInterface $roleHierarchy = null, TokenStorageInterface $tokenStorage = null, AuthorizationCheckerInterface $authChecker = null)
+    public function __construct(ArgumentNameConverter $argumentNameConverter, ExpressionLanguage $language = null, AuthenticationTrustResolverInterface $trustResolver = null, RoleHierarchyInterface $roleHierarchy = null, TokenStorageInterface $tokenStorage = null, AuthorizationCheckerInterface $authChecker = null, LoggerInterface $logger = null)
     {
         $this->argumentNameConverter = $argumentNameConverter;
         $this->tokenStorage = $tokenStorage;
@@ -45,6 +47,7 @@ class SecurityListener implements EventSubscriberInterface
         $this->language = $language;
         $this->trustResolver = $trustResolver;
         $this->roleHierarchy = $roleHierarchy;
+        $this->logger = $logger;
     }
 
     public function onKernelControllerArguments(FilterControllerArgumentsEvent $event)
@@ -80,7 +83,7 @@ class SecurityListener implements EventSubscriberInterface
     // code should be sync with Symfony\Component\Security\Core\Authorization\Voter\ExpressionVoter
     private function getVariables(FilterControllerArgumentsEvent $event)
     {
-        $request = $event->getArguments();
+        $request = $event->getRequest();
         $token = $this->tokenStorage->getToken();
 
         if (null !== $this->roleHierarchy) {
@@ -104,8 +107,18 @@ class SecurityListener implements EventSubscriberInterface
         $controllerArguments = $this->argumentNameConverter->getControllerArguments($event);
 
         if ($diff = array_intersect(array_keys($variables), array_keys($controllerArguments))) {
-            $singular = 1 === count($diff);
-            throw new \RuntimeException(sprintf('Request attribute%s "%s" cannot be defined as %s collide%s with built-in security expression variables.', $singular ? '' : 's', implode('", "', $diff), $singular ? 'it' : 'they', $singular ? 's' : ''));
+            foreach ($diff as $key => $variableName) {
+                if ($variables[$variableName] === $controllerArguments[$variableName]) {
+                    unset($diff[$key]);
+                }
+            }
+
+            if (!empty($diff)) {
+                $singular = 1 === count($diff);
+                if (null !== $this->logger) {
+                    $this->logger->warning(sprintf('Controller argument%s "%s" collided with the built-in security expression variables. The built-in value%s are being used for the @Security expression.', $singular ? '' : 's', implode('", "', $diff), $singular ? 's' : ''));
+                }
+            }
         }
 
         // controller variables should also be accessible

@@ -22,34 +22,6 @@ use Symfony\Component\HttpKernel\Event\FilterControllerArgumentsEvent;
 class SecurityListenerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @expectedException        \RuntimeException
-     * @expectedExceptionMessage Request attribute "user" cannot be defined as it collides with built-in security expression variables.
-     */
-    public function testReservedVariable()
-    {
-        $token = $this->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\TokenInterface')->getMock();
-        $token->expects($this->once())->method('getRoles')->will($this->returnValue(array()));
-
-        $tokenStorage = $this->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface')->getMock();
-        $tokenStorage->expects($this->exactly(2))->method('getToken')->will($this->returnValue($token));
-
-        $authChecker = $this->getMockBuilder('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface')->getMock();
-
-        $trustResolver = $this->getMockBuilder('Symfony\Component\Security\Core\Authentication\AuthenticationTrustResolverInterface')->getMock();
-
-        $language = new ExpressionLanguage();
-
-        $argNameConverter = $this->createArgumentNameConverter(array('user' => 'myuser'));
-
-        $listener = new SecurityListener($argNameConverter, $language, $trustResolver, null, $tokenStorage, $authChecker);
-        $request = $this->createRequest(new Security(array('expression' => 'has_role("ROLE_ADMIN") or is_granted("FOO")')));
-
-        $event = new FilterControllerArgumentsEvent($this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock(), function () { return new Response(); }, array(), $request, null);
-
-        $listener->onKernelControllerArguments($event);
-    }
-
-    /**
      * @expectedException \Symfony\Component\Security\Core\Exception\AccessDeniedException
      */
     public function testAccessDenied()
