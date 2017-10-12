@@ -47,7 +47,7 @@ class ArgumentNameConverter
                 break;
             }
 
-            if (!isset($controllerArguments[$index])) {
+            if (!array_key_exists($index, $controllerArguments)) {
                 throw new \LogicException(sprintf('Could not find an argument value for argument %d of the controller.', $index));
             }
 
