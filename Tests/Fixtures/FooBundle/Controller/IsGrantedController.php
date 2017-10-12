@@ -48,4 +48,14 @@ class IsGrantedController
     {
         return new Response('yay3');
     }
+
+    /**
+     * @Route("/is_granted/resolved/conflict")
+     * @IsGranted("ISGRANTED_VOTER", subject="request")
+     * @Security("is_granted('ISGRANTED_VOTER', request)")
+     */
+    public function someRequestAction(Request $request)
+    {
+        return new Response('yayRequest');
+    }
 }
