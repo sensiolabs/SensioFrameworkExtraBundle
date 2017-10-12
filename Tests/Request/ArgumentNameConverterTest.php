@@ -63,5 +63,10 @@ class ArgumentNameConverterTest extends \PHPUnit_Framework_TestCase
 
         // variadic argument receives no arguments, so becomes an empty array
         yield array(array('arg1Value'), array($arg1Metadata, $arg2VariadicMetadata), array(), array('arg1Name' => 'arg1Value', 'arg2Name' => array()));
+
+        // resolves nullable argument correctly
+        $arg1Metadata = new ArgumentMetadata('arg1Name', 'string', false, false, null);
+        $arg2NullableMetadata = new ArgumentMetadata('arg2Name', 'string', false, false, true);
+        yield array(array('arg1Value', null), array($arg1Metadata, $arg2Metadata), array('post' => 5), array('post' => 5, 'arg1Name' => 'arg1Value', 'arg2Name' => null));
     }
 }
