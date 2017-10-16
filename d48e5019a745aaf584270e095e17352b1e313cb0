@@ -1,0 +1,25 @@
+---------------------------------------------------------------------------
+
+by HeahDude at 2017-10-02T15:05:43Z
+
+>I tried to add the same behavior in converters.xml but it was not working..
+
+It's better to do it in the pass anyway as it allows to auto configure any other converter.
+
+The `instance_of` DI feature only applies on definitions in the same file.
+
+---------------------------------------------------------------------------
+
+by weaverryan at 2017-10-13T00:20:55Z
+
+This makes sense to me: this will create a non-named converter with a priority of 0... which is probably what you want in most cases.
+
+@B-Galati could you also update the docs: https://github.com/sensiolabs/SensioFrameworkExtraBundle/blob/74f1f17e1e5c32ca43de92611e9097a8d0e0acf2/Resources/doc/annotations/converters.rst#creating-a-converter. We should say something like "If you're using service auto-registration and autoconfiguration, you're done! Your converter will automatically be used. If not,..."
+
+You could even link to http://symfony.com/doc/current/service_container/3.3-di-changes.html for `auto-registration and autoconfiguration`.
+
+---------------------------------------------------------------------------
+
+by B-Galati at 2017-10-13T20:46:44Z
+
+@weaverryan It's done thank you, let me know for anything else ;-)
