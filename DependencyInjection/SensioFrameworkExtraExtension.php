@@ -11,6 +11,7 @@
 
 namespace Sensio\Bundle\FrameworkExtraBundle\DependencyInjection;
 
+use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
@@ -46,6 +47,9 @@ class SensioFrameworkExtraExtension extends Extension
 
         if ($config['request']['converters']) {
             $annotationsToLoad[] = 'converters.xml';
+
+            $container->registerForAutoconfiguration(ParamConverterInterface::class)
+                ->addTag('request.param_converter');
 
             $container->setParameter('sensio_framework_extra.disabled_converters', is_string($config['request']['disable']) ? implode(',', $config['request']['disable']) : $config['request']['disable']);
 
