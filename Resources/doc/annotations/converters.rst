@@ -60,7 +60,7 @@ by setting the ``auto_convert`` flag to ``false``:
             <request converters="true" auto-convert="true" />
         </sensio-framework-extra:config>
 
-You can also explicitly disable some converters by name::
+You can also explicitly disable some converters by name:
 
 .. configuration-block::
 
