@@ -13,7 +13,7 @@ The ``@Template`` annotation associates a controller with a template name::
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
     /**
-     * @Template("@SensioBlog/Post/show.html.twig")
+     * @Template("@SensioBlog/post/show.html.twig")
      */
     public function showAction($id)
     {
@@ -57,6 +57,11 @@ case for the above example, you can even omit the annotation value::
         return array('post' => $post);
     }
 
+.. tip::
+   Sub-namespaces are converted into underscores. 
+   The ``Sensio\BlogBundle\Controller\UserProfileController::showDetailsAction()`` action
+   will resolve to ``@SensioBlog/user_profile/show_details.html.twig``
+
 And if the only parameters to pass to the template are method arguments, you
 can use the ``vars`` attribute instead of returning an array. This is very
 useful in combination with the ``@ParamConverter`` :doc:`annotation
@@ -64,7 +69,7 @@ useful in combination with the ``@ParamConverter`` :doc:`annotation
 
     /**
      * @ParamConverter("post", class="SensioBlogBundle:Post")
-     * @Template("@SensioBlog/Post/show.html.twig", vars={"post"})
+     * @Template("@SensioBlog/post/show.html.twig", vars={"post"})
      */
     public function showAction(Post $post)
     {
