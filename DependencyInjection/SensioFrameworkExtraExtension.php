@@ -103,10 +103,10 @@ class SensioFrameworkExtraExtension extends Extension
                 if (class_exists(SecurityExpressionLanguage::class)) {
                     $container->setAlias('sensio_framework_extra.security.expression_language', new Alias($config['security']['expression_language'], false));
                 } else {
-                    $container->removeDefinition('Sensio\Bundle\FrameworkExtraBundle\Security\ExpressionLanguage');
+                    $container->removeDefinition('sensio_framework_extra.security.expression_language.default');
                 }
             } else {
-                $container->removeDefinition('Sensio\Bundle\FrameworkExtraBundle\Security\ExpressionLanguage');
+                $container->removeDefinition('sensio_framework_extra.security.expression_language.default');
             }
 
             if (PHP_VERSION_ID < 70000) {
@@ -137,7 +137,7 @@ class SensioFrameworkExtraExtension extends Extension
 
         if (!empty($config['templating']['controller_patterns'])) {
             $container
-                ->getDefinition('Sensio\Bundle\FrameworkExtraBundle\Templating\TemplateGuesser')
+                ->getDefinition('sensio_framework_extra.view.guesser')
                 ->addArgument($config['templating']['controller_patterns']);
         }
 

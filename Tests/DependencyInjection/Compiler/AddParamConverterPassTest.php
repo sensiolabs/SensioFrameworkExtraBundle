@@ -38,13 +38,13 @@ class AddParamConverterPassTest extends \PHPUnit_Framework_TestCase
         $this->pass = new AddParamConverterPass();
         $this->container = new ContainerBuilder();
         $this->managerDefinition = new Definition();
-        $this->container->setDefinition('Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager', $this->managerDefinition);
+        $this->container->setDefinition('sensio_framework_extra.converter.manager', $this->managerDefinition);
         $this->container->setParameter('sensio_framework_extra.disabled_converters', array());
     }
 
     public function testProcessNoOpNoManager()
     {
-        $this->container->removeDefinition('Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager');
+        $this->container->removeDefinition('sensio_framework_extra.converter.manager');
         $this->pass->process($this->container);
     }
 

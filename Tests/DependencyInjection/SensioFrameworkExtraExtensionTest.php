@@ -24,7 +24,7 @@ class SensioFrameworkExtraExtensionTest extends \PHPUnit_Framework_TestCase
         $extension = new SensioFrameworkExtraExtension();
         $extension->load(array(), $container);
 
-        $this->assertAlias($container, 'Sensio\Bundle\FrameworkExtraBundle\Security\ExpressionLanguage', 'sensio_framework_extra.security.expression_language');
+        $this->assertAlias($container, 'sensio_framework_extra.security.expression_language.default', 'sensio_framework_extra.security.expression_language');
     }
 
     public function testOverrideExpressionLanguageConfig()
@@ -58,7 +58,7 @@ class SensioFrameworkExtraExtensionTest extends \PHPUnit_Framework_TestCase
 
         $extension->load(array($config), $container);
 
-        $this->assertEquals($patterns, $container->getDefinition('Sensio\Bundle\FrameworkExtraBundle\Templating\TemplateGuesser')->getArgument(1));
+        $this->assertEquals($patterns, $container->getDefinition('sensio_framework_extra.view.guesser')->getArgument(1));
     }
 
     private function assertAlias(ContainerBuilder $container, $value, $key)

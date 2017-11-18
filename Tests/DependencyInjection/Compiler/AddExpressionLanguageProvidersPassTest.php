@@ -38,12 +38,12 @@ class AddExpressionLanguageProvidersPassTest extends \PHPUnit_Framework_TestCase
         $this->pass = new AddExpressionLanguageProvidersPass();
         $this->container = new ContainerBuilder();
         $this->expressionLangDefinition = new Definition();
-        $this->container->setDefinition('Sensio\Bundle\FrameworkExtraBundle\Security\ExpressionLanguage', $this->expressionLangDefinition);
+        $this->container->setDefinition('sensio_framework_extra.security.expression_language.default', $this->expressionLangDefinition);
     }
 
     public function testProcessNoOpNoExpressionLang()
     {
-        $this->container->removeDefinition('Sensio\Bundle\FrameworkExtraBundle\Security\ExpressionLanguage');
+        $this->container->removeDefinition('sensio_framework_extra.security.expression_language.default');
         $this->pass->process($this->container);
     }
 
