@@ -60,7 +60,7 @@ by setting the ``auto_convert`` flag to ``false``:
             <request converters="true" auto-convert="true" />
         </sensio-framework-extra:config>
 
-You can also explicitly disable some converters by name::
+You can also explicitly disable some converters by name:
 
 .. configuration-block::
 
@@ -146,7 +146,7 @@ If automatic fetching doesn't work, another great option is to use
 an expression::
 
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
-    
+
     /**
      * @Route("/blog/{post_id}")
      * @Entity("post", expr="repository.find(post_id)")
