@@ -5,19 +5,19 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="Symfony\Component\Routing\Loader\AnnotationDirectoryLoader" class="Symfony\Component\Routing\Loader\AnnotationDirectoryLoader" public="false">
+        <service id="framework_extra_bundle.loader.annotation_directory" class="Symfony\Component\Routing\Loader\AnnotationDirectoryLoader" public="false">
             <tag name="routing.loader" />
             <argument type="service" id="file_locator" />
-            <argument type="service" id="Sensio\Bundle\FrameworkExtraBundle\Routing\AnnotatedRouteControllerLoader" />
+            <argument type="service" id="framework_extra_bundle.controller.annotated_route" />
         </service>
 
-        <service id="Symfony\Component\Routing\Loader\AnnotationFileLoader" class="Symfony\Component\Routing\Loader\AnnotationFileLoader" public="false">
+        <service id="framework_extra_bundle.loader.annotation_file" class="Symfony\Component\Routing\Loader\AnnotationFileLoader" public="false">
             <tag name="routing.loader" />
             <argument type="service" id="file_locator" />
-            <argument type="service" id="Sensio\Bundle\FrameworkExtraBundle\Routing\AnnotatedRouteControllerLoader" />
+            <argument type="service" id="framework_extra_bundle.controller.annotated_route" />
         </service>
 
-        <service id="Sensio\Bundle\FrameworkExtraBundle\Routing\AnnotatedRouteControllerLoader" class="Sensio\Bundle\FrameworkExtraBundle\Routing\AnnotatedRouteControllerLoader" public="false">
+        <service id="framework_extra_bundle.controller.annotated_route" class="Sensio\Bundle\FrameworkExtraBundle\Routing\AnnotatedRouteControllerLoader" public="false">
             <tag name="routing.loader" />
             <argument type="service" id="annotation_reader" />
         </service>

@@ -17,6 +17,7 @@ use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use Sensio\Bundle\FrameworkExtraBundle\EventListener\HttpCacheListener;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -172,7 +173,7 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
         $controllerEvent = new FilterControllerEvent($this->getKernel(), function () { return new Response(); }, $request, null);
         $listener->onKernelController($controllerEvent);
 
-        $responseEvent = new FilterResponseEvent($this->getKernel(), $request, null, call_user_func($controllerEvent->getController()));
+        $responseEvent = new FilterResponseEvent($this->getKernel(), $request, HttpKernelInterface::MASTER_REQUEST, call_user_func($controllerEvent->getController()));
         $listener->onKernelResponse($responseEvent);
 
         $response = $responseEvent->getResponse();
@@ -207,7 +208,7 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
         $controllerEvent = new FilterControllerEvent($this->getKernel(), function () { return new Response(); }, $request, null);
         $listener->onKernelController($controllerEvent);
 
-        $responseEvent = new FilterResponseEvent($this->getKernel(), $request, null, call_user_func($controllerEvent->getController()));
+        $responseEvent = new FilterResponseEvent($this->getKernel(), $request, HttpKernelInterface::MASTER_REQUEST, call_user_func($controllerEvent->getController()));
         $listener->onKernelResponse($responseEvent);
 
         $response = $responseEvent->getResponse();
@@ -237,7 +238,7 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
         $response->setVary(array('foobaz'));
 
         $listener = new HttpCacheListener();
-        $responseEvent = new FilterResponseEvent($this->getKernel(), $request, null, $response);
+        $responseEvent = new FilterResponseEvent($this->getKernel(), $request, HttpKernelInterface::MASTER_REQUEST, $response);
         $listener->onKernelResponse($responseEvent);
 
         $this->assertEquals('"54321"', $response->getEtag());

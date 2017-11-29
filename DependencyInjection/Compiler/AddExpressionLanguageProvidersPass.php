@@ -22,8 +22,8 @@ class AddExpressionLanguageProvidersPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if ($container->hasDefinition('Sensio\Bundle\FrameworkExtraBundle\Security\ExpressionLanguage')) {
-            $definition = $container->findDefinition('Sensio\Bundle\FrameworkExtraBundle\Security\ExpressionLanguage');
+        if ($container->hasDefinition('sensio_framework_extra.security.expression_language.default')) {
+            $definition = $container->findDefinition('sensio_framework_extra.security.expression_language.default');
             foreach ($container->findTaggedServiceIds('security.expression_language_provider') as $id => $attributes) {
                 $definition->addMethodCall('registerProvider', array(new Reference($id)));
             }
