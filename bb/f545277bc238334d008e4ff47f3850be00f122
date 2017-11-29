@@ -1,0 +1,50 @@
+---------------------------------------------------------------------------
+
+by Simperfit at 2017-11-19T17:31:20Z
+
+Yes, I agree with you
+
+2017-11-19 18:26 GMT+01:00 Nicolas Grekas <notifications@github.com>:
+
+> *@nicolas-grekas* commented on this pull request.
+> ------------------------------
+>
+> In DependencyInjection/SensioFrameworkExtraExtension.php
+> <https://github.com/sensiolabs/SensioFrameworkExtraBundle/pull/530#discussion_r151871263>
+> :
+>
+> > @@ -103,10 +103,10 @@ public function load(array $configs, ContainerBuilder $container)
+>                  if (class_exists(SecurityExpressionLanguage::class)) {
+>                      $container->setAlias('sensio_framework_extra.security.expression_language', new Alias($config['security']['expression_language'], false));
+>                  } else {
+> -                    $container->removeDefinition('Sensio\Bundle\FrameworkExtraBundle\Security\ExpressionLanguage');
+> +                    $container->removeDefinition('framework_extra_bundle.expression_language');
+>
+> the configuration prefix is "sensio_framework_extra", should use the same?
+>
+> —
+> You are receiving this because you authored the thread.
+> Reply to this email directly, view it on GitHub
+> <https://github.com/sensiolabs/SensioFrameworkExtraBundle/pull/530#pullrequestreview-77649092>,
+> or mute the thread
+> <https://github.com/notifications/unsubscribe-auth/ADSq8rDfWJ0aY13awWYkxPmzmn6sBWLhks5s4GS8gaJpZM4Qi9Ke>
+> .
+>
+
+---------------------------------------------------------------------------
+
+by nicolas-grekas at 2017-11-20T18:20:24Z
+
+I just found #488, which this PR basically reverts. We should revert to the same names that we used before, don't you think?
+
+---------------------------------------------------------------------------
+
+by Simperfit at 2017-11-21T04:49:47Z
+
+Yeah I agree, I'm going to do that
+
+---------------------------------------------------------------------------
+
+by stof at 2017-11-29T19:14:49Z
+
+Reusing the old name has an advantage: it will avoid breaking bundles needing to deal with these services, if they kept support for the previous version of the bundle (I'm looking at FOSRestBundle here).
