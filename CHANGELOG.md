@@ -1,6 +1,14 @@
 CHANGELOG
 =========
 
+5.1
+---
+
+ * Added autoconfigure for `ParamConverterInterface` (#516).
+
+ * Renamed service ids back to traditional service ids instead
+   of class names (#530).
+
 5.0
 ---
 
