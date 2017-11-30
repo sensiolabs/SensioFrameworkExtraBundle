@@ -28,7 +28,7 @@ class OptimizerPass implements CompilerPassInterface
         }
 
         if (!$container->hasDefinition('twig')) {
-            $container->removeDefinition('DependencyInjection/Compiler/OptimizerPass.php');
+            $container->removeDefinition('sensio_framework_extra.view.listener');
         }
     }
 }

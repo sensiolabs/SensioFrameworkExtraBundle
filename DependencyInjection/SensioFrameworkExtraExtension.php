@@ -55,9 +55,9 @@ class SensioFrameworkExtraExtension extends Extension
 
             $container->addResource(new ClassExistenceResource(ExpressionLanguage::class));
             if (class_exists(ExpressionLanguage::class)) {
-                $container->setAlias('sensio_framework_extra.converter.doctrine.orm.expression_language', new Alias('Symfony\Component\ExpressionLanguage\ExpressionLanguage', false));
+                $container->setAlias('sensio_framework_extra.converter.doctrine.orm.expression_language', new Alias('sensio_framework_extra.converter.doctrine.orm.expression_language.default', false));
             } else {
-                $container->removeDefinition('Symfony\Component\ExpressionLanguage\ExpressionLanguage');
+                $container->removeDefinition('sensio_framework_extra.converter.doctrine.orm.expression_language.default');
             }
 
             if (PHP_VERSION_ID < 70000) {
@@ -131,7 +131,7 @@ class SensioFrameworkExtraExtension extends Extension
             }
 
             if ($config['request']['converters']) {
-                $container->getDefinition('Sensio\Bundle\FrameworkExtraBundle\EventListener\ParamConverterListener')->replaceArgument(1, $config['request']['auto_convert']);
+                $container->getDefinition('sensio_framework_extra.converter.listener')->replaceArgument(1, $config['request']['auto_convert']);
             }
         }
 
