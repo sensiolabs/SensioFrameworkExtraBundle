@@ -34,6 +34,7 @@ class SensioFrameworkExtraExtension extends Extension
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 
         $annotationsToLoad = array();
+        $definitionsToRemove = array();
 
         if ($config['router']['annotations']) {
             $annotationsToLoad[] = 'routing.xml';
@@ -57,7 +58,7 @@ class SensioFrameworkExtraExtension extends Extension
             if (class_exists(ExpressionLanguage::class)) {
                 $container->setAlias('sensio_framework_extra.converter.doctrine.orm.expression_language', new Alias('sensio_framework_extra.converter.doctrine.orm.expression_language.default', false));
             } else {
-                $container->removeDefinition('sensio_framework_extra.converter.doctrine.orm.expression_language.default');
+                $definitionsToRemove[] = 'sensio_framework_extra.converter.doctrine.orm.expression_language.default';
             }
 
             if (PHP_VERSION_ID < 70000) {
@@ -103,10 +104,10 @@ class SensioFrameworkExtraExtension extends Extension
                 if (class_exists(SecurityExpressionLanguage::class)) {
                     $container->setAlias('sensio_framework_extra.security.expression_language', new Alias($config['security']['expression_language'], false));
                 } else {
-                    $container->removeDefinition('sensio_framework_extra.security.expression_language.default');
+                    $definitionsToRemove[] = 'sensio_framework_extra.security.expression_language.default';
                 }
             } else {
-                $container->removeDefinition('sensio_framework_extra.security.expression_language.default');
+                $definitionsToRemove[] = 'sensio_framework_extra.security.expression_language.default';
             }
 
             if (PHP_VERSION_ID < 70000) {
@@ -143,6 +144,10 @@ class SensioFrameworkExtraExtension extends Extension
 
         if ($config['psr_message']['enabled']) {
             $loader->load('psr7.xml');
+        }
+
+        foreach ($definitionsToRemove as $definition) {
+            $container->removeDefinition($definition);
         }
     }
 
