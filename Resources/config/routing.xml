@@ -11,6 +11,11 @@
     </parameters>
 
     <services>
+        <service id="sensio_framework_extra.routing.loader.annot_class" class="%sensio_framework_extra.routing.loader.annot_class.class%" public="false">
+            <tag name="routing.loader" />
+            <argument type="service" id="annotation_reader" />
+        </service>
+
         <service id="sensio_framework_extra.routing.loader.annot_dir" class="%sensio_framework_extra.routing.loader.annot_dir.class%" public="false">
             <tag name="routing.loader" />
             <argument type="service" id="file_locator" />
@@ -21,11 +26,6 @@
             <tag name="routing.loader" />
             <argument type="service" id="file_locator" />
             <argument type="service" id="sensio_framework_extra.routing.loader.annot_class" />
-        </service>
-
-        <service id="sensio_framework_extra.routing.loader.annot_class" class="%sensio_framework_extra.routing.loader.annot_class.class%" public="false">
-            <tag name="routing.loader" />
-            <argument type="service" id="annotation_reader" />
         </service>
     </services>
 </container>
