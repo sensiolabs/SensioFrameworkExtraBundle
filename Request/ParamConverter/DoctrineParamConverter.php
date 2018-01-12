@@ -109,7 +109,7 @@ class DoctrineParamConverter implements ParamConverterInterface
         } else {
             $method = 'find';
         }
-        
+
         $om = $this->getManager($options['entity_manager'], $class);
         if ($options['evict_cache'] && $om instanceof EntityManagerInterface) {
             $cacheProvider = $om->getCache();
@@ -117,9 +117,9 @@ class DoctrineParamConverter implements ParamConverterInterface
                 $cacheProvider->evictEntity($class, $id);
             }
         }
-        
+
         try {
-            return $this->getManager($options['entity_manager'], $class)->getRepository($class)->$method($id);
+            return $om->getRepository($class)->$method($id);
         } catch (NoResultException $e) {
             return;
         }
