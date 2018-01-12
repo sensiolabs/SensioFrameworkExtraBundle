@@ -67,7 +67,8 @@ class ParamConverterManager
             if (!isset($this->namedConverters[$converterName])) {
                 throw new \RuntimeException(sprintf(
                     "No converter named '%s' found for conversion of parameter '%s'.",
-                    $converterName, $configuration->getName()
+                    $converterName,
+                    $configuration->getName()
                 ));
             }
 
@@ -76,7 +77,8 @@ class ParamConverterManager
             if (!$converter->supports($configuration)) {
                 throw new \RuntimeException(sprintf(
                     "Converter '%s' does not support conversion of parameter '%s'.",
-                    $converterName, $configuration->getName()
+                    $converterName,
+                    $configuration->getName()
                 ));
             }
 

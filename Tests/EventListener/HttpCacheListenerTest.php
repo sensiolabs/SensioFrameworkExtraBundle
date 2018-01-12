@@ -155,7 +155,9 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
         $request->headers->add(array('If-Modified-Since' => 'Fri, 23 Aug 2013 00:00:00 GMT'));
 
         $listener = new HttpCacheListener();
-        $controllerEvent = new FilterControllerEvent($this->getKernel(), function () { return new Response(500); }, $request, null);
+        $controllerEvent = new FilterControllerEvent($this->getKernel(), function () {
+            return new Response(500);
+        }, $request, null);
 
         $listener->onKernelController($controllerEvent);
         $response = call_user_func($controllerEvent->getController());
@@ -170,7 +172,9 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
         $response = new Response();
 
         $listener = new HttpCacheListener();
-        $controllerEvent = new FilterControllerEvent($this->getKernel(), function () { return new Response(); }, $request, null);
+        $controllerEvent = new FilterControllerEvent($this->getKernel(), function () {
+            return new Response();
+        }, $request, null);
         $listener->onKernelController($controllerEvent);
 
         $responseEvent = new FilterResponseEvent($this->getKernel(), $request, HttpKernelInterface::MASTER_REQUEST, call_user_func($controllerEvent->getController()));
@@ -190,7 +194,9 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
         $request->headers->add(array('If-None-Match' => sprintf('"%s"', hash('sha256', $entity->getId()))));
 
         $listener = new HttpCacheListener();
-        $controllerEvent = new FilterControllerEvent($this->getKernel(), function () { return new Response(500); }, $request, null);
+        $controllerEvent = new FilterControllerEvent($this->getKernel(), function () {
+            return new Response(500);
+        }, $request, null);
 
         $listener->onKernelController($controllerEvent);
         $response = call_user_func($controllerEvent->getController());
@@ -205,7 +211,9 @@ class HttpCacheListenerTest extends \PHPUnit_Framework_TestCase
         $response = new Response();
 
         $listener = new HttpCacheListener();
-        $controllerEvent = new FilterControllerEvent($this->getKernel(), function () { return new Response(); }, $request, null);
+        $controllerEvent = new FilterControllerEvent($this->getKernel(), function () {
+            return new Response();
+        }, $request, null);
         $listener->onKernelController($controllerEvent);
 
         $responseEvent = new FilterResponseEvent($this->getKernel(), $request, HttpKernelInterface::MASTER_REQUEST, call_user_func($controllerEvent->getController()));

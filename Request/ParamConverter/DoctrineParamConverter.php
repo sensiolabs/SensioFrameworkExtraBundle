@@ -111,9 +111,9 @@ class DoctrineParamConverter implements ParamConverterInterface
         }
         
         $om = $this->getManager($options['entity_manager'], $class);
-        if($options['evict_cache'] && $om instanceof EntityManagerInterface) {
+        if ($options['evict_cache'] && $om instanceof EntityManagerInterface) {
             $cacheProvider = $om->getCache();
-            if($cacheProvider && $cacheProvider->containsEntity($class, $id)){
+            if ($cacheProvider && $cacheProvider->containsEntity($class, $id)) {
                 $cacheProvider->evictEntity($class, $id);
             }
         }
@@ -189,7 +189,9 @@ class DoctrineParamConverter implements ParamConverterInterface
         }
 
         if ($options['strip_null']) {
-            $criteria = array_filter($criteria, function ($value) { return !is_null($value); });
+            $criteria = array_filter($criteria, function ($value) {
+                return !is_null($value);
+            });
         }
 
         if (!$criteria) {
