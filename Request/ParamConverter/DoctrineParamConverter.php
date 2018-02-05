@@ -265,7 +265,7 @@ class DoctrineParamConverter implements ParamConverterInterface
             return false;
         }
 
-        $options = $this->getOptions($configuration);
+        $options = $this->getOptions($configuration, false);
 
         // Doctrine Entity?
         $em = $this->getManager($options['entity_manager'], $configuration->getClass());
@@ -276,7 +276,7 @@ class DoctrineParamConverter implements ParamConverterInterface
         return !$em->getMetadataFactory()->isTransient($configuration->getClass());
     }
 
-    private function getOptions(ParamConverter $configuration)
+    private function getOptions(ParamConverter $configuration, $strict = true)
     {
         $defaultValues = array(
             'entity_manager' => null,
@@ -301,7 +301,7 @@ class DoctrineParamConverter implements ParamConverterInterface
         }
 
         $extraKeys = array_diff(array_keys($passedOptions), array_keys($defaultValues));
-        if ($extraKeys) {
+        if ($extraKeys && $strict) {
             throw new \InvalidArgumentException(sprintf('Invalid option(s) passed to @%s: %s', $this->getAnnotationName($configuration), implode(', ', $extraKeys)));
         }
 
