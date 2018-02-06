@@ -485,6 +485,26 @@ class DoctrineParamConverterTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($ret, 'Should be supported');
     }
 
+    public function testSupportsWithDifferentConfiguration()
+    {
+        $config = $this->createConfiguration('DateTime', array('format' => \DateTime::ISO8601));
+
+        $objectManager = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')->getMock();
+        $objectManager->expects($this->never())
+                      ->method('getMetadataFactory');
+
+        $this->registry->expects($this->once())
+                    ->method('getManagers')
+                    ->will($this->returnValue(array($objectManager)));
+
+        $this->registry->expects($this->never())
+                      ->method('getManager');
+
+        $ret = $this->converter->supports($config);
+
+        $this->assertFalse($ret, 'Should not be supported');
+    }
+
     /**
      * @expectedException \LogicException
      */
