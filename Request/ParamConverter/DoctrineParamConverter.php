@@ -236,7 +236,7 @@ class DoctrineParamConverter implements ParamConverterInterface
     private function findViaExpression($class, Request $request, $expression, $options, ParamConverter $configuration)
     {
         if (null === $this->language) {
-            throw new \LogicException(sprintf('To use the @%s tag with the "expr" option, you need install the ExpressionLanguage component.', $this->getAnnotationName($configuration)));
+            throw new \LogicException(sprintf('To use the @%s tag with the "expr" option, you need to install the ExpressionLanguage component.', $this->getAnnotationName($configuration)));
         }
 
         $repository = $this->getManager($options['entity_manager'], $class)->getRepository($class);
@@ -293,11 +293,11 @@ class DoctrineParamConverter implements ParamConverterInterface
         $passedOptions = $configuration->getOptions();
 
         if (isset($passedOptions['repository_method'])) {
-            @trigger_error('The repository_method option of @ParamConverter is deprecated and will be removed in 5.0. Use the expr option or @Entity.', E_USER_DEPRECATED);
+            @trigger_error('The repository_method option of @ParamConverter is deprecated and will be removed in 6.0. Use the expr option or @Entity.', E_USER_DEPRECATED);
         }
 
         if (isset($passedOptions['map_method_signature'])) {
-            @trigger_error('The map_method_signature option of @ParamConverter is deprecated and will be removed in 5.0. Use the expr option or @Entity.', E_USER_DEPRECATED);
+            @trigger_error('The map_method_signature option of @ParamConverter is deprecated and will be removed in 6.0. Use the expr option or @Entity.', E_USER_DEPRECATED);
         }
 
         $extraKeys = array_diff(array_keys($passedOptions), array_keys($defaultValues));
