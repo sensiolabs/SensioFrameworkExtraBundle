@@ -79,8 +79,8 @@ class AnnotatedRouteControllerLoader extends AnnotationClassLoader
         $routeName = parent::getDefaultRouteName($class, $method);
 
         return preg_replace(
-            array('/(bundle|controller)_/', '/action(_\d+)?$/', '/__/'),
-            array('_', '\\1', '_'),
+            ['/(bundle|controller)_/', '/action(_\d+)?$/', '/__/'],
+            ['_', '\\1', '_'],
             $routeName
         );
     }

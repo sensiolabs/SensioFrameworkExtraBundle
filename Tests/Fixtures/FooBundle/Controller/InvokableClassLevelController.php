@@ -25,8 +25,8 @@ class InvokableClassLevelController
      */
     public function __invoke()
     {
-        return array(
+        return [
             'foo' => 'bar',
-        );
+        ];
     }
 }

@@ -21,7 +21,7 @@ class TestKernel extends Kernel
 {
     public function registerBundles()
     {
-        return array(
+        return [
             new \Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
             new \Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new \Symfony\Bundle\TwigBundle\TwigBundle(),
@@ -29,7 +29,7 @@ class TestKernel extends Kernel
             new \Symfony\Bundle\SecurityBundle\SecurityBundle(),
             new \Tests\Fixtures\FooBundle\FooBundle(),
             new \Tests\Fixtures\ActionArgumentsBundle\ActionArgumentsBundle(),
-        );
+        ];
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader)

@@ -34,16 +34,16 @@ class SensioFrameworkExtraExtension extends Extension
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 
-        $annotationsToLoad = array();
-        $definitionsToRemove = array();
+        $annotationsToLoad = [];
+        $definitionsToRemove = [];
 
         if ($config['router']['annotations']) {
             $annotationsToLoad[] = 'routing.xml';
 
             if (PHP_VERSION_ID < 70000) {
-                $this->addClassesToCompile(array(
+                $this->addClassesToCompile([
                     'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\ControllerListener',
-                ));
+                ]);
             }
         }
 
@@ -63,7 +63,7 @@ class SensioFrameworkExtraExtension extends Extension
             }
 
             if (PHP_VERSION_ID < 70000) {
-                $this->addClassesToCompile(array(
+                $this->addClassesToCompile([
                     // cannot be added because it has some annotations
                     //'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\ParamConverter',
                     'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\ParamConverterListener',
@@ -71,7 +71,7 @@ class SensioFrameworkExtraExtension extends Extension
                     'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\DoctrineParamConverter',
                     'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\ParamConverterInterface',
                     'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\ParamConverterManager',
-                ));
+                ]);
             }
         }
 
@@ -79,9 +79,9 @@ class SensioFrameworkExtraExtension extends Extension
             $annotationsToLoad[] = 'view.xml';
 
             if (PHP_VERSION_ID < 70000) {
-                $this->addClassesToCompile(array(
+                $this->addClassesToCompile([
                     'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\TemplateListener',
-                ));
+                ]);
             }
         }
 
@@ -89,9 +89,9 @@ class SensioFrameworkExtraExtension extends Extension
             $annotationsToLoad[] = 'cache.xml';
 
             if (PHP_VERSION_ID < 70000) {
-                $this->addClassesToCompile(array(
+                $this->addClassesToCompile([
                     'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\HttpCacheListener',
-                ));
+                ]);
             }
         }
 
@@ -112,9 +112,9 @@ class SensioFrameworkExtraExtension extends Extension
             }
 
             if (PHP_VERSION_ID < 70000) {
-                $this->addClassesToCompile(array(
+                $this->addClassesToCompile([
                     'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\SecurityListener',
-                ));
+                ]);
             }
         }
 
@@ -127,9 +127,9 @@ class SensioFrameworkExtraExtension extends Extension
             }
 
             if (PHP_VERSION_ID < 70000) {
-                $this->addClassesToCompile(array(
+                $this->addClassesToCompile([
                     'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\ConfigurationAnnotation',
-                ));
+                ]);
             }
 
             if ($config['request']['converters']) {

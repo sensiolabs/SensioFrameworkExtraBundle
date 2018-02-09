@@ -16,11 +16,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 /**
  * @author Iltar van der Berg <ivanderberg@hostnet.nl>
  */
-class RouteTest extends \PHPUnit_Framework_TestCase
+class RouteTest extends \PHPUnit\Framework\TestCase
 {
     public function testSetServiceWithoutPath()
     {
-        $route = new Route(array());
+        $route = new Route([]);
         $this->assertNull($route->getPath());
         $this->assertNull($route->getService());
 
@@ -32,7 +32,7 @@ class RouteTest extends \PHPUnit_Framework_TestCase
 
     public function testSetServiceWithPath()
     {
-        $route = new Route(array());
+        $route = new Route([]);
         $this->assertNull($route->getPath());
         $this->assertNull($route->getService());
 
@@ -45,11 +45,11 @@ class RouteTest extends \PHPUnit_Framework_TestCase
 
     public function testSettersViaConstruct()
     {
-        $route = new Route(array('service' => 'app.test'));
+        $route = new Route(['service' => 'app.test']);
         $this->assertSame('', $route->getPath());
         $this->assertSame('app.test', $route->getService());
 
-        $route = new Route(array('service' => 'app.test', 'path' => '/test/'));
+        $route = new Route(['service' => 'app.test', 'path' => '/test/']);
         $this->assertSame('/test/', $route->getPath());
         $this->assertSame('app.test', $route->getService());
     }

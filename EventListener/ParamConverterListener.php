@@ -54,10 +54,10 @@ class ParamConverterListener implements EventSubscriberInterface
     {
         $controller = $event->getController();
         $request = $event->getRequest();
-        $configurations = array();
+        $configurations = [];
 
         if ($configuration = $request->attributes->get('_converters')) {
-            foreach (is_array($configuration) ? $configuration : array($configuration) as $configuration) {
+            foreach (is_array($configuration) ? $configuration : [$configuration] as $configuration) {
                 $configurations[$configuration->getName()] = $configuration;
             }
         }
@@ -91,7 +91,7 @@ class ParamConverterListener implements EventSubscriberInterface
 
             if ($class || $hasType) {
                 if (!isset($configurations[$name])) {
-                    $configuration = new ParamConverter(array());
+                    $configuration = new ParamConverter([]);
                     $configuration->setName($name);
 
                     $configurations[$name] = $configuration;
@@ -115,8 +115,8 @@ class ParamConverterListener implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             KernelEvents::CONTROLLER => 'onKernelController',
-        );
+        ];
     }
 }

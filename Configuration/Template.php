@@ -31,7 +31,7 @@ class Template extends ConfigurationAnnotation
      *
      * @var array
      */
-    private $vars = array();
+    private $vars = [];
 
     /**
      * Should the template be streamed?

@@ -90,7 +90,7 @@ class HttpCacheListener implements EventSubscriberInterface
         $response = $event->getResponse();
 
         // http://tools.ietf.org/html/draft-ietf-httpbis-p4-conditional-12#section-3.1
-        if (!in_array($response->getStatusCode(), array(200, 203, 300, 301, 302, 304, 404, 410))) {
+        if (!in_array($response->getStatusCode(), [200, 203, 300, 301, 302, 304, 404, 410])) {
             return;
         }
 
@@ -148,10 +148,10 @@ class HttpCacheListener implements EventSubscriberInterface
 
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             KernelEvents::CONTROLLER => 'onKernelController',
             KernelEvents::RESPONSE => 'onKernelResponse',
-        );
+        ];
     }
 
     private function getExpressionLanguage()

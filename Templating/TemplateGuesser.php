@@ -36,7 +36,7 @@ class TemplateGuesser
     /**
      * @param string[] $controllerPatterns Regexps extracting the controller name from its FQN
      */
-    public function __construct(KernelInterface $kernel, array $controllerPatterns = array())
+    public function __construct(KernelInterface $kernel, array $controllerPatterns = [])
     {
         $controllerPatterns[] = '/Controller\\\(.+)Controller$/';
 
@@ -57,7 +57,7 @@ class TemplateGuesser
     public function guessTemplateName($controller, Request $request)
     {
         if (is_object($controller) && method_exists($controller, '__invoke')) {
-            $controller = array($controller, '__invoke');
+            $controller = [$controller, '__invoke'];
         } elseif (!is_array($controller)) {
             throw new \InvalidArgumentException(sprintf('First argument of %s must be an array callable or an object defining the magic method __invoke. "%s" given.', __METHOD__, gettype($controller)));
         }

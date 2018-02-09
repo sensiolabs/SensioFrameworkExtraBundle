@@ -15,14 +15,14 @@ use Sensio\Bundle\FrameworkExtraBundle\Templating\TemplateGuesser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\KernelInterface;
 
-class TemplateGuesserTest extends \PHPUnit_Framework_TestCase
+class TemplateGuesserTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var KernelInterface
      */
     private $kernel;
 
-    private $bundles = array();
+    private $bundles = [];
 
     public function setUp()
     {
@@ -42,10 +42,10 @@ class TemplateGuesserTest extends \PHPUnit_Framework_TestCase
             ->method('getBundle');
 
         $templateGuesser = new TemplateGuesser($this->kernel);
-        $templateReference = $templateGuesser->guessTemplateName(array(
+        $templateReference = $templateGuesser->guessTemplateName([
             new Fixture\FooBundle\Controller\FooController(),
             'indexAction',
-        ), new Request());
+        ], new Request());
 
         $this->assertEquals('@Foo/foo/index.html.twig', (string) $templateReference);
     }
@@ -53,10 +53,10 @@ class TemplateGuesserTest extends \PHPUnit_Framework_TestCase
     public function testGuessTemplateWithoutBundle()
     {
         $templateGuesser = new TemplateGuesser($this->kernel);
-        $templateReference = $templateGuesser->guessTemplateName(array(
+        $templateReference = $templateGuesser->guessTemplateName([
             new Fixture\Controller\MyAdmin\OutOfBundleController(),
             'indexAction',
-        ), new Request());
+        ], new Request());
 
         $this->assertEquals('my_admin/out_of_bundle/index.html.twig', (string) $templateReference);
     }
@@ -64,10 +64,10 @@ class TemplateGuesserTest extends \PHPUnit_Framework_TestCase
     public function testGuessTemplateWithSubNamespace()
     {
         $templateGuesser = new TemplateGuesser($this->kernel);
-        $templateReference = $templateGuesser->guessTemplateName(array(
+        $templateReference = $templateGuesser->guessTemplateName([
             new Fixture\FooBundle\Controller\SubController\FooBarController(),
             'fooBaz',
-        ), new Request());
+        ], new Request());
 
         $this->assertEquals('@Foo/sub_controller/foo_bar/foo_baz.html.twig', (string) $templateReference);
     }
@@ -79,10 +79,10 @@ class TemplateGuesserTest extends \PHPUnit_Framework_TestCase
     {
         $templateGuesser = new TemplateGuesser($this->kernel, $patterns);
 
-        $templateReference = $templateGuesser->guessTemplateName(array(
+        $templateReference = $templateGuesser->guessTemplateName([
             $controller,
             '__invoke',
-        ), new Request());
+        ], new Request());
 
         $this->assertEquals('@Foo/foo.html.twig', (string) $templateReference);
     }
@@ -94,10 +94,10 @@ class TemplateGuesserTest extends \PHPUnit_Framework_TestCase
     {
         $templateGuesser = new TemplateGuesser($this->kernel, $patterns);
 
-        $templateReference = $templateGuesser->guessTemplateName(array(
+        $templateReference = $templateGuesser->guessTemplateName([
             $controller,
             'indexAction',
-        ), new Request());
+        ], new Request());
 
         $this->assertEquals('@Foo/foo/index.html.twig', (string) $templateReference);
     }
@@ -109,20 +109,20 @@ class TemplateGuesserTest extends \PHPUnit_Framework_TestCase
     {
         $templateGuesser = new TemplateGuesser($this->kernel, $patterns);
 
-        $templateReference = $templateGuesser->guessTemplateName(array(
+        $templateReference = $templateGuesser->guessTemplateName([
             $controller,
             'fooBar',
-        ), new Request());
+        ], new Request());
 
         $this->assertEquals('@Foo/foo/foo_bar.html.twig', (string) $templateReference);
     }
 
     public function controllerProvider()
     {
-        return array(
-            array(new Fixture\FooBundle\Controller\FooController(), array()),
-            array(new Fixture\FooBundle\Action\FooAction(), array('/foobar/', '/FooBundle\\\Action\\\(.+)Action/')),
-        );
+        return [
+            [new Fixture\FooBundle\Controller\FooController(), []],
+            [new Fixture\FooBundle\Action\FooAction(), ['/foobar/', '/FooBundle\\\Action\\\(.+)Action/']],
+        ];
     }
 
     /**
@@ -132,11 +132,11 @@ class TemplateGuesserTest extends \PHPUnit_Framework_TestCase
     public function testGuessTemplateWhenControllerFQNDoesNotMatchAPattern()
     {
         $this->kernel->getBundles();
-        $templateGuesser = new TemplateGuesser($this->kernel, array('/foo/', '/bar/'));
-        $templateReference = $templateGuesser->guessTemplateName(array(
+        $templateGuesser = new TemplateGuesser($this->kernel, ['/foo/', '/bar/']);
+        $templateReference = $templateGuesser->guessTemplateName([
             new \stdClass(),
             'indexAction',
-        ), new Request());
+        ], new Request());
     }
 
     /**

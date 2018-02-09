@@ -154,7 +154,7 @@ class Cache extends ConfigurationAnnotation
      */
     public function isPublic()
     {
-        return $this->public === true;
+        return true === $this->public;
     }
 
     /**
@@ -162,7 +162,7 @@ class Cache extends ConfigurationAnnotation
      */
     public function mustRevalidate()
     {
-        return $this->mustRevalidate === true;
+        return true === $this->mustRevalidate;
     }
 
     /**
@@ -182,7 +182,7 @@ class Cache extends ConfigurationAnnotation
      */
     public function isPrivate()
     {
-        return $this->public === false;
+        return false === $this->public;
     }
 
     /**

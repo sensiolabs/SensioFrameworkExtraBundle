@@ -27,22 +27,22 @@ class TemplateAnnotationTest extends WebTestCase
 
     public static function urlProvider()
     {
-        return array(
-            array('/multi/one-template/1/', 'bar'),
-            array('/multi/one-template/2/', 'bar'),
-            array('/multi/one-template/3/', 'bar'),
-            array('/multi/one-template/4/', 'foo bar baz'),
-            array('/invokable/predefined/service/', 'bar'),
-            array('/invokable/class-level/service/', 'bar'),
-            array('/simple/multiple/', 'a, b, c'),
-            array('/simple/multiple/henk/bar/', 'henk, bar, c'),
-            array('/simple/multiple-with-vars/', 'a, b'),
-            array('/invokable/predefined/container/', 'bar'),
-            array('/invokable/variable/container/the-var/', 'the-var'),
-            array('/invokable/another-variable/container/another-var/', 'another-var'),
-            array('/invokable/variable/container/the-var/another-var/', 'the-var,another-var'),
-            array('/no-listener/', 'I did not get rendered via twig'),
-        );
+        return [
+            ['/multi/one-template/1/', 'bar'],
+            ['/multi/one-template/2/', 'bar'],
+            ['/multi/one-template/3/', 'bar'],
+            ['/multi/one-template/4/', 'foo bar baz'],
+            ['/invokable/predefined/service/', 'bar'],
+            ['/invokable/class-level/service/', 'bar'],
+            ['/simple/multiple/', 'a, b, c'],
+            ['/simple/multiple/henk/bar/', 'henk, bar, c'],
+            ['/simple/multiple-with-vars/', 'a, b'],
+            ['/invokable/predefined/container/', 'bar'],
+            ['/invokable/variable/container/the-var/', 'the-var'],
+            ['/invokable/another-variable/container/another-var/', 'another-var'],
+            ['/invokable/variable/container/the-var/another-var/', 'the-var,another-var'],
+            ['/no-listener/', 'I did not get rendered via twig'],
+        ];
     }
 
     public function testStreamedControllerResponse()

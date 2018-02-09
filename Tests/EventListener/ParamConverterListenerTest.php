@@ -17,7 +17,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Tests\EventListener\Fixture\FooController
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 
-class ParamConverterListenerTest extends \PHPUnit_Framework_TestCase
+class ParamConverterListenerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider getControllerWithNoArgsFixtures
@@ -27,7 +27,7 @@ class ParamConverterListenerTest extends \PHPUnit_Framework_TestCase
         $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
         $request = new Request();
 
-        $listener = new ParamConverterListener($this->getParamConverterManager($request, array()));
+        $listener = new ParamConverterListener($this->getParamConverterManager($request, []));
         $event = new FilterControllerEvent($kernel, $controllerCallable, $request, null);
 
         $listener->onKernelController($event);
@@ -35,10 +35,10 @@ class ParamConverterListenerTest extends \PHPUnit_Framework_TestCase
 
     public function getControllerWithNoArgsFixtures()
     {
-        return array(
-            array(array(new TestController(), 'noArgAction')),
-            array(new InvokableNoArgController()),
-        );
+        return [
+            [[new TestController(), 'noArgAction']],
+            [new InvokableNoArgController()],
+        ];
     }
 
     /**
@@ -47,11 +47,11 @@ class ParamConverterListenerTest extends \PHPUnit_Framework_TestCase
     public function testAutoConvert($controllerCallable)
     {
         $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
-        $request = new Request(array(), array(), array('date' => '2014-03-14 09:00:00'));
+        $request = new Request([], [], ['date' => '2014-03-14 09:00:00']);
 
-        $converter = new ParamConverter(array('name' => 'date', 'class' => 'DateTime'));
+        $converter = new ParamConverter(['name' => 'date', 'class' => 'DateTime']);
 
-        $listener = new ParamConverterListener($this->getParamConverterManager($request, array('date' => $converter)));
+        $listener = new ParamConverterListener($this->getParamConverterManager($request, ['date' => $converter]));
         $event = new FilterControllerEvent($kernel, $controllerCallable, $request, null);
 
         $listener->onKernelController($event);
@@ -66,16 +66,16 @@ class ParamConverterListenerTest extends \PHPUnit_Framework_TestCase
         $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
         $request = new Request();
 
-        $converter = new ParamConverter(array('name' => 'param', 'class' => 'DateTime'));
+        $converter = new ParamConverter(['name' => 'param', 'class' => 'DateTime']);
         $converter->setIsOptional($isOptional);
 
-        $listener = new ParamConverterListener($this->getParamConverterManager($request, array('param' => $converter)), true);
+        $listener = new ParamConverterListener($this->getParamConverterManager($request, ['param' => $converter]), true);
         $event = new FilterControllerEvent(
             $kernel,
-            array(
+            [
                 new FooControllerNullableParameter(),
                 $function,
-            ),
+            ],
             $request,
             null
         );
@@ -85,11 +85,11 @@ class ParamConverterListenerTest extends \PHPUnit_Framework_TestCase
 
     public function settingOptionalParamProvider()
     {
-        return array(
-            array('requiredParamAction', false),
-            array('defaultParamAction', true),
-            array('nullableParamAction', true),
-        );
+        return [
+            ['requiredParamAction', false],
+            ['defaultParamAction', true],
+            ['nullableParamAction', true],
+        ];
     }
 
     /**
@@ -98,9 +98,9 @@ class ParamConverterListenerTest extends \PHPUnit_Framework_TestCase
     public function testNoAutoConvert($controllerCallable)
     {
         $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
-        $request = new Request(array(), array(), array('date' => '2014-03-14 09:00:00'));
+        $request = new Request([], [], ['date' => '2014-03-14 09:00:00']);
 
-        $listener = new ParamConverterListener($this->getParamConverterManager($request, array()), false);
+        $listener = new ParamConverterListener($this->getParamConverterManager($request, []), false);
         $event = new FilterControllerEvent($kernel, $controllerCallable, $request, null);
 
         $listener->onKernelController($event);
@@ -108,10 +108,10 @@ class ParamConverterListenerTest extends \PHPUnit_Framework_TestCase
 
     public function getControllerWithArgsFixtures()
     {
-        return array(
-            array(array(new TestController(), 'dateAction')),
-            array(new InvokableController()),
-        );
+        return [
+            [[new TestController(), 'dateAction']],
+            [new InvokableController()],
+        ];
     }
 
     private function getParamConverterManager(Request $request, $configurations)

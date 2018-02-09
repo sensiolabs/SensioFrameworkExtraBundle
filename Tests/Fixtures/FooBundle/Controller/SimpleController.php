@@ -58,9 +58,9 @@ class SimpleController
      */
     public function streamedAction()
     {
-        return array(
+        return [
             'foo' => 'foo',
             'bar' => 'bar',
-        );
+        ];
     }
 }

@@ -23,11 +23,11 @@ use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
  */
 final class Psr7ServerRequestResolver implements ArgumentValueResolverInterface
 {
-    private static $supportedTypes = array(
+    private static $supportedTypes = [
         'Psr\Http\Message\ServerRequestInterface' => true,
         'Psr\Http\Message\RequestInterface' => true,
         'Psr\Http\Message\MessageInterface' => true,
-    );
+    ];
 
     private $httpMessageFactory;
 

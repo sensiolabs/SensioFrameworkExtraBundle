@@ -26,9 +26,9 @@ class Psr7RequestTest extends WebTestCase
 
     public static function urlProvider()
     {
-        return array(
-            array('/action-arguments/normal/'),
-            array('/action-arguments/invoke/'),
-        );
+        return [
+            ['/action-arguments/normal/'],
+            ['/action-arguments/invoke/'],
+        ];
     }
 }

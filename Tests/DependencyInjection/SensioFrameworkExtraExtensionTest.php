@@ -15,14 +15,14 @@ use Sensio\Bundle\FrameworkExtraBundle\DependencyInjection\SensioFrameworkExtraE
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
-class SensioFrameworkExtraExtensionTest extends \PHPUnit_Framework_TestCase
+class SensioFrameworkExtraExtensionTest extends \PHPUnit\Framework\TestCase
 {
     public function testDefaultExpressionLanguageConfig()
     {
         $container = new ContainerBuilder();
 
         $extension = new SensioFrameworkExtraExtension();
-        $extension->load(array(), $container);
+        $extension->load([], $container);
 
         $this->assertAlias($container, 'sensio_framework_extra.security.expression_language.default', 'sensio_framework_extra.security.expression_language');
     }
@@ -32,15 +32,15 @@ class SensioFrameworkExtraExtensionTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder();
 
         $extension = new SensioFrameworkExtraExtension();
-        $config = array(
-            'security' => array(
+        $config = [
+            'security' => [
                 'expression_language' => 'acme.security.expression_language',
-            ),
-        );
+            ],
+        ];
 
         $container->setDefinition('acme.security.expression_language', new Definition());
 
-        $extension->load(array($config), $container);
+        $extension->load([$config], $container);
 
         $this->assertAlias($container, 'acme.security.expression_language', 'sensio_framework_extra.security.expression_language');
     }
@@ -50,13 +50,13 @@ class SensioFrameworkExtraExtensionTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder();
 
         $extension = new SensioFrameworkExtraExtension();
-        $config = array(
-            'templating' => array(
-                'controller_patterns' => $patterns = array('/foo/', '/bar/', '/foobar/'),
-            ),
-        );
+        $config = [
+            'templating' => [
+                'controller_patterns' => $patterns = ['/foo/', '/bar/', '/foobar/'],
+            ],
+        ];
 
-        $extension->load(array($config), $container);
+        $extension->load([$config], $container);
 
         $this->assertEquals($patterns, $container->getDefinition('sensio_framework_extra.view.guesser')->getArgument(1));
     }

@@ -46,7 +46,7 @@ class AddParamConverterPass implements CompilerPassInterface
                     $priority = null;
                 }
 
-                $definition->addMethodCall('add', array(new Reference($id), $priority, $name));
+                $definition->addMethodCall('add', [new Reference($id), $priority, $name]);
             }
         }
     }

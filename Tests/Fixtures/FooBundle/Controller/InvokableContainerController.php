@@ -31,9 +31,9 @@ class InvokableContainerController extends Controller
      */
     public function anotherVariableAction($variable)
     {
-        return array(
+        return [
             'variable' => $variable,
-        );
+        ];
     }
 
     /**
@@ -42,10 +42,10 @@ class InvokableContainerController extends Controller
      */
     public function doubleVariableAction($variable, $another_variable)
     {
-        return array(
+        return [
             'variable' => $variable,
             'another_variable' => $another_variable,
-        );
+        ];
     }
 
     /**
@@ -54,8 +54,8 @@ class InvokableContainerController extends Controller
      */
     public function __invoke()
     {
-        return array(
+        return [
             'foo' => 'bar',
-        );
+        ];
     }
 }

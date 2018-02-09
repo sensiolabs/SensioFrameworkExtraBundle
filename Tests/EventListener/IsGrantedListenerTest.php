@@ -21,15 +21,15 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class IsGrantedListenerTest extends \PHPUnit_Framework_TestCase
+class IsGrantedListenerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @expectedException \LogicException
      */
     public function testExceptionIfSecurityNotInstalled()
     {
-        $listener = new IsGrantedListener($this->createArgumentNameConverter(array()));
-        $request = $this->createRequest(new IsGranted(array()));
+        $listener = new IsGrantedListener($this->createArgumentNameConverter([]));
+        $request = $this->createRequest(new IsGranted([]));
         $listener->onKernelControllerArguments($this->createFilterControllerEvent($request));
     }
 
@@ -39,7 +39,7 @@ class IsGrantedListenerTest extends \PHPUnit_Framework_TestCase
         $authChecker->expects($this->never())
             ->method('isGranted');
 
-        $listener = new IsGrantedListener($this->createArgumentNameConverter(array()), $authChecker);
+        $listener = new IsGrantedListener($this->createArgumentNameConverter([]), $authChecker);
         $request = $this->createRequest();
         $listener->onKernelControllerArguments($this->createFilterControllerEvent($request));
     }
@@ -53,8 +53,8 @@ class IsGrantedListenerTest extends \PHPUnit_Framework_TestCase
             ->with('ROLE_ADMIN')
             ->will($this->returnValue(true));
 
-        $listener = new IsGrantedListener($this->createArgumentNameConverter(array()), $authChecker);
-        $isGranted = new IsGranted(array('attributes' => 'ROLE_ADMIN'));
+        $listener = new IsGrantedListener($this->createArgumentNameConverter([]), $authChecker);
+        $isGranted = new IsGranted(['attributes' => 'ROLE_ADMIN']);
         $request = $this->createRequest($isGranted);
         $listener->onKernelControllerArguments($this->createFilterControllerEvent($request));
     }
@@ -70,8 +70,8 @@ class IsGrantedListenerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
 
         // create metadata for 2 named args for the controller
-        $listener = new IsGrantedListener($this->createArgumentNameConverter(array('arg1Name' => 'arg1Value', 'arg2Name' => 'arg2Value')), $authChecker);
-        $isGranted = new IsGranted(array('attributes' => 'ROLE_ADMIN', 'subject' => 'arg2Name'));
+        $listener = new IsGrantedListener($this->createArgumentNameConverter(['arg1Name' => 'arg1Value', 'arg2Name' => 'arg2Value']), $authChecker);
+        $isGranted = new IsGranted(['attributes' => 'ROLE_ADMIN', 'subject' => 'arg2Name']);
         $request = $this->createRequest($isGranted);
 
         $listener->onKernelControllerArguments($this->createFilterControllerEvent($request));
@@ -84,8 +84,8 @@ class IsGrantedListenerTest extends \PHPUnit_Framework_TestCase
     {
         $authChecker = $this->getMockBuilder(AuthorizationCheckerInterface::class)->getMock();
 
-        $listener = new IsGrantedListener($this->createArgumentNameConverter(array()), $authChecker);
-        $isGranted = new IsGranted(array('attributes' => 'ROLE_ADMIN', 'subject' => 'non_existent'));
+        $listener = new IsGrantedListener($this->createArgumentNameConverter([]), $authChecker);
+        $isGranted = new IsGranted(['attributes' => 'ROLE_ADMIN', 'subject' => 'non_existent']);
         $request = $this->createRequest($isGranted);
         $listener->onKernelControllerArguments($this->createFilterControllerEvent($request));
     }
@@ -101,13 +101,13 @@ class IsGrantedListenerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(false));
 
         // avoid the error of the subject not being found in the request attributes
-        $arguments = array();
+        $arguments = [];
         if (null !== $subject) {
             $arguments[$subject] = 'bar';
         }
 
         $listener = new IsGrantedListener($this->createArgumentNameConverter($arguments), $authChecker);
-        $isGranted = new IsGranted(array('attributes' => $attributes, 'subject' => $subject));
+        $isGranted = new IsGranted(['attributes' => $attributes, 'subject' => $subject]);
         $request = $this->createRequest($isGranted);
 
         try {
@@ -121,9 +121,9 @@ class IsGrantedListenerTest extends \PHPUnit_Framework_TestCase
 
     public function getAccessDeniedMessageTests()
     {
-        yield array(array('ROLE_ADMIN'), null, 'Access Denied by controller annotation @IsGranted("ROLE_ADMIN")');
-        yield array(array('ROLE_ADMIN', 'ROLE_USER'), null, 'Access Denied by controller annotation @IsGranted(["ROLE_ADMIN", "ROLE_USER"])');
-        yield array(array('ROLE_ADMIN', 'ROLE_USER'), 'product', 'Access Denied by controller annotation @IsGranted(["ROLE_ADMIN", "ROLE_USER"], product)');
+        yield [['ROLE_ADMIN'], null, 'Access Denied by controller annotation @IsGranted("ROLE_ADMIN")'];
+        yield [['ROLE_ADMIN', 'ROLE_USER'], null, 'Access Denied by controller annotation @IsGranted(["ROLE_ADMIN", "ROLE_USER"])'];
+        yield [['ROLE_ADMIN', 'ROLE_USER'], 'product', 'Access Denied by controller annotation @IsGranted(["ROLE_ADMIN", "ROLE_USER"], product)'];
     }
 
     /**
@@ -132,7 +132,7 @@ class IsGrantedListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function testNotFoundHttpException()
     {
-        $request = $this->createRequest(new IsGranted(array('attributes' => 'ROLE_ADMIN', 'statusCode' => 404, 'message' => 'Not found')));
+        $request = $this->createRequest(new IsGranted(['attributes' => 'ROLE_ADMIN', 'statusCode' => 404, 'message' => 'Not found']));
         $event = $this->createFilterControllerEvent($request);
 
         $authChecker = $this->getMockBuilder(AuthorizationCheckerInterface::class)->getMock();
@@ -140,25 +140,25 @@ class IsGrantedListenerTest extends \PHPUnit_Framework_TestCase
             ->method('isGranted')
             ->will($this->returnValue(false));
 
-        $listener = new IsGrantedListener($this->createArgumentNameConverter(array()), $authChecker);
+        $listener = new IsGrantedListener($this->createArgumentNameConverter([]), $authChecker);
         $listener->onKernelControllerArguments($event);
     }
 
     private function createRequest(IsGranted $isGranted = null)
     {
-        return new Request(array(), array(), array(
-            '_is_granted' => null === $isGranted ? array() : array(
+        return new Request([], [], [
+            '_is_granted' => null === $isGranted ? [] : [
                 $isGranted,
                 $isGranted,
-            ),
-        ));
+            ],
+        ]);
     }
 
     private function createFilterControllerEvent(Request $request)
     {
         return new FilterControllerArgumentsEvent($this->getMockBuilder(HttpKernelInterface::class)->getMock(), function () {
             return new Response();
-        }, array(), $request, null);
+        }, [], $request, null);
     }
 
     private function createArgumentNameConverter(array $arguments)

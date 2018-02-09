@@ -12,7 +12,6 @@
 namespace Sensio\Bundle\FrameworkExtraBundle\EventListener;
 
 use Psr\Http\Message\ResponseInterface;
-use Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory;
 use Symfony\Bridge\PsrHttpMessage\HttpFoundationFactoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
@@ -54,8 +53,8 @@ class PsrResponseListener implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             KernelEvents::VIEW => 'onKernelView',
-        );
+        ];
     }
 }

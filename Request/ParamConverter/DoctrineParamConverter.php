@@ -131,7 +131,7 @@ class DoctrineParamConverter implements ParamConverterInterface
             if (!is_array($options['id'])) {
                 $name = $options['id'];
             } elseif (is_array($options['id'])) {
-                $id = array();
+                $id = [];
                 foreach ($options['id'] as $field) {
                     $id[$field] = $request->attributes->get($field);
                 }
@@ -155,7 +155,7 @@ class DoctrineParamConverter implements ParamConverterInterface
     {
         if (!$options['mapping']) {
             $keys = $request->attributes->keys();
-            $options['mapping'] = $keys ? array_combine($keys, $keys) : array();
+            $options['mapping'] = $keys ? array_combine($keys, $keys) : [];
         }
 
         foreach ($options['exclude'] as $exclude) {
@@ -172,13 +172,13 @@ class DoctrineParamConverter implements ParamConverterInterface
             return false;
         }
 
-        $criteria = array();
+        $criteria = [];
         $em = $this->getManager($options['entity_manager'], $class);
         $metadata = $em->getClassMetadata($class);
 
         $mapMethodSignature = $options['repository_method']
             && $options['map_method_signature']
-            && $options['map_method_signature'] === true;
+            && true === $options['map_method_signature'];
 
         foreach ($options['mapping'] as $attribute => $field) {
             if ($metadata->hasField($field)
@@ -190,7 +190,7 @@ class DoctrineParamConverter implements ParamConverterInterface
 
         if ($options['strip_null']) {
             $criteria = array_filter($criteria, function ($value) {
-                return !is_null($value);
+                return null !== $value;
             });
         }
 
@@ -217,7 +217,7 @@ class DoctrineParamConverter implements ParamConverterInterface
 
     private function findDataByMapMethodSignature($em, $class, $repositoryMethod, $criteria)
     {
-        $arguments = array();
+        $arguments = [];
         $repository = $em->getRepository($class);
         $ref = new \ReflectionMethod($repository, $repositoryMethod);
         foreach ($ref->getParameters() as $parameter) {
@@ -240,7 +240,7 @@ class DoctrineParamConverter implements ParamConverterInterface
         }
 
         $repository = $this->getManager($options['entity_manager'], $class)->getRepository($class);
-        $variables = array_merge($request->attributes->all(), array('repository' => $repository));
+        $variables = array_merge($request->attributes->all(), ['repository' => $repository]);
 
         try {
             return $this->language->evaluate($expression, $variables);
@@ -278,17 +278,17 @@ class DoctrineParamConverter implements ParamConverterInterface
 
     private function getOptions(ParamConverter $configuration, $strict = true)
     {
-        $defaultValues = array(
+        $defaultValues = [
             'entity_manager' => null,
-            'exclude' => array(),
-            'mapping' => array(),
+            'exclude' => [],
+            'mapping' => [],
             'strip_null' => false,
             'expr' => null,
             'id' => null,
             'repository_method' => null,
             'map_method_signature' => false,
             'evict_cache' => false,
-        );
+        ];
 
         $passedOptions = $configuration->getOptions();
 

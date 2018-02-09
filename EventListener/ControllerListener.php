@@ -46,7 +46,7 @@ class ControllerListener implements EventSubscriberInterface
         $controller = $event->getController();
 
         if (!is_array($controller) && method_exists($controller, '__invoke')) {
-            $controller = array($controller, '__invoke');
+            $controller = [$controller, '__invoke'];
         }
 
         if (!is_array($controller)) {
@@ -60,7 +60,7 @@ class ControllerListener implements EventSubscriberInterface
         $classConfigurations = $this->getConfigurations($this->reader->getClassAnnotations($object));
         $methodConfigurations = $this->getConfigurations($this->reader->getMethodAnnotations($method));
 
-        $configurations = array();
+        $configurations = [];
         foreach (array_merge(array_keys($classConfigurations), array_keys($methodConfigurations)) as $key) {
             if (!array_key_exists($key, $classConfigurations)) {
                 $configurations[$key] = $methodConfigurations[$key];
@@ -87,7 +87,7 @@ class ControllerListener implements EventSubscriberInterface
 
     private function getConfigurations(array $annotations)
     {
-        $configurations = array();
+        $configurations = [];
         foreach ($annotations as $configuration) {
             if ($configuration instanceof ConfigurationInterface) {
                 if ($configuration->allowArray()) {
@@ -108,8 +108,8 @@ class ControllerListener implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             KernelEvents::CONTROLLER => 'onKernelController',
-        );
+        ];
     }
 }

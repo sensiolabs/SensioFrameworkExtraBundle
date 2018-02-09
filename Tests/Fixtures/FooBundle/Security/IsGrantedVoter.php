@@ -36,7 +36,7 @@ class IsGrantedVoter extends Voter
             return true;
         }
 
-        if (array('foo', 'bar') === $subject) {
+        if (['foo', 'bar'] === $subject) {
             return true;
         }
 

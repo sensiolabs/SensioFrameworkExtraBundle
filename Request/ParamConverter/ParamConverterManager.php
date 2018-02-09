@@ -25,12 +25,12 @@ class ParamConverterManager
     /**
      * @var array
      */
-    private $converters = array();
+    private $converters = [];
 
     /**
      * @var array
      */
-    private $namedConverters = array();
+    private $namedConverters = [];
 
     /**
      * Applies all converters to the passed configurations and stops when a
@@ -41,7 +41,7 @@ class ParamConverterManager
     public function apply(Request $request, $configurations)
     {
         if (is_object($configurations)) {
-            $configurations = array($configurations);
+            $configurations = [$configurations];
         }
 
         foreach ($configurations as $configuration) {
@@ -109,9 +109,9 @@ class ParamConverterManager
      */
     public function add(ParamConverterInterface $converter, $priority = 0, $name = null)
     {
-        if ($priority !== null) {
+        if (null !== $priority) {
             if (!isset($this->converters[$priority])) {
-                $this->converters[$priority] = array();
+                $this->converters[$priority] = [];
             }
 
             $this->converters[$priority][] = $converter;
@@ -131,7 +131,7 @@ class ParamConverterManager
     {
         krsort($this->converters);
 
-        $converters = array();
+        $converters = [];
         foreach ($this->converters as $all) {
             $converters = array_merge($converters, $all);
         }

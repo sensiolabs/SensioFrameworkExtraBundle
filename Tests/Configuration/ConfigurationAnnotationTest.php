@@ -11,17 +11,17 @@
 
 namespace Sensio\Bundle\FrameworkExtraBundle\Tests\Configuration;
 
-class ConfigurationAnnotationTest extends \PHPUnit_Framework_TestCase
+class ConfigurationAnnotationTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      */
     public function testUndefinedSetterThrowsException()
     {
-        $this->getMockForAbstractClass('Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationAnnotation', array(
-            array(
+        $this->getMockForAbstractClass('Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationAnnotation', [
+            [
                 'doesNotExists' => true,
-            ),
-        ));
+            ],
+        ]);
     }
 }

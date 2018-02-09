@@ -54,7 +54,7 @@ class TemplateListener implements EventSubscriberInterface
 
         $controller = $event->getController();
         if (!is_array($controller) && method_exists($controller, '__invoke')) {
-            $controller = array($controller, '__invoke');
+            $controller = [$controller, '__invoke'];
         }
         $template->setOwner($controller);
 
@@ -104,7 +104,7 @@ class TemplateListener implements EventSubscriberInterface
         }
 
         // make sure the owner (controller+dependencies) is not cached or stored elsewhere
-        $template->setOwner(array());
+        $template->setOwner([]);
     }
 
     /**
@@ -112,21 +112,21 @@ class TemplateListener implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return array(
-            KernelEvents::CONTROLLER => array('onKernelController', -128),
+        return [
+            KernelEvents::CONTROLLER => ['onKernelController', -128],
             KernelEvents::VIEW => 'onKernelView',
-        );
+        ];
     }
 
     private function resolveDefaultParameters(Request $request, Template $template, $controller, $action)
     {
-        $parameters = array();
+        $parameters = [];
         $arguments = $template->getVars();
 
         if (0 === count($arguments)) {
             $r = new \ReflectionObject($controller);
 
-            $arguments = array();
+            $arguments = [];
             foreach ($r->getMethod($action)->getParameters() as $param) {
                 $arguments[] = $param;
             }

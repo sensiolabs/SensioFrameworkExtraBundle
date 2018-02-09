@@ -97,6 +97,6 @@ class IsGrantedListener implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return array(KernelEvents::CONTROLLER_ARGUMENTS => 'onKernelControllerArguments');
+        return [KernelEvents::CONTROLLER_ARGUMENTS => 'onKernelControllerArguments'];
     }
 }

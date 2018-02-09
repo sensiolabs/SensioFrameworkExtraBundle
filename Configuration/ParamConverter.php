@@ -38,7 +38,7 @@ class ParamConverter extends ConfigurationAnnotation
      *
      * @var array
      */
-    private $options = array();
+    private $options = [];
 
     /**
      * Whether or not the parameter is optional.
