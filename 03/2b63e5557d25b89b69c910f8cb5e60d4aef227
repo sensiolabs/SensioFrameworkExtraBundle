@@ -1,0 +1,17 @@
+---------------------------------------------------------------------------
+
+by alcaeus at 2018-02-09T05:39:28Z
+
+Note: can't reproduce the deprecations on my machine - anyone have suggestions how to fix?
+
+---------------------------------------------------------------------------
+
+by fabpot at 2018-02-09T13:13:11Z
+
+I've fixed the CS in be47a02
+
+---------------------------------------------------------------------------
+
+by alcaeus at 2018-02-09T13:24:53Z
+
+Thanks @fabpot, I've rebased on top but still need to address the deprecation warnings to get the builds stable.
