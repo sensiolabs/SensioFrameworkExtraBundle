@@ -80,13 +80,13 @@ class DateTimeParamConverterTest extends \PHPUnit\Framework\TestCase
 
     public function testApplyOptionalWithEmptyAttribute()
     {
-        $request = new Request([], [], ['start' => null]);
+        $request = new Request([], [], ['start' => '']);
         $config = $this->createConfiguration('DateTime', 'start');
         $config->expects($this->once())
             ->method('isOptional')
             ->will($this->returnValue(true));
 
-        $this->assertFalse($this->converter->apply($request, $config));
+        $this->assertTrue($this->converter->apply($request, $config));
         $this->assertNull($request->attributes->get('start'));
     }
 
