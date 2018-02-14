@@ -443,9 +443,9 @@ class DoctrineParamConverterTest extends \PHPUnit\Framework\TestCase
                       ->method('getMetadataFactory')
                       ->will($this->returnValue($metadataFactory));
 
-        $this->registry->expects($this->once())
-                    ->method('getManagers')
-                    ->will($this->returnValue([$objectManager]));
+        $this->registry->expects($this->any())
+                    ->method('getManagerNames')
+                    ->will($this->returnValue(['default']));
 
         $this->registry->expects($this->once())
                       ->method('getManagerForClass')
@@ -472,8 +472,8 @@ class DoctrineParamConverterTest extends \PHPUnit\Framework\TestCase
                       ->will($this->returnValue($metadataFactory));
 
         $this->registry->expects($this->once())
-                    ->method('getManagers')
-                    ->will($this->returnValue([$objectManager]));
+                    ->method('getManagerNames')
+                    ->will($this->returnValue(['default']));
 
         $this->registry->expects($this->once())
                       ->method('getManager')
@@ -493,9 +493,9 @@ class DoctrineParamConverterTest extends \PHPUnit\Framework\TestCase
         $objectManager->expects($this->never())
                       ->method('getMetadataFactory');
 
-        $this->registry->expects($this->once())
-                    ->method('getManagers')
-                    ->will($this->returnValue([$objectManager]));
+        $this->registry->expects($this->any())
+            ->method('getManagerNames')
+            ->will($this->returnValue(['default']));
 
         $this->registry->expects($this->never())
                       ->method('getManager');
