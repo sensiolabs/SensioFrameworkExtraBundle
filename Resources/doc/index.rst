@@ -8,7 +8,15 @@ conventions and annotations. It allows for more concise controllers.
 Installation
 ------------
 
-Before using this bundle in your project, add it to your ``composer.json`` file:
+An official `Symfony Flex`_ recipe is available for this bundle. To automatically install and configure it run:
+
+.. code-block:: bash
+
+    $ composer require annotations
+
+You're done!
+
+Alternatively, if you don't use Symfony Flex, add it to your ``composer.json`` file:
 
 .. code-block:: bash
 
@@ -215,3 +223,4 @@ and :class:`Symfony\\Component\\HttpFoundation\\Response` instances.
 .. _`PSR-7`: http://www.php-fig.org/psr/psr-7/
 .. _`the HttpFoundation to PSR-7 bridge`: https://github.com/symfony/psr-http-message-bridge
 .. _`Zend Diactoros`: https://github.com/zendframework/zend-diactoros
+.. _`Symfony Flex`: https://symfony.com/doc/current/setup/flex.html
