@@ -8,7 +8,7 @@ conventions and annotations. It allows for more concise controllers.
 Installation
 ------------
 
-An official `Symfony`_ recipe is available for this bundle. To automatically
+An official Symfony recipe is available for this bundle. To automatically
 install and configure it run:
 
 .. code-block:: bash
@@ -225,4 +225,3 @@ and :class:`Symfony\\Component\\HttpFoundation\\Response` instances.
 .. _`PSR-7`: http://www.php-fig.org/psr/psr-7/
 .. _`the HttpFoundation to PSR-7 bridge`: https://github.com/symfony/psr-http-message-bridge
 .. _`Zend Diactoros`: https://github.com/zendframework/zend-diactoros
-.. _`Symfony Flex`: https://symfony.com/doc/current/setup/flex.html
