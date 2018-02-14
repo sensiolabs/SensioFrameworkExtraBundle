@@ -8,7 +8,8 @@ conventions and annotations. It allows for more concise controllers.
 Installation
 ------------
 
-An official `Symfony Flex`_ recipe is available for this bundle. To automatically install and configure it run:
+An official `Symfony`_ recipe is available for this bundle. To automatically
+install and configure it run:
 
 .. code-block:: bash
 
@@ -16,7 +17,8 @@ An official `Symfony Flex`_ recipe is available for this bundle. To automaticall
 
 You're done!
 
-Alternatively, if you don't use Symfony Flex, add it to your ``composer.json`` file:
+Alternatively, if you don't use Symfony Flex, add it to your ``composer.json``
+file:
 
 .. code-block:: bash
 
