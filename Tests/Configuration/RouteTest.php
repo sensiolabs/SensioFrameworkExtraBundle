@@ -15,6 +15,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 /**
  * @author Iltar van der Berg <ivanderberg@hostnet.nl>
+ *
+ * @group legacy
  */
 class RouteTest extends \PHPUnit\Framework\TestCase
 {

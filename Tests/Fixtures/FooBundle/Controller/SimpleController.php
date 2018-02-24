@@ -11,13 +11,10 @@
 
 namespace Tests\Fixtures\FooBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route(service="test.simple.multiple")
- */
 class SimpleController
 {
     /**

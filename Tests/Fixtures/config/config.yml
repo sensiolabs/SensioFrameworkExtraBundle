@@ -11,25 +11,24 @@ doctrine:
     orm:
         auto_mapping: true
 
+sensio_framework_extra:
+    router:
+        annotations: false
+
 services:
-    test.invokable.predefined:
-        class:  Tests\Fixtures\FooBundle\Controller\InvokableController
+    Tests\Fixtures\FooBundle\Controller\InvokableController:
         public: true
 
-    test.invokable_class_level.predefined:
-        class:  Tests\Fixtures\FooBundle\Controller\InvokableClassLevelController
+    Tests\Fixtures\FooBundle\Controller\InvokableClassLevelController:
         public: true
 
-    test.simple.multiple:
-        class:  Tests\Fixtures\FooBundle\Controller\SimpleController
+    Tests\Fixtures\FooBundle\Controller\SimpleController:
         public: true
 
-    test.action_arguments:
-        class:  Tests\Fixtures\ActionArgumentsBundle\Controller\ActionArgumentsController
+    Tests\Fixtures\ActionArgumentsBundle\Controller\ActionArgumentsController:
         public: true
 
-    test.is_granted_voter:
-        class: Tests\Fixtures\FooBundle\Security\IsGrantedVoter
+    Tests\Fixtures\FooBundle\Security\IsGrantedVoter:
         public: false
         tags:
             - { name: security.voter }

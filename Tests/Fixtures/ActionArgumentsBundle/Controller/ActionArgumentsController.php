@@ -14,11 +14,11 @@ namespace Tests\Fixtures\ActionArgumentsBundle\Controller;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/action-arguments", service="test.action_arguments")
+ * @Route("/action-arguments")
  */
 class ActionArgumentsController
 {

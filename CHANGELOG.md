@@ -1,6 +1,21 @@
 CHANGELOG
 =========
 
+5.2
+---
+
+ * Deprecated routing annotations as this is included in symfony/framework-bundle.
+   Disable the feature with
+
+   ```
+   sensio_framework_extra:
+       router:
+           annotations: false
+   ```
+
+   Also replace the annotations `Sensio\Bundle\FrameworkExtraBundle\Configuration\Route`
+   and `Sensio\Bundle\FrameworkExtraBundle\Configuration\Method` with `Symfony\Component\Routing\Annotation\Route`
+
 5.1
 ---
 

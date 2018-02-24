@@ -38,6 +38,8 @@ class SensioFrameworkExtraExtension extends Extension
         $definitionsToRemove = [];
 
         if ($config['router']['annotations']) {
+            @trigger_error(sprintf('Enabling the "sensio_framework_extra.router.annotations" configuration is deprecated since version 5.2. Set it to false and use the "%s" annotation from Symfony itself.', \Symfony\Component\Routing\Annotation\Route::class), E_USER_DEPRECATED);
+
             $annotationsToLoad[] = 'routing.xml';
 
             if (PHP_VERSION_ID < 70000) {
