@@ -11,11 +11,14 @@
 
 namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
 
+@trigger_error(sprintf('The "%s" annotation is deprecated since version 5.2. Use "%s" instead.', Method::class, \Symfony\Component\Routing\Annotation\Route::class), E_USER_DEPRECATED);
+
 /**
  * The Method class handles the Method annotation parts.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  * @Annotation
+ * @deprecated since version 5.2
  */
 class Method extends ConfigurationAnnotation
 {

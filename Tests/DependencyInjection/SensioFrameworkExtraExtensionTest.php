@@ -22,7 +22,13 @@ class SensioFrameworkExtraExtensionTest extends \PHPUnit\Framework\TestCase
         $container = new ContainerBuilder();
 
         $extension = new SensioFrameworkExtraExtension();
-        $extension->load([], $container);
+        $config = [
+            'router' => [
+                'annotations' => false,
+            ],
+        ];
+
+        $extension->load([$config], $container);
 
         $this->assertAlias($container, 'sensio_framework_extra.security.expression_language.default', 'sensio_framework_extra.security.expression_language');
     }
@@ -33,6 +39,9 @@ class SensioFrameworkExtraExtensionTest extends \PHPUnit\Framework\TestCase
 
         $extension = new SensioFrameworkExtraExtension();
         $config = [
+            'router' => [
+                'annotations' => false,
+            ],
             'security' => [
                 'expression_language' => 'acme.security.expression_language',
             ],
@@ -51,6 +60,9 @@ class SensioFrameworkExtraExtensionTest extends \PHPUnit\Framework\TestCase
 
         $extension = new SensioFrameworkExtraExtension();
         $config = [
+            'router' => [
+                'annotations' => false,
+            ],
             'templating' => [
                 'controller_patterns' => $patterns = ['/foo/', '/bar/', '/foobar/'],
             ],

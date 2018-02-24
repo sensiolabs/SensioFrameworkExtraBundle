@@ -16,6 +16,9 @@ use Doctrine\Common\Annotations\AnnotationRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Routing\AnnotatedRouteControllerLoader;
 
+/**
+ * @group legacy
+ */
 class AnnotatedRouteControllerLoaderTest extends \PHPUnit\Framework\TestCase
 {
     public function testServiceOptionIsAllowedOnClass()
