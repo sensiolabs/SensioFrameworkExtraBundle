@@ -125,7 +125,7 @@ class DoctrineParamConverter implements ParamConverterInterface
         }
     }
 
-    private function getIdentifier(Request $request, $options, $name)
+    protected function getIdentifier(Request $request, $options, $name)
     {
         if (null !== $options['id']) {
             if (!is_array($options['id'])) {
