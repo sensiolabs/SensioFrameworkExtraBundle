@@ -1,0 +1,11 @@
+---------------------------------------------------------------------------
+
+by alexislefebvre at 2018-02-14T22:58:18Z
+
+@jverdeyen Typo `namspaces` is still here, could you please fix it?
+
+---------------------------------------------------------------------------
+
+by mweimerskirch at 2018-03-30T17:20:38Z
+
+I was about to create a pull request for the same issue and stumbled upon this. IMHO this could be merged. As far as I can see, all requested changes have been applied by the pull request author even though the CI bot says otherwise.
