@@ -41,6 +41,9 @@ class AddExpressionLanguageProvidersPassTest extends \PHPUnit\Framework\TestCase
         $this->container->setDefinition('sensio_framework_extra.security.expression_language.default', $this->expressionLangDefinition);
     }
 
+    /**
+     * @doesNotPerformAssertions
+     */
     public function testProcessNoOpNoExpressionLang()
     {
         $this->container->removeDefinition('sensio_framework_extra.security.expression_language.default');

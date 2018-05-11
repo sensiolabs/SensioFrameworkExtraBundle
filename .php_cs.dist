@@ -1,5 +1,10 @@
 <?php
 
+$finder = PhpCsFixer\Finder::create()
+    ->exclude('vendor')
+    ->exclude('Tests/Fixtures/cache')
+    ->in(__DIR__);
+
 return PhpCsFixer\Config::create()
     ->setRules(array(
         '@Symfony' => true,
@@ -10,4 +15,5 @@ return PhpCsFixer\Config::create()
         'protected_to_private' => false,
     ))
     ->setRiskyAllowed(true)
+    ->setFinder($finder)
 ;

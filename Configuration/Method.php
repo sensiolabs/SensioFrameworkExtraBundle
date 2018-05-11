@@ -18,6 +18,7 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  * @Annotation
+ *
  * @deprecated since version 5.2
  */
 class Method extends ConfigurationAnnotation
