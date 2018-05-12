@@ -18,6 +18,7 @@ use Symfony\Component\Routing\Annotation\Route as BaseRoute;
 /**
  * @author Kris Wallsmith <kris@symfony.com>
  * @Annotation
+ *
  * @deprecated since version 5.2
  */
 class Route extends BaseRoute

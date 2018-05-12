@@ -9,6 +9,7 @@
     <php>
         <server name="KERNEL_CLASS" value="Tests\Fixtures\TestKernel" />
         <server name="KERNEL_DIR" value="Tests/Fixtures/" />
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="/disabled/" />
     </php>
     <filter>
         <whitelist>

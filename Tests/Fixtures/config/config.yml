@@ -3,6 +3,9 @@ framework:
     secret: test
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
+    fragments:
+        enabled: true
+
 doctrine:
     dbal:
         driver:   pdo_sqlite
@@ -54,3 +57,16 @@ security:
         default:
             form_login: ~
             anonymous: ~
+
+monolog:
+    handlers:
+        main:
+            type: stream
+            path: "%kernel.logs_dir%/console.log"
+            level: critical
+            channels: []
+
+twig:
+    debug: '%kernel.debug%'
+    strict_variables: '%kernel.debug%'
+    exception_controller: twig.controller.exception:showAction

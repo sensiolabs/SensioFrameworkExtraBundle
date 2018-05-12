@@ -49,32 +49,41 @@ class DateTimeParamConverterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('2012-07-21', $request->attributes->get('start')->format('Y-m-d'));
     }
 
+    /**
+     * @expectedException \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @expectedExceptionMessage Invalid date given for parameter "start".
+     */
     public function testApplyInvalidDate404Exception()
     {
         $request = new Request([], [], ['start' => 'Invalid DateTime Format']);
         $config = $this->createConfiguration('DateTime', 'start');
 
-        $this->setExpectedException('Symfony\Component\HttpKernel\Exception\NotFoundHttpException', 'Invalid date given for parameter "start".');
         $this->converter->apply($request, $config);
     }
 
+    /**
+     * @expectedException \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @expectedExceptionMessage Invalid date given for parameter "start".
+     */
     public function testApplyWithFormatInvalidDate404Exception()
     {
         $request = new Request([], [], ['start' => '2012-07-21']);
         $config = $this->createConfiguration('DateTime', 'start');
         $config->expects($this->any())->method('getOptions')->will($this->returnValue(['format' => 'd.m.Y']));
 
-        $this->setExpectedException('Symfony\Component\HttpKernel\Exception\NotFoundHttpException', 'Invalid date given for parameter "start".');
         $this->converter->apply($request, $config);
     }
 
+    /**
+     * @expectedException \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @expectedExceptionMessage Invalid date given for parameter "start".
+     */
     public function testApplyWithYmdFormatInvalidDate404Exception()
     {
         $request = new Request([], [], ['start' => '2012-21-07']);
         $config = $this->createConfiguration('DateTime', 'start');
         $config->expects($this->any())->method('getOptions')->will($this->returnValue(['format' => 'Y-m-d']));
 
-        $this->setExpectedException('Symfony\Component\HttpKernel\Exception\NotFoundHttpException', 'Invalid date given for parameter "start".');
         $this->converter->apply($request, $config);
     }
 
