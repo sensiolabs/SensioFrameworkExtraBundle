@@ -33,7 +33,7 @@
         "doctrine/orm": "^2.5",
         "symfony/monolog-bridge": "^3.0|^4.0",
         "symfony/monolog-bundle": "^3.2",
-        "hashids/hashids": "^3.0"
+        "hashids/hashids": "^2.0|^3.0"
     },
     "suggest": {
         "symfony/psr-http-message-bridge": "To use the PSR-7 converters",

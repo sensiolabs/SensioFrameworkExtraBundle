@@ -11,7 +11,7 @@
 
 namespace Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter;
 
-use Hashids\Hashids;
+use Hashids\HashidsInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -28,11 +28,11 @@ class HashidsParamConverter implements ParamConverterInterface
     protected $inner;
 
     /**
-     * @var Hashids|null
+     * @var HashidsInterface|null
      */
     protected $hashids;
 
-    public function __construct(ParamConverterInterface $inner = null, Hashids $hashids = null)
+    public function __construct(ParamConverterInterface $inner = null, HashidsInterface $hashids = null)
     {
         $this->inner = $inner;
         $this->hashids = $hashids;
