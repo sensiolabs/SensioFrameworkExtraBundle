@@ -42,6 +42,9 @@ class AddParamConverterPassTest extends \PHPUnit\Framework\TestCase
         $this->container->setParameter('sensio_framework_extra.disabled_converters', []);
     }
 
+    /**
+     * @doesNotPerformAssertions
+     */
     public function testProcessNoOpNoManager()
     {
         $this->container->removeDefinition('sensio_framework_extra.converter.manager');

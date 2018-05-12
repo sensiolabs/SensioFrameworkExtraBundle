@@ -75,13 +75,15 @@ class DoctrineParamConverterTest extends \PHPUnit\Framework\TestCase
         return $config;
     }
 
+    /**
+     * @expectedException \LogicException
+     */
     public function testApplyWithNoIdAndData()
     {
         $request = new Request();
         $config = $this->createConfiguration(null, []);
         $objectManager = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')->getMock();
 
-        $this->setExpectedException('LogicException');
         $this->converter->apply($request, $config);
     }
 

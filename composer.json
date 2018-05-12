@@ -30,7 +30,9 @@
         "symfony/dom-crawler": "^3.3|^4.0",
         "zendframework/zend-diactoros": "^1.3",
         "doctrine/doctrine-bundle": "^1.6",
-        "doctrine/orm": "^2.5"
+        "doctrine/orm": "^2.5",
+        "symfony/monolog-bundle": "^3.2",
+        "symfony/monolog-bridge": "^3.0|^4.0"
     },
     "suggest": {
         "symfony/psr-http-message-bridge": "To use the PSR-7 converters",

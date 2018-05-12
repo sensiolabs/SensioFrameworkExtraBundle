@@ -68,6 +68,9 @@ class ParamConverterManagerTest extends \PHPUnit\Framework\TestCase
         $manager->apply(new Request(), $configurations);
     }
 
+    /**
+     * @doesNotPerformAssertions
+     */
     public function testApplyNamedConverter()
     {
         $converter = $this->createParamConverterMock();
