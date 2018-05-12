@@ -30,12 +30,14 @@
         "symfony/dom-crawler": "^3.3|^4.0",
         "zendframework/zend-diactoros": "^1.3",
         "doctrine/doctrine-bundle": "^1.6",
-        "doctrine/orm": "^2.5"
+        "doctrine/orm": "^2.5",
+        "hashids/hashids": "^3.0"
     },
     "suggest": {
         "symfony/psr-http-message-bridge": "To use the PSR-7 converters",
         "symfony/expression-language": "",
-        "symfony/security-bundle": ""
+        "symfony/security-bundle": "",
+        "hashids/hashids": "To use the Hashids converter"
     },
     "autoload": {
         "psr-4": { "Sensio\\Bundle\\FrameworkExtraBundle\\": "" }
