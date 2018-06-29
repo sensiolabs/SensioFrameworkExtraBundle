@@ -37,7 +37,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('router')
                     ->addDefaultsIfNotSet()
                     ->children()
-                        ->booleanNode('annotations')->defaultTrue()->end()
+                        ->booleanNode('annotations')->defaultFalse()->end()
                     ->end()
                 ->end()
                 ->arrayNode('request')
