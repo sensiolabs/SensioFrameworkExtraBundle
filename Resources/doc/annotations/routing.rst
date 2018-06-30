@@ -1,6 +1,12 @@
 @Route and @Method
 ==================
 
+.. caution::
+
+    Routing annotations of the SensioFrameworkExtraBundle are deprecated since version 5.2.
+    Configuring routes with annotations is now a core feature of Symfony. Please use it
+    instead as explained in :doc:`/routing`.
+
 Usage
 -----
 
