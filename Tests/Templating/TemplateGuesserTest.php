@@ -61,6 +61,17 @@ class TemplateGuesserTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('my_admin/out_of_bundle/index.html.twig', (string) $templateReference);
     }
 
+    public function testGuessTemplateWithoutBundleExtendingInBundle()
+    {
+        $templateGuesser = new TemplateGuesser($this->kernel);
+        $templateReference = $templateGuesser->guessTemplateName([
+            new Fixture\Controller\MyAdmin\OutOfBundleExtendingInBundleController(),
+            'indexAction',
+        ], new Request());
+
+        $this->assertEquals('my_admin/out_of_bundle_extending_in_bundle/index.html.twig', (string) $templateReference);
+    }
+
     public function testGuessTemplateWithSubNamespace()
     {
         $templateGuesser = new TemplateGuesser($this->kernel);
