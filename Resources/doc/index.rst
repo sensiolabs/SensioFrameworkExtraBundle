@@ -50,7 +50,7 @@ The default configuration is as follow:
     .. code-block:: yaml
 
         sensio_framework_extra:
-            router:      { annotations: true }
+            router:      { annotations: true } # Deprecated; use routing annotations of Symfony core instead
             request:     { converters: true, auto_convert: true }
             view:        { annotations: true }
             cache:       { annotations: true }
