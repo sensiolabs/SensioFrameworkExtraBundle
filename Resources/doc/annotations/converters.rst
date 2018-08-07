@@ -58,9 +58,26 @@ If you use type hinting as in the example above, you can even omit the
 
         .. code-block:: xml
 
-            <sensio-framework-extra:config>
-                <request converters="true" auto-convert="true" />
-            </sensio-framework-extra:config>
+            <?xml version="1.0" encoding="UTF-8" ?>
+            <container xmlns="http://symfony.com/schema/dic/services"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:sensio-framework-extra="http://symfony.com/schema/dic/symfony_extra"
+                xsi:schemaLocation="http://symfony.com/schema/dic/services
+                    http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+                <sensio-framework-extra:config>
+                    <request converters="true" auto-convert="false" />
+                </sensio-framework-extra:config>
+            </container>
+
+        .. code-block:: php
+
+            $container->loadFromExtension('sensio_framework_extra', array(
+                'request' => array(
+                    'converters' => true,
+                    'auto_convert' => false,
+                ),
+            ));
 
 To detect which converter is run on a parameter the following process is run:
 
@@ -284,9 +301,27 @@ To register your converter service, you must add a tag to your service:
 
     .. code-block:: xml
 
-        <service id="my_converter" class="MyBundle\Request\ParamConverter\MyConverter">
-            <tag name="request.param_converter" priority="-2" converter="my_converter" />
-        </service>
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <container xmlns="http://symfony.com/schema/dic/services"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://symfony.com/schema/dic/services
+                http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+            <service id="my_converter" class="MyBundle\Request\ParamConverter\MyConverter">
+                <tag name="request.param_converter" priority="-2" converter="my_converter" />
+            </service>
+        </container>
+
+    .. code-block:: php
+
+        use MyBundle\Request\ParamConverter\MyConverter;
+
+        $container->register('my_converter', MyConverter::class)
+            ->addTag('request.param_converter', array(
+                'priority' => -2,
+                'converter' => 'my_converter',
+            ))
+        ;
 
 You can register a converter by priority, by name (attribute "converter"), or
 both. If you don't specify a priority or a name, the converter will be added to
