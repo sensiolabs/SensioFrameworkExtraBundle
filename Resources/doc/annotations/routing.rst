@@ -1,190 +1,68 @@
 @Route and @Method
 ==================
 
-.. caution::
+**Routing annotations of the SensioFrameworkExtraBundle are deprecated** since
+version 5.2 because they are now a core feature of Symfony.
 
-    Routing annotations of the SensioFrameworkExtraBundle are deprecated since version 5.2.
-    Configuring routes with annotations is now a core feature of Symfony. Please use it
-    instead as explained in :doc:`/routing`.
+How to Update your Applications
+-------------------------------
 
-Usage
------
+``@Route`` Annotation
+~~~~~~~~~~~~~~~~~~~~~
 
-The ``@Route`` annotation maps a route pattern with a controller::
+The Symfony ``@Route`` annotation is similar to the SensioFrameworkExtraBundle
+annotation, so you only have to update the annotation class namespace:
 
-    use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+.. code-block:: diff
 
-    class PostController extends Controller
+    -use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+    +use Symfony\Component\Routing\Annotation\Route;
+
+    class DefaultController extends Controller
     {
         /**
          * @Route("/")
          */
-        public function indexAction()
+        public function index()
         {
             // ...
         }
     }
 
-The ``index`` action of the ``Post`` controller is now mapped to the ``/``
-URL. This is equivalent to the following YAML configuration:
+The main difference is that Symfony's annotation no longer defines the
+``service`` option, which was used to instantiate the controller by fetching the
+given service from the container. In modern Symfony applications, all
+`controllers are services by default`_ and their service IDs are their fully-
+qualified class names, so this option is no longer needed.
 
-.. code-block:: yaml
+``@Method`` Annotation
+~~~~~~~~~~~~~~~~~~~~~~
 
-    blog_home:
-        path:     /
-        defaults: { _controller: SensioBlogBundle:Post:index }
+The ``@Method`` annotation from SensioFrameworkExtraBundle has been removed.
+Instead, the Symfony ``@Route`` annotation defines a ``methods`` option to
+restrict the HTTP methods of the route:
 
-Like any route pattern, you can define placeholders, requirements, and default
-values::
+.. code-block:: diff
 
-    /**
-     * @Route("/{id}", requirements={"id" = "\d+"}, defaults={"id" = 1})
-     */
-    public function showAction($id)
-    {
-    }
+    -use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+    -use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+    +use Symfony\Component\Routing\Annotation\Route;
 
-You can also define the default value for a placeholder with
-the PHP default value::
-
-    /**
-     * @Route("/{id}", requirements={"id" = "\d+"})
-     */
-    public function showAction($id = 1)
-    {
-    }
-
-You can also match more than one URL by defining additional ``@Route``
-annotations::
-
-    /**
-     * @Route("/", defaults={"id" = 1})
-     * @Route("/{id}")
-     */
-    public function showAction($id)
-    {
-    }
-
-.. _frameworkextra-annotations-routing-activation:
-
-Activation
-----------
-
-The routes need to be imported to be active as any other routing resources
-(note the ``annotation`` type):
-
-.. code-block:: yaml
-
-    # app/config/routing.yml
-
-    # import routes from a controller class
-    post:
-        resource: "@SensioBlogBundle/Controller/PostController.php"
-        type:     annotation
-
-You can also import a whole directory:
-
-.. code-block:: yaml
-
-    # import routes from a controller directory
-    blog:
-        resource: "@SensioBlogBundle/Controller"
-        type:     annotation
-
-As for any other resource, you can "mount" the routes under a given prefix:
-
-.. code-block:: yaml
-
-    post:
-        resource: "@SensioBlogBundle/Controller/PostController.php"
-        prefix:   /blog
-        type:     annotation
-
-Route Name
-----------
-
-A route defined with the ``@Route`` annotation is given a default name composed
-of the bundle name, the controller name and the action name. That would be
-``sensio_blog_post_index`` for the above example;
-
-The ``name`` attribute can be used to override this default route name::
-
-    /**
-     * @Route("/", name="blog_home")
-     */
-    public function indexAction()
-    {
-        // ...
-    }
-
-Route Prefix
-------------
-
-A ``@Route`` annotation on a controller class defines a prefix for all action
-routes (note that you cannot have more than one ``@Route`` annotation on a
-class)::
-
-    /**
-     * @Route("/blog")
-     */
-    class PostController extends Controller
+    class DefaultController extends Controller
     {
         /**
-         * @Route("/{id}")
+    -      * @Route("/show/{id}")
+    -      * @Method({"GET", "HEAD"})
+    +      * @Route("/show/{id}", methods={"GET","HEAD"})
          */
-        public function showAction($id)
+        public function show($id)
         {
+            // ...
         }
     }
 
-The ``show`` action is now mapped to the ``/blog/{id}`` pattern.
+Read the `chapter about Routing`_ in the Symfony Documentation to learn
+everything about these and the other annotations available.
 
-Route Method
-------------
-
-There is a shortcut ``@Method`` annotation to specify the HTTP method allowed
-for the route. To use it, import the ``Method`` annotation namespace::
-
-    use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-    use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-
-    /**
-     * @Route("/blog")
-     */
-    class PostController extends Controller
-    {
-        /**
-         * @Route("/edit/{id}")
-         * @Method({"GET", "POST"})
-         */
-        public function editAction($id)
-        {
-        }
-    }
-
-The ``edit`` action is now mapped to the ``/blog/edit/{id}`` pattern if the HTTP
-method used is either GET or POST.
-
-The ``@Method`` annotation is only considered when an action is annotated with
-``@Route``.
-
-Controller as Service
----------------------
-
-The ``@Route`` annotation on a controller class can also be used to assign the
-controller class to a service so that the controller resolver will instantiate
-the controller by fetching it from the DI container instead of calling ``new
-PostController()`` itself::
-
-    /**
-     * @Route(service="my_post_controller_service")
-     */
-    class PostController
-    {
-        // ...
-    }
-
-.. tip::
-
-    You can also omit the ``service`` option if your service ID is your controller 
-    fully-qualified class name (FQCN).
+.. _`controllers are services by default`: https://symfony.com/doc/current/controller/service.html
+.. _`chapter about Routing`: https://symfony.com/doc/current/routing.html
