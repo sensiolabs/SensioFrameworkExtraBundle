@@ -67,19 +67,25 @@ The default configuration is as follow:
 
     .. code-block:: xml
 
-        <!-- xmlns:sensio-framework-extra="http://symfony.com/schema/dic/symfony_extra" -->
-        <sensio-framework-extra:config>
-            <router annotations="true" />
-            <request converters="true" auto_convert="true" />
-            <view annotations="true" />
-            <cache annotations="true" />
-            <security annotations="true" />
-            <psr-message enabled="false" /> <!-- Defaults to true if the PSR-7 bridge is installed -->
-        </sensio-framework-extra:config>
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <container xmlns="http://symfony.com/schema/dic/services"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:sensio-framework-extra="http://symfony.com/schema/dic/symfony_extra"
+            xsi:schemaLocation="http://symfony.com/schema/dic/services
+                http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+            <sensio-framework-extra:config>
+                <router annotations="true" />
+                <request converters="true" auto-convert="true" />
+                <view annotations="true" />
+                <cache annotations="true" />
+                <security annotations="true" />
+                <psr-message enabled="false" /> <!-- Defaults to true if the PSR-7 bridge is installed -->
+            </sensio-framework-extra:config>
+        </container>
 
     .. code-block:: php
 
-        // load the profiler
         $container->loadFromExtension('sensio_framework_extra', array(
             'router'      => array('annotations' => true),
             'request'     => array('converters' => true, 'auto_convert' => true),
