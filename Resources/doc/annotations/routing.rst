@@ -10,7 +10,7 @@ How to Update your Applications
 ``@Route`` Annotation
 ~~~~~~~~~~~~~~~~~~~~~
 
-The Symfony annotation has the same options as the SensioFrameworkExtraBundle
+The Symfony ``@Route`` annotation is similar to the SensioFrameworkExtraBundle
 annotation, so you only have to update the annotation class namespace:
 
 .. code-block:: diff
@@ -29,11 +29,17 @@ annotation, so you only have to update the annotation class namespace:
         }
     }
 
+The main difference is that Symfony's annotation no longer defines the
+``service`` option, which was used to instantiate the controller by fetching the
+given service from the container. In modern Symfony applications, all
+`controllers are services by default`_ and their service IDs are their fully-
+qualified class names, so this option is no longer needed.
+
 ``@Method`` Annotation
 ~~~~~~~~~~~~~~~~~~~~~~
 
 The ``@Method`` annotation from SensioFrameworkExtraBundle has been removed.
-Instead, the Symfony ``@Route`` annotation defines a new ``methods`` option to
+Instead, the Symfony ``@Route`` annotation defines a ``methods`` option to
 restrict the HTTP methods of the route:
 
 .. code-block:: diff
@@ -58,4 +64,5 @@ restrict the HTTP methods of the route:
 Read the `chapter about Routing`_ in the Symfony Documentation to learn
 everything about these and the other annotations available.
 
+.. _`controllers are services by default`: https://symfony.com/doc/current/controller/service.html
 .. _`chapter about Routing`: https://symfony.com/doc/current/routing.html
