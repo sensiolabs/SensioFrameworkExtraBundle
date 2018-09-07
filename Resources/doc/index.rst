@@ -182,8 +182,6 @@ example:
         resource: "@AnnotRoutingBundle/Controller"
         type:     annotation
 
-see :ref:`Annotated Routes Activation<frameworkextra-annotations-routing-activation>` for more details.
-
 PSR-7 support
 -------------
 
