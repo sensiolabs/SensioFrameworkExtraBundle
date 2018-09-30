@@ -37,10 +37,29 @@ class DoctrineParamConverter implements ParamConverterInterface
      */
     private $language;
 
-    public function __construct(ManagerRegistry $registry = null, ExpressionLanguage $expressionLanguage = null)
+    /**
+     * @var array
+     */
+    private $defaultOptions;
+
+    public function __construct(ManagerRegistry $registry = null, ExpressionLanguage $expressionLanguage = null, array $options = [])
     {
         $this->registry = $registry;
         $this->language = $expressionLanguage;
+
+        $defaultValues = [
+            'entity_manager' => null,
+            'exclude' => [],
+            'mapping' => [],
+            'strip_null' => false,
+            'expr' => null,
+            'id' => null,
+            'repository_method' => null,
+            'map_method_signature' => false,
+            'evict_cache' => false,
+        ];
+
+        $this->defaultOptions = array_merge($defaultValues, $options);
     }
 
     /**
@@ -133,6 +152,10 @@ class DoctrineParamConverter implements ParamConverterInterface
             } elseif (is_array($options['id'])) {
                 $id = [];
                 foreach ($options['id'] as $field) {
+                    if (false !== strstr($field, '%s')) {
+                        // Convert "%s_uuid" to "foobar_uuid"
+                        $field = sprintf($field, $name);
+                    }
                     $id[$field] = $request->attributes->get($field);
                 }
 
@@ -278,18 +301,6 @@ class DoctrineParamConverter implements ParamConverterInterface
 
     private function getOptions(ParamConverter $configuration, $strict = true)
     {
-        $defaultValues = [
-            'entity_manager' => null,
-            'exclude' => [],
-            'mapping' => [],
-            'strip_null' => false,
-            'expr' => null,
-            'id' => null,
-            'repository_method' => null,
-            'map_method_signature' => false,
-            'evict_cache' => false,
-        ];
-
         $passedOptions = $configuration->getOptions();
 
         if (isset($passedOptions['repository_method'])) {
@@ -300,12 +311,12 @@ class DoctrineParamConverter implements ParamConverterInterface
             @trigger_error('The map_method_signature option of @ParamConverter is deprecated and will be removed in 6.0. Use the expr option or @Entity.', E_USER_DEPRECATED);
         }
 
-        $extraKeys = array_diff(array_keys($passedOptions), array_keys($defaultValues));
+        $extraKeys = array_diff(array_keys($passedOptions), array_keys($this->defaultOptions));
         if ($extraKeys && $strict) {
             throw new \InvalidArgumentException(sprintf('Invalid option(s) passed to @%s: %s', $this->getAnnotationName($configuration), implode(', ', $extraKeys)));
         }
 
-        return array_replace($defaultValues, $passedOptions);
+        return array_replace($this->defaultOptions, $passedOptions);
     }
 
     private function getManager($name, $class)
