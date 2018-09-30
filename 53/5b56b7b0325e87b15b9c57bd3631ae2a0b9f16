@@ -1,0 +1,59 @@
+---------------------------------------------------------------------------
+
+by Nyholm at 2018-09-29T09:47:07Z
+
+I spoke with some great minds at SymfonyLive London. We concluded that I should have a UUID as a primary key in my database. Which means that the ParamConverter would work well even without this PR.
+
+I have now modified the code so I do not register a new service. I just allow people (like myself) to configure the service themselves:
+
+``` xml
+<service id="app.param_converter.uuid" class="Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter" public="false">
+    <tag name="request.param_converter" converter="doctrine.orm.uuid" />
+    <argument type="service" id="doctrine" on-invalid="ignore" />
+    <argument type="service" id="sensio_framework_extra.converter.doctrine.orm.expression_language" on-invalid="null" />
+    <argument type="collection">
+        <argument key="repository_method">findOneByUuid</argument>
+        <argument key="id" type="collection">
+            <argument>uuid</argument>
+            <argument>%s_uuid</argument>
+        </argument>
+    </argument>
+</service>
+```
+
+```php
+class User
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     * @var \Ramsey\Uuid\Uuid
+     *
+     * @ORM\Column(type="uuid", unique=true)
+     */
+    private $uuid;
+   // ...
+}
+```
+
+```php
+class FooController
+{
+    /**
+     * @Route("/{uuid}/show", requirements={"uuid": "%uuid_regex%"})
+     */
+    public function bar(User $user) { /* ... */ }
+
+    /**
+     * @Route("/{uuid}/articles/{article_uuid}/show", requirements={"uuid": "%uuid_regex%", "article_uuid": "%uuid_regex%"})
+     */
+    public function baz(User $user, Article $article) { /* ... */ }
+}
+```
