@@ -11,6 +11,7 @@
 
 namespace Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter;
 
+use Doctrine\DBAL\Types\ConversionException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\ExpressionLanguage\SyntaxError;
@@ -141,6 +142,8 @@ class DoctrineParamConverter implements ParamConverterInterface
             return $om->getRepository($class)->$method($id);
         } catch (NoResultException $e) {
             return;
+        } catch (ConversionException $e) {
+            return;
         }
     }
 
@@ -235,6 +238,8 @@ class DoctrineParamConverter implements ParamConverterInterface
             return $em->getRepository($class)->$repositoryMethod($criteria);
         } catch (NoResultException $e) {
             return;
+        } catch (ConversionException $e) {
+            return;
         }
     }
 
@@ -268,6 +273,8 @@ class DoctrineParamConverter implements ParamConverterInterface
         try {
             return $this->language->evaluate($expression, $variables);
         } catch (NoResultException $e) {
+            return;
+        } catch (ConversionException $e) {
             return;
         } catch (SyntaxError $e) {
             throw new \LogicException(sprintf('Error parsing expression -- %s -- (%s)', $expression, $e->getMessage()), 0, $e);
