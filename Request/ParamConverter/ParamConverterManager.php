@@ -40,7 +40,7 @@ class ParamConverterManager
      */
     public function apply(Request $request, $configurations)
     {
-        if (is_object($configurations)) {
+        if (\is_object($configurations)) {
             $configurations = [$configurations];
         }
 
@@ -59,7 +59,7 @@ class ParamConverterManager
 
         // If the value is already an instance of the class we are trying to convert it into
         // we should continue as no conversion is required
-        if (is_object($value) && $value instanceof $className) {
+        if (\is_object($value) && $value instanceof $className) {
             return;
         }
 

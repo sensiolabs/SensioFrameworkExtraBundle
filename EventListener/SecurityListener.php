@@ -116,7 +116,7 @@ class SecurityListener implements EventSubscriberInterface
             }
 
             if ($diff) {
-                $singular = 1 === count($diff);
+                $singular = 1 === \count($diff);
                 if (null !== $this->logger) {
                     $this->logger->warning(sprintf('Controller argument%s "%s" collided with the built-in security expression variables. The built-in value%s are being used for the @Security expression.', $singular ? '' : 's', implode('", "', $diff), $singular ? 's' : ''));
                 }

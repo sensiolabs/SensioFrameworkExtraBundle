@@ -79,7 +79,7 @@ class IsGrantedListener implements EventSubscriberInterface
         $attributes = array_map(function ($attribute) {
             return sprintf('"%s"', $attribute);
         }, (array) $isGranted->getAttributes());
-        if (1 === count($attributes)) {
+        if (1 === \count($attributes)) {
             $argsString = reset($attributes);
         } else {
             $argsString = sprintf('[%s]', implode(', ', $attributes));

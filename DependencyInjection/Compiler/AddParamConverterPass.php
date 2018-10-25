@@ -36,7 +36,7 @@ class AddParamConverterPass implements CompilerPassInterface
             foreach ($converters as $converter) {
                 $name = isset($converter['converter']) ? $converter['converter'] : null;
 
-                if (null !== $name && in_array($name, $disabled)) {
+                if (null !== $name && \in_array($name, $disabled)) {
                     continue;
                 }
 

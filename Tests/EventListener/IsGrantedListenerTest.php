@@ -114,7 +114,7 @@ class IsGrantedListenerTest extends \PHPUnit\Framework\TestCase
             $listener->onKernelControllerArguments($this->createFilterControllerEvent($request));
             $this->fail();
         } catch (\Exception $e) {
-            $this->assertEquals(AccessDeniedException::class, get_class($e));
+            $this->assertEquals(AccessDeniedException::class, \get_class($e));
             $this->assertEquals($expectedMessage, $e->getMessage());
         }
     }

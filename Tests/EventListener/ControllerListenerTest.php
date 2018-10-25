@@ -117,7 +117,7 @@ class ControllerListenerTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf('Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter', $annotations[1]);
         $this->assertEquals('test2', $annotations[1]->getName());
 
-        $this->assertEquals(2, count($annotations));
+        $this->assertCount(2, $annotations);
     }
 
     private function createRequest(Cache $cache = null)

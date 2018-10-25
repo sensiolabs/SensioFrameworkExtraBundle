@@ -45,15 +45,15 @@ class ControllerListener implements EventSubscriberInterface
     {
         $controller = $event->getController();
 
-        if (!is_array($controller) && method_exists($controller, '__invoke')) {
+        if (!\is_array($controller) && method_exists($controller, '__invoke')) {
             $controller = [$controller, '__invoke'];
         }
 
-        if (!is_array($controller)) {
+        if (!\is_array($controller)) {
             return;
         }
 
-        $className = class_exists('Doctrine\Common\Util\ClassUtils') ? ClassUtils::getClass($controller[0]) : get_class($controller[0]);
+        $className = class_exists('Doctrine\Common\Util\ClassUtils') ? ClassUtils::getClass($controller[0]) : \get_class($controller[0]);
         $object = new \ReflectionClass($className);
         $method = $object->getMethod($controller[1]);
 
@@ -67,8 +67,8 @@ class ControllerListener implements EventSubscriberInterface
             } elseif (!array_key_exists($key, $methodConfigurations)) {
                 $configurations[$key] = $classConfigurations[$key];
             } else {
-                if (is_array($classConfigurations[$key])) {
-                    if (!is_array($methodConfigurations[$key])) {
+                if (\is_array($classConfigurations[$key])) {
+                    if (!\is_array($methodConfigurations[$key])) {
                         throw new \UnexpectedValueException('Configurations should both be an array or both not be an array');
                     }
                     $configurations[$key] = array_merge($classConfigurations[$key], $methodConfigurations[$key]);

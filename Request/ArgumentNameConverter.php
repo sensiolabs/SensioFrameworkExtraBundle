@@ -42,7 +42,7 @@ class ArgumentNameConverter
         foreach ($argumentMetadatas as $index => $argumentMetadata) {
             if ($argumentMetadata->isVariadic()) {
                 // set the rest of the arguments as this arg's value
-                $namedArguments[$argumentMetadata->getName()] = array_slice($controllerArguments, $index);
+                $namedArguments[$argumentMetadata->getName()] = \array_slice($controllerArguments, $index);
 
                 break;
             }

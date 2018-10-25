@@ -53,7 +53,7 @@ class TemplateListener implements EventSubscriberInterface
         }
 
         $controller = $event->getController();
-        if (!is_array($controller) && method_exists($controller, '__invoke')) {
+        if (!\is_array($controller) && method_exists($controller, '__invoke')) {
             $controller = [$controller, '__invoke'];
         }
         $template->setOwner($controller);
@@ -123,7 +123,7 @@ class TemplateListener implements EventSubscriberInterface
         $parameters = [];
         $arguments = $template->getVars();
 
-        if (0 === count($arguments)) {
+        if (0 === \count($arguments)) {
             $r = new \ReflectionObject($controller);
 
             $arguments = [];

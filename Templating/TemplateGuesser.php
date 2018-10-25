@@ -56,13 +56,13 @@ class TemplateGuesser
      */
     public function guessTemplateName($controller, Request $request)
     {
-        if (is_object($controller) && method_exists($controller, '__invoke')) {
+        if (\is_object($controller) && method_exists($controller, '__invoke')) {
             $controller = [$controller, '__invoke'];
-        } elseif (!is_array($controller)) {
-            throw new \InvalidArgumentException(sprintf('First argument of %s must be an array callable or an object defining the magic method __invoke. "%s" given.', __METHOD__, gettype($controller)));
+        } elseif (!\is_array($controller)) {
+            throw new \InvalidArgumentException(sprintf('First argument of %s must be an array callable or an object defining the magic method __invoke. "%s" given.', __METHOD__, \gettype($controller)));
         }
 
-        $className = class_exists('Doctrine\Common\Util\ClassUtils') ? ClassUtils::getClass($controller[0]) : get_class($controller[0]);
+        $className = class_exists('Doctrine\Common\Util\ClassUtils') ? ClassUtils::getClass($controller[0]) : \get_class($controller[0]);
 
         $matchController = null;
         foreach ($this->controllerPatterns as $pattern) {
@@ -72,7 +72,7 @@ class TemplateGuesser
             }
         }
         if (null === $matchController) {
-            throw new \InvalidArgumentException(sprintf('The "%s" class does not look like a controller class (its FQN must match one of the following regexps: "%s")', get_class($controller[0]), implode('", "', $this->controllerPatterns)));
+            throw new \InvalidArgumentException(sprintf('The "%s" class does not look like a controller class (its FQN must match one of the following regexps: "%s")', \get_class($controller[0]), implode('", "', $this->controllerPatterns)));
         }
 
         if ('__invoke' === $controller[1]) {

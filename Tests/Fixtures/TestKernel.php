@@ -37,7 +37,7 @@ class TestKernel extends Kernel
     {
         $loader->load(__DIR__.'/config/config.yml');
 
-        if (PHP_VERSION_ID >= 70100) {
+        if (\PHP_VERSION_ID >= 70100) {
             $loader->load(__DIR__.'/config/nullable_type/config.yml');
         }
     }

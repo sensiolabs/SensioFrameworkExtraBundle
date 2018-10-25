@@ -47,7 +47,7 @@ class Method extends ConfigurationAnnotation
      */
     public function setMethods($methods)
     {
-        $this->methods = is_array($methods) ? $methods : [$methods];
+        $this->methods = \is_array($methods) ? $methods : [$methods];
     }
 
     /**

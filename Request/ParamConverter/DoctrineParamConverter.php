@@ -147,9 +147,9 @@ class DoctrineParamConverter implements ParamConverterInterface
     private function getIdentifier(Request $request, $options, $name)
     {
         if (null !== $options['id']) {
-            if (!is_array($options['id'])) {
+            if (!\is_array($options['id'])) {
                 $name = $options['id'];
-            } elseif (is_array($options['id'])) {
+            } elseif (\is_array($options['id'])) {
                 $id = [];
                 foreach ($options['id'] as $field) {
                     if (false !== strstr($field, '%s')) {
@@ -249,7 +249,7 @@ class DoctrineParamConverter implements ParamConverterInterface
             } elseif ($parameter->isDefaultValueAvailable()) {
                 $arguments[] = $parameter->getDefaultValue();
             } else {
-                throw new \InvalidArgumentException(sprintf('Repository method "%s::%s" requires that you provide a value for the "$%s" argument.', get_class($repository), $repositoryMethod, $parameter->name));
+                throw new \InvalidArgumentException(sprintf('Repository method "%s::%s" requires that you provide a value for the "$%s" argument.', \get_class($repository), $repositoryMethod, $parameter->name));
             }
         }
 
@@ -280,7 +280,7 @@ class DoctrineParamConverter implements ParamConverterInterface
     public function supports(ParamConverter $configuration)
     {
         // if there is no manager, this means that only Doctrine DBAL is configured
-        if (null === $this->registry || !count($this->registry->getManagerNames())) {
+        if (null === $this->registry || !\count($this->registry->getManagerNames())) {
             return false;
         }
 

@@ -160,7 +160,7 @@ class HttpCacheListenerTest extends \PHPUnit\Framework\TestCase
         }, $request, null);
 
         $listener->onKernelController($controllerEvent);
-        $response = call_user_func($controllerEvent->getController());
+        $response = \call_user_func($controllerEvent->getController());
 
         $this->assertEquals(304, $response->getStatusCode());
     }
@@ -177,7 +177,7 @@ class HttpCacheListenerTest extends \PHPUnit\Framework\TestCase
         }, $request, null);
         $listener->onKernelController($controllerEvent);
 
-        $responseEvent = new FilterResponseEvent($this->getKernel(), $request, HttpKernelInterface::MASTER_REQUEST, call_user_func($controllerEvent->getController()));
+        $responseEvent = new FilterResponseEvent($this->getKernel(), $request, HttpKernelInterface::MASTER_REQUEST, \call_user_func($controllerEvent->getController()));
         $listener->onKernelResponse($responseEvent);
 
         $response = $responseEvent->getResponse();
@@ -199,7 +199,7 @@ class HttpCacheListenerTest extends \PHPUnit\Framework\TestCase
         }, $request, null);
 
         $listener->onKernelController($controllerEvent);
-        $response = call_user_func($controllerEvent->getController());
+        $response = \call_user_func($controllerEvent->getController());
 
         $this->assertEquals(304, $response->getStatusCode());
     }
@@ -216,7 +216,7 @@ class HttpCacheListenerTest extends \PHPUnit\Framework\TestCase
         }, $request, null);
         $listener->onKernelController($controllerEvent);
 
-        $responseEvent = new FilterResponseEvent($this->getKernel(), $request, HttpKernelInterface::MASTER_REQUEST, call_user_func($controllerEvent->getController()));
+        $responseEvent = new FilterResponseEvent($this->getKernel(), $request, HttpKernelInterface::MASTER_REQUEST, \call_user_func($controllerEvent->getController()));
         $listener->onKernelResponse($responseEvent);
 
         $response = $responseEvent->getResponse();
