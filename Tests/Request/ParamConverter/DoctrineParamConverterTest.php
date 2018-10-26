@@ -11,6 +11,7 @@
 
 namespace Sensio\Bundle\FrameworkExtraBundle\Tests\Request\ParamConverter;
 
+use Doctrine\DBAL\Types\ConversionException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\ExpressionLanguage\SyntaxError;
@@ -161,6 +162,36 @@ class DoctrineParamConverterTest extends \PHPUnit\Framework\TestCase
 
         $this->assertTrue($ret);
         $this->assertSame($object, $request->attributes->get('arg'));
+    }
+
+    /**
+     * @expectedException \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
+    public function testApplyWithConversionFailedException()
+    {
+        $request = new Request();
+        $request->attributes->set('id', 'test');
+
+        $config = $this->createConfiguration('stdClass', ['id' => 'id'], 'arg');
+
+        $manager = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')->getMock();
+        $objectRepository = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectRepository')->getMock();
+        $this->registry->expects($this->once())
+              ->method('getManagerForClass')
+              ->with('stdClass')
+              ->will($this->returnValue($manager));
+
+        $manager->expects($this->once())
+            ->method('getRepository')
+            ->with('stdClass')
+            ->will($this->returnValue($objectRepository));
+
+        $objectRepository->expects($this->once())
+                      ->method('find')
+                      ->with($this->equalTo('test'))
+                      ->will($this->throwException(new ConversionException()));
+
+        $this->converter->apply($request, $config);
     }
 
     public function testUsedProperIdentifier()
