@@ -15,6 +15,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ArgumentNameConverter;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\FilterControllerArgumentsEvent;
+use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -36,6 +37,24 @@ class IsGrantedListener implements EventSubscriberInterface
         $this->authChecker = $authChecker;
     }
 
+    public function onKernelController(FilterControllerEvent $event)
+    {
+        $request = $event->getRequest();
+        /** @var $configurations IsGranted[] */
+        if (!$configurations = $request->attributes->get('_is_granted')) {
+            return;
+        }
+
+        $this->warnAboutAuthChecker();
+
+        foreach ($configurations as $configuration) {
+            // Only configurations WITHOUT subject.
+            if (null === $configuration->getSubject()) {
+                $this->checkIsGranted($configuration, null);
+            }
+        }
+    }
+
     public function onKernelControllerArguments(FilterControllerArgumentsEvent $event)
     {
         $request = $event->getRequest();
@@ -44,33 +63,45 @@ class IsGrantedListener implements EventSubscriberInterface
             return;
         }
 
-        if (null === $this->authChecker) {
-            throw new \LogicException('To use the @IsGranted tag, you need to install symfony/security-bundle and configure your security system.');
-        }
+        $this->warnAboutAuthChecker();
 
         $arguments = $this->argumentNameConverter->getControllerArguments($event);
 
         foreach ($configurations as $configuration) {
-            $subject = null;
-            if ($configuration->getSubject()) {
-                if (!isset($arguments[$configuration->getSubject()])) {
-                    throw new \RuntimeException(sprintf('Could not find the subject "%s" for the @IsGranted annotation. Try adding a "$%s" argument to your controller method.', $configuration->getSubject(), $configuration->getSubject()));
-                }
-
-                $subject = $arguments[$configuration->getSubject()];
+            // Only configurations WITH subject.
+            if (null === $configuration->getSubject()) {
+                continue;
             }
 
-            if (!$this->authChecker->isGranted($configuration->getAttributes(), $subject)) {
-                $argsString = $this->getIsGrantedString($configuration);
-
-                $message = $configuration->getMessage() ?: sprintf('Access Denied by controller annotation @IsGranted(%s)', $argsString);
-
-                if ($statusCode = $configuration->getStatusCode()) {
-                    throw new HttpException($statusCode, $message);
-                }
-
-                throw new AccessDeniedException($message);
+            if (!isset($arguments[$configuration->getSubject()])) {
+                throw new \RuntimeException(sprintf('Could not find the subject "%s" for the @IsGranted annotation. Try adding a "$%s" argument to your controller method.', $configuration->getSubject(), $configuration->getSubject()));
             }
+
+            $subject = $arguments[$configuration->getSubject()];
+
+            $this->checkIsGranted($configuration, $subject);
+        }
+    }
+
+    private function warnAboutAuthChecker()
+    {
+        if (null === $this->authChecker) {
+            throw new \LogicException('To use the @IsGranted tag, you need to install symfony/security-bundle and configure your security system.');
+        }
+    }
+
+    private function checkIsGranted(IsGranted $isGranted, $subject)
+    {
+        if (!$this->authChecker->isGranted($isGranted->getAttributes(), $subject)) {
+            $argsString = $this->getIsGrantedString($isGranted);
+
+            $message = $isGranted->getMessage() ?: sprintf('Access Denied by controller annotation @IsGranted(%s)', $argsString);
+
+            if ($statusCode = $isGranted->getStatusCode()) {
+                throw new HttpException($statusCode, $message);
+            }
+
+            throw new AccessDeniedException($message);
         }
     }
 
@@ -97,6 +128,9 @@ class IsGrantedListener implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return [KernelEvents::CONTROLLER_ARGUMENTS => 'onKernelControllerArguments'];
+        return [
+            KernelEvents::CONTROLLER => 'onKernelController',
+            KernelEvents::CONTROLLER_ARGUMENTS => 'onKernelControllerArguments',
+        ];
     }
 }
