@@ -13,13 +13,17 @@ namespace Sensio\Bundle\FrameworkExtraBundle\EventListener;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ArgumentNameConverter;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Exception\RuntimeException as DependencyInjectionException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\FilterControllerArgumentsEvent;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
+use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Handles the IsGranted annotation on controllers.
@@ -83,6 +87,27 @@ class IsGrantedListener implements EventSubscriberInterface
         }
     }
 
+    public function onKernelException(GetResponseForExceptionEvent $event)
+    {
+        $request = $event->getRequest();
+        /** @var $configurations IsGranted[] */
+        if (!$configurations = $request->attributes->get('_is_granted')) {
+            return;
+        }
+
+        $exception = $event->getException();
+
+        if ($exception instanceof DependencyInjectionException && false !== strpos($exception->getMessage(), UserInterface::class)) {
+            foreach ($configurations as $configuration) {
+                if (null !== $configuration->getSubject()) {
+                    $exception = new \RuntimeException(sprintf('Usage of both @IsGranted annotation with subject and %s type hint in controller argument is not supported. Use getUser() or isGranted() methods of %s instead.', UserInterface::class, AbstractController::class));
+
+                    $event->setException($exception);
+                }
+            }
+        }
+    }
+
     private function warnAboutAuthChecker()
     {
         if (null === $this->authChecker) {
@@ -131,6 +156,7 @@ class IsGrantedListener implements EventSubscriberInterface
         return [
             KernelEvents::CONTROLLER => 'onKernelController',
             KernelEvents::CONTROLLER_ARGUMENTS => 'onKernelControllerArguments',
+            KernelEvents::EXCEPTION => 'onKernelException',
         ];
     }
 }
