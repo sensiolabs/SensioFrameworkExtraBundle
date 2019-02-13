@@ -13,7 +13,7 @@ they can be injected as controller method arguments::
 
     /**
      * @Route("/blog/{id}")
-     * @ParamConverter("post", class="SensioBlogBundle:Post")
+     * @ParamConverter("id", class="SensioBlogBundle:Post")
      */
     public function showAction(Post $post)
     {
