@@ -13,13 +13,13 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Tests\EventListener;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\EventListener\IsGrantedListener;
+use Sensio\Bundle\FrameworkExtraBundle\Exception\IsGrantedAccessDeniedException;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ArgumentNameConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\FilterControllerArgumentsEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class IsGrantedListenerTest extends \PHPUnit\Framework\TestCase
 {
@@ -114,7 +114,7 @@ class IsGrantedListenerTest extends \PHPUnit\Framework\TestCase
             $listener->onKernelControllerArguments($this->createFilterControllerEvent($request));
             $this->fail();
         } catch (\Exception $e) {
-            $this->assertEquals(AccessDeniedException::class, \get_class($e));
+            $this->assertEquals(IsGrantedAccessDeniedException::class, \get_class($e));
             $this->assertEquals($expectedMessage, $e->getMessage());
         }
     }
@@ -127,7 +127,7 @@ class IsGrantedListenerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException        \Symfony\Component\HttpKernel\Exception\HttpException
+     * @expectedException        \Sensio\Bundle\FrameworkExtraBundle\Exception\IsGrantedHttpException
      * @expectedExceptionMessage Not found
      */
     public function testNotFoundHttpException()
