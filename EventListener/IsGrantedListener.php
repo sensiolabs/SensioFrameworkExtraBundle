@@ -12,13 +12,13 @@
 namespace Sensio\Bundle\FrameworkExtraBundle\EventListener;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Exception\IsGrantedAccessDeniedException;
+use Sensio\Bundle\FrameworkExtraBundle\Exception\IsGrantedHttpException;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ArgumentNameConverter;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\FilterControllerArgumentsEvent;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Handles the IsGranted annotation on controllers.
@@ -51,6 +51,7 @@ class IsGrantedListener implements EventSubscriberInterface
         $arguments = $this->argumentNameConverter->getControllerArguments($event);
 
         foreach ($configurations as $configuration) {
+            $attributes = $configuration->getAttributes();
             $subject = null;
             if ($configuration->getSubject()) {
                 if (!isset($arguments[$configuration->getSubject()])) {
@@ -60,16 +61,16 @@ class IsGrantedListener implements EventSubscriberInterface
                 $subject = $arguments[$configuration->getSubject()];
             }
 
-            if (!$this->authChecker->isGranted($configuration->getAttributes(), $subject)) {
+            if (!$this->authChecker->isGranted($attributes, $subject)) {
                 $argsString = $this->getIsGrantedString($configuration);
 
                 $message = $configuration->getMessage() ?: sprintf('Access Denied by controller annotation @IsGranted(%s)', $argsString);
 
                 if ($statusCode = $configuration->getStatusCode()) {
-                    throw new HttpException($statusCode, $message);
+                    throw new IsGrantedHttpException($attributes, $subject, $statusCode, $message);
                 }
 
-                throw new AccessDeniedException($message);
+                throw new IsGrantedAccessDeniedException($attributes, $subject, $message);
             }
         }
     }
