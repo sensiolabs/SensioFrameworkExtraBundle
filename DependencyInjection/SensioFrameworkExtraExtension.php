@@ -11,16 +11,17 @@
 
 namespace Sensio\Bundle\FrameworkExtraBundle\DependencyInjection;
 
+use Psr\Http\Message\StreamFactoryInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Symfony\Component\DependencyInjection\Exception\LogicException;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Resource\ClassExistenceResource;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\Security\Core\Authorization\ExpressionLanguage as SecurityExpressionLanguage;
-use Zend\Diactoros\ServerRequestFactory;
 
 /**
  * @author Fabien Potencier <fabien@symfony.com>
@@ -148,8 +149,8 @@ class SensioFrameworkExtraExtension extends Extension
         if ($config['psr_message']['enabled']) {
             $loader->load('psr7.xml');
 
-            if (!class_exists(ServerRequestFactory::class)) {
-                $definitionsToRemove[] = 'sensio_framework_extra.psr7.argument_value_resolver.server_request';
+            if (!interface_exists(StreamFactoryInterface::class)) {
+                throw new LogicException('PSR-7 support cannot be enabled as the required dependencies are not installed. Try running "composer require nyholm/psr7".');
             }
         }
 
