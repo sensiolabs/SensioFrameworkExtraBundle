@@ -15,7 +15,7 @@ they can be injected as controller method arguments::
      * @Route("/blog/{id}")
      * @ParamConverter("post", class="SensioBlogBundle:Post")
      */
-    public function showAction(Post $post)
+    public function show(Post $post)
     {
     }
 
@@ -37,7 +37,7 @@ If you use type hinting as in the example above, you can even omit the
 ``@ParamConverter`` annotation altogether::
 
     // automatic with method signature
-    public function showAction(Post $post)
+    public function show(Post $post)
     {
     }
 
@@ -114,7 +114,7 @@ the converter will automatically fetch them::
      *
      * @Route("/blog/{id}")
      */
-    public function showByPkAction(Post $post)
+    public function showByPk(Post $post)
     {
     }
 
@@ -123,7 +123,7 @@ the converter will automatically fetch them::
      *
      * @Route("/blog/{slug}")
      */
-    public function showAction(Post $post)
+    public function show(Post $post)
     {
     }
 
@@ -151,7 +151,7 @@ an expression::
      * @Route("/blog/{post_id}")
      * @Entity("post", expr="repository.find(post_id)")
      */
-    public function showAction(Post $post)
+    public function show(Post $post)
     {
     }
 
@@ -171,7 +171,7 @@ This can also be used to help resolve multiple arguments::
      * @Route("/blog/{id}/comments/{comment_id}")
      * @Entity("comment", expr="repository.find(comment_id)")
      */
-    public function showAction(Post $post, Comment $comment)
+    public function show(Post $post, Comment $comment)
     {
     }
 
@@ -193,7 +193,7 @@ A number of ``options`` are available on the ``@ParamConverter`` or
      * @Route("/blog/{post_id}")
      * @ParamConverter("post", options={"id" = "post_id"})
      */
-    public function showPostAction(Post $post)
+    public function showPost(Post $post)
     {
     }
 
@@ -206,7 +206,7 @@ A number of ``options`` are available on the ``@ParamConverter`` or
      * @ParamConverter("post", options={"mapping": {"date": "date", "slug": "slug"}})
      * @ParamConverter("comment", options={"mapping": {"comment_slug": "slug"}})
      */
-    public function showCommentAction(Post $post, Comment $comment)
+    public function showComment(Post $post, Comment $comment)
     {
     }
 
@@ -217,7 +217,7 @@ A number of ``options`` are available on the ``@ParamConverter`` or
      * @Route("/blog/{date}/{slug}")
      * @ParamConverter("post", options={"exclude": {"date"}})
      */
-    public function showAction(Post $post, \DateTime $date)
+    public function show(Post $post, \DateTime $date)
     {
     }
 
@@ -231,7 +231,7 @@ A number of ``options`` are available on the ``@ParamConverter`` or
      * @Route("/blog/{id}")
      * @ParamConverter("post", options={"entity_manager" = "foo"})
      */
-    public function showAction(Post $post)
+    public function show(Post $post)
     {
     }
 
@@ -246,7 +246,7 @@ instance::
     /**
      * @Route("/blog/archive/{start}/{end}")
      */
-    public function archiveAction(\DateTime $start, \DateTime $end)
+    public function archive(\DateTime $start, \DateTime $end)
     {
     }
 
@@ -258,7 +258,7 @@ is accepted. You can be stricter with input given through the options::
      * @ParamConverter("start", options={"format": "Y-m-d"})
      * @ParamConverter("end", options={"format": "Y-m-d"})
      */
-    public function archiveAction(\DateTime $start, \DateTime $end)
+    public function archive(\DateTime $start, \DateTime $end)
     {
     }
 

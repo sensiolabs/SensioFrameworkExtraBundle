@@ -14,7 +14,7 @@ The ``@Cache`` annotation makes it easy to define HTTP caching::
     /**
      * @Cache(expires="tomorrow", public=true)
      */
-    public function indexAction()
+    public function index()
     {
     }
 
@@ -39,7 +39,7 @@ configuration, the latter overrides the former::
         /**
          * @Cache(expires="+2 days")
          */
-        public function indexAction()
+        public function index()
         {
         }
     }
@@ -64,7 +64,7 @@ response is not modified (in this case, the controller is **not** called)::
     /**
      * @Cache(lastModified="post.getUpdatedAt()", Etag="'Post' ~ post.getId() ~ post.getUpdatedAt().getTimestamp()")
      */
-    public function indexAction(Post $post)
+    public function index(Post $post)
     {
         // your code
         // won't be called in case of a 304
@@ -72,7 +72,7 @@ response is not modified (in this case, the controller is **not** called)::
 
 It's roughly doing the same as the following code::
 
-    public function myAction(Request $request, Post $post)
+    public function my(Request $request, Post $post)
     {
         $response = new Response();
         $response->setLastModified($post->getUpdatedAt());
