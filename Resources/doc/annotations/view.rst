@@ -15,7 +15,7 @@ The ``@Template`` annotation associates a controller with a template name::
     /**
      * @Template("@SensioBlog/post/show.html.twig")
      */
-    public function showAction($id)
+    public function show($id)
     {
         // get the Post
         $post = ...;
@@ -33,7 +33,7 @@ array of parameters to pass to the view instead of a ``Response`` object.
         /**
          * @Template(isStreamable=true)
          */
-        public function showAction($id)
+        public function show($id)
         {
             // ...
         }
@@ -49,7 +49,7 @@ case for the above example, you can even omit the annotation value::
     /**
      * @Template
      */
-    public function showAction($id)
+    public function show($id)
     {
         // get the Post
         $post = ...;
@@ -59,7 +59,7 @@ case for the above example, you can even omit the annotation value::
 
 .. tip::
    Sub-namespaces are converted into underscores. 
-   The ``Sensio\BlogBundle\Controller\UserProfileController::showDetailsAction()`` action
+   The ``Sensio\BlogBundle\Controller\UserProfileController::showDetails()`` action
    will resolve to ``@SensioBlog/user_profile/show_details.html.twig``
 
 And if the only parameters to pass to the template are method arguments, you
@@ -71,7 +71,7 @@ useful in combination with the ``@ParamConverter`` :doc:`annotation
      * @ParamConverter("post", class="SensioBlogBundle:Post")
      * @Template("@SensioBlog/post/show.html.twig", vars={"post"})
      */
-    public function showAction(Post $post)
+    public function show(Post $post)
     {
     }
 
@@ -80,7 +80,7 @@ which, thanks to conventions, is equivalent to the following configuration::
     /**
      * @Template(vars={"post"})
      */
-    public function showAction(Post $post)
+    public function show(Post $post)
     {
     }
 
@@ -91,6 +91,6 @@ attribute is defined::
     /**
      * @Template
      */
-    public function showAction(Post $post)
+    public function show(Post $post)
     {
     }

@@ -136,7 +136,7 @@ This example shows all the available annotations in action::
          * @Route("/")
          * @Template
          */
-        public function indexAction()
+        public function index()
         {
             $posts = ...;
 
@@ -152,7 +152,7 @@ This example shows all the available annotations in action::
          * @IsGranted("ROLE_SPECIAL_USER")
          * @Security("has_role('ROLE_ADMIN') and is_granted('POST_SHOW', post)")
          */
-        public function showAction(Post $post)
+        public function show(Post $post)
         {
         }
     }
@@ -166,7 +166,7 @@ annotations::
      * @IsGranted("ROLE_SPECIAL_USER")
      * @Security("has_role('ROLE_ADMIN') and is_granted('POST_SHOW', post)")
      */
-    public function showAction(Post $post)
+    public function show(Post $post)
     {
     }
 
@@ -205,7 +205,7 @@ snippet::
 
     class DefaultController
     {
-        public function indexAction(ServerRequestInterface $request)
+        public function index(ServerRequestInterface $request)
         {
             // Interact with the PSR-7 request
 
