@@ -11,6 +11,7 @@
 
 namespace Sensio\Bundle\FrameworkExtraBundle\DependencyInjection;
 
+use Symfony\Bridge\PsrHttpMessage\HttpFoundationFactoryInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\NodeInterface;
@@ -76,7 +77,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('psr_message')
                     ->addDefaultsIfNotSet()
                     ->children()
-                        ->booleanNode('enabled')->defaultValue(interface_exists('Symfony\Bridge\PsrHttpMessage\HttpFoundationFactoryInterface') && class_exists('Zend\Diactoros\ServerRequestFactory'))->end()
+                        ->booleanNode('enabled')->defaultValue(interface_exists(HttpFoundationFactoryInterface::class))->end()
                     ->end()
                 ->end()
                 ->arrayNode('templating')

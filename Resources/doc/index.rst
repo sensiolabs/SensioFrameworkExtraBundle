@@ -189,27 +189,27 @@ SensioFrameworkExtraBundle provides support for HTTP messages interfaces defined
 in `PSR-7`_. It allows to inject instances of ``Psr\Http\Message\ServerRequestInterface``
 and to return instances of ``Psr\Http\Message\ResponseInterface`` in controllers.
 
-To enable this feature, `the HttpFoundation to PSR-7 bridge`_ and `Zend Diactoros`_ must be installed:
+To enable this feature, `the HttpFoundation to PSR-7 bridge`_ and `autowiring aliases for PSR-17` must be installed:
 
 .. code-block:: bash
 
-    $ composer require symfony/psr-http-message-bridge zendframework/zend-diactoros
+    $ composer require symfony/psr-http-message-bridge nyholm/psr7
 
 Then, PSR-7 messages can be used directly in controllers like in the following code
 snippet::
 
     namespace AppBundle\Controller;
 
+    use Psr\Http\Message\ResponseFactoryInterface;
     use Psr\Http\Message\ServerRequestInterface;
-    use Zend\Diactoros\Response;
 
     class DefaultController
     {
-        public function index(ServerRequestInterface $request)
+        public function index(ServerRequestInterface $request, ResponseFactoryInterface $responseFactory)
         {
             // Interact with the PSR-7 request
 
-            $response = new Response();
+            $response = $responseFactory->createResponse();
             // Interact with the PSR-7 response
 
             return $response;
@@ -222,4 +222,4 @@ and :class:`Symfony\\Component\\HttpFoundation\\Response` instances.
 .. _`SensioFrameworkExtraBundle`: https://github.com/sensiolabs/SensioFrameworkExtraBundle
 .. _`PSR-7`: http://www.php-fig.org/psr/psr-7/
 .. _`the HttpFoundation to PSR-7 bridge`: https://github.com/symfony/psr-http-message-bridge
-.. _`Zend Diactoros`: https://github.com/zendframework/zend-diactoros
+.. _`autowiring aliases for PSR-17`: https://github.com/symfony/recipes/blob/master/nyholm/psr7/1.0/config/packages/nyholm_psr7.yaml
