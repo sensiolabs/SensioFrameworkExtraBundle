@@ -62,9 +62,9 @@ class ControllerListener implements EventSubscriberInterface
 
         $configurations = [];
         foreach (array_merge(array_keys($classConfigurations), array_keys($methodConfigurations)) as $key) {
-            if (!array_key_exists($key, $classConfigurations)) {
+            if (!\array_key_exists($key, $classConfigurations)) {
                 $configurations[$key] = $methodConfigurations[$key];
-            } elseif (!array_key_exists($key, $methodConfigurations)) {
+            } elseif (!\array_key_exists($key, $methodConfigurations)) {
                 $configurations[$key] = $classConfigurations[$key];
             } else {
                 if (\is_array($classConfigurations[$key])) {

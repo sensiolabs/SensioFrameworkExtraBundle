@@ -249,7 +249,7 @@ class DoctrineParamConverter implements ParamConverterInterface
         $repository = $em->getRepository($class);
         $ref = new \ReflectionMethod($repository, $repositoryMethod);
         foreach ($ref->getParameters() as $parameter) {
-            if (array_key_exists($parameter->name, $criteria)) {
+            if (\array_key_exists($parameter->name, $criteria)) {
                 $arguments[] = $criteria[$parameter->name];
             } elseif ($parameter->isDefaultValueAvailable()) {
                 $arguments[] = $parameter->getDefaultValue();
