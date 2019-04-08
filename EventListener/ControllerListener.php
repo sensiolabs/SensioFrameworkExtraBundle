@@ -12,11 +12,11 @@
 namespace Sensio\Bundle\FrameworkExtraBundle\EventListener;
 
 use Doctrine\Common\Annotations\Reader;
+use Doctrine\Common\Persistence\Proxy;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
-use Doctrine\Common\Util\ClassUtils;
 
 /**
  * The ControllerListener class parses annotation blocks located in
@@ -53,7 +53,7 @@ class ControllerListener implements EventSubscriberInterface
             return;
         }
 
-        $className = class_exists('Doctrine\Common\Util\ClassUtils') ? ClassUtils::getClass($controller[0]) : \get_class($controller[0]);
+        $className = $this->getRealClass(\get_class($controller[0]));
         $object = new \ReflectionClass($className);
         $method = $object->getMethod($controller[1]);
 
@@ -111,5 +111,14 @@ class ControllerListener implements EventSubscriberInterface
         return [
             KernelEvents::CONTROLLER => 'onKernelController',
         ];
+    }
+
+    private static function getRealClass(string $class): string
+    {
+        if (false === $pos = strrpos($class, '\\'.Proxy::MARKER.'\\')) {
+            return $class;
+        }
+
+        return substr($class, $pos + Proxy::MARKER_LENGTH + 2);
     }
 }
