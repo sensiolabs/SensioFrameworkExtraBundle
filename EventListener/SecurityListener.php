@@ -86,10 +86,20 @@ class SecurityListener implements EventSubscriberInterface
         $request = $event->getRequest();
         $token = $this->tokenStorage->getToken();
 
-        if (null !== $this->roleHierarchy) {
-            $roles = $this->roleHierarchy->getReachableRoles($token->getRoles());
+        if (method_exists($token, 'getRoleNames')) {
+            $roleNames = $token->getRoleNames();
+            $roles = array_map(function (string $role) { return new Role($role, false); }, $roleNames);
         } else {
-            $roles = $token->getRoles();
+            @trigger_error(sprintf('Not implementing the getRoleNames() method in %s which implements %s is deprecated since Symfony 4.3.', \get_class($token), TokenInterface::class), E_USER_DEPRECATED);
+            $roles = $token->getRoles(false);
+            $roleNames = array_map(function (Role $role) { return $role->getRole(); }, $roles);
+        }
+        if (null !== $this->roleHierarchy && method_exists($this->roleHierarchy, 'getReachableRoleNames')) {
+            $roleNames = $this->roleHierarchy->getReachableRoleNames($roleNames);
+            $roles = array_map(function (string $role) { return new Role($role, false); }, $roleNames);
+        } elseif (null !== $this->roleHierarchy) {
+            $roles = $this->roleHierarchy->getReachableRoles($roles);
+            $roleNames = array_map(function (Role $role) { return $role->getRole(); }, $roles);
         }
 
         $variables = [
@@ -98,9 +108,8 @@ class SecurityListener implements EventSubscriberInterface
             'object' => $request,
             'subject' => $request,
             'request' => $request,
-            'roles' => array_map(function ($role) {
-                return $role->getRole();
-            }, $roles),
+            'roles' => $roles,
+            'role_names' => $roleNames,
             'trust_resolver' => $this->trustResolver,
             // needed for the is_granted expression function
             'auth_checker' => $this->authChecker,
