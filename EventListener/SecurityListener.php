@@ -23,6 +23,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
+use Symfony\Component\Security\Core\Role\Role;
 
 /**
  * SecurityListener handles security restrictions on controllers.
