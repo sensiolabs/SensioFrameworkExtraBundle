@@ -87,9 +87,9 @@ class SecurityListener implements EventSubscriberInterface
         $token = $this->tokenStorage->getToken();
 
         if (null !== $this->roleHierarchy) {
-            $roles = $this->roleHierarchy->getReachableRoles($token->getRoles());
+            $roles = $this->roleHierarchy->getReachableRoleNames($token->getRoleNames());
         } else {
-            $roles = $token->getRoles();
+            $roles = $token->getRoleNames();
         }
 
         $variables = [
@@ -99,7 +99,7 @@ class SecurityListener implements EventSubscriberInterface
             'subject' => $request,
             'request' => $request,
             'roles' => array_map(function ($role) {
-                return $role->getRole();
+                return $role;
             }, $roles),
             'trust_resolver' => $this->trustResolver,
             // needed for the is_granted expression function
