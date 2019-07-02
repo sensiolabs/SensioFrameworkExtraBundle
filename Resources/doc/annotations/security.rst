@@ -34,7 +34,7 @@ on variables passed to the controller::
     /**
      * @Route("/posts/{id}")
      *
-     * @IsGranted("ROLE_ADMIN")
+     * @IsGranted({"ROLE_ADMIN", "ROLE_SYSTEM"})
      * @IsGranted("POST_SHOW", subject="post")
      */
     public function show(Post $post)
