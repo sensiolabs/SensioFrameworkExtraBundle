@@ -14,7 +14,7 @@ namespace Sensio\Bundle\FrameworkExtraBundle\EventListener;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ArgumentNameConverter;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent;
+use Symfony\Component\HttpKernel\Event\KernelEvent;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -36,7 +36,7 @@ class IsGrantedListener implements EventSubscriberInterface
         $this->authChecker = $authChecker;
     }
 
-    public function onKernelControllerArguments(ControllerArgumentsEvent $event)
+    public function onKernelControllerArguments(KernelEvent $event)
     {
         $request = $event->getRequest();
         /** @var $configurations IsGranted[] */

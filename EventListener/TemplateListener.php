@@ -17,8 +17,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
-use Symfony\Component\HttpKernel\Event\ControllerEvent;
-use Symfony\Component\HttpKernel\Event\ViewEvent;
+use Symfony\Component\HttpKernel\Event\KernelEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
@@ -43,7 +42,7 @@ class TemplateListener implements EventSubscriberInterface
      * Guesses the template name to render and its variables and adds them to
      * the request object.
      */
-    public function onKernelController(ControllerEvent $event)
+    public function onKernelController(KernelEvent $event)
     {
         $request = $event->getRequest();
         $template = $request->attributes->get('_template');
@@ -68,7 +67,7 @@ class TemplateListener implements EventSubscriberInterface
      * Renders the template and initializes a new response object with the
      * rendered template content.
      */
-    public function onKernelView(ViewEvent $event)
+    public function onKernelView(KernelEvent $event)
     {
         /* @var Template $template */
         $request = $event->getRequest();

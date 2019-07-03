@@ -17,6 +17,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Request\ArgumentNameConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent;
+use Symfony\Component\HttpKernel\Event\FilterControllerArgumentsEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -156,7 +157,9 @@ class IsGrantedListenerTest extends \PHPUnit\Framework\TestCase
 
     private function createFilterControllerEvent(Request $request)
     {
-        return new ControllerArgumentsEvent($this->getMockBuilder(HttpKernelInterface::class)->getMock(), function () {
+        $eventClass = class_exists(ControllerArgumentsEvent::class) ? ControllerArgumentsEvent::class : FilterControllerArgumentsEvent::class;
+
+        return new $eventClass($this->getMockBuilder(HttpKernelInterface::class)->getMock(), function () {
             return new Response();
         }, [], $request, null);
     }
