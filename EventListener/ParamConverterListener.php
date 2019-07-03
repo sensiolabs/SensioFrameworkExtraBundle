@@ -13,10 +13,10 @@ namespace Sensio\Bundle\FrameworkExtraBundle\EventListener;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
-use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Event\ControllerEvent;
+use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
  * The ParamConverterListener handles the ParamConverter annotation.
@@ -50,7 +50,7 @@ class ParamConverterListener implements EventSubscriberInterface
     /**
      * Modifies the ParamConverterManager instance.
      */
-    public function onKernelController(FilterControllerEvent $event)
+    public function onKernelController(ControllerEvent $event)
     {
         $controller = $event->getController();
         $request = $event->getRequest();

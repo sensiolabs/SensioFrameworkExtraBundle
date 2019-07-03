@@ -11,12 +11,12 @@
 
 namespace Sensio\Bundle\FrameworkExtraBundle\EventListener;
 
-use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
-use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Event\ControllerEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
+use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
  * HttpCacheListener handles HTTP cache headers.
@@ -40,7 +40,7 @@ class HttpCacheListener implements EventSubscriberInterface
     /**
      * Handles HTTP validation headers.
      */
-    public function onKernelController(FilterControllerEvent $event)
+    public function onKernelController(ControllerEvent $event)
     {
         $request = $event->getRequest();
         if (!$configuration = $request->attributes->get('_cache')) {
@@ -79,7 +79,7 @@ class HttpCacheListener implements EventSubscriberInterface
     /**
      * Modifies the response to apply HTTP cache headers when needed.
      */
-    public function onKernelResponse(FilterResponseEvent $event)
+    public function onKernelResponse(ResponseEvent $event)
     {
         $request = $event->getRequest();
 

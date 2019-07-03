@@ -16,7 +16,7 @@ use Sensio\Bundle\FrameworkExtraBundle\EventListener\IsGrantedListener;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ArgumentNameConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\FilterControllerArgumentsEvent;
+use Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -51,7 +51,7 @@ class IsGrantedListenerTest extends \PHPUnit\Framework\TestCase
         $authChecker->expects($this->exactly(2))
             ->method('isGranted')
             ->with('ROLE_ADMIN')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $listener = new IsGrantedListener($this->createArgumentNameConverter([]), $authChecker);
         $isGranted = new IsGranted(['attributes' => 'ROLE_ADMIN']);
@@ -67,7 +67,7 @@ class IsGrantedListenerTest extends \PHPUnit\Framework\TestCase
             ->method('isGranted')
             // the subject => arg2name will eventually resolve to the 2nd argument, which has this value
             ->with('ROLE_ADMIN', 'arg2Value')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         // create metadata for 2 named args for the controller
         $listener = new IsGrantedListener($this->createArgumentNameConverter(['arg1Name' => 'arg1Value', 'arg2Name' => 'arg2Value']), $authChecker);
@@ -119,7 +119,7 @@ class IsGrantedListenerTest extends \PHPUnit\Framework\TestCase
         $authChecker = $this->getMockBuilder(AuthorizationCheckerInterface::class)->getMock();
         $authChecker->expects($this->any())
             ->method('isGranted')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         // avoid the error of the subject not being found in the request attributes
         $arguments = [];
@@ -159,7 +159,7 @@ class IsGrantedListenerTest extends \PHPUnit\Framework\TestCase
         $authChecker = $this->getMockBuilder(AuthorizationCheckerInterface::class)->getMock();
         $authChecker->expects($this->any())
             ->method('isGranted')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $listener = new IsGrantedListener($this->createArgumentNameConverter([]), $authChecker);
         $listener->onKernelControllerArguments($event);
@@ -177,7 +177,7 @@ class IsGrantedListenerTest extends \PHPUnit\Framework\TestCase
 
     private function createFilterControllerEvent(Request $request)
     {
-        return new FilterControllerArgumentsEvent($this->getMockBuilder(HttpKernelInterface::class)->getMock(), function () {
+        return new ControllerArgumentsEvent($this->getMockBuilder(HttpKernelInterface::class)->getMock(), function () {
             return new Response();
         }, [], $request, null);
     }
@@ -188,7 +188,7 @@ class IsGrantedListenerTest extends \PHPUnit\Framework\TestCase
 
         $nameConverter->expects($this->any())
             ->method('getControllerArguments')
-            ->will($this->returnValue($arguments));
+            ->willReturn($arguments);
 
         return $nameConverter;
     }

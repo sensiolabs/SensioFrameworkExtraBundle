@@ -13,10 +13,10 @@ namespace Sensio\Bundle\FrameworkExtraBundle\EventListener;
 
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Persistence\Proxy;
-use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
-use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpKernel\Event\ControllerEvent;
+use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
  * The ControllerListener class parses annotation blocks located in
@@ -41,7 +41,7 @@ class ControllerListener implements EventSubscriberInterface
      * controllers annotations like the template to render or HTTP caching
      * configuration.
      */
-    public function onKernelController(FilterControllerEvent $event)
+    public function onKernelController(ControllerEvent $event)
     {
         $controller = $event->getController();
 
