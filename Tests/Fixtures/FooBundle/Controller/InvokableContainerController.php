@@ -12,10 +12,9 @@
 namespace Tests\Fixtures\FooBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 
-class InvokableContainerController extends Controller
+class InvokableContainerController
 {
     /**
      * @Route("/invokable/variable/container/{variable}/")

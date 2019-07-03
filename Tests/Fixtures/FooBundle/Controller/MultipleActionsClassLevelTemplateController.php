@@ -12,13 +12,12 @@
 namespace Tests\Fixtures\FooBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Template("@Foo/invokable/predefined.html.twig")
  */
-class MultipleActionsClassLevelTemplateController extends Controller
+class MultipleActionsClassLevelTemplateController
 {
     /**
      * @Route("/multi/one-template/1/")

@@ -14,10 +14,10 @@ namespace Sensio\Bundle\FrameworkExtraBundle\EventListener;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ArgumentNameConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Security\ExpressionLanguage;
-use Symfony\Component\HttpKernel\Event\FilterControllerArgumentsEvent;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Authentication\AuthenticationTrustResolverInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -50,7 +50,7 @@ class SecurityListener implements EventSubscriberInterface
         $this->logger = $logger;
     }
 
-    public function onKernelControllerArguments(FilterControllerArgumentsEvent $event)
+    public function onKernelControllerArguments(ControllerArgumentsEvent $event)
     {
         $request = $event->getRequest();
         if (!$configurations = $request->attributes->get('_security')) {
@@ -81,15 +81,15 @@ class SecurityListener implements EventSubscriberInterface
     }
 
     // code should be sync with Symfony\Component\Security\Core\Authorization\Voter\ExpressionVoter
-    private function getVariables(FilterControllerArgumentsEvent $event)
+    private function getVariables(ControllerArgumentsEvent $event)
     {
         $request = $event->getRequest();
         $token = $this->tokenStorage->getToken();
 
         if (null !== $this->roleHierarchy) {
-            $roles = $this->roleHierarchy->getReachableRoles($token->getRoles());
+            $roles = $this->roleHierarchy->getReachableRoleNames($token->getRoleNames());
         } else {
-            $roles = $token->getRoles();
+            $roles = $token->getRoleNames();
         }
 
         $variables = [
@@ -98,9 +98,7 @@ class SecurityListener implements EventSubscriberInterface
             'object' => $request,
             'subject' => $request,
             'request' => $request,
-            'roles' => array_map(function ($role) {
-                return $role->getRole();
-            }, $roles),
+            'roles' => $roles,
             'trust_resolver' => $this->trustResolver,
             // needed for the is_granted expression function
             'auth_checker' => $this->authChecker,

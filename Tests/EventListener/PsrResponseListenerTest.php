@@ -46,14 +46,14 @@ class PsrResponseListenerTest extends \PHPUnit\Framework\TestCase
     private function createEventMock($controllerResult)
     {
         $event = $this
-            ->getMockBuilder('Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent')
+            ->getMockBuilder('Symfony\Component\HttpKernel\Event\ViewEvent')
             ->disableOriginalConstructor()
             ->getMock()
         ;
         $event
             ->expects($this->any())
             ->method('getControllerResult')
-            ->will($this->returnValue($controllerResult))
+            ->willReturn($controllerResult)
         ;
 
         return $event;

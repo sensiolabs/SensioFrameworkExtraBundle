@@ -15,7 +15,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\EventListener\ParamConverterListener;
 use Sensio\Bundle\FrameworkExtraBundle\Tests\EventListener\Fixture\FooControllerNullableParameter;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
+use Symfony\Component\HttpKernel\Event\ControllerEvent;
 
 class ParamConverterListenerTest extends \PHPUnit\Framework\TestCase
 {
@@ -28,7 +28,7 @@ class ParamConverterListenerTest extends \PHPUnit\Framework\TestCase
         $request = new Request();
 
         $listener = new ParamConverterListener($this->getParamConverterManager($request, []));
-        $event = new FilterControllerEvent($kernel, $controllerCallable, $request, null);
+        $event = new ControllerEvent($kernel, $controllerCallable, $request, null);
 
         $listener->onKernelController($event);
     }
@@ -52,7 +52,7 @@ class ParamConverterListenerTest extends \PHPUnit\Framework\TestCase
         $converter = new ParamConverter(['name' => 'date', 'class' => 'DateTime']);
 
         $listener = new ParamConverterListener($this->getParamConverterManager($request, ['date' => $converter]));
-        $event = new FilterControllerEvent($kernel, $controllerCallable, $request, null);
+        $event = new ControllerEvent($kernel, $controllerCallable, $request, null);
 
         $listener->onKernelController($event);
     }
@@ -70,7 +70,7 @@ class ParamConverterListenerTest extends \PHPUnit\Framework\TestCase
         $converter->setIsOptional($isOptional);
 
         $listener = new ParamConverterListener($this->getParamConverterManager($request, ['param' => $converter]), true);
-        $event = new FilterControllerEvent(
+        $event = new ControllerEvent(
             $kernel,
             [
                 new FooControllerNullableParameter(),
@@ -101,7 +101,7 @@ class ParamConverterListenerTest extends \PHPUnit\Framework\TestCase
         $request = new Request([], [], ['date' => '2014-03-14 09:00:00']);
 
         $listener = new ParamConverterListener($this->getParamConverterManager($request, []), false);
-        $event = new FilterControllerEvent($kernel, $controllerCallable, $request, null);
+        $event = new ControllerEvent($kernel, $controllerCallable, $request, null);
 
         $listener->onKernelController($event);
     }
