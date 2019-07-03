@@ -29,7 +29,7 @@ class ArgumentNameConverterTest extends \PHPUnit\Framework\TestCase
         $metadataFactory = $this->getMockBuilder(ArgumentMetadataFactoryInterface::class)->getMock();
         $metadataFactory->expects($this->any())
             ->method('createArgumentMetadata')
-            ->will($this->returnValue($argumentMetadatas));
+            ->willReturn($argumentMetadatas);
 
         $request = new Request();
         $request->attributes->add($requestAttributes);

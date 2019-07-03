@@ -47,13 +47,13 @@ class AnnotatedRouteControllerLoaderTest extends \PHPUnit\Framework\TestCase
         $reader
             ->expects($this->once())
             ->method('getClassAnnotation')
-            ->will($this->returnValue($annotation))
+            ->willReturn($annotation)
         ;
 
         $reader
             ->expects($this->once())
             ->method('getMethodAnnotations')
-            ->will($this->returnValue([]))
+            ->willReturn([])
         ;
 
         $loader = $this->getMockBuilder('Sensio\Bundle\FrameworkExtraBundle\Routing\AnnotatedRouteControllerLoader')
@@ -89,13 +89,13 @@ class AnnotatedRouteControllerLoaderTest extends \PHPUnit\Framework\TestCase
         $reader
             ->expects($this->once())
             ->method('getClassAnnotation')
-            ->will($this->returnValue(null))
+            ->willReturn(null)
         ;
 
         $reader
             ->expects($this->once())
             ->method('getMethodAnnotations')
-            ->will($this->returnValue([$annotation]))
+            ->willReturn([$annotation])
         ;
 
         $loader = $this->getMockBuilder('Sensio\Bundle\FrameworkExtraBundle\Routing\AnnotatedRouteControllerLoader')

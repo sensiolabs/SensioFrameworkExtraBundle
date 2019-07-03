@@ -88,7 +88,7 @@ class IsGrantedListenerTest extends \PHPUnit\Framework\TestCase
                 'arg1Name' => 'arg1Value',
                 'arg2Name' => 'arg2Value',
             ])
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         // create metadata for 2 named args for the controller
         $listener = new IsGrantedListener($this->createArgumentNameConverter(['arg1Name' => 'arg1Value', 'arg2Name' => 'arg2Value']), $authChecker);

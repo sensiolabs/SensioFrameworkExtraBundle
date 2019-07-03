@@ -69,7 +69,7 @@ class DateTimeParamConverterTest extends \PHPUnit\Framework\TestCase
     {
         $request = new Request([], [], ['start' => '2012-07-21']);
         $config = $this->createConfiguration('DateTime', 'start');
-        $config->expects($this->any())->method('getOptions')->will($this->returnValue(['format' => 'd.m.Y']));
+        $config->expects($this->any())->method('getOptions')->willReturn(['format' => 'd.m.Y']);
 
         $this->converter->apply($request, $config);
     }
@@ -82,7 +82,7 @@ class DateTimeParamConverterTest extends \PHPUnit\Framework\TestCase
     {
         $request = new Request([], [], ['start' => '2012-21-07']);
         $config = $this->createConfiguration('DateTime', 'start');
-        $config->expects($this->any())->method('getOptions')->will($this->returnValue(['format' => 'Y-m-d']));
+        $config->expects($this->any())->method('getOptions')->willReturn(['format' => 'Y-m-d']);
 
         $this->converter->apply($request, $config);
     }
@@ -93,7 +93,7 @@ class DateTimeParamConverterTest extends \PHPUnit\Framework\TestCase
         $config = $this->createConfiguration('DateTime', 'start');
         $config->expects($this->once())
             ->method('isOptional')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->assertTrue($this->converter->apply($request, $config));
         $this->assertNull($request->attributes->get('start'));
@@ -135,12 +135,12 @@ class DateTimeParamConverterTest extends \PHPUnit\Framework\TestCase
         if (null !== $name) {
             $config->expects($this->any())
                    ->method('getName')
-                   ->will($this->returnValue($name));
+                   ->willReturn($name);
         }
         if (null !== $class) {
             $config->expects($this->any())
                    ->method('getClass')
-                   ->will($this->returnValue($class));
+                   ->willReturn($class);
         }
 
         return $config;

@@ -32,7 +32,7 @@ class TemplateGuesserTest extends \PHPUnit\Framework\TestCase
         $this->kernel
             ->expects($this->once())
             ->method('getBundles')
-            ->will($this->returnValue(array_values($this->bundles)));
+            ->willReturn(array_values($this->bundles));
     }
 
     public function testGuessTemplateName()
@@ -159,12 +159,12 @@ class TemplateGuesserTest extends \PHPUnit\Framework\TestCase
         $bundle
             ->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue($name));
+            ->willReturn($name);
 
         $bundle
             ->expects($this->any())
             ->method('getNamespace')
-            ->will($this->returnValue($namespace));
+            ->willReturn($namespace);
 
         return $bundle;
     }
