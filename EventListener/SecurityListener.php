@@ -15,7 +15,7 @@ use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ArgumentNameConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Security\ExpressionLanguage;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent;
+use Symfony\Component\HttpKernel\Event\KernelEvent;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\Authentication\AuthenticationTrustResolverInterface;
@@ -50,7 +50,7 @@ class SecurityListener implements EventSubscriberInterface
         $this->logger = $logger;
     }
 
-    public function onKernelControllerArguments(ControllerArgumentsEvent $event)
+    public function onKernelControllerArguments(KernelEvent $event)
     {
         $request = $event->getRequest();
         if (!$configurations = $request->attributes->get('_security')) {
@@ -81,15 +81,23 @@ class SecurityListener implements EventSubscriberInterface
     }
 
     // code should be sync with Symfony\Component\Security\Core\Authorization\Voter\ExpressionVoter
-    private function getVariables(ControllerArgumentsEvent $event)
+    private function getVariables(KernelEvent $event)
     {
         $request = $event->getRequest();
         $token = $this->tokenStorage->getToken();
 
-        if (null !== $this->roleHierarchy) {
-            $roles = $this->roleHierarchy->getReachableRoleNames($token->getRoleNames());
+        if (method_exists($this->roleHierarchy, 'getReachableRoleNames')) {
+            if (null !== $this->roleHierarchy) {
+                $roles = $this->roleHierarchy->getReachableRoleNames($token->getRoleNames());
+            } else {
+                $roles = $token->getRoleNames();
+            }
         } else {
-            $roles = $token->getRoleNames();
+            if (null !== $this->roleHierarchy) {
+                $roles = $this->roleHierarchy->getReachableRoles($token->getRoles());
+            } else {
+                $roles = $token->getRoles();
+            }
         }
 
         $variables = [
