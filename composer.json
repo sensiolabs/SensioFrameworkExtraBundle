@@ -42,10 +42,18 @@
         "symfony/security-bundle": ""
     },
     "autoload": {
-        "psr-4": { "Sensio\\Bundle\\FrameworkExtraBundle\\": "" }
+        "psr-4": {
+            "Sensio\\Bundle\\FrameworkExtraBundle\\": ""
+        },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
     },
     "autoload-dev": {
-        "psr-4": { "Tests\\Fixtures\\": "Tests/Fixtures/" }
+        "psr-4": {
+            "Sensio\\Bundle\\FrameworkExtraBundle\\Tests\\": "Tests/",
+            "Tests\\Fixtures\\": "Tests/Fixtures/"
+        }
     },
     "extra": {
         "branch-alias": {
