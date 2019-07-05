@@ -98,6 +98,10 @@ class SecurityListener implements EventSubscriberInterface
             } else {
                 $roles = $token->getRoles();
             }
+
+            $roles = array_map(function ($role) {
+                return $role->getRole();
+            }, $roles);
         }
 
         $variables = [
