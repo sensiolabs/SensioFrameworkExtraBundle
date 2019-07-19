@@ -112,7 +112,7 @@ class IsGrantedListener implements EventSubscriberInterface
             if (1 === \count($subjects)) {
                 $subjectString = reset($subjects);
             } else {
-                $subjectString = sprintf('[%s]', \implode(', ', $subjects));
+                $subjectString = sprintf('[%s]', implode(', ', $subjects));
             }
 
             $argsString = sprintf('%s, %s', $argsString, $subjectString);
