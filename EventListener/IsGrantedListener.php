@@ -59,7 +59,10 @@ class IsGrantedListener implements EventSubscriberInterface
         }
     }
 
-    public function onKernelControllerArguments(FilterControllerArgumentsEvent $event)
+    /**
+     * @param \Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent|FilterControllerArgumentsEvent $event
+     */
+    public function onKernelControllerArguments($event)
     {
         $request = $event->getRequest();
         /** @var $configurations IsGranted[] */
