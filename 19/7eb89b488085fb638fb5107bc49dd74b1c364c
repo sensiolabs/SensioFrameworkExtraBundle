@@ -1,0 +1,16 @@
+---------------------------------------------------------------------------
+
+by fabpot at 2019-08-05T13:16:36Z
+
+Nice, is it something documented somewhere?
+
+---------------------------------------------------------------------------
+
+by andrew-demb at 2019-08-05T13:24:57Z
+
+Yes
+
+```
+! | Resets all fields (year, month, day, hour, minute, second, fraction and timezone information) to the Unix Epoch | Without !, all fields will be set to the current date and time.
+```
+https://www.php.net/manual/en/datetime.createfromformat.php
