@@ -257,8 +257,8 @@ is accepted. You can be stricter with input given through the options::
 
     /**
      * @Route("/blog/archive/{start}/{end}")
-     * @ParamConverter("start", options={"format": "Y-m-d"})
-     * @ParamConverter("end", options={"format": "Y-m-d"})
+     * @ParamConverter("start", options={"format": "!Y-m-d"})
+     * @ParamConverter("end", options={"format": "!Y-m-d"})
      */
     public function archive(\DateTime $start, \DateTime $end)
     {
