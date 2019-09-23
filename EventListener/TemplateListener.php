@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Event\KernelEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Twig\Environment;
 
 /**
  * Handles the Template annotation for actions.
@@ -32,7 +33,7 @@ class TemplateListener implements EventSubscriberInterface
     private $templateGuesser;
     private $twig;
 
-    public function __construct(TemplateGuesser $templateGuesser, \Twig_Environment $twig = null)
+    public function __construct(TemplateGuesser $templateGuesser, Environment $twig = null)
     {
         $this->templateGuesser = $templateGuesser;
         $this->twig = $twig;
