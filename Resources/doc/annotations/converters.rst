@@ -8,7 +8,7 @@ The ``@ParamConverter`` annotation calls *converters* to convert request
 parameters to objects. These objects are stored as request attributes and so
 they can be injected as controller method arguments::
 
-    use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+    use Symfony\Component\Routing\Annotation\Route;
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
     /**
