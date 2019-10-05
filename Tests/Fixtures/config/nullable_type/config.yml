@@ -1,3 +1,0 @@
-framework:
-    router:
-        resource: '%kernel.root_dir%/config/nullable_type/routing.yml'

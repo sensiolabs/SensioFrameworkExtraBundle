@@ -3,20 +3,21 @@
 <phpunit bootstrap="./vendor/autoload.php" colors="true">
     <testsuites>
         <testsuite name="SensioFrameworkExtraBundle">
-            <directory suffix="Test.php">./Tests</directory>
+            <directory suffix="Test.php">./tests</directory>
         </testsuite>
     </testsuites>
     <php>
         <server name="KERNEL_CLASS" value="Tests\Fixtures\TestKernel" />
-        <server name="KERNEL_DIR" value="Tests/Fixtures/" />
+        <server name="KERNEL_DIR" value="tests/Fixtures/" />
+        <server name="SYMFONY_PHPUNIT_VERSION" value="7.5" />
         <env name="SYMFONY_DEPRECATIONS_HELPER" value="/disabled/" />
     </php>
     <filter>
         <whitelist>
             <directory>./</directory>
             <exclude>
-                <directory>./Resources</directory>
-                <directory>./Tests</directory>
+                <directory>./src/Resources</directory>
+                <directory>./tests</directory>
                 <directory>./vendor</directory>
             </exclude>
         </whitelist>
