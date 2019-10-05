@@ -16,8 +16,7 @@
         "symfony/framework-bundle": "^3.4|^4.3",
         "symfony/dependency-injection": "^3.4|^4.3",
         "symfony/http-kernel": "^3.4|^4.3",
-        "doctrine/annotations": "^1.0",
-        "doctrine/persistence": "^1.0"
+        "doctrine/annotations": "^1.0"
     },
     "require-dev": {
         "symfony/expression-language": "^3.4|^4.3",
