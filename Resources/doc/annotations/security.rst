@@ -67,7 +67,7 @@ You can also control the message and status code::
 ---------
 
 The ``@Security`` annotation is more flexible than ``@IsGranted``: it
-allows you to pass an *expression* that can contains custom logic::
+allows you to pass an *expression* that can contain custom logic::
 
     /**
      * @Security("is_granted('ROLE_ADMIN') and is_granted('POST_SHOW', post)")
