@@ -45,7 +45,7 @@ class Template extends ConfigurationAnnotation
      *
      * @var array
      */
-    private $owner;
+    private $owner = [];
 
     /**
      * Returns the array of templates variables.
