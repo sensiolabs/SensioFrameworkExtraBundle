@@ -115,6 +115,9 @@ class ControllerListener implements EventSubscriberInterface
 
     private static function getRealClass(string $class): string
     {
+        if (!class_exists(Proxy::class)) {
+            return $class;
+        }
         if (false === $pos = strrpos($class, '\\'.Proxy::MARKER.'\\')) {
             return $class;
         }
