@@ -24,7 +24,7 @@ class IsGranted extends ConfigurationAnnotation
      *
      * @var mixed
      */
-    private $attributes;
+    private $attribute;
 
     /**
      * Sets the second argument passed to isGranted().
@@ -50,14 +50,29 @@ class IsGranted extends ConfigurationAnnotation
      */
     private $statusCode;
 
-    public function setAttributes($attributes)
+    public function setAttribute($attribute)
     {
-        $this->attributes = $attributes;
+        if (\is_array($attribute)) {
+            if (\count($attribute) > 1) {
+                @trigger_error(sprintf('Passing multiple Security attributes to the "%s" annotation is deprecated since SensioFrameworkExtraBundle 5.6.', __CLASS__));
+            } else {
+                $attribute = $attribute[0];
+            }
+        }
+
+        $this->attribute = $attribute;
     }
 
-    public function getAttributes()
+    public function setAttributes($attributes)
     {
-        return $this->attributes;
+        @trigger_error(sprintf('The attributes option of the "%s" annotation is deprecated since SensioFrameworkExtraBundle 5.6. Use the "attribute" option instead.', __CLASS__));
+
+        $this->setAttribute($attributes);
+    }
+
+    public function getAttribute()
+    {
+        return $this->attribute;
     }
 
     public function setSubject($subject)
@@ -92,7 +107,7 @@ class IsGranted extends ConfigurationAnnotation
 
     public function setValue($value)
     {
-        $this->setAttributes($value);
+        $this->setAttribute($value);
     }
 
     public function getAliasName()

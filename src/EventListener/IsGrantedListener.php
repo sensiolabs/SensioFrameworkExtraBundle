@@ -73,7 +73,7 @@ class IsGrantedListener implements EventSubscriberInterface
                 }
             }
 
-            if (!$this->authChecker->isGranted($configuration->getAttributes(), $subject)) {
+            if (!$this->authChecker->isGranted($configuration->getAttribute(), $subject)) {
                 $argsString = $this->getIsGrantedString($configuration);
 
                 $message = $configuration->getMessage() ?: sprintf('Access Denied by controller annotation @IsGranted(%s)', $argsString);
@@ -96,7 +96,7 @@ class IsGrantedListener implements EventSubscriberInterface
     {
         $attributes = array_map(function ($attribute) {
             return sprintf('"%s"', $attribute);
-        }, (array) $isGranted->getAttributes());
+        }, (array) $isGranted->getAttribute());
         if (1 === \count($attributes)) {
             $argsString = reset($attributes);
         } else {

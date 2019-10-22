@@ -53,7 +53,7 @@ class IsGrantedListenerTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
 
         $listener = new IsGrantedListener($this->createArgumentNameConverter([]), $authChecker);
-        $isGranted = new IsGranted(['attributes' => 'ROLE_ADMIN']);
+        $isGranted = new IsGranted(['attribute' => 'ROLE_ADMIN']);
         $request = $this->createRequest($isGranted);
         $listener->onKernelControllerArguments($this->createFilterControllerEvent($request));
     }
@@ -70,7 +70,7 @@ class IsGrantedListenerTest extends \PHPUnit\Framework\TestCase
 
         // create metadata for 2 named args for the controller
         $listener = new IsGrantedListener($this->createArgumentNameConverter(['arg1Name' => 'arg1Value', 'arg2Name' => 'arg2Value']), $authChecker);
-        $isGranted = new IsGranted(['attributes' => 'ROLE_ADMIN', 'subject' => 'arg2Name']);
+        $isGranted = new IsGranted(['attribute' => 'ROLE_ADMIN', 'subject' => 'arg2Name']);
         $request = $this->createRequest($isGranted);
 
         $listener->onKernelControllerArguments($this->createFilterControllerEvent($request));
@@ -91,7 +91,7 @@ class IsGrantedListenerTest extends \PHPUnit\Framework\TestCase
 
         // create metadata for 2 named args for the controller
         $listener = new IsGrantedListener($this->createArgumentNameConverter(['arg1Name' => 'arg1Value', 'arg2Name' => 'arg2Value']), $authChecker);
-        $isGranted = new IsGranted(['attributes' => 'ROLE_ADMIN', 'subject' => ['arg1Name', 'arg2Name']]);
+        $isGranted = new IsGranted(['attribute' => 'ROLE_ADMIN', 'subject' => ['arg1Name', 'arg2Name']]);
         $request = $this->createRequest($isGranted);
 
         $listener->onKernelControllerArguments($this->createFilterControllerEvent($request));
@@ -104,7 +104,7 @@ class IsGrantedListenerTest extends \PHPUnit\Framework\TestCase
         $authChecker = $this->getMockBuilder(AuthorizationCheckerInterface::class)->getMock();
 
         $listener = new IsGrantedListener($this->createArgumentNameConverter([]), $authChecker);
-        $isGranted = new IsGranted(['attributes' => 'ROLE_ADMIN', 'subject' => 'non_existent']);
+        $isGranted = new IsGranted(['attribute' => 'ROLE_ADMIN', 'subject' => 'non_existent']);
         $request = $this->createRequest($isGranted);
         $listener->onKernelControllerArguments($this->createFilterControllerEvent($request));
     }
@@ -112,21 +112,21 @@ class IsGrantedListenerTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider getAccessDeniedMessageTests
      */
-    public function testAccessDeniedMessages(array $attributes, $subject, $expectedMessage)
+    public function testLegacyAccessDeniedMessages(array $attribute, $subject, $expectedMessage)
     {
         $authChecker = $this->getMockBuilder(AuthorizationCheckerInterface::class)->getMock();
         $authChecker->expects($this->any())
             ->method('isGranted')
             ->willReturn(false);
 
-        // avoid the error of the subject not being found in the request attributes
+        // avoid the error of the subject not being found in the request attribute
         $arguments = [];
         if (null !== $subject) {
             $arguments[$subject] = 'bar';
         }
 
         $listener = new IsGrantedListener($this->createArgumentNameConverter($arguments), $authChecker);
-        $isGranted = new IsGranted(['attributes' => $attributes, 'subject' => $subject]);
+        $isGranted = new IsGranted(['attribute' => $attribute, 'subject' => $subject]);
         $request = $this->createRequest($isGranted);
 
         try {
@@ -150,7 +150,7 @@ class IsGrantedListenerTest extends \PHPUnit\Framework\TestCase
         $this->expectException(\Symfony\Component\HttpKernel\Exception\HttpException::class);
         $this->expectExceptionMessage('Not found');
 
-        $request = $this->createRequest(new IsGranted(['attributes' => 'ROLE_ADMIN', 'statusCode' => 404, 'message' => 'Not found']));
+        $request = $this->createRequest(new IsGranted(['attribute' => 'ROLE_ADMIN', 'statusCode' => 404, 'message' => 'Not found']));
         $event = $this->createFilterControllerEvent($request);
 
         $authChecker = $this->getMockBuilder(AuthorizationCheckerInterface::class)->getMock();
