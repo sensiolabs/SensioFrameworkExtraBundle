@@ -86,6 +86,22 @@ class Cache extends ConfigurationAnnotation
     private $maxStale;
 
     /**
+     * stale-while-revalidate Cache-Control header
+     * It can be expressed in seconds or with a relative time format (1 day, 2 weeks, ...).
+     *
+     * @var int|string
+     */
+    private $staleWhileRevalidate;
+
+    /**
+     * stale-if-error Cache-Control header
+     * It can be expressed in seconds or with a relative time format (1 day, 2 weeks, ...).
+     *
+     * @var int|string
+     */
+    private $staleIfError;
+
+    /**
      * Returns the expiration date for the Expires header field.
      *
      * @return string
@@ -271,6 +287,46 @@ class Cache extends ConfigurationAnnotation
     public function setMaxStale($maxStale)
     {
         $this->maxStale = $maxStale;
+    }
+
+    /**
+     * @return int|string
+     */
+    public function getStaleWhileRevalidate()
+    {
+        return $this->staleWhileRevalidate;
+    }
+
+    /**
+     * @param int|string $staleWhileRevalidate
+     *
+     * @return self
+     */
+    public function setStaleWhileRevalidate($staleWhileRevalidate)
+    {
+        $this->staleWhileRevalidate = $staleWhileRevalidate;
+
+        return $this;
+    }
+
+    /**
+     * @return int|string
+     */
+    public function getStaleIfError()
+    {
+        return $this->staleIfError;
+    }
+
+    /**
+     * @param int|string $staleIfError
+     *
+     * @return self
+     */
+    public function setStaleIfError($staleIfError)
+    {
+        $this->staleIfError = $staleIfError;
+
+        return $this;
     }
 
     /**

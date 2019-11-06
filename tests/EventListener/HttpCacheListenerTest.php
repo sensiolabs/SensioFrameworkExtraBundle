@@ -16,8 +16,6 @@ use Sensio\Bundle\FrameworkExtraBundle\EventListener\HttpCacheListener;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
-use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
@@ -115,12 +113,16 @@ class HttpCacheListenerTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($this->response->getExpires());
         $this->assertFalse($this->response->headers->hasCacheControlDirective('s-maxage'));
         $this->assertFalse($this->response->headers->hasCacheControlDirective('max-stale'));
+        $this->assertFalse($this->response->headers->hasCacheControlDirective('stale-while-revalidate'));
+        $this->assertFalse($this->response->headers->hasCacheControlDirective('stale-if-error'));
 
         $this->request->attributes->set('_cache', new Cache([
             'expires' => 'tomorrow',
             'smaxage' => '15',
             'maxage' => '15',
             'maxstale' => '5',
+            'staleWhileRevalidate' => '6',
+            'staleIfError' => '7',
         ]));
 
         $this->listener->onKernelResponse($this->event);
@@ -128,6 +130,8 @@ class HttpCacheListenerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('15', $this->response->getMaxAge());
         $this->assertEquals('15', $this->response->headers->getCacheControlDirective('s-maxage'));
         $this->assertEquals('5', $this->response->headers->getCacheControlDirective('max-stale'));
+        $this->assertEquals('6', $this->response->headers->getCacheControlDirective('stale-while-revalidate'));
+        $this->assertEquals('7', $this->response->headers->getCacheControlDirective('stale-if-error'));
         $this->assertInstanceOf('DateTime', $this->response->getExpires());
     }
 
@@ -137,6 +141,8 @@ class HttpCacheListenerTest extends \PHPUnit\Framework\TestCase
             'smaxage' => '1 day',
             'maxage' => '1 day',
             'maxstale' => '1 day',
+            'staleWhileRevalidate' => '1 day',
+            'staleIfError' => '1 day',
         ]));
 
         $this->listener->onKernelResponse($this->event);
@@ -144,6 +150,7 @@ class HttpCacheListenerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(60 * 60 * 24, $this->response->headers->getCacheControlDirective('s-maxage'));
         $this->assertEquals(60 * 60 * 24, $this->response->getMaxAge());
         $this->assertEquals(60 * 60 * 24, $this->response->headers->getCacheControlDirective('max-stale'));
+        $this->assertEquals(60 * 60 * 24, $this->response->headers->getCacheControlDirective('stale-if-error'));
     }
 
     public function testLastModifiedNotModifiedResponse()
