@@ -5,7 +5,7 @@ CHANGELOG
 ---
 
  * Deprecated passing more than one attribute to `@IsGranted()`. Use an expression instead
-   (e.g. `@IsGranted("has_role('ROLE_USER') or has_role('ROLE_ADMIN')")`).
+   (e.g. `@Security("has_role('ROLE_USER') or has_role('ROLE_ADMIN')")`).
 
 5.2
 ---
