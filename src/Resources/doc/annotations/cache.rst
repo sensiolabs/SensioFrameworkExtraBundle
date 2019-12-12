@@ -100,6 +100,8 @@ Annotation                                                              Response
 ``@Cache(smaxage="15")``                                                ``$response->setSharedMaxAge()``
 ``@Cache(maxage="15")``                                                 ``$response->setMaxAge()``
 ``@Cache(maxstale="15")``                                               ``$response->headers->addCacheControlDirective('max-stale', 15)``
+``@Cache(staleWhileRevalidate="15")``                                   ``$response->headers->addCacheControlDirective('stale-while-revalidate', 15)``
+``@Cache(staleIfError="15")``                                           ``$response->headers->addCacheControlDirective('stale-if-error', 15)``
 ``@Cache(vary={"Cookie"})``                                             ``$response->setVary()``
 ``@Cache(public=true)``                                                 ``$response->setPublic()``
 ``@Cache(lastModified="post.getUpdatedAt()")``                          ``$response->setLastModified()``
