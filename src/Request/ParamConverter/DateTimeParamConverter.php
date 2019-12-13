@@ -57,11 +57,16 @@ class DateTimeParamConverter implements ParamConverterInterface
                 throw new NotFoundHttpException(sprintf('Invalid date given for parameter "%s".', $param));
             }
         } else {
-            if (false === strtotime($value)) {
-                throw new NotFoundHttpException(sprintf('Invalid date given for parameter "%s".', $param));
-            }
+            $valueIsInt = filter_var($value, FILTER_VALIDATE_INT, ['options' => ['min_range' => 0]]);
+            if (false !== $valueIsInt) {
+                $date = (new $class())->setTimestamp($value);
+            } else {
+                if (false === strtotime($value)) {
+                    throw new NotFoundHttpException(sprintf('Invalid date given for parameter "%s".', $param));
+                }
 
-            $date = new $class($value);
+                $date = new $class($value);
+            }
         }
 
         $request->attributes->set($param, $date);
