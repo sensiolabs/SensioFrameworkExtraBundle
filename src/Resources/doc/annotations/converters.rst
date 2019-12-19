@@ -235,7 +235,15 @@ A number of ``options`` are available on the ``@ParamConverter`` or
     {
     }
 
-* ``evict_cache`` If true, forces Doctrine to always fetch the entity from the database instead of cache.
+* ``evict_cache`` If true, forces Doctrine to always fetch the entity from the database instead of cache::
+
+    /**
+     * @Route("/blog/{id}")
+     * @ParamConverter("post", options={"entity_manager" = "foo", "evict_cache" = true})
+     */
+    public function show(Post $post)
+    {
+    }
 
 DateTime Converter
 ~~~~~~~~~~~~~~~~~~
