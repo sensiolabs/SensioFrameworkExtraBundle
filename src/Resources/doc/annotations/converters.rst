@@ -203,7 +203,7 @@ we will use different arguments in the same Annotation to define our requirement
 ``{"repository_method"}`` This argument make reference to the method called from the repository
 file, and contain the query we need in this case.
 
-``{"mapping"}`` Is important that mapping argument be defined in ther same order of arguments
+``{"mapping"}`` Is important that the arguments defined in there, have the same order of arguments
 defined inside the repository method params.
 
 ``{"map_method_signature"}`` This argument is very important, when is ``true`` the params passed to 
