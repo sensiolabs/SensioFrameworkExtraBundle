@@ -23,7 +23,7 @@ class OptimizerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('security.token_storage')) {
+        if (!$container->has('security.token_storage')) {
             $container->removeDefinition('sensio_framework_extra.security.listener');
         }
 
