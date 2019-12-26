@@ -178,6 +178,38 @@ This can also be used to help resolve multiple arguments::
 In the example above, the ``$post`` parameter is handled automatically, but ``$comment``
 is configured with the annotation since they cannot both follow the default convention.
 
+3) Fetch via Repositoy using @ParamConverter Annotation
+.......................................................
+We can use Repository methods if we need it from @ParamConverter params. In this time
+we will use different arguments in the same Annotation to define our requirements::
+
+     * @ParamConverter("post", class="App\Entity\Post",
+     *     options={
+     *     "repository_method": "findByAuthorAndTitle",
+     *     "mapping"= {"author": "author", "title": "title"},
+     *     "map_method_signature"= false
+     *     }
+     * )
+     * @param Post $post
+     * @return Response
+     */
+    public function show(Post $post): Response
+    {
+        return $this->render('post/show.html.twig', [
+            'post' => $post,
+        ]);
+    }
+
+``{"repository_method"}`` This argument make reference to the method called from the repository
+file, and contain the query we need in this case.
+
+``{"mapping"}`` Is important that mapping argument be defined in ther same order of arguments
+defined inside the repository method params.
+
+``{"map_method_signature"}`` This argument is very important, when is ``true`` the params passed to 
+repository method will be one by one in the same order but if ``false`` we will pass all the params
+defined in mapping like one param of type Array.
+
 .. _`@ParamConverter options`:
 
 DoctrineConverter Options
