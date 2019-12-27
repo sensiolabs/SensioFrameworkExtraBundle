@@ -12,7 +12,8 @@
 namespace Sensio\Bundle\FrameworkExtraBundle\EventListener;
 
 use Doctrine\Common\Annotations\Reader;
-use Doctrine\Common\Persistence\Proxy;
+use Doctrine\Common\Persistence\Proxy as LegacyProxy;
+use Doctrine\Persistence\Proxy;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\KernelEvent;
@@ -115,13 +116,22 @@ class ControllerListener implements EventSubscriberInterface
 
     private static function getRealClass(string $class): string
     {
-        if (!class_exists(Proxy::class)) {
-            return $class;
-        }
-        if (false === $pos = strrpos($class, '\\'.Proxy::MARKER.'\\')) {
-            return $class;
+        if (class_exists(Proxy::class)) {
+            if (false === $pos = strrpos($class, '\\'.Proxy::MARKER.'\\')) {
+                return $class;
+            }
+
+            return substr($class, $pos + Proxy::MARKER_LENGTH + 2);
         }
 
-        return substr($class, $pos + Proxy::MARKER_LENGTH + 2);
+        if (class_exists(LegacyProxy::class)) {
+            if (false === $pos = strrpos($class, '\\'.LegacyProxy::MARKER.'\\')) {
+                return $class;
+            }
+
+            return substr($class, $pos + LegacyProxy::MARKER_LENGTH + 2);
+        }
+
+        return $class;
     }
 }
