@@ -278,6 +278,11 @@ class DoctrineParamConverterTest extends \PHPUnit\Framework\TestCase
                 ->willReturn($repository);
 
         $metadata->expects($this->once())
+                 ->method('isIdentifier')
+                 ->with($this->equalTo('Foo'))
+                 ->willReturn(false);
+
+        $metadata->expects($this->once())
                  ->method('hasField')
                  ->with($this->equalTo('Foo'))
                  ->willReturn(true);
@@ -285,6 +290,52 @@ class DoctrineParamConverterTest extends \PHPUnit\Framework\TestCase
         $repository->expects($this->once())
                       ->method('findOneBy')
                       ->with($this->equalTo(['Foo' => 1]))
+                      ->willReturn($object = new \stdClass());
+
+        $ret = $this->converter->apply($request, $config);
+
+        $this->assertTrue($ret);
+        $this->assertSame($object, $request->attributes->get('arg'));
+    }
+
+    public function testApplyWithMappingAndExcludeWithIdentifier()
+    {
+        $request = new Request();
+        $request->attributes->set('foo', 1);
+        $request->attributes->set('bar', 2);
+
+        $config = $this->createConfiguration(
+            'stdClass',
+            ['mapping' => ['bar' => 'Bar'], 'exclude' => ['foo']],
+            'arg'
+        );
+
+        $manager = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')->getMock();
+        $metadata = $this->getMockBuilder('Doctrine\Common\Persistence\Mapping\ClassMetadata')->getMock();
+        $repository = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectRepository')->getMock();
+
+        $this->registry->expects($this->once())
+                ->method('getManagerForClass')
+                ->with('stdClass')
+                ->willReturn($manager);
+
+        $manager->expects($this->once())
+                ->method('getClassMetadata')
+                ->with('stdClass')
+                ->willReturn($metadata);
+        $manager->expects($this->once())
+                ->method('getRepository')
+                ->with('stdClass')
+                ->willReturn($repository);
+
+        $metadata->expects($this->once())
+                 ->method('isIdentifier')
+                 ->with($this->equalTo('Bar'))
+                 ->willReturn(true);
+
+        $repository->expects($this->once())
+                      ->method('findOneBy')
+                      ->with($this->equalTo(['Bar' => 2]))
                       ->willReturn($object = new \stdClass());
 
         $ret = $this->converter->apply($request, $config);
