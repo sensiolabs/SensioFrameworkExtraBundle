@@ -207,9 +207,12 @@ class DoctrineParamConverter implements ParamConverterInterface
             && true === $options['map_method_signature'];
 
         foreach ($options['mapping'] as $attribute => $field) {
-            if ($metadata->hasField($field)
+            if (
+                $metadata->isIdentifier($field)
+                || $metadata->hasField($field)
                 || ($metadata->hasAssociation($field) && $metadata->isSingleValuedAssociation($field))
-                || $mapMethodSignature) {
+                || $mapMethodSignature
+            ) {
                 $criteria[$field] = $request->attributes->get($attribute);
             }
         }
