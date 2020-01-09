@@ -77,6 +77,12 @@ allows you to pass an *expression* that can contain custom logic::
         // ...
     }
 
+To use the ``@Security`` annotation, you need to have Expression Language Component installed.
+If you don't, install it first:
+
+.. code-block:: terminal
+
+    $ composer require symfony/expression-language
 
 The expression can use all functions that you can use in the ``access_control``
 section of the security bundle configuration, with the addition of the
