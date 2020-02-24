@@ -8,17 +8,7 @@ conventions and annotations. It allows for more concise controllers.
 Installation
 ------------
 
-An official Symfony recipe is available for this bundle. To automatically
-install and configure it run:
-
-.. code-block:: bash
-
-    $ composer require annotations
-
-You're done!
-
-Alternatively, if you don't use Symfony Flex, add it to your ``composer.json``
-file:
+An official Symfony recipe is available for this bundle. Run this command :
 
 .. code-block:: bash
 
