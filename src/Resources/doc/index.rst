@@ -175,7 +175,7 @@ example:
 
 .. code-block:: yaml
 
-    # app/config/routing.yml
+    # config/routes/annotations.yaml
 
     # import routes from a controller directory
     annot:
