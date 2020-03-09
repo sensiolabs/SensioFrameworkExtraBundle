@@ -153,6 +153,23 @@ class HttpCacheListenerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(60 * 60 * 24, $this->response->headers->getCacheControlDirective('stale-if-error'));
     }
 
+    public function testCacheMaxAgeSupportsVariation()
+    {
+        $this->request->attributes->set('_cache', new Cache([
+            'smaxage' => '1 day',
+            'smaxageVariation' => 0.5,
+            'maxage' => '1 day',
+            'maxageVariation' => 0.5,
+        ]));
+
+        $this->listener->onKernelResponse($this->event);
+
+        $this->assertGreaterThanOrEqual(60 * 60 * 24, $this->response->headers->getCacheControlDirective('s-maxage'));
+        $this->assertLessThanOrEqual(60 * 60 * 24 / 0.5, $this->response->headers->getCacheControlDirective('s-maxage'));
+        $this->assertGreaterThanOrEqual(60 * 60 * 24, $this->response->getMaxAge());
+        $this->assertLessThanOrEqual(60 * 60 * 24 / 0.5, $this->response->getMaxAge());
+    }
+
     public function testLastModifiedNotModifiedResponse()
     {
         $request = $this->createRequest(new Cache(['lastModified' => 'test.getDate()']));
@@ -260,6 +277,20 @@ class HttpCacheListenerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(30, $response->headers->getCacheControlDirective('s-maxage'));
         $this->assertEquals(30, $response->getMaxAge());
         $this->assertEquals(['foobaz'], $response->getVary());
+    }
+
+    public function testApplyVariation()
+    {
+        $listener = new HttpCacheListener();
+
+        $reflection = new \ReflectionClass($listener);
+        $method = $reflection->getMethod('applyVariation');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($listener, 100, 0.5);
+
+        $this->assertGreaterThanOrEqual(100, $result);
+        $this->assertLessThanOrEqual(150, $result);
     }
 
     private function createRequest(Cache $cache = null)

@@ -95,6 +95,7 @@ class HttpCacheListener implements EventSubscriberInterface
 
         if (!$response->headers->hasCacheControlDirective('s-maxage') && null !== $age = $configuration->getSMaxAge()) {
             $age = $this->convertToSecondsIfNeeded($age);
+            $age = $this->applyVariation($age, $configuration->getSMaxAgeVariation());
 
             $response->setSharedMaxAge($age);
         }
@@ -105,6 +106,7 @@ class HttpCacheListener implements EventSubscriberInterface
 
         if (!$response->headers->hasCacheControlDirective('max-age') && null !== $age = $configuration->getMaxAge()) {
             $age = $this->convertToSecondsIfNeeded($age);
+            $age = $this->applyVariation($age, $configuration->getMaxAgeVariation());
 
             $response->setMaxAge($age);
         }
@@ -191,5 +193,21 @@ class HttpCacheListener implements EventSubscriberInterface
         }
 
         return $time;
+    }
+
+    /**
+     * Apply stampede protection to the given time.
+     */
+    private function applyVariation(int $time, ?float $variation): int
+    {
+        if (null === $variation) {
+            return $time;
+        }
+
+        try {
+            return random_int($time, $time + $time * $variation);
+        } catch (\Exception $e) {
+            return $time;
+        }
     }
 }
