@@ -36,10 +36,7 @@ class TestKernel extends Kernel
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
         $loader->load(__DIR__.'/config/config.yml');
-
-        if (\PHP_VERSION_ID >= 70100) {
-            $loader->load(__DIR__.'/config/nullable_type/config.yml');
-        }
+        $loader->load(__DIR__.'/config/nullable_type/config.yml');
     }
 
     public function getProjectDir(): string

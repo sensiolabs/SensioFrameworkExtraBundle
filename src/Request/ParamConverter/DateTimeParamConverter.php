@@ -78,6 +78,6 @@ class DateTimeParamConverter implements ParamConverterInterface
             return false;
         }
 
-        return 'DateTime' === $configuration->getClass() || is_subclass_of($configuration->getClass(), \PHP_VERSION_ID < 50500 ? 'DateTime' : 'DateTimeInterface');
+        return is_subclass_of($configuration->getClass(), \DateTimeInterface::class);
     }
 }

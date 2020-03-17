@@ -41,12 +41,6 @@ class SensioFrameworkExtraExtension extends Extension
             @trigger_error(sprintf('Enabling the "sensio_framework_extra.router.annotations" configuration is deprecated since version 5.2. Set it to false and use the "%s" annotation from Symfony itself.', \Symfony\Component\Routing\Annotation\Route::class), E_USER_DEPRECATED);
 
             $annotationsToLoad[] = 'routing.xml';
-
-            if (\PHP_VERSION_ID < 70000) {
-                $this->addClassesToCompile([
-                    'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\ControllerListener',
-                ]);
-            }
         }
 
         if ($config['request']['converters']) {
@@ -63,38 +57,14 @@ class SensioFrameworkExtraExtension extends Extension
             } else {
                 $definitionsToRemove[] = 'sensio_framework_extra.converter.doctrine.orm.expression_language.default';
             }
-
-            if (\PHP_VERSION_ID < 70000) {
-                $this->addClassesToCompile([
-                    // cannot be added because it has some annotations
-                    //'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\ParamConverter',
-                    'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\ParamConverterListener',
-                    'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\DateTimeParamConverter',
-                    'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\DoctrineParamConverter',
-                    'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\ParamConverterInterface',
-                    'Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\ParamConverterManager',
-                ]);
-            }
         }
 
         if ($config['view']['annotations']) {
             $annotationsToLoad[] = 'view.xml';
-
-            if (\PHP_VERSION_ID < 70000) {
-                $this->addClassesToCompile([
-                    'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\TemplateListener',
-                ]);
-            }
         }
 
         if ($config['cache']['annotations']) {
             $annotationsToLoad[] = 'cache.xml';
-
-            if (\PHP_VERSION_ID < 70000) {
-                $this->addClassesToCompile([
-                    'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\HttpCacheListener',
-                ]);
-            }
         }
 
         if ($config['security']['annotations']) {
@@ -112,12 +82,6 @@ class SensioFrameworkExtraExtension extends Extension
             } else {
                 $definitionsToRemove[] = 'sensio_framework_extra.security.expression_language.default';
             }
-
-            if (\PHP_VERSION_ID < 70000) {
-                $this->addClassesToCompile([
-                    'Sensio\\Bundle\\FrameworkExtraBundle\\EventListener\\SecurityListener',
-                ]);
-            }
         }
 
         if ($annotationsToLoad) {
@@ -126,12 +90,6 @@ class SensioFrameworkExtraExtension extends Extension
 
             foreach ($annotationsToLoad as $configFile) {
                 $loader->load($configFile);
-            }
-
-            if (\PHP_VERSION_ID < 70000) {
-                $this->addClassesToCompile([
-                    'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\ConfigurationAnnotation',
-                ]);
             }
 
             if ($config['request']['converters']) {
