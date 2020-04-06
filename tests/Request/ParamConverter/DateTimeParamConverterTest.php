@@ -49,6 +49,17 @@ class DateTimeParamConverterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('2012-07-21', $request->attributes->get('start')->format('Y-m-d'));
     }
 
+    public function testApplyUnixTimestamp()
+    {
+        $request = new Request([], [], ['start' => '989541720']);
+        $config = $this->createConfiguration('DateTime', 'start');
+
+        $this->converter->apply($request, $config);
+
+        $this->assertInstanceOf('DateTime', $request->attributes->get('start'));
+        $this->assertEquals('2001-05-11', $request->attributes->get('start')->format('Y-m-d'));
+    }
+
     public function testApplyInvalidDate404Exception()
     {
         $this->expectException(\Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class);
