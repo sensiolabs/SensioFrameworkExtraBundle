@@ -44,39 +44,23 @@ If you use type hinting as in the example above, you can even omit the
 You can disable the auto-conversion of type-hinted method arguments feature
 by setting the ``auto_convert`` flag to ``false``:
 
-.. configuration-block::
+.. code-block:: yaml
 
-    .. code-block:: yaml
-
-        # app/config/config.yml
-        sensio_framework_extra:
-            request:
-                converters: true
-                auto_convert: false
-
-    .. code-block:: xml
-
-        <sensio-framework-extra:config>
-            <request converters="true" auto-convert="true" />
-        </sensio-framework-extra:config>
+    # config/packages/sensio_framework_extra.yaml
+    sensio_framework_extra:
+        request:
+            converters: true
+            auto_convert: false
 
 You can also explicitly disable some converters by name:
 
-.. configuration-block::
+.. code-block:: yaml
 
-    .. code-block:: yaml
-
-        # app/config/config.yml
-        sensio_framework_extra:
-            request:
-                converters: true
-                disable: ['doctrine.orm', 'datetime']
-
-    .. code-block:: xml
-
-        <sensio-framework-extra:config>
-            <request converters="true" disable="doctrine.orm,datetime" />
-        </sensio-framework-extra:config>
+    # config/packages/sensio_framework_extra.yaml
+    sensio_framework_extra:
+        request:
+            converters: true
+            disable: ['doctrine.orm', 'datetime']
 
 To detect which converter is run on a parameter the following process is run:
 
@@ -300,24 +284,6 @@ on the request attributes, it should set an attribute named
 
 If you're using service `auto-registration and autoconfiguration`_,
 you're done! Your converter will automatically be used.
-If not, you must add a tag to your service:
-
-.. configuration-block::
-
-    .. code-block:: yaml
-
-        # app/config/config.yml
-        services:
-            my_converter:
-                class:        MyBundle\Request\ParamConverter\MyConverter
-                tags:
-                    - { name: request.param_converter, priority: -2, converter: my_converter }
-
-    .. code-block:: xml
-
-        <service id="my_converter" class="MyBundle\Request\ParamConverter\MyConverter">
-            <tag name="request.param_converter" priority="-2" converter="my_converter" />
-        </service>
 
 You can register a converter by priority, by name (attribute "converter"), or
 both. If you don't specify a priority or a name, the converter will be added to
