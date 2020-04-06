@@ -17,26 +17,6 @@ install and configure it run:
 
 You're done!
 
-Alternatively, if you don't use Symfony Flex, add it to your ``composer.json``
-file:
-
-.. code-block:: bash
-
-    $ composer require sensio/framework-extra-bundle
-
-Then, like for any other bundle, include it in your Kernel class::
-
-    public function registerBundles()
-    {
-        $bundles = array(
-            // ...
-
-            new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-        );
-
-        // ...
-    }
-
 Configuration
 -------------
 
@@ -83,7 +63,7 @@ The default configuration is as follow:
         ));
 
 You can disable some annotations and conventions by defining one or more
-settings to false.
+settings to ``false``.
 
 Annotations for Controllers
 ---------------------------
@@ -189,7 +169,8 @@ SensioFrameworkExtraBundle provides support for HTTP messages interfaces defined
 in `PSR-7`_. It allows to inject instances of ``Psr\Http\Message\ServerRequestInterface``
 and to return instances of ``Psr\Http\Message\ResponseInterface`` in controllers.
 
-To enable this feature, `the HttpFoundation to PSR-7 bridge`_ and `autowiring aliases for PSR-17` must be installed:
+To enable this feature, `the HttpFoundation to PSR-7 bridge`_ and `autowiring
+aliases for PSR-17`_ must be installed:
 
 .. code-block:: bash
 
