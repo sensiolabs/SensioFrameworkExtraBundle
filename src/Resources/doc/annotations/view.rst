@@ -1,10 +1,6 @@
 @Template
 =========
 
-As of version 4.0 of the bundle, only Twig is supported by the ``@Template``
-annotation (and only when **not** used with the Symfony Templating component --
-no ``templating`` entry set in the ``framework`` configuration settings).
-
 Usage
 -----
 
@@ -40,8 +36,9 @@ array of parameters to pass to the view instead of a ``Response`` object.
 
 
 .. tip::
-   If the action returns a ``Response`` object, the ``@Template`` 
-   annotation is simply ignored.
+
+   If the action returns a ``Response`` object, the ``@Template`` annotation is
+   simply ignored.
 
 If the template is named after the controller and action names, which is the
 case for the above example, you can even omit the annotation value::
@@ -58,8 +55,9 @@ case for the above example, you can even omit the annotation value::
     }
 
 .. tip::
-   Sub-namespaces are converted into underscores. 
-   The ``Sensio\BlogBundle\Controller\UserProfileController::showDetails()`` action
+
+   Sub-namespaces are converted into underscores. The
+   ``Sensio\BlogBundle\Controller\UserProfileController::showDetails()`` action
    will resolve to ``@SensioBlog/user_profile/show_details.html.twig``
 
 And if the only parameters to pass to the template are method arguments, you
@@ -85,8 +83,8 @@ which, thanks to conventions, is equivalent to the following configuration::
     }
 
 You can make it even more concise as all method arguments are automatically
-passed to the template if the method returns ``null`` and no ``vars``
-attribute is defined::
+passed to the template if the method returns ``null`` and no ``vars`` attribute
+is defined::
 
     /**
      * @Template

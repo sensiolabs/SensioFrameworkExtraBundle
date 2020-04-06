@@ -113,7 +113,7 @@ The ``message`` option allows you to customize the exception message::
 
 .. tip::
 
-    You can also add ``@IsGranted`` or  ``@Security`` annotations on a controller
-    class to prevent access to *all* actions in the class.
+    You can also add ``@IsGranted`` or ``@Security`` annotations on a
+    controller class to prevent access to *all* actions in the class.
 
 .. _`the Security Voters page`: http://symfony.com/doc/current/cookbook/security/voters_data_permission.html

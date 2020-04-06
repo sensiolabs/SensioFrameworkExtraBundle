@@ -34,7 +34,7 @@ Several things happen under the hood:
   controller when present in the method signature.
 
 If you use type hinting as in the example above, you can even omit the
-``@ParamConverter`` annotation altogether::
+``@ParamConverter`` annotation::
 
     // automatic with method signature
     public function show(Post $post)
@@ -62,7 +62,8 @@ You can also explicitly disable some converters by name:
             converters: true
             disable: ['doctrine.orm', 'datetime']
 
-To detect which converter is run on a parameter the following process is run:
+To detect which converters are run on a parameter, the following process is
+run:
 
 * If an explicit converter choice was made with
   ``@ParamConverter(converter="name")`` the converter with the given name is
@@ -90,8 +91,8 @@ entities fetched from the database. Several different approaches are possible:
 1) Fetch Automatically
 ......................
 
-If your route wildcards match properties on your entity, then
-the converter will automatically fetch them::
+If your route wildcards match properties on your entity, then the converter
+will automatically fetch them::
 
     /**
      * Fetch via primary key because {id} is in the route.
@@ -126,8 +127,7 @@ annotation and using the `@ParamConverter options`_.
 2) Fetch via an Expression
 ..........................
 
-If automatic fetching doesn't work, another great option is to use
-an expression::
+If automatic fetching doesn't work, use an expression::
 
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 

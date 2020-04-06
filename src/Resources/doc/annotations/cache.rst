@@ -1,13 +1,13 @@
 @Cache
 ======
 
-The ``@Cache`` annotation makes it easy to define HTTP caching headers for
-expiration and validation.
+The ``@Cache`` annotation allows to define HTTP caching headers for expiration
+and validation.
 
 HTTP Expiration Strategies
 --------------------------
 
-The ``@Cache`` annotation makes it easy to define HTTP caching::
+The ``@Cache`` annotation allows to define HTTP caching::
 
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 
@@ -111,4 +111,5 @@ Annotation                                                              Response
 
 .. note::
 
-    smaxage, maxage and maxstale attributes can also get a string with relative time format (1 day, 2 weeks, ...).
+    ``smaxage``, ``maxage`` and ``maxstale`` attributes can also get a string
+    with relative time format (``1 day``, ``2 weeks``, ...).
