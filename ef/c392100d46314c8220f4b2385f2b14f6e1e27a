@@ -1,0 +1,5 @@
+---------------------------------------------------------------------------
+
+by iamdto at 2020-04-09T14:17:42Z
+
+On second thought I think removing the `exclude-from-classmap` would only partially solve the problem. Most developers probably just run `composer install` if they want to contribute to this project, so even with this removed you would still not see the warnings.
