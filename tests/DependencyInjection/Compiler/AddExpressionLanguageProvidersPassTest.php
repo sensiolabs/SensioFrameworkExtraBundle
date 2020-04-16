@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Sensio\Bundle\FrameworkExtraBundle\Tests\DependencyInjection;
+namespace Sensio\Bundle\FrameworkExtraBundle\Tests\DependencyInjection\Compiler;
 
 use Sensio\Bundle\FrameworkExtraBundle\DependencyInjection\Compiler\AddExpressionLanguageProvidersPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
