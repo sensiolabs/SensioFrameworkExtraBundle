@@ -88,14 +88,14 @@ class DoctrineParamConverter implements ParamConverterInterface
                 $object = $this->findViaExpression($class, $request, $expr, $options, $configuration);
 
                 if (null === $object) {
-                    $errorMessage = sprintf('The expression "%s" returned null', $expr);
+                    $errorMessage = sprintf('The expression "%s" returned null.', $expr);
                 }
             } else {
                 // find by identifier?
                 $object = $this->find($class, $request, $options, $name, $id);
 
                 if (null === $object && isset($id)) {
-                    $errorMessage = sprintf('No object identified by "%s"', $id);
+                    $errorMessage = sprintf('No object identified by "%s".', $id);
                     if ($options['throw_notfound']) {
                         $throwNotFound = true;
                     }
@@ -107,7 +107,7 @@ class DoctrineParamConverter implements ParamConverterInterface
 
                     if (null === $object && $criteria) {
                         $errorMessage = sprintf(
-                            'No object identified by {%s}',
+                            'No object identified by {%s}.',
                             implode(', ', array_map(function ($k, $v) {
                                 return sprintf('%s: "%s"', $k, $v);
                             }, array_keys($criteria), $criteria))
@@ -302,7 +302,7 @@ class DoctrineParamConverter implements ParamConverterInterface
         try {
             return $this->language->evaluate($expression, $variables);
         } catch (SyntaxError $e) {
-            throw new \LogicException(sprintf('Error parsing expression -- %s -- (%s)', $expression, $e->getMessage()), 0, $e);
+            throw new \LogicException(sprintf('Error parsing expression -- "%s" -- (%s).', $expression, $e->getMessage()), 0, $e);
         }
     }
 
@@ -345,7 +345,7 @@ class DoctrineParamConverter implements ParamConverterInterface
 
         $extraKeys = array_diff(array_keys($passedOptions), array_keys($this->defaultOptions));
         if ($extraKeys && $strict) {
-            throw new \InvalidArgumentException(sprintf('Invalid option(s) passed to @%s: %s', $this->getAnnotationName($configuration), implode(', ', $extraKeys)));
+            throw new \InvalidArgumentException(sprintf('Invalid option(s) passed to @%s: "%s".', $this->getAnnotationName($configuration), implode(', ', $extraKeys)));
         }
 
         return array_replace($this->defaultOptions, $passedOptions);
