@@ -80,23 +80,31 @@ class DoctrineParamConverter implements ParamConverterInterface
         }
 
         $errorMessage = null;
-        if ($expr = $options['expr']) {
-            $object = $this->findViaExpression($class, $request, $expr, $options, $configuration);
+        $object = null;
+        try {
+            if ($expr = $options['expr']) {
+                $object = $this->findViaExpression($class, $request, $expr, $options, $configuration);
 
-            if (null === $object) {
-                $errorMessage = sprintf('The expression "%s" returned null', $expr);
-            }
+                if (null === $object) {
+                    $errorMessage = sprintf('The expression "%s" returned null', $expr);
+                }
+            } else {
+                // find by identifier?
+                $object = $this->find($class, $request, $options, $name);
 
-            // find by identifier?
-        } elseif (false === $object = $this->find($class, $request, $options, $name)) {
-            // find by criteria
-            if (false === $object = $this->findOneBy($class, $request, $options)) {
-                if ($configuration->isOptional()) {
-                    $object = null;
-                } else {
-                    throw new \LogicException(sprintf('Unable to guess how to get a Doctrine instance from the request information for parameter "%s".', $name));
+                if (false === $object) {
+                    // find by criteria
+                    if (false === $object = $this->findOneBy($class, $request, $options)) {
+                        if ($configuration->isOptional()) {
+                            $object = null;
+                        } else {
+                            throw new \LogicException(sprintf('Unable to guess how to get a Doctrine instance from the request information for parameter "%s".', $name));
+                        }
+                    }
                 }
             }
+        } catch (NoResultException $e) {
+        } catch (ConversionException $e) {
         }
 
         if (null === $object && false === $configuration->isOptional()) {
@@ -138,13 +146,7 @@ class DoctrineParamConverter implements ParamConverterInterface
             }
         }
 
-        try {
-            return $om->getRepository($class)->$method($id);
-        } catch (NoResultException $e) {
-            return;
-        } catch (ConversionException $e) {
-            return;
-        }
+        return $om->getRepository($class)->$method($id);
     }
 
     private function getIdentifier(Request $request, $options, $name)
@@ -230,17 +232,11 @@ class DoctrineParamConverter implements ParamConverterInterface
             $repositoryMethod = 'findOneBy';
         }
 
-        try {
-            if ($mapMethodSignature) {
-                return $this->findDataByMapMethodSignature($em, $class, $repositoryMethod, $criteria);
-            }
-
-            return $em->getRepository($class)->$repositoryMethod($criteria);
-        } catch (NoResultException $e) {
-            return;
-        } catch (ConversionException $e) {
-            return;
+        if ($mapMethodSignature) {
+            return $this->findDataByMapMethodSignature($em, $class, $repositoryMethod, $criteria);
         }
+
+        return $em->getRepository($class)->$repositoryMethod($criteria);
     }
 
     private function findDataByMapMethodSignature($em, $class, $repositoryMethod, $criteria)
@@ -272,10 +268,6 @@ class DoctrineParamConverter implements ParamConverterInterface
 
         try {
             return $this->language->evaluate($expression, $variables);
-        } catch (NoResultException $e) {
-            return;
-        } catch (ConversionException $e) {
-            return;
         } catch (SyntaxError $e) {
             throw new \LogicException(sprintf('Error parsing expression -- %s -- (%s)', $expression, $e->getMessage()), 0, $e);
         }
