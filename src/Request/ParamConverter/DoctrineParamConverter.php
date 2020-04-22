@@ -128,8 +128,10 @@ class DoctrineParamConverter implements ParamConverterInterface
 
         $id = $this->getIdentifier($request, $options, $name);
 
-        if (false === $id || null === $id) {
+        if (false === $id) {
             return false;
+        } elseif (null === $id) {
+            return null;
         }
 
         if ($options['repository_method']) {

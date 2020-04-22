@@ -223,23 +223,7 @@ class DoctrineParamConverterTest extends \PHPUnit\Framework\TestCase
 
         $config = $this->createConfiguration('stdClass', [], 'arg', null);
 
-        $classMetadata = $this->getMockBuilder('Doctrine\Common\Persistence\Mapping\ClassMetadata')->getMock();
-        $manager = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')->getMock();
-        $manager->expects($this->once())
-            ->method('getClassMetadata')
-            ->with('stdClass')
-            ->willReturn($classMetadata);
-
-        $objectRepository = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectRepository')->getMock();
-        $this->registry->expects($this->once())
-              ->method('getManagerForClass')
-              ->with('stdClass')
-              ->willReturn($manager);
-
-        $manager->expects($this->never())->method('getRepository');
-
-        $objectRepository->expects($this->never())->method('find');
-        $objectRepository->expects($this->never())->method('findOneBy');
+        $this->registry->expects($this->never())->method('getManagerForClass');
 
         $ret = $this->converter->apply($request, $config);
 
