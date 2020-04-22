@@ -13,6 +13,7 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Tests\Request\ParamConverter;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\DBAL\Types\ConversionException;
+use Doctrine\ORM\NoResultException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
@@ -163,21 +164,68 @@ class DoctrineParamConverterTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($object, $request->attributes->get('arg'));
     }
 
-    public function testApplyWithConversionFailedException()
+    public function provideExceptionOptions()
     {
-        $this->expectException(\Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class);
+        return [
+            [
+                [],
+                false,
+                new ConversionException(),
+                \Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class,
+            ],
+            [
+                ['throw_notfound' => true],
+                true,
+                new ConversionException(),
+                \Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class,
+            ],
+            [
+                ['throw_notfound' => false],
+                true,
+                new ConversionException(),
+                null,
+            ],
+            [
+                [],
+                false,
+                new NoResultException(),
+                \Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class,
+            ],
+            [
+                ['throw_notfound' => true],
+                true,
+                new NoResultException(),
+                \Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class,
+            ],
+            [
+                ['throw_notfound' => false],
+                true,
+                new NoResultException(),
+                null,
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider provideExceptionOptions
+     */
+    public function testApplyWithException(array $options, bool $optional, ?\Throwable $thrownException, ?string $expectedException)
+    {
+        if ($expectedException) {
+            $this->expectException($expectedException);
+        }
 
         $request = new Request();
         $request->attributes->set('id', 'test');
 
-        $config = $this->createConfiguration('stdClass', ['id' => 'id'], 'arg');
+        $config = $this->createConfiguration('stdClass', $options, 'arg', $optional);
 
         $manager = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')->getMock();
         $objectRepository = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectRepository')->getMock();
         $this->registry->expects($this->once())
-              ->method('getManagerForClass')
-              ->with('stdClass')
-              ->willReturn($manager);
+            ->method('getManagerForClass')
+            ->with('stdClass')
+            ->willReturn($manager);
 
         $manager->expects($this->once())
             ->method('getRepository')
@@ -185,11 +233,124 @@ class DoctrineParamConverterTest extends \PHPUnit\Framework\TestCase
             ->willReturn($objectRepository);
 
         $objectRepository->expects($this->once())
-                      ->method('find')
-                      ->with($this->equalTo('test'))
-                      ->will($this->throwException(new ConversionException()));
+            ->method('find')
+            ->with($this->equalTo('test'))
+            ->will($this->throwException($thrownException));
 
-        $this->converter->apply($request, $config);
+        $ret = $this->converter->apply($request, $config);
+
+        if (null === $expectedException) {
+            $this->assertTrue($ret);
+            $this->assertNull($request->attributes->get('arg'));
+        }
+    }
+
+    public function provideNotFound(): array
+    {
+        return [
+            [
+                [],
+                false,
+                \Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class,
+            ],
+            [
+                [],
+                true,
+                null,
+            ],
+            [
+                ['throw_notfound' => true],
+                false,
+                \Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class,
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider provideNotFound
+     */
+    public function testApplyFindWithNull(array $options, bool $optional, ?string $expectedException): void
+    {
+        $request = new Request();
+        $request->attributes->add(['id' => 'test']);
+
+        $config = $this->createConfiguration('stdClass', $options, 'arg', $optional);
+
+        $manager = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')->getMock();
+        $this->registry->expects($this->once())
+            ->method('getManagerForClass')
+            ->with('stdClass')
+            ->willReturn($manager);
+        
+        $objectRepository = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectRepository')->getMock();
+        $manager->expects($this->once())
+            ->method('getRepository')
+            ->with('stdClass')
+            ->willReturn($objectRepository);
+
+        $objectRepository->expects($this->once())
+            ->method('find')
+            ->with($this->equalTo('test'))
+            ->willReturn(null);
+
+        if ($expectedException) {
+            $this->expectException($expectedException);
+        }
+
+        $ret = $this->converter->apply($request, $config);
+
+        if (null === $expectedException) {
+            $this->assertTrue($ret);
+            $this->assertNull($request->attributes->get('arg'));
+        }
+    }
+
+    /**
+     * @dataProvider provideNotFound
+     */
+    public function testApplyFindOneByWithNull(array $options, bool $optional, ?string $expectedException): void
+    {
+        $request = new Request();
+        $request->attributes->add(['id' => 'test']);
+
+        $config = $this->createConfiguration('stdClass', array_merge(['mapping' => ['id' => 'id']], $options), 'arg', $optional);
+
+        $manager = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')->getMock();
+        $this->registry->expects($this->once())
+            ->method('getManagerForClass')
+            ->with('stdClass')
+            ->willReturn($manager);
+
+        $metadata = $this->getMockBuilder('Doctrine\Common\Persistence\Mapping\ClassMetadata')->getMock();
+        $manager->expects($this->once())
+            ->method('getClassMetadata')
+            ->with('stdClass')
+            ->willReturn($metadata);
+        $metadata->expects($this->once())
+            ->method('hasField')
+            ->with($this->equalTo('id'))
+            ->willReturn(true);
+
+        $repository = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectRepository')->getMock();
+        $manager->expects($this->once())
+            ->method('getRepository')
+            ->with('stdClass')
+            ->willReturn($repository);
+        $repository->expects($this->once())
+            ->method('findOneBy')
+            ->with($this->equalTo(['id' => 'test']))
+            ->willReturn(null);
+
+        if ($expectedException) {
+            $this->expectException($expectedException);
+        }
+
+        $ret = $this->converter->apply($request, $config);
+
+        if (null === $expectedException) {
+            $this->assertTrue($ret);
+            $this->assertNull($request->attributes->get('arg'));
+        }
     }
 
     public function testUsedProperIdentifier()
