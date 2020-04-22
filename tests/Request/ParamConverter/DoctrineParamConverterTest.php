@@ -281,7 +281,7 @@ class DoctrineParamConverterTest extends \PHPUnit\Framework\TestCase
             ->method('getManagerForClass')
             ->with('stdClass')
             ->willReturn($manager);
-        
+
         $objectRepository = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectRepository')->getMock();
         $manager->expects($this->once())
             ->method('getRepository')

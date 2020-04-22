@@ -110,7 +110,7 @@ class DoctrineParamConverter implements ParamConverterInterface
                             'No object identified by {%s}',
                             implode(', ', array_map(function ($k, $v) {
                                 return sprintf('%s: "%s"', $k, $v);
-                            }, \array_keys($criteria), $criteria))
+                            }, array_keys($criteria), $criteria))
                         );
                         if ($options['throw_notfound']) {
                             $throwNotFound = true;
