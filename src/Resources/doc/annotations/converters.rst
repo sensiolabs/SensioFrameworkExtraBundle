@@ -208,6 +208,9 @@ A number of ``options`` are available on the ``@ParamConverter`` or
 * ``strip_null`` If true, then when ``findOneBy()`` is used, any values that are
   ``null`` will not be used for the query.
 
+* ``throw_notfound`` If true, invalid values (object not found or bad format)
+  trigger a ``404`` error on optional parameters, while null values pass.
+
 * ``entity_manager`` By default, the Doctrine converter uses the *default* entity
   manager, but you can configure this::
 
