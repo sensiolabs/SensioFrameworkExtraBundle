@@ -11,8 +11,11 @@
 
         <service id="sensio_framework_extra.view.listener" class="Sensio\Bundle\FrameworkExtraBundle\EventListener\TemplateListener">
             <tag name="kernel.event_subscriber" />
+            <tag name="container.service_subscriber" id="twig" />
             <argument type="service" id="sensio_framework_extra.view.guesser" />
-            <argument type="service" id="twig" on-invalid="null" />
+            <call method="setContainer">
+                <argument type="service" id="Psr\Container\ContainerInterface" on-invalid="ignore" />
+            </call>
         </service>
     </services>
 </container>

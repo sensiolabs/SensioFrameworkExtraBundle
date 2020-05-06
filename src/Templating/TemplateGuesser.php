@@ -13,7 +13,6 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Templating;
 
 use Doctrine\Common\Persistence\Proxy;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
@@ -59,7 +58,7 @@ class TemplateGuesser
         if (\is_object($controller) && method_exists($controller, '__invoke')) {
             $controller = [$controller, '__invoke'];
         } elseif (!\is_array($controller)) {
-            throw new \InvalidArgumentException(sprintf('First argument of %s must be an array callable or an object defining the magic method __invoke. "%s" given.', __METHOD__, \gettype($controller)));
+            throw new \InvalidArgumentException(sprintf('First argument of "%s" must be an array callable or an object defining the magic method __invoke. "%s" given.', __METHOD__, \gettype($controller)));
         }
 
         $className = $this->getRealClass(\get_class($controller[0]));
@@ -72,7 +71,7 @@ class TemplateGuesser
             }
         }
         if (null === $matchController) {
-            throw new \InvalidArgumentException(sprintf('The "%s" class does not look like a controller class (its FQN must match one of the following regexps: "%s")', \get_class($controller[0]), implode('", "', $this->controllerPatterns)));
+            throw new \InvalidArgumentException(sprintf('The "%s" class does not look like a controller class (its FQN must match one of the following regexps: "%s").', \get_class($controller[0]), implode('", "', $this->controllerPatterns)));
         }
 
         if ('__invoke' === $controller[1]) {
