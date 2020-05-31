@@ -12,6 +12,7 @@ php:
     - 7.2
     - 7.3
     - 7.4
+    - nightly
 
 matrix:
     include:
@@ -27,7 +28,8 @@ before_install:
     - export SYMFONY_PHPUNIT_DIR="$(pwd)/.phpunit"
     - INI_FILE=~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
     - echo memory_limit = -1 >> $INI_FILE
-    - phpenv config-rm xdebug.ini
+    - phpenv config-rm xdebug.ini || true
+    - if [ $TRAVIS_PHP_VERSION = "nightly" ]; then composer config platform.php 7.4.99; fi;
 
 install:
     - if [ "$deps" = "no" ]; then composer install; fi;

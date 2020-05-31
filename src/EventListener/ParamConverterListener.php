@@ -33,18 +33,12 @@ class ParamConverterListener implements EventSubscriberInterface
     private $autoConvert;
 
     /**
-     * @var bool
-     */
-    private $isParameterTypeSupported;
-
-    /**
      * @param bool $autoConvert Auto convert non-configured objects
      */
     public function __construct(ParamConverterManager $manager, $autoConvert = true)
     {
         $this->manager = $manager;
         $this->autoConvert = $autoConvert;
-        $this->isParameterTypeSupported = method_exists('ReflectionParameter', 'getType');
     }
 
     /**
@@ -81,15 +75,15 @@ class ParamConverterListener implements EventSubscriberInterface
     private function autoConfigure(\ReflectionFunctionAbstract $r, Request $request, $configurations)
     {
         foreach ($r->getParameters() as $param) {
-            if ($param->getClass() && $param->getClass()->isInstance($request)) {
+            $type = $param->getType();
+            $class = null !== $type && !$type->isBuiltin() ? $type->getName() : null;
+            if (null !== $class && $request instanceof $class) {
                 continue;
             }
 
             $name = $param->getName();
-            $class = $param->getClass();
-            $hasType = $this->isParameterTypeSupported && $param->hasType();
 
-            if ($class || $hasType) {
+            if ($type) {
                 if (!isset($configurations[$name])) {
                     $configuration = new ParamConverter([]);
                     $configuration->setName($name);
@@ -97,13 +91,13 @@ class ParamConverterListener implements EventSubscriberInterface
                     $configurations[$name] = $configuration;
                 }
 
-                if ($class && null === $configurations[$name]->getClass()) {
-                    $configurations[$name]->setClass($class->getName());
+                if (null !== $class && null === $configurations[$name]->getClass()) {
+                    $configurations[$name]->setClass($class);
                 }
             }
 
             if (isset($configurations[$name])) {
-                $configurations[$name]->setIsOptional($param->isOptional() || $param->isDefaultValueAvailable() || $hasType && $param->getType()->allowsNull());
+                $configurations[$name]->setIsOptional($param->isOptional() || $param->isDefaultValueAvailable() || ($type && $type->allowsNull()));
             }
         }
 
