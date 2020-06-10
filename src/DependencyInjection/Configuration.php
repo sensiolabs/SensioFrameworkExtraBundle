@@ -15,6 +15,7 @@ use Symfony\Bridge\PsrHttpMessage\HttpFoundationFactoryInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\NodeInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * FrameworkExtraBundle configuration structure.
@@ -65,6 +66,12 @@ class Configuration implements ConfigurationInterface
                     ->addDefaultsIfNotSet()
                     ->children()
                         ->booleanNode('annotations')->defaultTrue()->end()
+                    ->end()
+                ->end()
+                ->arrayNode('content_safe')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->booleanNode('annotations')->defaultValue(method_exists(Response::class, 'setContentSafe'))->end()
                     ->end()
                 ->end()
                 ->arrayNode('security')

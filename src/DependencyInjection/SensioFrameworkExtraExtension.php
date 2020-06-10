@@ -19,6 +19,7 @@ use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\Security\Core\Authorization\ExpressionLanguage as SecurityExpressionLanguage;
 
@@ -65,6 +66,14 @@ class SensioFrameworkExtraExtension extends Extension
 
         if ($config['cache']['annotations']) {
             $annotationsToLoad[] = 'cache.xml';
+        }
+
+        if ($config['content_safe']['annotations']) {
+            if (!method_exists(Response::class, 'setContentSafe')) {
+                throw new \LogicException('The ContentSafe annotation can only be used starting from symfony/http-foundation 5.2 or higher.');
+            }
+
+            $annotationsToLoad[] = 'content_safe.xml';
         }
 
         if ($config['security']['annotations']) {

@@ -36,7 +36,7 @@ The default configuration is as follow:
             cache:       { annotations: true }
             security:    { annotations: true }
             psr_message: { enabled: false } # Defaults to true if the PSR-7 bridge is installed
-
+            content_safe: { annotations: true } # Defaults to true if symfony/http-foundation v5.2 or higher is installed
 
     .. code-block:: xml
 
@@ -48,6 +48,7 @@ The default configuration is as follow:
             <cache annotations="true" />
             <security annotations="true" />
             <psr-message enabled="false" /> <!-- Defaults to true if the PSR-7 bridge is installed -->
+            <content-safe annotations="false" /> <!-- Defaults to true if symfony/http-foundation v5.2 or higher is installed -->
         </sensio-framework-extra:config>
 
     .. code-block:: php
@@ -60,6 +61,7 @@ The default configuration is as follow:
             'cache'       => array('annotations' => true),
             'security'    => array('annotations' => true),
             'psr_message' => array('enabled' => false), // Defaults to true if the PSR-7 bridge is installed
+            'content_safe' => array('annotations' => false), // Defaults to true if symfony/http-foundation v5.2 or higher is installed
         ));
 
 You can disable some annotations and conventions by defining one or more
@@ -95,11 +97,13 @@ The following annotations are defined by the bundle:
    annotations/view
    annotations/cache
    annotations/security
+   annotations/content_safe
 
 This example shows all the available annotations in action::
 
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
+    use Sensio\Bundle\FrameworkExtraBundle\Configuration\ContentSafe;
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -131,6 +135,7 @@ This example shows all the available annotations in action::
          * @Cache(smaxage="15", lastmodified="post.getUpdatedAt()", etag="'Post' ~ post.getId() ~ post.getUpdatedAt()")
          * @IsGranted("ROLE_SPECIAL_USER")
          * @Security("has_role('ROLE_ADMIN') and is_granted('POST_SHOW', post)")
+         * @ContentSafe()
          */
         public function show(Post $post)
         {
@@ -145,6 +150,7 @@ annotations::
      * @Cache(smaxage="15", lastModified="post.getUpdatedAt()", Etag="'Post' ~ post.getId() ~ post.getUpdatedAt()")
      * @IsGranted("ROLE_SPECIAL_USER")
      * @Security("has_role('ROLE_ADMIN') and is_granted('POST_SHOW', post)")
+     * @ContentSafe()
      */
     public function show(Post $post)
     {
