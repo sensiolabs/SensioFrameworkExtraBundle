@@ -2,6 +2,9 @@
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
+/**
+ * @requires function \Symfony\Component\HttpFoundation\Request::preferSafeContent
+ */
 class ContentSafeTest extends WebTestCase
 {
     public function testResponseSafePreferenceApplied()

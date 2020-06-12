@@ -11,11 +11,6 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
  */
 class ContentSafe extends ConfigurationAnnotation
 {
-    public function __construct(array $values)
-    {
-        parent::__construct($values);
-    }
-
     public function getAliasName()
     {
         return 'content_safe';

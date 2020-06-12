@@ -19,6 +19,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
+/**
+ * @requires function \Symfony\Component\HttpFoundation\Request::preferSafeContent
+ */
 class ContentSafeListenerTest extends TestCase
 {
     protected function setUp(): void
