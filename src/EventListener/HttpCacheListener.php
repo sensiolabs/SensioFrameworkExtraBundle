@@ -15,7 +15,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\KernelEvent;
-use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
@@ -79,7 +78,7 @@ class HttpCacheListener implements EventSubscriberInterface
     /**
      * Modifies the response to apply HTTP cache headers when needed.
      */
-    public function onKernelResponse(ResponseEvent $event)
+    public function onKernelResponse(KernelEvent $event)
     {
         $request = $event->getRequest();
 
