@@ -62,7 +62,7 @@ class SecurityListener implements EventSubscriberInterface
         }
 
         if (null === $this->tokenStorage->getToken()) {
-            throw new \LogicException('To use the @Security tag, your controller needs to be behind a firewall.');
+            throw new AccessDeniedException('No user token or you forgot to put your controller behind a firewall while using a @Security tag.');
         }
 
         if (null === $this->language) {
