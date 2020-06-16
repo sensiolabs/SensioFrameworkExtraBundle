@@ -13,6 +13,9 @@
         </service>
         <service id="sensio_framework_extra.psr7.http_foundation_factory" class="Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory" />
 
+        <service id="Symfony\Bridge\PsrHttpMessage\HttpFoundationFactoryInterface" alias="sensio_framework_extra.psr7.http_foundation_factory"/>
+        <service id="Symfony\Bridge\PsrHttpMessage\HttpMessageFactoryInterface" alias="sensio_framework_extra.psr7.http_message_factory"/>
+
         <service id="sensio_framework_extra.psr7.argument_value_resolver.server_request" class="Sensio\Bundle\FrameworkExtraBundle\Request\ArgumentValueResolver\Psr7ServerRequestResolver">
             <argument type="service" id="sensio_framework_extra.psr7.http_message_factory" />
             <tag name="controller.argument_value_resolver" />
