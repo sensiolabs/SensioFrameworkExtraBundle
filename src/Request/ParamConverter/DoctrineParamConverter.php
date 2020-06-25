@@ -11,10 +11,10 @@
 
 namespace Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NoResultException;
+use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\ExpressionLanguage\SyntaxError;
@@ -277,7 +277,7 @@ class DoctrineParamConverter implements ParamConverterInterface
         } catch (ConversionException $e) {
             return;
         } catch (SyntaxError $e) {
-            throw new \LogicException(sprintf('Error parsing expression -- %s -- (%s)', $expression, $e->getMessage()), 0, $e);
+            throw new \LogicException(sprintf('Error parsing expression -- "%s" -- (%s).', $expression, $e->getMessage()), 0, $e);
         }
     }
 
@@ -320,7 +320,7 @@ class DoctrineParamConverter implements ParamConverterInterface
 
         $extraKeys = array_diff(array_keys($passedOptions), array_keys($this->defaultOptions));
         if ($extraKeys && $strict) {
-            throw new \InvalidArgumentException(sprintf('Invalid option(s) passed to @%s: %s', $this->getAnnotationName($configuration), implode(', ', $extraKeys)));
+            throw new \InvalidArgumentException(sprintf('Invalid option(s) passed to @%s: "%s".', $this->getAnnotationName($configuration), implode(', ', $extraKeys)));
         }
 
         return array_replace($this->defaultOptions, $passedOptions);
