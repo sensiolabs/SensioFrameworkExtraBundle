@@ -135,6 +135,12 @@ class IsGrantedListenerTest extends \PHPUnit\Framework\TestCase
         } catch (\Exception $e) {
             $this->assertEquals(AccessDeniedException::class, \get_class($e));
             $this->assertEquals($expectedMessage, $e->getMessage());
+            $this->assertEquals($attributes, $e->getAttributes());
+            if (null !== $subject) {
+                $this->assertEquals('bar', $e->getSubject());
+            } else {
+                $this->assertNull($e->getSubject());
+            }
         }
     }
 
