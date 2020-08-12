@@ -17,9 +17,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Request\ArgumentNameConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class IsGrantedListenerTest extends \PHPUnit\Framework\TestCase
 {
@@ -133,7 +133,7 @@ class IsGrantedListenerTest extends \PHPUnit\Framework\TestCase
             $listener->onKernelControllerArguments($this->createFilterControllerEvent($request));
             $this->fail();
         } catch (\Exception $e) {
-            $this->assertEquals(AccessDeniedException::class, \get_class($e));
+            $this->assertEquals(AccessDeniedHttpException::class, \get_class($e));
             $this->assertEquals($expectedMessage, $e->getMessage());
         }
     }

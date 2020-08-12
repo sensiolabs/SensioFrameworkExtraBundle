@@ -15,10 +15,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ArgumentNameConverter;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\KernelEvent;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Handles the IsGranted annotation on controllers.
@@ -82,7 +82,7 @@ class IsGrantedListener implements EventSubscriberInterface
                     throw new HttpException($statusCode, $message);
                 }
 
-                throw new AccessDeniedException($message);
+                throw new AccessDeniedHttpException($message);
             }
         }
     }

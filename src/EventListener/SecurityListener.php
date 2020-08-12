@@ -16,12 +16,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Request\ArgumentNameConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Security\ExpressionLanguage;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\KernelEvent;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\Authentication\AuthenticationTrustResolverInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 
 /**
@@ -62,7 +62,7 @@ class SecurityListener implements EventSubscriberInterface
         }
 
         if (null === $this->tokenStorage->getToken()) {
-            throw new AccessDeniedException('No user token or you forgot to put your controller behind a firewall while using a @Security tag.');
+            throw new AccessDeniedHttpException('No user token or you forgot to put your controller behind a firewall while using a @Security tag.');
         }
 
         if (null === $this->language) {
@@ -75,7 +75,7 @@ class SecurityListener implements EventSubscriberInterface
                     throw new HttpException($statusCode, $configuration->getMessage());
                 }
 
-                throw new AccessDeniedException($configuration->getMessage() ?: sprintf('Expression "%s" denied access.', $configuration->getExpression()));
+                throw new AccessDeniedHttpException($configuration->getMessage() ?: sprintf('Expression "%s" denied access.', $configuration->getExpression()));
             }
         }
     }
