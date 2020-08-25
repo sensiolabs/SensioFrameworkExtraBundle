@@ -28,9 +28,11 @@ before_install:
     - INI_FILE=~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
     - echo memory_limit = -1 >> $INI_FILE
     - phpenv config-rm xdebug.ini || true
-    - if [ $TRAVIS_PHP_VERSION = "nightly" ]; then composer config platform.php 7.4.99; fi;
 
 install:
+    - export PHPUNIT=$(readlink -f ./vendor/bin/simple-phpunit)
+    - $PHPUNIT install
+    - if [ $TRAVIS_PHP_VERSION = "nightly" ]; then composer config platform.php 7.4.99; fi;
     - if [ "$deps" = "no" ]; then composer install; fi;
     - if [ "$deps" = "low" ]; then composer --prefer-lowest --prefer-stable update; fi;
 
