@@ -12,7 +12,6 @@
 namespace Sensio\Bundle\FrameworkExtraBundle\EventListener;
 
 use Doctrine\Common\Annotations\Reader;
-use Doctrine\Common\Persistence\Proxy as LegacyProxy;
 use Doctrine\Persistence\Proxy;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -70,7 +69,7 @@ class ControllerListener implements EventSubscriberInterface
             } else {
                 if (\is_array($classConfigurations[$key])) {
                     if (!\is_array($methodConfigurations[$key])) {
-                        throw new \UnexpectedValueException('Configurations should both be an array or both not be an array');
+                        throw new \UnexpectedValueException('Configurations should both be an array or both not be an array.');
                     }
                     $configurations[$key] = array_merge($classConfigurations[$key], $methodConfigurations[$key]);
                 } else {
@@ -122,14 +121,6 @@ class ControllerListener implements EventSubscriberInterface
             }
 
             return substr($class, $pos + Proxy::MARKER_LENGTH + 2);
-        }
-
-        if (class_exists(LegacyProxy::class)) {
-            if (false === $pos = strrpos($class, '\\'.LegacyProxy::MARKER.'\\')) {
-                return $class;
-            }
-
-            return substr($class, $pos + LegacyProxy::MARKER_LENGTH + 2);
         }
 
         return $class;
