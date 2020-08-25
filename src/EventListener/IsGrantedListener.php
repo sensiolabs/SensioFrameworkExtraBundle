@@ -82,7 +82,11 @@ class IsGrantedListener implements EventSubscriberInterface
                     throw new HttpException($statusCode, $message);
                 }
 
-                throw new AccessDeniedException($message);
+                $accessDeniedException = new AccessDeniedException($message);
+                $accessDeniedException->setAttributes($configuration->getAttributes());
+                $accessDeniedException->setSubject($subject);
+
+                throw $accessDeniedException;
             }
         }
     }
