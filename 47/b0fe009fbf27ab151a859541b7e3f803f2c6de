@@ -1,0 +1,25 @@
+---------------------------------------------------------------------------
+
+by andrea-daru at 2020-06-26T09:43:20Z
+
+I need this fix to be released because it's blocking for my project.
+@fruitwasp do you know when it will be released?
+
+---------------------------------------------------------------------------
+
+by michaljusiega at 2020-08-25T07:53:36Z
+
+cc @fabpot - Can you tell when this fix will be released ?
+
+---------------------------------------------------------------------------
+
+by fabpot at 2020-08-25T08:18:59Z
+
+Apparently, the tests are broken, so it cannot be merged as is.
+
+---------------------------------------------------------------------------
+
+by jhfyang at 2020-08-25T10:07:06Z
+
+Hello is it possible to try to import with :
+`use Symfony\Bridge\Doctrine\ManagerRegistry;` ?
