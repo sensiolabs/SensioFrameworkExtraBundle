@@ -13,7 +13,7 @@ install and configure it run:
 
 .. code-block:: bash
 
-    $ composer require annotations
+    $ composer require sensio/framework-extra-bundle
 
 You're done!
 
