@@ -34,7 +34,7 @@ class IsGranted extends ConfigurationAnnotation
     private $subject;
 
     /**
-     * Defines if subject can be null/not set
+     * Defines if subject can be null/not set.
      *
      * @var bool
      */
