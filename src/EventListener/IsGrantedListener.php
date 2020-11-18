@@ -56,20 +56,19 @@ class IsGrantedListener implements EventSubscriberInterface
             $subject = null;
 
             if ($subjectRef) {
+                $subjectNullable = $configuration->isSubjectNullable();
                 if (\is_array($subjectRef)) {
                     foreach ($subjectRef as $ref) {
-                        if (!isset($arguments[$ref])) {
+                        $subject[$ref] = $arguments[$ref] ?? null;
+                        if (is_null($subject[$ref]) && !$subjectNullable) {
                             throw $this->createMissingSubjectException($ref);
                         }
-
-                        $subject[$ref] = $arguments[$ref];
                     }
                 } else {
-                    if (!isset($arguments[$subjectRef])) {
+                    $subject = $arguments[$subjectRef] ?? null;
+                    if (is_null($subject) && !$subjectNullable) {
                         throw $this->createMissingSubjectException($subjectRef);
                     }
-
-                    $subject = $arguments[$subjectRef];
                 }
             }
 
