@@ -127,13 +127,11 @@ class IsGrantedListenerTest extends \PHPUnit\Framework\TestCase
 
         $authChecker->expects($this->exactly(2))
             ->method('isGranted')
-            // the subject => arg2name will eventually resolve to the 2nd argument, which has this value
             ->with('ROLE_ADMIN', [
                 'arg1Name' => null,
                 'arg2Name' => 'arg2Value',
             ])
             ->willReturn(true);
-
 
         $listener = new IsGrantedListener($this->createArgumentNameConverter(['arg2Name' => 'arg2Value']), $authChecker);
         $isGranted = new IsGranted(['attributes' => 'ROLE_ADMIN', 'subject' => ['arg1Name', 'arg2Name'], 'nullableSubject' => true]);
