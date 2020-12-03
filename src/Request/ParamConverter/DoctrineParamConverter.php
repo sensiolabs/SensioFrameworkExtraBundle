@@ -15,6 +15,7 @@ use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Persistence\Mapping\MappingException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\ExpressionLanguage\SyntaxError;
@@ -303,7 +304,7 @@ class DoctrineParamConverter implements ParamConverterInterface
             return false;
         }
 
-        return !$em->getMetadataFactory()->isTransient($configuration->getClass());
+        return $em->getClassMetadata($configuration->getClass()) !== null;
     }
 
     private function getOptions(ParamConverter $configuration, $strict = true)
@@ -328,11 +329,29 @@ class DoctrineParamConverter implements ParamConverterInterface
 
     private function getManager($name, $class)
     {
-        if (null === $name) {
-            return $this->registry->getManagerForClass($class);
+        if (null !== $name) {
+            return $this->registry->getManager($name);
         }
 
-        return $this->registry->getManager($name);
+        $ref = new \ReflectionClass($class);
+        $isInterface = $ref->isInterface();
+
+        foreach ($this->registry->getManagerNames() as $name => $id) {
+            $manager = $this->registry->getManager($name);
+
+            if (!$isInterface) {
+                if (!$manager->getMetadataFactory()->isTransient($class)) {
+                    return $manager;
+                }
+            } else {
+                try {
+                    $manager->getClassMetadata($class);
+
+                    return $manager;
+                } catch (MappingException $expected) {
+                }
+            }
+        }
     }
 
     private function getAnnotationName(ParamConverter $configuration)
