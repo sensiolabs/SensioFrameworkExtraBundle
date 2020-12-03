@@ -304,7 +304,7 @@ class DoctrineParamConverter implements ParamConverterInterface
             return false;
         }
 
-        return $em->getClassMetadata($configuration->getClass()) !== null;
+        return null !== $em->getClassMetadata($configuration->getClass());
     }
 
     private function getOptions(ParamConverter $configuration, $strict = true)
