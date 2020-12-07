@@ -17,6 +17,7 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
  * @author Ryan Weaver <ryan@knpuniversity.com>
  * @Annotation
  */
+#[\Attribute(\Attribute::IS_REPEATABLE | \Attribute::TARGET_CLASS | \Attribute::TARGET_METHOD)]
 class Entity extends ParamConverter
 {
     public function setExpr($expr)
@@ -25,5 +26,30 @@ class Entity extends ParamConverter
         $options['expr'] = $expr;
 
         $this->setOptions($options);
+    }
+
+    /**
+     * @param array|string $data
+     */
+    public function __construct(
+        $data = [],
+        string $expr = null,
+        string $class = null,
+        array $options = [],
+        bool $isOptional = false,
+        string $converter = null
+    ) {
+        $values = [];
+        if (\is_string($data)) {
+            $values['value'] = $data;
+        } else {
+            $values = $data;
+        }
+
+        $values['expr'] = $values['expr'] ?? $expr;
+
+        parent::__construct($values, $class, $options, $isOptional, $converter);
+
+        $this->setExpr($values['expr']);
     }
 }

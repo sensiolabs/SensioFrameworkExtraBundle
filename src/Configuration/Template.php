@@ -17,6 +17,7 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
  * @author Fabien Potencier <fabien@symfony.com>
  * @Annotation
  */
+#[\Attribute(\Attribute::TARGET_METHOD)]
 class Template extends ConfigurationAnnotation
 {
     /**
@@ -46,6 +47,29 @@ class Template extends ConfigurationAnnotation
      * @var array
      */
     private $owner = [];
+
+    /**
+     * @param array|string $data
+     */
+    public function __construct(
+        $data = [],
+        array $vars = [],
+        bool $isStreamable = false,
+        array $owner = []
+    ) {
+        $values = [];
+        if (\is_string($data)) {
+            $values['template'] = $data;
+        } else {
+            $values = $data;
+        }
+
+        $values['isStreamable'] = $values['isStreamable'] ?? $isStreamable;
+        $values['vars'] = $values['vars'] ?? $vars;
+        $values['owner'] = $values['owner'] ?? $owner;
+
+        parent::__construct($values);
+    }
 
     /**
      * Returns the array of templates variables.

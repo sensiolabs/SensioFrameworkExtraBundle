@@ -132,7 +132,7 @@ class HttpCacheListenerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('5', $this->response->headers->getCacheControlDirective('max-stale'));
         $this->assertEquals('6', $this->response->headers->getCacheControlDirective('stale-while-revalidate'));
         $this->assertEquals('7', $this->response->headers->getCacheControlDirective('stale-if-error'));
-        $this->assertInstanceOf('DateTime', $this->response->getExpires());
+        $this->assertInstanceOf(\DateTime::class, $this->response->getExpires());
     }
 
     public function testCacheMaxAgeSupportsStrtotimeFormat()
@@ -194,7 +194,7 @@ class HttpCacheListenerTest extends \PHPUnit\Framework\TestCase
 
     public function testEtagNotModifiedResponse()
     {
-        $request = $this->createRequest(new Cache(['etag' => 'test.getId()']));
+        $request = $this->createRequest(new Cache(['Etag' => 'test.getId()']));
         $request->attributes->set('test', $entity = new TestEntity());
         $request->headers->add(['If-None-Match' => sprintf('"%s"', hash('sha256', $entity->getId()))]);
 
@@ -211,7 +211,7 @@ class HttpCacheListenerTest extends \PHPUnit\Framework\TestCase
 
     public function testEtagHeader()
     {
-        $request = $this->createRequest(new Cache(['ETag' => 'test.getId()']));
+        $request = $this->createRequest(new Cache(['Etag' => 'test.getId()']));
         $request->attributes->set('test', $entity = new TestEntity());
         $response = new Response();
 
@@ -276,7 +276,7 @@ class HttpCacheListenerTest extends \PHPUnit\Framework\TestCase
 
     private function getKernel()
     {
-        return $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        return $this->getMockBuilder(HttpKernelInterface::class)->getMock();
     }
 }
 

@@ -18,15 +18,23 @@ use Sensio\Bundle\FrameworkExtraBundle\Security\ExpressionLanguage;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\Security\Core\Authentication\AuthenticationTrustResolverInterface;
+use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Security\Core\Role\RoleHierarchy;
 
 class SecurityListenerTest extends \PHPUnit\Framework\TestCase
 {
     public function testAccessDenied()
     {
-        $this->expectException(\Symfony\Component\Security\Core\Exception\AccessDeniedException::class);
+        $this->expectException(AccessDeniedException::class);
 
         $request = $this->createRequest(new Security(['expression' => 'is_granted("ROLE_ADMIN") or is_granted("FOO")']));
-        $event = new ControllerArgumentsEvent($this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock(), function () {
+        $event = new ControllerArgumentsEvent($this->getMockBuilder(HttpKernelInterface::class)->getMock(), function () {
             return new Response();
         }, [], $request, null);
 
@@ -35,11 +43,11 @@ class SecurityListenerTest extends \PHPUnit\Framework\TestCase
 
     public function testNotFoundHttpException()
     {
-        $this->expectException(\Symfony\Component\HttpKernel\Exception\HttpException::class);
+        $this->expectException(HttpException::class);
         $this->expectExceptionMessage('Not found');
 
         $request = $this->createRequest(new Security(['expression' => 'is_granted("ROLE_ADMIN") or is_granted("FOO")', 'statusCode' => 404, 'message' => 'Not found']));
-        $event = new ControllerArgumentsEvent($this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock(), function () {
+        $event = new ControllerArgumentsEvent($this->getMockBuilder(HttpKernelInterface::class)->getMock(), function () {
             return new Response();
         }, [], $request, null);
 
@@ -48,19 +56,19 @@ class SecurityListenerTest extends \PHPUnit\Framework\TestCase
 
     private function getListener()
     {
-        $roleHierarchy = $this->getMockBuilder('Symfony\Component\Security\Core\Role\RoleHierarchy')->disableOriginalConstructor()->getMock();
+        $roleHierarchy = $this->getMockBuilder(RoleHierarchy::class)->disableOriginalConstructor()->getMock();
         $roleHierarchy->expects($this->once())->method('getReachableRoleNames')->willReturn([]);
 
-        $token = $this->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\AbstractToken')->getMock();
+        $token = $this->getMockBuilder(AbstractToken::class)->getMock();
         $token->expects($this->once())->method('getRoleNames')->willReturn([]);
 
-        $tokenStorage = $this->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface')->getMock();
+        $tokenStorage = $this->getMockBuilder(TokenStorageInterface::class)->getMock();
         $tokenStorage->expects($this->exactly(2))->method('getToken')->willReturn($token);
 
-        $authChecker = $this->getMockBuilder('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface')->getMock();
+        $authChecker = $this->getMockBuilder(AuthorizationCheckerInterface::class)->getMock();
         $authChecker->expects($this->exactly(2))->method('isGranted')->willReturn(false);
 
-        $trustResolver = $this->getMockBuilder('Symfony\Component\Security\Core\Authentication\AuthenticationTrustResolverInterface')->getMock();
+        $trustResolver = $this->getMockBuilder(AuthenticationTrustResolverInterface::class)->getMock();
 
         $argNameConverter = $this->createArgumentNameConverter([]);
 
