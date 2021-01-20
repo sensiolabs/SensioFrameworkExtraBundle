@@ -13,7 +13,7 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
 
 use Symfony\Component\Routing\Annotation\Route as BaseRoute;
 
-@trigger_error(sprintf('The "%s" annotation is deprecated since version 5.2. Use "%s" instead.', Route::class, BaseRoute::class), E_USER_DEPRECATED);
+@trigger_error(sprintf('The "%s" annotation is deprecated since version 5.2. Use "%s" instead.', Route::class, BaseRoute::class), \E_USER_DEPRECATED);
 
 /**
  * @author Kris Wallsmith <kris@symfony.com>

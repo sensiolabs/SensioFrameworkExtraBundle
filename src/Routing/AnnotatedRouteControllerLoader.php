@@ -16,7 +16,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route as FrameworkExtraBund
 use Symfony\Component\Routing\Loader\AnnotationClassLoader;
 use Symfony\Component\Routing\Route;
 
-@trigger_error(sprintf('The "%s" class is deprecated since version 5.2. Use "%s" instead.', AnnotatedRouteControllerLoader::class, \Symfony\Bundle\FrameworkBundle\Routing\AnnotatedRouteControllerLoader::class), E_USER_DEPRECATED);
+@trigger_error(sprintf('The "%s" class is deprecated since version 5.2. Use "%s" instead.', AnnotatedRouteControllerLoader::class, \Symfony\Bundle\FrameworkBundle\Routing\AnnotatedRouteControllerLoader::class), \E_USER_DEPRECATED);
 
 /**
  * AnnotatedRouteControllerLoader is an implementation of AnnotationClassLoader

@@ -311,11 +311,11 @@ class DoctrineParamConverter implements ParamConverterInterface
         $passedOptions = $configuration->getOptions();
 
         if (isset($passedOptions['repository_method'])) {
-            @trigger_error('The repository_method option of @ParamConverter is deprecated and will be removed in 6.0. Use the expr option or @Entity.', E_USER_DEPRECATED);
+            @trigger_error('The repository_method option of @ParamConverter is deprecated and will be removed in 6.0. Use the expr option or @Entity.', \E_USER_DEPRECATED);
         }
 
         if (isset($passedOptions['map_method_signature'])) {
-            @trigger_error('The map_method_signature option of @ParamConverter is deprecated and will be removed in 6.0. Use the expr option or @Entity.', E_USER_DEPRECATED);
+            @trigger_error('The map_method_signature option of @ParamConverter is deprecated and will be removed in 6.0. Use the expr option or @Entity.', \E_USER_DEPRECATED);
         }
 
         $extraKeys = array_diff(array_keys($passedOptions), array_keys($this->defaultOptions));

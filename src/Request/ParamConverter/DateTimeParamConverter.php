@@ -57,7 +57,7 @@ class DateTimeParamConverter implements ParamConverterInterface
                 throw new NotFoundHttpException(sprintf('Invalid date given for parameter "%s".', $param));
             }
         } else {
-            $valueIsInt = filter_var($value, FILTER_VALIDATE_INT, ['options' => ['min_range' => 0]]);
+            $valueIsInt = filter_var($value, \FILTER_VALIDATE_INT, ['options' => ['min_range' => 0]]);
             if (false !== $valueIsInt) {
                 $date = (new $class())->setTimestamp($value);
             } else {
