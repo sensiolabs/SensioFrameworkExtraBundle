@@ -29,7 +29,6 @@ class TestKernel extends Kernel
             new \Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new \Symfony\Bundle\SecurityBundle\SecurityBundle(),
             new \Tests\Fixtures\FooBundle\FooBundle(),
-            new \Tests\Fixtures\ActionArgumentsBundle\ActionArgumentsBundle(),
         ];
     }
 

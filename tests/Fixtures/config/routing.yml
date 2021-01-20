@@ -7,7 +7,3 @@ foo_bundle_with_variadics:
     defaults:
         _controller: '\Tests\Fixtures\FooBundle\ControllerWithVariadics\IsGrantedControllerWithVariadics::some4Action'
         params: ["foo", "bar"]
-
-action_arguments_bundle:
-    resource: "@ActionArgumentsBundle/Controller/ActionArgumentsController.php"
-    type: annotation

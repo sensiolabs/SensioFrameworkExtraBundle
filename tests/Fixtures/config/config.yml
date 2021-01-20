@@ -28,9 +28,6 @@ services:
     Tests\Fixtures\FooBundle\Controller\SimpleController:
         public: true
 
-    Tests\Fixtures\ActionArgumentsBundle\Controller\ActionArgumentsController:
-        public: true
-
     Tests\Fixtures\FooBundle\Security\IsGrantedVoter:
         public: false
         tags:

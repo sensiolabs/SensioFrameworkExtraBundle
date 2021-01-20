@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+6.0
+---
+
+ * Remove PSR-7 support
+
 5.6
 ---
 
