@@ -35,7 +35,6 @@ The default configuration is as follow:
             view:        { annotations: true }
             cache:       { annotations: true }
             security:    { annotations: true }
-            psr_message: { enabled: false } # Defaults to true if the PSR-7 bridge is installed
 
 
     .. code-block:: xml
@@ -47,7 +46,6 @@ The default configuration is as follow:
             <view annotations="true" />
             <cache annotations="true" />
             <security annotations="true" />
-            <psr-message enabled="false" /> <!-- Defaults to true if the PSR-7 bridge is installed -->
         </sensio-framework-extra:config>
 
     .. code-block:: php
@@ -59,7 +57,6 @@ The default configuration is as follow:
             'view'        => array('annotations' => true),
             'cache'       => array('annotations' => true),
             'security'    => array('annotations' => true),
-            'psr_message' => array('enabled' => false), // Defaults to true if the PSR-7 bridge is installed
         ));
 
 You can disable some annotations and conventions by defining one or more
@@ -162,45 +159,4 @@ example:
         resource: "@AnnotRoutingBundle/Controller"
         type:     annotation
 
-PSR-7 support
--------------
-
-SensioFrameworkExtraBundle provides support for HTTP messages interfaces defined
-in `PSR-7`_. It allows to inject instances of ``Psr\Http\Message\ServerRequestInterface``
-and to return instances of ``Psr\Http\Message\ResponseInterface`` in controllers.
-
-To enable this feature, `the HttpFoundation to PSR-7 bridge`_ and `autowiring
-aliases for PSR-17`_ must be installed:
-
-.. code-block:: bash
-
-    $ composer require symfony/psr-http-message-bridge nyholm/psr7
-
-Then, PSR-7 messages can be used directly in controllers like in the following code
-snippet::
-
-    namespace AppBundle\Controller;
-
-    use Psr\Http\Message\ResponseFactoryInterface;
-    use Psr\Http\Message\ServerRequestInterface;
-
-    class DefaultController
-    {
-        public function index(ServerRequestInterface $request, ResponseFactoryInterface $responseFactory)
-        {
-            // Interact with the PSR-7 request
-
-            $response = $responseFactory->createResponse();
-            // Interact with the PSR-7 response
-
-            return $response;
-        }
-    }
-
-Note that internally, Symfony always use :class:`Symfony\\Component\\HttpFoundation\\Request`
-and :class:`Symfony\\Component\\HttpFoundation\\Response` instances.
-
 .. _`SensioFrameworkExtraBundle`: https://github.com/sensiolabs/SensioFrameworkExtraBundle
-.. _`PSR-7`: http://www.php-fig.org/psr/psr-7/
-.. _`the HttpFoundation to PSR-7 bridge`: https://github.com/symfony/psr-http-message-bridge
-.. _`autowiring aliases for PSR-17`: https://github.com/symfony/recipes/blob/master/nyholm/psr7/1.0/config/packages/nyholm_psr7.yaml

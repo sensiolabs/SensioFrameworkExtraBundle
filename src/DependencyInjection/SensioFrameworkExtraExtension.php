@@ -11,7 +11,6 @@
 
 namespace Sensio\Bundle\FrameworkExtraBundle\DependencyInjection;
 
-use Psr\Http\Message\StreamFactoryInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Resource\ClassExistenceResource;
@@ -101,14 +100,6 @@ class SensioFrameworkExtraExtension extends Extension
             $container
                 ->getDefinition('sensio_framework_extra.view.guesser')
                 ->addArgument($config['templating']['controller_patterns']);
-        }
-
-        if ($config['psr_message']['enabled']) {
-            $loader->load('psr7.xml');
-
-            if (!interface_exists(StreamFactoryInterface::class)) {
-                $definitionsToRemove[] = 'sensio_framework_extra.psr7.argument_value_resolver.server_request';
-            }
         }
 
         foreach ($definitionsToRemove as $definition) {

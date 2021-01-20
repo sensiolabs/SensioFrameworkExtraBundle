@@ -11,7 +11,6 @@
 
 namespace Sensio\Bundle\FrameworkExtraBundle\DependencyInjection;
 
-use Symfony\Bridge\PsrHttpMessage\HttpFoundationFactoryInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\NodeInterface;
@@ -72,12 +71,6 @@ class Configuration implements ConfigurationInterface
                     ->children()
                         ->booleanNode('annotations')->defaultTrue()->end()
                         ->scalarNode('expression_language')->defaultValue('sensio_framework_extra.security.expression_language.default')->end()
-                    ->end()
-                ->end()
-                ->arrayNode('psr_message')
-                    ->addDefaultsIfNotSet()
-                    ->children()
-                        ->booleanNode('enabled')->defaultValue(interface_exists(HttpFoundationFactoryInterface::class))->end()
                     ->end()
                 ->end()
                 ->arrayNode('templating')
