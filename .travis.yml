@@ -11,7 +11,7 @@ php:
     - 7.2
     - 7.3
     - 7.4
-    - nightly
+    - 8.0
 
 matrix:
     include:
@@ -29,10 +29,8 @@ before_install:
     - echo memory_limit = -1 >> ~/.phpenv/versions/$TRAVIS_PHP_VERSION/etc/conf.d/travis.ini
 
 install:
-    - if [ $TRAVIS_PHP_VERSION = "nightly" ]; then composer config platform.php 7.4.99; fi;
     - if [ "$deps" = "no" ]; then composer install; fi;
     - if [ "$deps" = "low" ]; then composer --prefer-lowest --prefer-stable update; fi;
-    - if [ $TRAVIS_PHP_VERSION = "nightly" ]; then composer config --unset platform.php; fi;
     - ./vendor/bin/simple-phpunit install
 
 script:
