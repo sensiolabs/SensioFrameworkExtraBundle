@@ -1,0 +1,47 @@
+---------------------------------------------------------------------------
+
+by pkly at 2020-12-08T10:51:24Z
+
+Seems good to me
+
+---------------------------------------------------------------------------
+
+by fabpot at 2021-01-13T06:12:33Z
+
+@derrabus Do you have time to review this PR?
+
+---------------------------------------------------------------------------
+
+by Yoann-TYT at 2021-01-13T11:22:52Z
+
+Thanks for your review @derrabus, I'll see that
+
+---------------------------------------------------------------------------
+
+by Yoann-TYT at 2021-01-15T09:13:31Z
+
+> Thank you for working on this topic! I have added a few comments.
+>
+> If you can, please add more tests for the named argument constructor usage of the annotation classes. Those changes don't seem to be covered well by the current tests.
+
+Yes, I'll add more tests this week-end ;)
+
+---------------------------------------------------------------------------
+
+by fabpot at 2021-01-20T11:27:35Z
+
+Can you rebase on current master (that should help for the tests)
+
+---------------------------------------------------------------------------
+
+by nlhommet at 2021-02-12T14:09:21Z
+
+Hi,
+What is blocking? need help finishing this PR?
+
+---------------------------------------------------------------------------
+
+by Yoann-TYT at 2021-02-12T14:26:28Z
+
+Hi @nlhommet  !
+Thanks, I just need to add more tests. I'll do that this week-end ! :)
