@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+6.1
+---
+
+ * Add support for PHP 8 attributes
+
 6.0
 ---
 
