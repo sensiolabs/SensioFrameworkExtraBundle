@@ -50,6 +50,18 @@ class HttpCacheListenerTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($response, $this->event->getResponse());
     }
 
+    public function testResponseIsPublicIfSharedMaxAgeSetAndPublicNotOverridden()
+    {
+        $request = $this->createRequest(new Cache([
+            'smaxage' => 1,
+        ]));
+
+        $this->listener->onKernelResponse($this->createEventMock($request, $this->response));
+
+        $this->assertTrue($this->response->headers->hasCacheControlDirective('public'));
+        $this->assertFalse($this->response->headers->hasCacheControlDirective('private'));
+    }
+
     public function testResponseIsPublicIfConfigurationIsPublicTrue()
     {
         $request = $this->createRequest(new Cache([
@@ -65,8 +77,8 @@ class HttpCacheListenerTest extends \PHPUnit\Framework\TestCase
     public function testResponseIsPrivateIfConfigurationIsPublicFalse()
     {
         $request = $this->createRequest(new Cache([
-                    'public' => false,
-                ]));
+            'public' => false,
+        ]));
 
         $this->listener->onKernelResponse($this->createEventMock($request, $this->response));
 
