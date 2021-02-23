@@ -114,11 +114,11 @@ class Cache extends ConfigurationAnnotation
         string $expires = null,
         $maxage = null,
         $smaxage = null,
-        bool $public = false,
-        bool $mustRevalidate = false,
-        array $vary = [],
-        ?string $lastModified = null,
-        ?string $etag = null,
+        bool $public = null,
+        bool $mustRevalidate = null,
+        array $vary = null,
+        string $lastModified = null,
+        string $etag = null,
         $maxstale = null,
         $staleWhileRevalidate = null,
         $staleIfError = null
@@ -135,6 +135,9 @@ class Cache extends ConfigurationAnnotation
         $values['staleWhileRevalidate'] = $values['staleWhileRevalidate'] ?? $staleWhileRevalidate;
         $values['staleIfError'] = $values['staleIfError'] ?? $staleIfError;
 
+        $values = array_filter($values, function ($v) {
+            return $v !== null;
+        });
         parent::__construct($values);
     }
 
