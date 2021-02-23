@@ -136,7 +136,7 @@ class Cache extends ConfigurationAnnotation
         $values['staleIfError'] = $values['staleIfError'] ?? $staleIfError;
 
         $values = array_filter($values, function ($v) {
-            return $v !== null;
+            return null !== $v;
         });
         parent::__construct($values);
     }
