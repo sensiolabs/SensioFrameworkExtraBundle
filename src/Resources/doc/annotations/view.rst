@@ -14,7 +14,7 @@ The ``@Template`` annotation associates a controller with a template name::
     public function show($id)
     {
         // get the Post
-        $post = ...;
+        $post = ...;``@Template`` annotation,
 
         return array('post' => $post);
     }
