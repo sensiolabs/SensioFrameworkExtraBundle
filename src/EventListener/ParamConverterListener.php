@@ -106,7 +106,7 @@ class ParamConverterListener implements EventSubscriberInterface
 
     private function getParamClassByType(?\ReflectionType $type): ?string
     {
-        if (PHP_VERSION_ID < 80000 || !class_exists('\ReflectionUnionType')) {
+        if (PHP_VERSION_ID < 80000) {
             return (null === $type || $type->isBuiltin() || !$type instanceof \ReflectionNamedType) ?
                 null : $type->getName();
         }

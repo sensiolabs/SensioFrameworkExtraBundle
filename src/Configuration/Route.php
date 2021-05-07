@@ -39,6 +39,16 @@ class Route extends BaseRoute
         return $this->service;
     }
 
+    public function setLocalizedPaths(array $localizedPaths)
+    {
+        if (isset($localizedPaths['service'])) {
+            $this->setService($localizedPaths['service']);
+            unset($localizedPaths['service']);
+        }
+
+        parent::setLocalizedPaths($localizedPaths);
+    }
+
     /**
      * Multiple route annotations are allowed.
      *
