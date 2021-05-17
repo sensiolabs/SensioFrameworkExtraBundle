@@ -11,20 +11,24 @@
 
 namespace Sensio\Bundle\FrameworkExtraBundle\Tests\EventListener;
 
+use PHPUnit\Framework\TestCase;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\EventListener\ParamConverterListener;
+use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager;
 use Sensio\Bundle\FrameworkExtraBundle\Tests\EventListener\Fixture\FooControllerNullableParameter;
+use Sensio\Bundle\FrameworkExtraBundle\Tests\EventListener\Fixture\InvokableControllerWithUnion;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 
-class ParamConverterListenerTest extends \PHPUnit\Framework\TestCase
+class ParamConverterListenerTest extends TestCase
 {
     /**
      * @dataProvider getControllerWithNoArgsFixtures
      */
     public function testRequestIsSkipped($controllerCallable)
     {
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
         $request = new Request();
 
         $listener = new ParamConverterListener($this->getParamConverterManager($request, []));
@@ -46,7 +50,7 @@ class ParamConverterListenerTest extends \PHPUnit\Framework\TestCase
      */
     public function testAutoConvert($controllerCallable)
     {
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
         $request = new Request([], [], ['date' => '2014-03-14 09:00:00']);
 
         $converter = new ParamConverter(['name' => 'date', 'class' => 'DateTime']);
@@ -57,13 +61,26 @@ class ParamConverterListenerTest extends \PHPUnit\Framework\TestCase
         $listener->onKernelController($event);
     }
 
+    public function testAutoConvertInterface()
+    {
+        $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
+        $request = new Request([], [], ['date' => '2014-03-14 09:00:00']);
+
+        $converter = new ParamConverter(['name' => 'date', 'class' => 'DateTimeInterface']);
+
+        $listener = new ParamConverterListener($this->getParamConverterManager($request, ['date' => $converter]));
+        $event = new ControllerEvent($kernel, new InvokableControllerWithInterface(), $request, null);
+
+        $listener->onKernelController($event);
+    }
+
     /**
      * @dataProvider settingOptionalParamProvider
      * @requires PHP 7.1
      */
     public function testSettingOptionalParam($function, $isOptional)
     {
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
         $request = new Request();
 
         $converter = new ParamConverter(['name' => 'param', 'class' => 'DateTime']);
@@ -97,7 +114,7 @@ class ParamConverterListenerTest extends \PHPUnit\Framework\TestCase
      */
     public function testNoAutoConvert($controllerCallable)
     {
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
         $request = new Request([], [], ['date' => '2014-03-14 09:00:00']);
 
         $listener = new ParamConverterListener($this->getParamConverterManager($request, []), false);
@@ -106,17 +123,19 @@ class ParamConverterListenerTest extends \PHPUnit\Framework\TestCase
         $listener->onKernelController($event);
     }
 
-    public function getControllerWithArgsFixtures()
+    public function getControllerWithArgsFixtures(): iterable
     {
-        return [
-            [[new TestController(), 'dateAction']],
-            [new InvokableController()],
-        ];
+        yield [[new TestController(), 'dateAction']];
+        yield [new InvokableController()];
+
+        if (80000 <= \PHP_VERSION_ID) {
+            yield [new InvokableControllerWithUnion()];
+        }
     }
 
     private function getParamConverterManager(Request $request, $configurations)
     {
-        $manager = $this->getMockBuilder('Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterManager')->getMock();
+        $manager = $this->getMockBuilder(ParamConverterManager::class)->getMock();
         $manager
             ->expects($this->once())
             ->method('apply')
@@ -148,6 +167,13 @@ class InvokableNoArgController
 class InvokableController
 {
     public function __invoke(\DateTime $date)
+    {
+    }
+}
+
+class InvokableControllerWithInterface
+{
+    public function __invoke(\DateTimeInterface $date)
     {
     }
 }
