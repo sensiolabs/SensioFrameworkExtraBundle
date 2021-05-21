@@ -6,18 +6,35 @@ Usage
 
 The ``@Template`` annotation associates a controller with a template name::
 
-    use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+.. configuration-block::
 
-    /**
-     * @Template("@SensioBlog/post/show.html.twig")
-     */
-    public function show($id)
-    {
-        // get the Post
-        $post = ...;
+    .. code-block:: php-annotations
 
-        return array('post' => $post);
-    }
+        use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+
+        /**
+         * @Template("@SensioBlog/post/show.html.twig")
+         */
+        public function show($id)
+        {
+            // get the Post
+            $post = ...;
+
+            return array('post' => $post);
+        }
+
+    .. code-block:: php-attributes
+
+        use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+
+        #[Template('@SensioBlog/post/show.html.twig')]
+        public function show($id)
+        {
+            // get the Post
+            $post = ...;
+
+            return array('post' => $post);
+        }
 
 When using the ``@Template`` annotation, the controller should return an
 array of parameters to pass to the view instead of a ``Response`` object.
@@ -26,14 +43,25 @@ array of parameters to pass to the view instead of a ``Response`` object.
 
     If you want to stream your template, you can make it with the following configuration::
 
-        /**
-         * @Template(isStreamable=true)
-         */
-        public function show($id)
-        {
-            // ...
-        }
+    .. configuration-block::
 
+        .. code-block:: php-annotations
+
+            /**
+             * @Template(isStreamable=true)
+             */
+            public function show($id)
+            {
+                // ...
+            }
+
+        .. code-block:: php-attributes
+
+            #[Template(isStreamable: true)]
+            public function show($id)
+            {
+                // ...
+            }
 
 .. tip::
 
@@ -43,16 +71,31 @@ array of parameters to pass to the view instead of a ``Response`` object.
 If the template is named after the controller and action names, which is the
 case for the above example, you can even omit the annotation value::
 
-    /**
-     * @Template
-     */
-    public function show($id)
-    {
-        // get the Post
-        $post = ...;
+.. configuration-block::
 
-        return array('post' => $post);
-    }
+    .. code-block:: php-annotations
+
+        /**
+         * @Template
+         */
+        public function show($id)
+        {
+            // get the Post
+            $post = ...;
+
+            return array('post' => $post);
+        }
+
+    .. code-block:: php-attributes
+
+        #[Template]
+        public function show($id)
+        {
+            // get the Post
+            $post = ...;
+
+            return array('post' => $post);
+        }
 
 .. tip::
 
@@ -65,30 +108,65 @@ can use the ``vars`` attribute instead of returning an array. This is very
 useful in combination with the ``@ParamConverter`` :doc:`annotation
 <converters>`::
 
-    /**
-     * @ParamConverter("post", class="SensioBlogBundle:Post")
-     * @Template("@SensioBlog/post/show.html.twig", vars={"post"})
-     */
-    public function show(Post $post)
-    {
-    }
+.. configuration-block::
+
+    .. code-block:: php-annotations
+
+        /**
+         * @ParamConverter("post", class="SensioBlogBundle:Post")
+         * @Template("@SensioBlog/post/show.html.twig", vars={"post"})
+         */
+        public function show(Post $post)
+        {
+        }
+
+    .. code-block:: php-attributes
+
+        #[ParamConverter('post', class: 'SensioBlogBundle:Post')]
+        #[Template('@SensioBlog/post/show.html.twig"', vars: ['post'])]
+        public function show(Post $post)
+        {
+        }
 
 which, thanks to conventions, is equivalent to the following configuration::
 
-    /**
-     * @Template(vars={"post"})
-     */
-    public function show(Post $post)
-    {
-    }
+.. configuration-block::
+
+    .. code-block:: php-annotations
+
+        /**
+         * @Template(vars={"post"})
+         */
+        public function show(Post $post)
+        {
+        }
+
+    .. code-block:: php-attributes
+
+        #[Template(vars: ['post'])]
+        public function show(Post $post)
+        {
+        }
 
 You can make it even more concise as all method arguments are automatically
 passed to the template if the method returns ``null`` and no ``vars`` attribute
 is defined::
 
-    /**
-     * @Template
-     */
-    public function show(Post $post)
-    {
-    }
+.. configuration-block::
+
+    .. code-block:: php-annotations
+
+        /**
+         * @Template
+         */
+        public function show(Post $post)
+        {
+        }
+
+    .. code-block:: php-attributes
+
+        #[Template]
+        public function show(Post $post)
+        {
+        }
+

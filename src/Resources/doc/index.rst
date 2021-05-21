@@ -93,59 +93,112 @@ The following annotations are defined by the bundle:
    annotations/cache
    annotations/security
 
-This example shows all the available annotations in action::
+This example shows all the available annotations in action (here and in all
+the other examples both plain old annotations and PHP 8.0 are shown)::
 
-    use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-    use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
-    use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-    use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-    use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-    use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-    use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+.. configuration-block::
 
-    /**
-     * @Route("/blog")
-     * @Cache(expires="tomorrow")
-     */
-    class AnnotController
-    {
+    .. code-block:: php-annotations
+
+        use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+        use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
+        use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+        use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+        use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+        use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+        use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+
         /**
-         * @Route("/")
-         * @Template
+         * @Route("/blog")
+         * @Cache(expires="tomorrow")
          */
-        public function index()
+        class AnnotController
         {
-            $posts = ...;
+            /**
+             * @Route("/")
+             * @Template
+             */
+            public function index()
+            {
+                $posts = ...;
 
-            return array('posts' => $posts);
+                return array('posts' => $posts);
+            }
+
+            /**
+             * @Route("/{id}")
+             * @Method("GET")
+             * @ParamConverter("post", class="SensioBlogBundle:Post")
+             * @Template("@SensioBlog/annot/show.html.twig", vars={"post"})
+             * @Cache(smaxage="15", lastmodified="post.getUpdatedAt()", etag="'Post' ~ post.getId() ~ post.getUpdatedAt()")
+             * @IsGranted("ROLE_SPECIAL_USER")
+             * @Security("has_role('ROLE_ADMIN') and is_granted('POST_SHOW', post)")
+             */
+            public function show(Post $post)
+            {
+            }
         }
+
+    .. code-block:: php-attributes
+
+        use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+        use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
+        use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+        use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+        use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+        use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+        use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+
+        #[Route('/blog')]
+        class AnnotController
+        {
+            #[Route('/')]
+            #[Template]
+            public function index()
+            {
+                $posts = ...;
+
+                return array('posts' => $posts);
+            }
+
+            #[Route('/{id}')]
+            #[Method('GET')]
+            #[ParamConverter('post', class: 'SensioBlogBundle:Post')]
+            #[Template('@SensioBlog/annot/show.html.twig", vars: ['post'])]
+            #[Cache(smaxage: 15, lastmodified: 'post.getUpdatedAt()', etag: "'Post' ~ post.getId() ~ post.getUpdatedAt()")]
+            #[IsGranted('ROLE_SPECIAL_USER')]
+            #[Security("has_role('ROLE_ADMIN') and is_granted('POST_SHOW', post)")]
+            public function show(Post $post)
+            {
+            }
+        }
+
+As the ``showAction`` method follows some conventions, you can omit some
+annotations::
+
+.. configuration-block::
+
+    .. code-block:: php-annotations
 
         /**
          * @Route("/{id}")
-         * @Method("GET")
-         * @ParamConverter("post", class="SensioBlogBundle:Post")
-         * @Template("@SensioBlog/annot/show.html.twig", vars={"post"})
-         * @Cache(smaxage="15", lastmodified="post.getUpdatedAt()", etag="'Post' ~ post.getId() ~ post.getUpdatedAt()")
+         * @Cache(smaxage="15", lastModified="post.getUpdatedAt()", Etag="'Post' ~ post.getId() ~ post.getUpdatedAt()")
          * @IsGranted("ROLE_SPECIAL_USER")
          * @Security("has_role('ROLE_ADMIN') and is_granted('POST_SHOW', post)")
          */
         public function show(Post $post)
         {
         }
-    }
 
-As the ``showAction`` method follows some conventions, you can omit some
-annotations::
+    .. code-block:: php-attributes
 
-    /**
-     * @Route("/{id}")
-     * @Cache(smaxage="15", lastModified="post.getUpdatedAt()", Etag="'Post' ~ post.getId() ~ post.getUpdatedAt()")
-     * @IsGranted("ROLE_SPECIAL_USER")
-     * @Security("has_role('ROLE_ADMIN') and is_granted('POST_SHOW', post)")
-     */
-    public function show(Post $post)
-    {
-    }
+        #[Route('/{id}')]
+        #[Cache(smaxage: 15, lastmodified: 'post.getUpdatedAt()', etag: "'Post' ~ post.getId() ~ post.getUpdatedAt()")]
+        #[IsGranted('ROLE_SPECIAL_USER')]
+        #[Security("has_role('ROLE_ADMIN') and is_granted('POST_SHOW', post)")]
+        public function show(Post $post)
+        {
+        }
 
 The routes need to be imported to be active as any other routing resources, for
 example:

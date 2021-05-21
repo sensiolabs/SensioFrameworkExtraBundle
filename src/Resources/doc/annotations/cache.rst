@@ -9,40 +9,81 @@ HTTP Expiration Strategies
 
 The ``@Cache`` annotation allows to define HTTP caching::
 
-    use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
+.. configuration-block::
 
-    /**
-     * @Cache(expires="tomorrow", public=true)
-     */
-    public function index()
-    {
-    }
+    .. code-block:: php-annotations
 
-You can also use the annotation on a class to define caching for all actions
-of a controller::
+        use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 
-    /**
-     * @Cache(expires="tomorrow", public=true)
-     */
-    class BlogController extends Controller
-    {
-    }
-
-When there is a conflict between the class configuration and the method
-configuration, the latter overrides the former::
-
-    /**
-     * @Cache(expires="tomorrow")
-     */
-    class BlogController extends Controller
-    {
         /**
-         * @Cache(expires="+2 days")
+         * @Cache(expires="tomorrow", public=true)
          */
         public function index()
         {
         }
-    }
+
+    .. code-block:: php-attributes
+
+        use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
+
+        #[Cache(expired: 'tomorrow', public: true)]
+        public function index()
+        {
+        }
+
+You can also use the annotation on a class to define caching for all actions
+of a controller::
+
+.. configuration-block::
+
+    .. code-block:: php-annotations
+
+        /**
+         * @Cache(expires="tomorrow", public=true)
+         */
+        class BlogController extends Controller
+        {
+        }
+
+    .. code-block:: php-attributes
+
+        #[Cache(expired: 'tomorrow', public: true)]
+        class BlogController extends Controller
+        {
+        }
+
+When there is a conflict between the class configuration and the method
+configuration, the latter overrides the former::
+
+.. configuration-block::
+
+    .. code-block:: php-annotations
+
+        /**
+         * @Cache(expires="tomorrow")
+         */
+        class BlogController extends Controller
+        {
+            /**
+             * @Cache(expires="+2 days")
+             */
+            public function index()
+            {
+            }
+        }
+
+    .. code-block:: php-attributes
+
+        #[Cache(expired: 'tomorrow')]
+        class BlogController extends Controller
+        {
+            #[Cache(expired: '+2 days')]
+            public function index()
+            {
+            }
+        }
+
+
 
 .. note::
 
@@ -59,16 +100,31 @@ headers. ``lastModified`` adds a ``Last-Modified`` header to Responses and
 Both automatically trigger the logic to return a 304 response when the
 response is not modified (in this case, the controller is **not** called)::
 
-    use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
+.. configuration-block::
 
-    /**
-     * @Cache(lastModified="post.getUpdatedAt()", Etag="'Post' ~ post.getId() ~ post.getUpdatedAt().getTimestamp()")
-     */
-    public function index(Post $post)
-    {
-        // your code
-        // won't be called in case of a 304
-    }
+    .. code-block:: php-annotations
+
+        use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
+
+        /**
+         * @Cache(lastModified="post.getUpdatedAt()", Etag="'Post' ~ post.getId() ~ post.getUpdatedAt().getTimestamp()")
+         */
+        public function index(Post $post)
+        {
+            // your code
+            // won't be called in case of a 304
+        }
+
+    .. code-block:: php-attributes
+
+        use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
+
+        #[Cache(lastModified: 'post.getUpdatedAt()', etag: "'Post' ~ post.getId() ~ post.getUpdatedAt().getTimestamp()")]
+        public function index(Post $post)
+        {
+            // your code
+            // won't be called in case of a 304
+        }
 
 It's roughly doing the same as the following code::
 
