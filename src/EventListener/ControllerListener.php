@@ -13,7 +13,6 @@ namespace Sensio\Bundle\FrameworkExtraBundle\EventListener;
 
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Persistence\Proxy;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationAnnotation;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\KernelEvent;
@@ -66,7 +65,7 @@ class ControllerListener implements EventSubscriberInterface
                 function (\ReflectionAttribute $attribute) {
                     return $attribute->newInstance();
                 },
-                $object->getAttributes(ConfigurationAnnotation::class, \ReflectionAttribute::IS_INSTANCEOF)
+                $object->getAttributes(ConfigurationInterface::class, \ReflectionAttribute::IS_INSTANCEOF)
             );
             $classConfigurations = array_merge($classConfigurations, $this->getConfigurations($classAttributes));
 
@@ -74,7 +73,7 @@ class ControllerListener implements EventSubscriberInterface
                 function (\ReflectionAttribute $attribute) {
                     return $attribute->newInstance();
                 },
-                $method->getAttributes(ConfigurationAnnotation::class, \ReflectionAttribute::IS_INSTANCEOF)
+                $method->getAttributes(ConfigurationInterface::class, \ReflectionAttribute::IS_INSTANCEOF)
             );
             $methodConfigurations = array_merge($methodConfigurations, $this->getConfigurations($methodAttributes));
         }

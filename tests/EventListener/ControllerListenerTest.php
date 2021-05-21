@@ -25,6 +25,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Tests\EventListener\Fixture\FooController
 use Sensio\Bundle\FrameworkExtraBundle\Tests\EventListener\Fixture\FooControllerCacheAttributeAtClass;
 use Sensio\Bundle\FrameworkExtraBundle\Tests\EventListener\Fixture\FooControllerCacheAttributeAtClassAndMethod;
 use Sensio\Bundle\FrameworkExtraBundle\Tests\EventListener\Fixture\FooControllerCacheAttributeAtMethod;
+use Sensio\Bundle\FrameworkExtraBundle\Tests\EventListener\Fixture\FooControllerCustomAttributeAtClass;
+use Sensio\Bundle\FrameworkExtraBundle\Tests\EventListener\Fixture\FooControllerCustomAttributeAtClassAndMethod;
+use Sensio\Bundle\FrameworkExtraBundle\Tests\EventListener\Fixture\FooControllerCustomAttributeAtMethod;
 use Sensio\Bundle\FrameworkExtraBundle\Tests\EventListener\Fixture\FooControllerEntityAtMethod;
 use Sensio\Bundle\FrameworkExtraBundle\Tests\EventListener\Fixture\FooControllerEntityAttributeAtMethod;
 use Sensio\Bundle\FrameworkExtraBundle\Tests\EventListener\Fixture\FooControllerIsGrantedAtClass;
@@ -47,6 +50,10 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class ControllerListenerTest extends \PHPUnit\Framework\TestCase
 {
+    private $event;
+    private $listener;
+    private $request;
+
     protected function setUp(): void
     {
         $this->listener = new ControllerListener(new AnnotationReader());
@@ -143,6 +150,51 @@ class ControllerListenerTest extends \PHPUnit\Framework\TestCase
 
         $this->assertNotNull($this->getReadedCache());
         $this->assertEquals(FooControllerCacheAttributeAtClassAndMethod::CLASS_SMAXAGE, $this->getReadedCache()->getSMaxAge());
+    }
+
+    /**
+     * @requires PHP 8.0
+     */
+    public function testCustomAttributeAtMethod()
+    {
+        $controller = new FooControllerCustomAttributeAtMethod();
+        $this->event = $this->getFilterControllerEvent([$controller, 'barAction'], $this->request);
+        $this->listener->onKernelController($this->event);
+
+        $this->assertNotNull($this->getCustomAttribute());
+        $this->assertEquals(FooControllerCustomAttributeAtClassAndMethod::METHOD_CUSTOM, $this->getCustomAttribute()->getCustom());
+    }
+
+    /**
+     * @requires PHP 8.0
+     */
+    public function testCustomAttributeAtClass()
+    {
+        $controller = new FooControllerCustomAttributeAtClass();
+        $this->event = $this->getFilterControllerEvent([$controller, 'barAction'], $this->request);
+        $this->listener->onKernelController($this->event);
+
+        $this->assertNotNull($this->getCustomAttribute());
+        $this->assertEquals(FooControllerCustomAttributeAtClass::CLASS_CUSTOM, $this->getCustomAttribute()->getCustom());
+    }
+
+    /**
+     * @requires PHP 8.0
+     */
+    public function testCustomAttributeAtClassAndMethod()
+    {
+        $controller = new FooControllerCustomAttributeAtClassAndMethod();
+        $this->event = $this->getFilterControllerEvent([$controller, 'barAction'], $this->request);
+        $this->listener->onKernelController($this->event);
+
+        $this->assertNotNull($this->getCustomAttribute());
+        $this->assertEquals(FooControllerCustomAttributeAtClassAndMethod::METHOD_CUSTOM, $this->getCustomAttribute()->getCustom());
+
+        $this->event = $this->getFilterControllerEvent([$controller, 'bar2Action'], $this->request);
+        $this->listener->onKernelController($this->event);
+
+        $this->assertNotNull($this->getCustomAttribute());
+        $this->assertEquals(FooControllerCustomAttributeAtClassAndMethod::CLASS_CUSTOM, $this->getCustomAttribute()->getCustom());
     }
 
     public function testMultipleAnnotationsOnClassThrowsExceptionUnlessConfigurationAllowsArray()
@@ -404,5 +456,10 @@ class ControllerListenerTest extends \PHPUnit\Framework\TestCase
     private function getReadedCache()
     {
         return $this->request->attributes->get('_cache');
+    }
+
+    private function getCustomAttribute()
+    {
+        return $this->request->attributes->get('_custom');
     }
 }
