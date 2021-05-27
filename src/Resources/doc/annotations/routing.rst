@@ -29,6 +29,25 @@ annotation, so you only have to update the annotation class namespace:
         }
     }
 
+Alternatively, it can be done with the help of the PHP 8 attribute:
+
+.. code-block:: diff
+
+    -use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+    +use Symfony\Component\Routing\Annotation\Route;
+
+    class DefaultController extends Controller
+    {
+    -    /**
+    -     * @Route("/")
+    -     */
+    +    #[Route('/')]
+        public function index()
+        {
+            // ...
+        }
+    }
+
 The main difference is that Symfony's annotation no longer defines the
 ``service`` option, which was used to instantiate the controller by fetching the
 given service from the container. In modern Symfony applications, all
@@ -60,6 +79,28 @@ restrict the HTTP methods of the route:
             // ...
         }
     }
+
+Alternatively, it can be done with the help of the PHP 8 attribute:
+
+.. code-block:: diff
+
+    -use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+    -use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+    +use Symfony\Component\Routing\Annotation\Route;
+
+    class DefaultController extends Controller
+    {
+    -    /**
+    -     * @Route("/show/{id}")
+    -     * @Method({"GET", "HEAD"})
+    -     */
+    +    #[Route('/show/{id}', methods: ['GET','HEAD'])]
+        public function show($id)
+        {
+            // ...
+        }
+    }
+
 
 Read the `chapter about Routing`_ in the Symfony Documentation to learn
 everything about these and the other annotations available.
