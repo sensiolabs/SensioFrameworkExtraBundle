@@ -4,7 +4,7 @@
 Usage
 -----
 
-The ``@Security`` and ``@IsGranted`` annotations restrict access on controllers::
+The ``@Security`` and ``@IsGranted`` annotations restrict access on controllers:
 
 .. configuration-block::
 
@@ -50,7 +50,7 @@ The ``@Security`` and ``@IsGranted`` annotations restrict access on controllers:
 
 The ``@IsGranted()`` annotation is the simplest way to restrict access.
 Use it to restrict by roles, or use custom voters to restrict access based
-on variables passed to the controller::
+on variables passed to the controller:
 
 .. configuration-block::
 
@@ -82,7 +82,7 @@ Each ``IsGranted()`` must grant access for the user to have access to the contro
     The ``@IsGranted("POST_SHOW", subject="post")`` is an example of using
     a custom security voter. For more details, see `the Security Voters page`_.
 
-You can also control the message and status code::
+You can also control the message and status code:
 
 .. configuration-block::
 
@@ -115,7 +115,7 @@ You can also control the message and status code::
 ---------
 
 The ``@Security`` annotation is more flexible than ``@IsGranted``: it
-allows you to pass an *expression* that can contain custom logic::
+allows you to pass an *expression* that can contain custom logic:
 
 .. configuration-block::
 
@@ -152,7 +152,7 @@ The expression has access to the following variables:
 You can throw an ``Symfony\Component\HttpKernel\Exception\HttpException``
 exception instead of
 ``Symfony\Component\Security\Core\Exception\AccessDeniedException`` using the
-``statusCode`` option::
+``statusCode`` option:
 
 .. configuration-block::
 
@@ -172,7 +172,7 @@ exception instead of
         {
         }
 
-The ``message`` option allows you to customize the exception message::
+The ``message`` option allows you to customize the exception message:
 
 .. configuration-block::
 

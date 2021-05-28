@@ -7,7 +7,7 @@ and validation.
 HTTP Expiration Strategies
 --------------------------
 
-The ``@Cache`` annotation allows to define HTTP caching::
+The ``@Cache`` annotation allows to define HTTP caching:
 
 .. configuration-block::
 
@@ -32,7 +32,7 @@ The ``@Cache`` annotation allows to define HTTP caching::
         }
 
 You can also use the annotation on a class to define caching for all actions
-of a controller::
+of a controller:
 
 .. configuration-block::
 
@@ -53,7 +53,7 @@ of a controller::
         }
 
 When there is a conflict between the class configuration and the method
-configuration, the latter overrides the former::
+configuration, the latter overrides the former:
 
 .. configuration-block::
 
@@ -98,7 +98,7 @@ headers. ``lastModified`` adds a ``Last-Modified`` header to Responses and
 ``Etag`` adds an ``Etag`` header.
 
 Both automatically trigger the logic to return a 304 response when the
-response is not modified (in this case, the controller is **not** called)::
+response is not modified (in this case, the controller is **not** called):
 
 .. configuration-block::
 

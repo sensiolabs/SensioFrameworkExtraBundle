@@ -94,7 +94,7 @@ The following annotations are defined by the bundle:
    annotations/security
 
 This example shows all the available annotations in action (here and in all
-the other examples both plain old annotations and PHP 8.0 are shown)::
+the other examples both plain old annotations and PHP 8.0 are shown):
 
 .. configuration-block::
 
@@ -174,7 +174,7 @@ the other examples both plain old annotations and PHP 8.0 are shown)::
         }
 
 As the ``showAction`` method follows some conventions, you can omit some
-annotations::
+annotations:
 
 .. configuration-block::
 

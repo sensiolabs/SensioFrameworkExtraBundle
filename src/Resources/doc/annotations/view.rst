@@ -4,7 +4,7 @@
 Usage
 -----
 
-The ``@Template`` annotation associates a controller with a template name::
+The ``@Template`` annotation associates a controller with a template name:
 
 .. configuration-block::
 
@@ -41,7 +41,7 @@ array of parameters to pass to the view instead of a ``Response`` object.
 
 .. note::
 
-    If you want to stream your template, you can make it with the following configuration::
+    If you want to stream your template, you can make it with the following configuration:
 
     .. configuration-block::
 
@@ -69,7 +69,7 @@ array of parameters to pass to the view instead of a ``Response`` object.
    simply ignored.
 
 If the template is named after the controller and action names, which is the
-case for the above example, you can even omit the annotation value::
+case for the above example, you can even omit the annotation value:
 
 .. configuration-block::
 
@@ -106,7 +106,7 @@ case for the above example, you can even omit the annotation value::
 And if the only parameters to pass to the template are method arguments, you
 can use the ``vars`` attribute instead of returning an array. This is very
 useful in combination with the ``@ParamConverter`` :doc:`annotation
-<converters>`::
+<converters>`:
 
 .. configuration-block::
 
@@ -128,7 +128,7 @@ useful in combination with the ``@ParamConverter`` :doc:`annotation
         {
         }
 
-which, thanks to conventions, is equivalent to the following configuration::
+which, thanks to conventions, is equivalent to the following configuration:
 
 .. configuration-block::
 
@@ -150,7 +150,7 @@ which, thanks to conventions, is equivalent to the following configuration::
 
 You can make it even more concise as all method arguments are automatically
 passed to the template if the method returns ``null`` and no ``vars`` attribute
-is defined::
+is defined:
 
 .. configuration-block::
 
@@ -169,4 +169,3 @@ is defined::
         public function show(Post $post)
         {
         }
-

@@ -6,7 +6,7 @@ Usage
 
 The ``@ParamConverter`` annotation calls *converters* to convert request
 parameters to objects. These objects are stored as request attributes and so
-they can be injected as controller method arguments::
+they can be injected as controller method arguments:
 
 .. configuration-block::
 
@@ -107,7 +107,7 @@ entities fetched from the database. Several different approaches are possible:
 ......................
 
 If your route wildcards match properties on your entity, then the converter
-will automatically fetch them::
+will automatically fetch them:
 
 .. configuration-block::
 
@@ -164,7 +164,7 @@ annotation and using the `@ParamConverter options`_.
 2) Fetch via an Expression
 ..........................
 
-If automatic fetching doesn't work, use an expression::
+If automatic fetching doesn't work, use an expression:
 
 .. configuration-block::
 
@@ -200,7 +200,7 @@ any route wildcards - like ``{post_id}`` are available as variables.
     The ``@Entity`` annotation is a shortcut for using ``expr``
     and has all the same options as ``@ParamConverter``.
 
-This can also be used to help resolve multiple arguments::
+This can also be used to help resolve multiple arguments:
 
 .. configuration-block::
 
@@ -234,102 +234,102 @@ A number of ``options`` are available on the ``@ParamConverter`` or
 (``@Entity``) annotation to control behavior:
 
 * ``id``: If an ``id`` option is configured and matches a route parameter, then the
-  converter will find by the primary key::
+  converter will find by the primary key:
 
-.. configuration-block::
+  .. configuration-block::
 
-    .. code-block:: php-annotations
+      .. code-block:: php-annotations
 
-        /**
-         * @Route("/blog/{post_id}")
-         * @ParamConverter("post", options={"id" = "post_id"})
-         */
-        public function showPost(Post $post)
-        {
-        }
+          /**
+           * @Route("/blog/{post_id}")
+           * @ParamConverter("post", options={"id" = "post_id"})
+           */
+          public function showPost(Post $post)
+          {
+          }
 
-    .. code-block:: php-attributes
-
-        #[Route('/blog/{post_id}')]
-        #[Entity('post', options: ['id' => 'post_id'])]
-        public function showPost(Post $post)
-        {
-        }
+      .. code-block:: php-attributes
+  
+          #[Route('/blog/{post_id}')]
+          #[Entity('post', options: ['id' => 'post_id'])]
+          public function showPost(Post $post)
+          {
+          }
 
 * ``mapping``: Configures the properties and values to use with the ``findOneBy()``
   method: the key is the route placeholder name and the value is the Doctrine property
-  name::
+  name:
 
-.. configuration-block::
+  .. configuration-block::
 
-    .. code-block:: php-annotations
+      .. code-block:: php-annotations
 
-        /**
-         * @Route("/blog/{date}/{slug}/comments/{comment_slug}")
-         * @ParamConverter("post", options={"mapping": {"date": "date", "slug": "slug"}})
-         * @ParamConverter("comment", options={"mapping": {"comment_slug": "slug"}})
-         */
-        public function showComment(Post $post, Comment $comment)
-        {
-        }
+          /**
+          * @Route("/blog/{date}/{slug}/comments/{comment_slug}")
+          * @ParamConverter("post", options={"mapping": {"date": "date", "slug": "slug"}})
+          * @ParamConverter("comment", options={"mapping": {"comment_slug": "slug"}})
+          */
+          public function showComment(Post $post, Comment $comment)
+          {
+          }
 
-    .. code-block:: php-attributes
+      .. code-block:: php-attributes
 
-        #[Route('/blog/{date}/{slug}/comments/{comment_slug}')]
-        #[ParamConverter('post', options: ['mapping' => ['date' => 'date', 'slug' => 'slug']])]
-        #[ParamConverter('comment', options: ['mapping': ['comment_slug' => 'slug']])]
-        public function showComment(Post $post, Comment $comment)
-        {
-        }
+          #[Route('/blog/{date}/{slug}/comments/{comment_slug}')]
+          #[ParamConverter('post', options: ['mapping' => ['date' => 'date', 'slug' => 'slug']])]
+          #[ParamConverter('comment', options: ['mapping': ['comment_slug' => 'slug']])]
+          public function showComment(Post $post, Comment $comment)
+          {
+          }
 
 * ``exclude`` Configures the properties that should be used in the ``findOneBy()``
-  method by *excluding* one or more properties so that not *all* are used::
+  method by *excluding* one or more properties so that not *all* are used:
 
-.. configuration-block::
+  .. configuration-block::
 
-    .. code-block:: php-annotations
+      .. code-block:: php-annotations
 
-        /**
-         * @Route("/blog/{date}/{slug}")
-         * @ParamConverter("post", options={"exclude": {"date"}})
-         */
-        public function show(Post $post, \DateTime $date)
-        {
-        }
+          /**
+           * @Route("/blog/{date}/{slug}")
+           * @ParamConverter("post", options={"exclude": {"date"}})
+           */
+          public function show(Post $post, \DateTime $date)
+          {
+          }
 
-    .. code-block:: php-attributes
+      .. code-block:: php-attributes
 
-        #[Route('/blog/{date}/{slug}')]
-        #[ParamConverter('post', options: ['exclude' => ['date']])]
-        public function show(Post $post, \DateTime $date)
-        {
-        }
+          #[Route('/blog/{date}/{slug}')]
+          #[ParamConverter('post', options: ['exclude' => ['date']])]
+          public function show(Post $post, \DateTime $date)
+          {
+          }
 
 * ``strip_null`` If true, then when ``findOneBy()`` is used, any values that are
   ``null`` will not be used for the query.
 
 * ``entity_manager`` By default, the Doctrine converter uses the *default* entity
-  manager, but you can configure this::
+  manager, but you can configure this:
 
-.. configuration-block::
+  .. configuration-block::
 
-    .. code-block:: php-annotations
+      .. code-block:: php-annotations
 
-        /**
-         * @Route("/blog/{id}")
-         * @ParamConverter("post", options={"entity_manager" = "foo"})
-         */
-        public function show(Post $post)
-        {
-        }
+          /**
+           * @Route("/blog/{id}")
+           * @ParamConverter("post", options={"entity_manager" = "foo"})
+           */
+          public function show(Post $post)
+          {
+          }
 
-    .. code-block:: php-attributes
+      .. code-block:: php-attributes
 
-        #[Route('/blog/{id}')]
-        #[ParamConverter('post', options: ['entity_manager' => 'foo'])]
-        public function show(Post $post)
-        {
-        }
+          #[Route('/blog/{id}')]
+          #[ParamConverter('post', options: ['entity_manager' => 'foo'])]
+          public function show(Post $post)
+          {
+          }
 
 * ``evict_cache`` If true, forces Doctrine to always fetch the entity from the database instead of cache.
 
@@ -339,7 +339,7 @@ DateTime Converter
 Converter Name: ``datetime``
 
 The datetime converter converts any route or request attribute into a datetime
-instance::
+instance:
 
 .. configuration-block::
 
@@ -360,7 +360,7 @@ instance::
         }
 
 By default any date format that can be parsed by the ``DateTime`` constructor
-is accepted. You can be stricter with input given through the options::
+is accepted. You can be stricter with input given through the options:
 
 .. configuration-block::
 
