@@ -59,7 +59,7 @@ class Security extends ConfigurationAnnotation
             $values = $data;
         }
 
-        $values['message'] = $values['message'] ?? $message;
+        $values['message'] = $values['message'] ?? $message ?? $this->message;
         $values['statusCode'] = $values['statusCode'] ?? $statusCode;
 
         parent::__construct($values);
