@@ -1,0 +1,18 @@
+---------------------------------------------------------------------------
+
+by derrabus at 2021-05-31T14:50:24Z
+
+Thank your for your PR. I think, @fabpot has to enable GHA on this repository first.
+
+You should be able to merge the two jobs, like we did here:
+
+https://github.com/symfony/security-acl/blob/df46dc827ae5b4d8b4db3218e45e5a9c58adf718/.github/workflows/ci.yml
+
+---------------------------------------------------------------------------
+
+by kevinpapst at 2021-05-31T19:03:47Z
+
+Good hint, never used `ramsey/composer-install` before, thanks @derrabus 👍
+Works now, even though tests are still failing (but unrelated to this PR).
+
+Output available at: https://github.com/kevinpapst/SensioFrameworkExtraBundle/pull/2/checks
