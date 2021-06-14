@@ -150,6 +150,7 @@ the other examples both plain old annotations and PHP 8.0 are shown):
         use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
         #[Route('/blog')]
+        #[Cache(expired: 'tomorrow')]
         class AnnotController
         {
             #[Route('/')]
