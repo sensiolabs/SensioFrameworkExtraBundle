@@ -35,7 +35,7 @@ The ``@Security`` and ``@IsGranted`` annotations restrict access on controllers:
 
         class PostController extends Controller
         {
-            #[IsGranted('ROLE_ADMIN']
+            #[IsGranted('ROLE_ADMIN')]
             /** or use Security attribute */
             #[Security("is_granted('ROLE_ADMIN') and is_granted('ROLE_FRIENDLY_USER')")]
             public function index()
@@ -69,7 +69,7 @@ on variables passed to the controller:
     .. code-block:: php-attributes
 
         #[Route('/posts/{id}')]
-        #[IsGranted('ROLE_ADMIN']
+        #[IsGranted('ROLE_ADMIN')]
         #[IsGranted('POST_SHOW', subject: 'post')]
         public function show(Post $post)
         {
