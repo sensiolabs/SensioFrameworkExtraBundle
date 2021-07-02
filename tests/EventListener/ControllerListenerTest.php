@@ -338,9 +338,11 @@ class ControllerListenerTest extends \PHPUnit\Framework\TestCase
 
         $annotations = $this->request->attributes->get('_security');
         $this->assertNotNull($annotations);
-        $this->assertArrayHasKey(0, $annotations);
+        $this->assertArrayHasKey(1, $annotations);
         $this->assertInstanceOf(Security::class, $annotations[0]);
-        $this->assertEquals("is_granted('ROLE_USER') and is_granted('FOO_SHOW', foo)", $annotations[0]->getExpression());
+        $this->assertEquals("is_granted('ROLE_USER')", $annotations[0]->getExpression());
+        $this->assertInstanceOf(Security::class, $annotations[1]);
+        $this->assertEquals("is_granted('ROLE_USER') and is_granted('FOO_SHOW', foo)", $annotations[1]->getExpression());
     }
 
     /**
@@ -354,9 +356,11 @@ class ControllerListenerTest extends \PHPUnit\Framework\TestCase
 
         $annotations = $this->request->attributes->get('_security');
         $this->assertNotNull($annotations);
-        $this->assertArrayHasKey(0, $annotations);
+        $this->assertArrayHasKey(1, $annotations);
         $this->assertInstanceOf(Security::class, $annotations[0]);
-        $this->assertEquals("is_granted('ROLE_USER') and is_granted('FOO_SHOW', foo)", $annotations[0]->getExpression());
+        $this->assertEquals("is_granted('ROLE_USER')", $annotations[0]->getExpression());
+        $this->assertInstanceOf(Security::class, $annotations[1]);
+        $this->assertEquals("is_granted('ROLE_USER') and is_granted('FOO_SHOW', foo)", $annotations[1]->getExpression());
     }
 
     public function testTemplateAnnotationOnMethod()
