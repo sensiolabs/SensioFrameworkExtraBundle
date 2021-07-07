@@ -132,7 +132,7 @@ the other examples both plain old annotations and PHP 8.0 are shown):
              * @Template("@SensioBlog/annot/show.html.twig", vars={"post"})
              * @Cache(smaxage="15", lastmodified="post.getUpdatedAt()", etag="'Post' ~ post.getId() ~ post.getUpdatedAt()")
              * @IsGranted("ROLE_SPECIAL_USER")
-             * @Security("has_role('ROLE_ADMIN') and is_granted('POST_SHOW', post)")
+             * @Security("is_granted('ROLE_ADMIN') and is_granted('POST_SHOW', post)")
              */
             public function show(Post $post)
             {
@@ -168,7 +168,7 @@ the other examples both plain old annotations and PHP 8.0 are shown):
             #[Template('@SensioBlog/annot/show.html.twig", vars: ['post'])]
             #[Cache(smaxage: 15, lastmodified: 'post.getUpdatedAt()', etag: "'Post' ~ post.getId() ~ post.getUpdatedAt()")]
             #[IsGranted('ROLE_SPECIAL_USER')]
-            #[Security("has_role('ROLE_ADMIN') and is_granted('POST_SHOW', post)")]
+            #[Security("is_granted('ROLE_ADMIN') and is_granted('POST_SHOW', post)")]
             public function show(Post $post)
             {
             }
@@ -185,7 +185,7 @@ annotations:
          * @Route("/{id}")
          * @Cache(smaxage="15", lastModified="post.getUpdatedAt()", Etag="'Post' ~ post.getId() ~ post.getUpdatedAt()")
          * @IsGranted("ROLE_SPECIAL_USER")
-         * @Security("has_role('ROLE_ADMIN') and is_granted('POST_SHOW', post)")
+         * @Security("is_granted('ROLE_ADMIN') and is_granted('POST_SHOW', post)")
          */
         public function show(Post $post)
         {
@@ -196,7 +196,7 @@ annotations:
         #[Route('/{id}')]
         #[Cache(smaxage: 15, lastmodified: 'post.getUpdatedAt()', etag: "'Post' ~ post.getId() ~ post.getUpdatedAt()")]
         #[IsGranted('ROLE_SPECIAL_USER')]
-        #[Security("has_role('ROLE_ADMIN') and is_granted('POST_SHOW', post)")]
+        #[Security("is_granted('ROLE_ADMIN') and is_granted('POST_SHOW', post)")]
         public function show(Post $post)
         {
         }
