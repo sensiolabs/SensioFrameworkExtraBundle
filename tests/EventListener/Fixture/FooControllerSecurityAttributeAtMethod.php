@@ -6,6 +6,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 class FooControllerSecurityAttributeAtMethod
 {
+    #[Security("is_granted('ROLE_USER')")]
     #[Security("is_granted('ROLE_USER') and is_granted('FOO_SHOW', foo)")]
     public function barAction($foo)
     {
