@@ -396,7 +396,7 @@ class ControllerListenerTest extends \PHPUnit\Framework\TestCase
 
     private function getFilterControllerEvent($controller, Request $request)
     {
-        $mockKernel = $this->getMockForAbstractClass(\Symfony\Component\HttpKernel\Kernel::class, ['', '']);
+        $mockKernel = $this->getMockForAbstractClass(\Symfony\Component\HttpKernel\Kernel::class, ['test', '']);
 
         return new ControllerEvent($mockKernel, $controller, $request, HttpKernelInterface::MASTER_REQUEST);
     }
