@@ -36,6 +36,12 @@ class TestKernel extends Kernel
     {
         $loader->load(__DIR__.'/config/config.yml');
         $loader->load(__DIR__.'/config/nullable_type/config.yml');
+
+        if (self::MAJOR_VERSION >= 5) {
+            $loader->load(__DIR__.'/config/config_sf5.yml');
+        } else {
+            $loader->load(__DIR__.'/config/config_sf4.yml');
+        }
     }
 
     public function getProjectDir(): string
