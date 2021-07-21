@@ -58,14 +58,14 @@ class IsGrantedListener implements EventSubscriberInterface
             if ($subjectRef) {
                 if (\is_array($subjectRef)) {
                     foreach ($subjectRef as $ref) {
-                        if (!isset($arguments[$ref])) {
+                        if (!\array_key_exists($ref, $arguments)) {
                             throw $this->createMissingSubjectException($ref);
                         }
 
                         $subject[$ref] = $arguments[$ref];
                     }
                 } else {
-                    if (!isset($arguments[$subjectRef])) {
+                    if (!\array_key_exists($subjectRef, $arguments)) {
                         throw $this->createMissingSubjectException($subjectRef);
                     }
 

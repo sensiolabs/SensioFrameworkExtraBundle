@@ -98,6 +98,39 @@ class IsGrantedListenerTest extends \PHPUnit\Framework\TestCase
         $listener->onKernelControllerArguments($this->createFilterControllerEvent($request));
     }
 
+    public function testIsGrantedNullSubjectFromArguments()
+    {
+        $authChecker = $this->getMockBuilder(AuthorizationCheckerInterface::class)->getMock();
+        // createRequest() puts 2 IsGranted annotations into the config
+        $authChecker->expects($this->exactly(2))
+            ->method('isGranted')
+            ->with('ROLE_ADMIN', null)
+            ->willReturn(true);
+
+        $listener = new IsGrantedListener($this->createArgumentNameConverter(['arg1Name' => 'arg1Value', 'arg2Name' => null]), $authChecker);
+        $isGranted = new IsGranted(['attributes' => 'ROLE_ADMIN', 'subject' => 'arg2Name']);
+        $request = $this->createRequest($isGranted);
+        $listener->onKernelControllerArguments($this->createFilterControllerEvent($request));
+    }
+
+    public function testIsGrantedArrayWithNullValueSubjectFromArguments()
+    {
+        $authChecker = $this->getMockBuilder(AuthorizationCheckerInterface::class)->getMock();
+        // createRequest() puts 2 IsGranted annotations into the config
+        $authChecker->expects($this->exactly(2))
+            ->method('isGranted')
+            ->with('ROLE_ADMIN', [
+                'arg1Name' => 'arg1Value',
+                'arg2Name' => null,
+            ])
+            ->willReturn(true);
+
+        $listener = new IsGrantedListener($this->createArgumentNameConverter(['arg1Name' => 'arg1Value', 'arg2Name' => null]), $authChecker);
+        $isGranted = new IsGranted(['attributes' => 'ROLE_ADMIN', 'subject' => ['arg1Name', 'arg2Name']]);
+        $request = $this->createRequest($isGranted);
+        $listener->onKernelControllerArguments($this->createFilterControllerEvent($request));
+    }
+
     public function testExceptionWhenMissingSubjectAttribute()
     {
         $this->expectException(\RuntimeException::class);
