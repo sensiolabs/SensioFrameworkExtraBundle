@@ -19,10 +19,17 @@
             <argument type="service" id="sensio_framework_extra.converter.doctrine.orm.expression_language" on-invalid="null" />
         </service>
 
+        <service id="sensio_framework_extra.converter.doctrine.mongodb" class="Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter">
+            <tag name="request.param_converter" converter="doctrine.mongodb" />
+            <argument type="service" id="doctrine_mongodb" on-invalid="ignore" />
+            <argument type="service" id="sensio_framework_extra.converter.doctrine.mongodb.expression_language" on-invalid="null" />
+        </service>
+
         <service id="framework_extra_bundle.date_time_param_converter" class="Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DateTimeParamConverter">
             <tag name="request.param_converter" converter="datetime" />
         </service>
 
         <service id="sensio_framework_extra.converter.doctrine.orm.expression_language.default" class="Symfony\Component\ExpressionLanguage\ExpressionLanguage" />
+        <service id="sensio_framework_extra.converter.doctrine.mongodb.expression_language.default" class="Symfony\Component\ExpressionLanguage\ExpressionLanguage" />
     </services>
 </container>

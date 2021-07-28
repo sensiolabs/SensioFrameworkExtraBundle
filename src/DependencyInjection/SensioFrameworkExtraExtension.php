@@ -53,8 +53,10 @@ class SensioFrameworkExtraExtension extends Extension
             $container->addResource(new ClassExistenceResource(ExpressionLanguage::class));
             if (class_exists(ExpressionLanguage::class)) {
                 $container->setAlias('sensio_framework_extra.converter.doctrine.orm.expression_language', new Alias('sensio_framework_extra.converter.doctrine.orm.expression_language.default', false));
+                $container->setAlias('sensio_framework_extra.converter.doctrine.mongodb.expression_language', new Alias('sensio_framework_extra.converter.doctrine.mongodb.expression_language.default', false));
             } else {
                 $definitionsToRemove[] = 'sensio_framework_extra.converter.doctrine.orm.expression_language.default';
+                $definitionsToRemove[] = 'sensio_framework_extra.converter.doctrine.mongodb.expression_language.default';
             }
         }
 
