@@ -110,6 +110,42 @@ class IsGrantedListenerTest extends \PHPUnit\Framework\TestCase
         $listener->onKernelControllerArguments($this->createFilterControllerEvent($request));
     }
 
+    public function testIsGrantedNullSubject()
+    {
+        $authChecker = $this->getMockBuilder(AuthorizationCheckerInterface::class)->getMock();
+        // createRequest() puts 2 IsGranted annotations into the config
+        $authChecker->expects($this->exactly(2))
+            ->method('isGranted')
+            // the subject => arg2name will eventually resolve to the 2nd argument, which has this value
+            ->with('ROLE_ADMIN', null)
+            ->willReturn(true);
+
+        // create metadata for 2 named args for the controller
+        $listener = new IsGrantedListener($this->createArgumentNameConverter(['arg1Name' => 'arg1Value', 'arg2Name' => null]), $authChecker);
+        $isGranted = new IsGranted(['attributes' => 'ROLE_ADMIN', 'subject' => 'arg2Name']);
+        $request = $this->createRequest($isGranted);
+
+        $listener->onKernelControllerArguments($this->createFilterControllerEvent($request));
+    }
+
+    public function testIsGrantedNullSubjectArray()
+    {
+        $authChecker = $this->getMockBuilder(AuthorizationCheckerInterface::class)->getMock();
+        // createRequest() puts 2 IsGranted annotations into the config
+        $authChecker->expects($this->exactly(2))
+            ->method('isGranted')
+            // the subject => arg2name will eventually resolve to the 2nd argument, which has this value
+            ->with('ROLE_ADMIN', ['arg1Name' => 'arg1Value', 'arg2Name' => null])
+            ->willReturn(true);
+
+        // create metadata for 2 named args for the controller
+        $listener = new IsGrantedListener($this->createArgumentNameConverter(['arg1Name' => 'arg1Value', 'arg2Name' => null]), $authChecker);
+        $isGranted = new IsGranted(['attributes' => 'ROLE_ADMIN', 'subject' => ['arg1Name', 'arg2Name']]);
+        $request = $this->createRequest($isGranted);
+
+        $listener->onKernelControllerArguments($this->createFilterControllerEvent($request));
+    }
+
     /**
      * @dataProvider getAccessDeniedMessageTests
      */
