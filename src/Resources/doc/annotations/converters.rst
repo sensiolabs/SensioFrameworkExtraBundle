@@ -277,7 +277,7 @@ A number of ``options`` are available on the ``@ParamConverter`` or
 
           #[Route('/blog/{date}/{slug}/comments/{comment_slug}')]
           #[ParamConverter('post', options: ['mapping' => ['date' => 'date', 'slug' => 'slug']])]
-          #[ParamConverter('comment', options: ['mapping': ['comment_slug' => 'slug']])]
+          #[ParamConverter('comment', options: ['mapping' => ['comment_slug' => 'slug']])]
           public function showComment(Post $post, Comment $comment)
           {
           }
