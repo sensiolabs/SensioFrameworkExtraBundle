@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+6.2
+---
+
+* Add support for Symfony 6
+
 6.1
 ---
 
