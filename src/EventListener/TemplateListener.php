@@ -120,7 +120,7 @@ class TemplateListener implements EventSubscriberInterface, ServiceSubscriberInt
     }
 
     /**
-     * {@inheritdoc}
+     * @return array
      */
     public static function getSubscribedEvents()
     {
