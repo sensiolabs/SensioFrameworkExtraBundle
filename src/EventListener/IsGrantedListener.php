@@ -115,7 +115,7 @@ class IsGrantedListener implements EventSubscriberInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return array
      */
     public static function getSubscribedEvents()
     {
