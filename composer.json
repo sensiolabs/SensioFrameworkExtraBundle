@@ -58,5 +58,10 @@
         "branch-alias": {
             "dev-master": "6.1.x-dev"
         }
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/package-versions-deprecated": true
+        }
     }
 }
