@@ -39,8 +39,9 @@ class SecurityListener implements EventSubscriberInterface
     private $trustResolver;
     private $roleHierarchy;
     private $logger;
+    private $useNewAuthSystem; // Symfony >= 5.4 new Auth system: Anonymous user concept dropped
 
-    public function __construct(ArgumentNameConverter $argumentNameConverter, ExpressionLanguage $language = null, AuthenticationTrustResolverInterface $trustResolver = null, RoleHierarchyInterface $roleHierarchy = null, TokenStorageInterface $tokenStorage = null, AuthorizationCheckerInterface $authChecker = null, LoggerInterface $logger = null)
+    public function __construct(ArgumentNameConverter $argumentNameConverter, ExpressionLanguage $language = null, AuthenticationTrustResolverInterface $trustResolver = null, RoleHierarchyInterface $roleHierarchy = null, TokenStorageInterface $tokenStorage = null, AuthorizationCheckerInterface $authChecker = null, LoggerInterface $logger = null, $useNewAuthSystem = false)
     {
         $this->argumentNameConverter = $argumentNameConverter;
         $this->tokenStorage = $tokenStorage;
@@ -49,6 +50,7 @@ class SecurityListener implements EventSubscriberInterface
         $this->trustResolver = $trustResolver;
         $this->roleHierarchy = $roleHierarchy;
         $this->logger = $logger;
+        $this->useNewAuthSystem = $useNewAuthSystem;
     }
 
     public function onKernelControllerArguments(KernelEvent $event)
@@ -63,7 +65,9 @@ class SecurityListener implements EventSubscriberInterface
         }
 
         if (null === $this->tokenStorage->getToken()) {
-            throw new AccessDeniedException('No user token or you forgot to put your controller behind a firewall while using a @Security tag.');
+            if(!$this->useNewAuthSystem){
+                throw new AccessDeniedException('No user token or you forgot to put your controller behind a firewall while using a @Security tag.');
+            }
         }
 
         if (null === $this->language) {
@@ -86,17 +90,33 @@ class SecurityListener implements EventSubscriberInterface
     {
         $request = $event->getRequest();
         $token = $this->tokenStorage->getToken();
-        $variables = [
-            'token' => $token,
-            'user' => $token->getUser(),
-            'object' => $request,
-            'subject' => $request,
-            'request' => $request,
-            'roles' => $this->getRoles($token),
-            'trust_resolver' => $this->trustResolver,
-            // needed for the is_granted expression function
-            'auth_checker' => $this->authChecker,
-        ];
+        
+        if($this->useNewAuthSystem){
+            $variables = [
+                'token' => $token,
+                'user' => $token != null ? $token->getUser() : null,
+                'object' => $request,
+                'subject' => $request,
+                'request' => $request,
+                'roles' => $token != null ? $this->getRoles($token) : array(),
+                'trust_resolver' => $this->trustResolver,
+                // needed for the is_granted expression function
+                'auth_checker' => $this->authChecker,
+            ];
+        }
+        else{
+            $variables = [
+                'token' => $token,
+                'user' => $token->getUser(),
+                'object' => $request,
+                'subject' => $request,
+                'request' => $request,
+                'roles' => $this->getRoles($token),
+                'trust_resolver' => $this->trustResolver,
+                // needed for the is_granted expression function
+                'auth_checker' => $this->authChecker,
+            ];            
+        }
 
         $controllerArguments = $this->argumentNameConverter->getControllerArguments($event);
 
