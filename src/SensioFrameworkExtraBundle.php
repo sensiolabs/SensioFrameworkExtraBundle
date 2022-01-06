@@ -13,6 +13,7 @@ namespace Sensio\Bundle\FrameworkExtraBundle;
 
 use Sensio\Bundle\FrameworkExtraBundle\DependencyInjection\Compiler\AddExpressionLanguageProvidersPass;
 use Sensio\Bundle\FrameworkExtraBundle\DependencyInjection\Compiler\AddParamConverterPass;
+use Sensio\Bundle\FrameworkExtraBundle\DependencyInjection\Compiler\EnableAuthenticatorManagerPass;
 use Sensio\Bundle\FrameworkExtraBundle\DependencyInjection\Compiler\OptimizerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -29,5 +30,6 @@ class SensioFrameworkExtraBundle extends Bundle
         $container->addCompilerPass(new AddParamConverterPass());
         $container->addCompilerPass(new OptimizerPass());
         $container->addCompilerPass(new AddExpressionLanguageProvidersPass());
+        $container->addCompilerPass(new EnableAuthenticatorManagerPass());
     }
 }
