@@ -1,0 +1,19 @@
+---------------------------------------------------------------------------
+
+by derrabus at 2021-05-21T19:40:40Z
+
+Can you provide a test case that covers your change?
+
+---------------------------------------------------------------------------
+
+by denisvmedia at 2021-05-21T20:02:53Z
+
+> Can you provide a test case that covers your change?
+
+Sure. Just pushed the tests.
+
+---------------------------------------------------------------------------
+
+by bobvandevijver at 2022-01-14T07:37:09Z
+
+What is the status of this? I would like to see this same change: I do not need the `ConfigurationAnnotation` as I do not need to support the array based constructor parameters as I want to create attributes only.
