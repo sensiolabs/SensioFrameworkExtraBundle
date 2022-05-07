@@ -359,8 +359,8 @@ instance:
         {
         }
 
-By default any date format that can be parsed by the ``DateTime`` constructor
-is accepted. You can be stricter with input given through the options:
+By default, any date format that can be parsed by the ``DateTime`` constructor
+or a unix timestamp is accepted. You can be stricter with input given through the options:
 
 .. configuration-block::
 
