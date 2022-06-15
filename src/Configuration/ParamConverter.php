@@ -111,7 +111,7 @@ class ParamConverter extends ConfigurationAnnotation
     /**
      * Returns the parameter class name.
      *
-     * @return string $name
+     * @return string
      */
     public function getClass()
     {
