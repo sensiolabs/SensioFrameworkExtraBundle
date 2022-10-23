@@ -107,10 +107,14 @@ class IsGrantedListener implements EventSubscriberInterface
             $argsString = sprintf('[%s]', implode(', ', $attributes));
         }
 
-        if (null !== $isGranted->getSubject()) {
-            $argsString = sprintf('%s, %s', $argsString, $isGranted->getSubject());
+        $subject = $isGranted->getSubject();
+        if (null !== $subject) {
+            if (\is_array($subject)) {
+                $argsString = sprintf('%s, [%s]', $argsString, implode(', ', $subject));
+            } else {
+                $argsString = sprintf('%s, %s', $argsString, $subject);
+            }
         }
-
         return $argsString;
     }
 
