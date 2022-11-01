@@ -50,6 +50,16 @@ class HttpCacheListenerTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($response, $this->event->getResponse());
     }
 
+    public function testIgnoreUnknownCacheAttribute()
+    {
+        $response = $this->event->getResponse();
+
+        $this->request->attributes->set('_cache', new \stdClass());
+
+        $this->assertNull($this->listener->onKernelResponse($this->event));
+        $this->assertSame($response, $this->event->getResponse());
+    }
+
     public function testResponseIsPublicIfSharedMaxAgeSetAndPublicNotOverridden()
     {
         $request = $this->createRequest(new Cache([
