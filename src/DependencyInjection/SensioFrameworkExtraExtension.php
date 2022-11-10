@@ -122,10 +122,7 @@ class SensioFrameworkExtraExtension extends Extension
         return __DIR__.'/../Resources/config/schema';
     }
 
-    /**
-     * @return string
-     */
-    public function getNamespace()
+    public function getNamespace(): string
     {
         return 'http://symfony.com/schema/dic/symfony_extra';
     }

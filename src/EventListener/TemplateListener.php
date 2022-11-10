@@ -119,10 +119,7 @@ class TemplateListener implements EventSubscriberInterface, ServiceSubscriberInt
         $template->setOwner([]);
     }
 
-    /**
-     * @return array
-     */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             KernelEvents::CONTROLLER => ['onKernelController', -128],

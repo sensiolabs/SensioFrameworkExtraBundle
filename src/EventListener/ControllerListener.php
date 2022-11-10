@@ -121,10 +121,7 @@ class ControllerListener implements EventSubscriberInterface
         return $configurations;
     }
 
-    /**
-     * @return array
-     */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             KernelEvents::CONTROLLER => 'onKernelController',
