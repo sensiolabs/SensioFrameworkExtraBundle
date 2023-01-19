@@ -185,7 +185,7 @@ If automatic fetching doesn't work, use an expression:
         use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 
         #[Route('/blog/{post_id}')]
-        #[Entity('post', expr: 'repository.find(post_id)')]
+        #[ParamConverter('post', expr: 'repository.find(post_id)')]
         public function show(Post $post)
         {
         }
