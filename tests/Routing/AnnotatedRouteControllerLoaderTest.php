@@ -110,7 +110,9 @@ class AnnotatedRouteControllerLoaderTest extends \PHPUnit\Framework\TestCase
     public function testLoad()
     {
         $loader = new AnnotatedRouteControllerLoader(new AnnotationReader());
-        AnnotationRegistry::registerLoader('class_exists');
+        if (method_exists(AnnotationRegistry::class, 'registerLoader')) {
+            AnnotationRegistry::registerLoader('class_exists');
+        }
 
         $rc = $loader->load('Sensio\Bundle\FrameworkExtraBundle\Tests\Routing\Fixtures\FoobarController');
 
@@ -135,7 +137,9 @@ class AnnotatedRouteControllerLoaderTest extends \PHPUnit\Framework\TestCase
     public function testInvokableControllerLoad()
     {
         $loader = new AnnotatedRouteControllerLoader(new AnnotationReader());
-        AnnotationRegistry::registerLoader('class_exists');
+        if (method_exists(AnnotationRegistry::class, 'registerLoader')) {
+            AnnotationRegistry::registerLoader('class_exists');
+        }
 
         $rc = $loader->load('Sensio\Bundle\FrameworkExtraBundle\Tests\Routing\Fixtures\InvokableController');
 
